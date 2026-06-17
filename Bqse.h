@@ -119,38 +119,85 @@ typedef tNone tFnc(tNone);
 typedef tFnc *tFncPtr;
 typedef tGen *tPtr;
 typedef char tChr;
+#define BQSE_DECLARE_MINMAXCLAMPS(tType)			\
+tType tType##_MinOf(tType Num1, tType Num2);		\
+tType tType##_MaxOf(tType Num1, tType Num2);		\
+tType tType##_Clamp(tType Lo, tType Num, tType Hi);	\
+tType tType##_ClampTop(tType Num1, tType Num2);		\
+tType tType##_ClampBot(tType Num1, tType Num2);		
+#define BQSE_DEFINE_MINMAXCLAMPS(tType)				\
+tType tType##_MinOf(tType Num1, tType Num2)			\
+{													\
+	return Min(Num1, Num2);							\
+}													\
+tType tType##_MaxOf(tType Num1, tType Num2)			\
+{													\
+	return Max(Num1, Num2);							\
+}													\
+tType tType##_Clamp(tType Lo, tType Num, tType Hi)	\
+{													\
+	return Clamp(Lo, Num, Hi);						\
+}													\
+tType tType##_ClampTop(tType Num1, tType Num2)		\
+{													\
+	return ClampTop(Num1, Num2);					\
+}													\
+tType tType##_ClampBot(tType Num1, tType Num2)		\
+{													\
+	return ClampBot(Num1, Num2);					\
+}
 typedef signed char tS8;
 typedef char Bqse_StaticAssert_tS8[(sizeof(tS8) == 1U) ? 1U : -1];
 #define tS8_Max 127
 #define tS8_Min (-128)
+BQSE_DECLARE_MINMAXCLAMPS(tS8);
 typedef unsigned char tU8;
 typedef char Bqse_StaticAssert_tU8[(sizeof(tU8) == 1U) ? 1U : -1];
 #define tU8_Max 255
 #define tU8_Min 0
+BQSE_DECLARE_MINMAXCLAMPS(tU8);
 typedef signed short tS16;
 typedef char Bqse_StaticAssert_tS16[(sizeof(tS16) == 2U) ? 1U : -1];
 #define tS16_Max 32767
 #define tS16_Min (-32768)
+BQSE_DECLARE_MINMAXCLAMPS(tS16);
 typedef unsigned short tU16;
 typedef char Bqse_StaticAssert_tU16[(sizeof(tU16) == 2U) ? 1U : -1];
 #define tU16_Max 65535
 #define tU16_Min 0
+BQSE_DECLARE_MINMAXCLAMPS(tU16);
 typedef signed int tS32;
 typedef char Bqse_StaticAssert_tS32[(sizeof(tS32) == 4U) ? 1U : -1];
 #define tS32_Max 2147483647
 #define tS32_Min (-2147483647-1)
+BQSE_DECLARE_MINMAXCLAMPS(tS32);
 typedef unsigned int tU32;
 typedef char Bqse_StaticAssert_tU32[(sizeof(tU32) == 4U) ? 1U : -1];
 #define tU32_Max 4294967295U
 #define tU32_Min 0U
+BQSE_DECLARE_MINMAXCLAMPS(tU32);
 typedef signed long long tS64;
 typedef char Bqse_StaticAssert_tS64[(sizeof(tS64) == 8U) ? 1U : -1];
 #define tS64_Max 9223372036854775807LL
 #define tS64_Min (-9223372036854775807LL-1)
+BQSE_DECLARE_MINMAXCLAMPS(tS64);
 typedef unsigned long long tU64;
 typedef char Bqse_StaticAssert_tU64[(sizeof(tU64) == 8U) ? 1U : -1];
 #define tU64_Max 18446744073709551615LLU
 #define tU64_Min 0LLU
+BQSE_DECLARE_MINMAXCLAMPS(tU64);
+#ifdef BQSE_MASTER
+BQSE_DEFINE_MINMAXCLAMPS(tS8);
+BQSE_DEFINE_MINMAXCLAMPS(tU8);
+BQSE_DEFINE_MINMAXCLAMPS(tS16);
+BQSE_DEFINE_MINMAXCLAMPS(tU16);
+BQSE_DEFINE_MINMAXCLAMPS(tS32);
+BQSE_DEFINE_MINMAXCLAMPS(tU32);
+BQSE_DEFINE_MINMAXCLAMPS(tS64);
+BQSE_DEFINE_MINMAXCLAMPS(tU64);
+#endif
+#undef BQSE_DECLARE_MINMAXCLAMPS
+#undef BQSE_DEFINE_MINMAXCLAMPS
 typedef float tF32;
 typedef char Bqse_StaticAssert_IEEE754_tF32[(sizeof(tF32) == 4U) ? 1U : -1];
 #define tF32_Pi 3.141592653589793F
@@ -464,4 +511,835 @@ typedef tU32 tUSz;
 #define LINK_C_End
 #endif
 
+// Compound types
+typedef union { struct { tS32 x, y; }; tS32 v[2]; } tV2S32;
+tV2S32 tV2S32_Make(tS32 x, tS32 y);
+tV2S32 tV2S32_Zero(tNone);
+tV2S32 tV2S32_Add(tV2S32 vec1, tV2S32 vec2);
+tV2S32 tV2S32_Sub(tV2S32 vec1, tV2S32 vec2);
+tV2S32 tV2S32_Mul(tV2S32 vec, tS32 mod);
+tV2S32 tV2S32_Div(tV2S32 vec, tS32 mod);
+tBln tV2S32_Eq(tV2S32 vec1, tV2S32 vec2);
+tS32 tV2S32_Dot(tV2S32 vec1, tV2S32 vec2);
+#ifdef BQSE_MASTER
+tV2S32 tV2S32_Make(tS32 x, tS32 y)
+{
+	tV2S32 vec;
+	vec.x = x;
+	vec.y = y;
+	return vec;
+}
+tV2S32 tV2S32_Zero(tNone)
+{
+	tV2S32 vec;
+	vec.x = 0;
+	vec.y = 0;
+	return vec;
+}
+tV2S32 tV2S32_Add(tV2S32 vec1, tV2S32 vec2)
+{
+	tV2S32 vec;
+	vec.x = vec1.x + vec2.x;
+	vec.y = vec1.y + vec2.y;
+	return vec;
+}
+tV2S32 tV2S32_Sub(tV2S32 vec1, tV2S32 vec2)
+{
+	tV2S32 vec;
+	vec.x = vec1.x - vec2.x;
+	vec.y = vec1.y - vec2.y;
+	return vec;
+}
+tV2S32 tV2S32_Mul(tV2S32 vec, tS32 mod)
+{
+	vec.x *= mod;
+	vec.y *= mod;
+	return vec;
+}
+tV2S32 tV2S32_Div(tV2S32 vec, tS32 mod)
+{
+	vec.x /= mod;
+	vec.y /= mod;
+	return vec;
+}
+tBln tV2S32_Eq(tV2S32 vec1, tV2S32 vec2)
+{
+	return (vec1.x == vec2.x) && (vec1.y == vec2.y);
+}
+tS32 tV2S32_Dot(tV2S32 vec1, tV2S32 vec2)
+{
+	return vec1.x * vec2.x + vec1.y * vec2.y;
+}
+#endif
+typedef union { struct { tS64 x, y; }; tS64 v[2]; } tV2S64;
+tV2S64 tV2S64_Make(tS64 x, tS64 y);
+tV2S64 tV2S64_Zero(tNone);
+tV2S64 tV2S64_Add(tV2S64 vec1, tV2S64 vec2);
+tV2S64 tV2S64_Sub(tV2S64 vec1, tV2S64 vec2);
+tV2S64 tV2S64_Mul(tV2S64 vec, tS64 mod);
+tV2S64 tV2S64_Div(tV2S64 vec, tS64 mod);
+tBln tV2S64_Eq(tV2S64 vec1, tV2S64 vec2);
+tS64 tV2S64_Dot(tV2S64 vec1, tV2S64 vec2);
+#ifdef BQSE_MASTER
+tV2S64 tV2S64_Make(tS64 x, tS64 y)
+{
+	tV2S64 vec;
+	vec.x = x;
+	vec.y = y;
+	return vec;
+}
+tV2S64 tV2S64_Zero(tNone)
+{
+	tV2S64 vec;
+	vec.x = 0;
+	vec.y = 0;
+	return vec;
+}
+tV2S64 tV2S64_Add(tV2S64 vec1, tV2S64 vec2)
+{
+	tV2S64 vec;
+	vec.x = vec1.x + vec2.x;
+	vec.y = vec1.y + vec2.y;
+	return vec;
+}
+tV2S64 tV2S64_Sub(tV2S64 vec1, tV2S64 vec2)
+{
+	tV2S64 vec;
+	vec.x = vec1.x - vec2.x;
+	vec.y = vec1.y - vec2.y;
+	return vec;
+}
+tV2S64 tV2S64_Mul(tV2S64 vec, tS64 mod)
+{
+	vec.x *= mod;
+	vec.y *= mod;
+	return vec;
+}
+tV2S64 tV2S64_Div(tV2S64 vec, tS64 mod)
+{
+	vec.x /= mod;
+	vec.y /= mod;
+	return vec;
+}
+tBln tV2S64_Eq(tV2S64 vec1, tV2S64 vec2)
+{
+	return (vec1.x == vec2.x) && (vec1.y == vec2.y);
+}
+tS64 tV2S64_Dot(tV2S64 vec1, tV2S64 vec2)
+{
+	return vec1.x * vec2.x + vec1.y * vec2.y;
+}
+#endif
+typedef union { struct { tF32 x, y; }; tF32 v[2]; } tV2F32;
+tV2F32 tV2F32_Make(tF32 x, tF32 y);
+tV2F32 tV2F32_Zero(tNone);
+tV2F32 tV2F32_Add(tV2F32 vec1, tV2F32 vec2);
+tV2F32 tV2F32_Sub(tV2F32 vec1, tV2F32 vec2);
+tV2F32 tV2F32_Mul(tV2F32 vec, tF32 mod);
+tV2F32 tV2F32_Div(tV2F32 vec, tF32 mod);
+tF32 tV2F32_Dot(tV2F32 vec1, tV2F32 vec2);
+tBln tV2F32_Eq(tV2F32 vec1, tV2F32 vec2);
+tBln tV2F32_Near(tV2F32 vec1, tV2F32 vec2, tF32 eps);
+tF32 tV2F32_LngSq(tV2F32 vec);
+tF32 tV2F32_Lng(tV2F32 vec);
+tV2F32 tV2F32_Norm(tV2F32 vec);
+tV2F32 tV2F32_FastNorm(tV2F32 vec);
+tF32 tV2F32_DistSq(tV2F32 vec1, tV2F32 vec2);
+tF32 tV2F32_Dist(tV2F32 vec1, tV2F32 vec2);
+tV2F32 tV2F32_Lerp(tV2F32 vec1, tV2F32 vec2, tF32 stp);
+#ifdef BQSE_MASTER
+tV2F32 tV2F32_Make(tF32 x, tF32 y)
+{
+	tV2F32 vec;
+	vec.x = x;
+	vec.y = y;
+	return vec;
+}
+tV2F32 tV2F32_Zero(tNone)
+{
+	tV2F32 vec;
+	vec.x = 0.0F;
+	vec.y = 0.0F;
+	return vec;
+}
+tV2F32 tV2F32_Add(tV2F32 vec1, tV2F32 vec2)
+{
+	tV2F32 vec;
+	vec.x = vec1.x + vec2.x;
+	vec.y = vec1.y + vec2.y;
+	return vec;
+}
+tV2F32 tV2F32_Sub(tV2F32 vec1, tV2F32 vec2)
+{
+	tV2F32 vec;
+	vec.x = vec1.x - vec2.x;
+	vec.y = vec1.y - vec2.y;
+	return vec;
+}
+tV2F32 tV2F32_Mul(tV2F32 vec, tF32 mod)
+{
+	vec.x *= mod;
+	vec.y *= mod;
+	return vec;
+}
+tV2F32 tV2F32_Div(tV2F32 vec, tF32 mod)
+{
+	vec.x /= mod;
+	vec.y /= mod;
+	return vec;
+}
+tF32 tV2F32_Dot(tV2F32 vec1, tV2F32 vec2)
+{
+	return vec1.x * vec2.x + vec1.y * vec2.y;
+}
+tBln tV2F32_Eq(tV2F32 vec1, tV2F32 vec2)
+{
+	return (vec1.x == vec2.x) && (vec1.y == vec2.y);
+}
+tBln tV2F32_Near(tV2F32 vec1, tV2F32 vec2, tF32 eps)
+{
+	return (tF32_Abs(vec1.x - vec2.x) <= eps) && (tF32_Abs(vec1.y - vec2.y) <= eps);
+}
+tF32 tV2F32_LngSq(tV2F32 vec)
+{
+	return tV2F32_Dot(vec, vec);
+}
+tF32 tV2F32_Lng(tV2F32 vec)
+{
+	return tF32_Sqrt(tV2F32_LngSq(vec));
+}
+tV2F32 tV2F32_Norm(tV2F32 vec)
+{
+	tF32 len = tV2F32_Lng(vec);
+	if (len == 0.0F) return tV2F32_Zero();
+	return tV2F32_Div(vec, len);
+}
+tV2F32 tV2F32_FastNorm(tV2F32 vec)
+{
+	tF32 lenSq = tV2F32_LngSq(vec);
+	if (lenSq == 0.0F) return tV2F32_Zero();
+	return tV2F32_Mul(vec, tF32_InvSqrt(lenSq));
+}
+tF32 tV2F32_DistSq(tV2F32 vec1, tV2F32 vec2)
+{
+	return tV2F32_LngSq(tV2F32_Sub(vec1, vec2));
+}
+tF32 tV2F32_Dist(tV2F32 vec1, tV2F32 vec2)
+{
+	return tV2F32_Lng(tV2F32_Sub(vec1, vec2));
+}
+tV2F32 tV2F32_Lerp(tV2F32 vec1, tV2F32 vec2, tF32 stp)
+{
+	tV2F32 vec;
+	vec.x = vec1.x + (vec2.x - vec1.x) * stp;
+	vec.y = vec1.y + (vec2.y - vec1.y) * stp;
+	return vec;
+}
+#endif
+typedef union { struct { tF32 x, y, z; }; tF32 v[3]; } tV3F32;
+tV3F32 tV3F32_Make(tF32 x, tF32 y, tF32 z);
+tV3F32 tV3F32_Zero(tNone);
+tV3F32 tV3F32_Add(tV3F32 vec1, tV3F32 vec2);
+tV3F32 tV3F32_Sub(tV3F32 vec1, tV3F32 vec2);
+tV3F32 tV3F32_Mul(tV3F32 vec, tF32 mod);
+tV3F32 tV3F32_Div(tV3F32 vec, tF32 mod);
+tF32 tV3F32_Dot(tV3F32 vec1, tV3F32 vec2);
+tBln tV3F32_Eq(tV3F32 vec1, tV3F32 vec2);
+tBln tV3F32_Near(tV3F32 vec1, tV3F32 vec2, tF32 eps);
+tF32 tV3F32_LngSq(tV3F32 vec);
+tF32 tV3F32_Lng(tV3F32 vec);
+tV3F32 tV3F32_Norm(tV3F32 vec);
+tV3F32 tV3F32_FastNorm(tV3F32 vec);
+tF32 tV3F32_DistSq(tV3F32 vec1, tV3F32 vec2);
+tF32 tV3F32_Dist(tV3F32 vec1, tV3F32 vec2);
+tV3F32 tV3F32_Lerp(tV3F32 vec1, tV3F32 vec2, tF32 stp);
+tV3F32 tV3F32_Cross(tV3F32 vec1, tV3F32 vec2);
+#ifdef BQSE_MASTER
+tV3F32 tV3F32_Make(tF32 x, tF32 y, tF32 z)
+{
+	tV3F32 vec;
+	vec.x = x;
+	vec.y = y;
+	vec.z = z;
+	return vec;
+}
+tV3F32 tV3F32_Zero(tNone)
+{
+	tV3F32 vec;
+	vec.x = 0.0F;
+	vec.y = 0.0F;
+	vec.z = 0.0F;
+	return vec;
+}
+tV3F32 tV3F32_Add(tV3F32 vec1, tV3F32 vec2)
+{
+	tV3F32 vec;
+	vec.x = vec1.x + vec2.x;
+	vec.y = vec1.y + vec2.y;
+	vec.z = vec1.z + vec2.z;
+	return vec;
+}
+tV3F32 tV3F32_Sub(tV3F32 vec1, tV3F32 vec2)
+{
+	tV3F32 vec;
+	vec.x = vec1.x - vec2.x;
+	vec.y = vec1.y - vec2.y;
+	vec.z = vec1.z - vec2.z;
+	return vec;
+}
+tV3F32 tV3F32_Mul(tV3F32 vec, tF32 mod)
+{
+	vec.x *= mod;
+	vec.y *= mod;
+	vec.z *= mod;
+	return vec;
+}
+tV3F32 tV3F32_Div(tV3F32 vec, tF32 mod)
+{
+	vec.x /= mod;
+	vec.y /= mod;
+	vec.z /= mod;
+	return vec;
+}
+tF32 tV3F32_Dot(tV3F32 vec1, tV3F32 vec2)
+{
+	return vec1.x * vec2.x +
+		vec1.y * vec2.y +
+		vec1.z * vec2.z;
+}
+tBln tV3F32_Eq(tV3F32 vec1, tV3F32 vec2)
+{
+	return (vec1.x == vec2.x) &&
+		(vec1.y == vec2.y) &&
+		(vec1.z == vec2.z);
+}
+tBln tV3F32_Near(tV3F32 vec1, tV3F32 vec2, tF32 eps)
+{
+	return (tF32_Abs(vec1.x - vec2.x) <= eps) && (tF32_Abs(vec1.y - vec2.y) <= eps) && (tF32_Abs(vec1.z - vec2.z) <= eps);
+}
+tF32 tV3F32_LngSq(tV3F32 vec)
+{
+	return tV3F32_Dot(vec, vec);
+}
+tF32 tV3F32_Lng(tV3F32 vec)
+{
+	return tF32_Sqrt(tV3F32_LngSq(vec));
+}
+tV3F32 tV3F32_Norm(tV3F32 vec)
+{
+	tF32 len = tV3F32_Lng(vec);
+
+	if (len == 0.0F)
+	{
+		return tV3F32_Zero();
+	}
+	return tV3F32_Div(vec, len);
+}
+tV3F32 tV3F32_FastNorm(tV3F32 vec)
+{
+	tF32 lenSq = tV3F32_LngSq(vec);
+	if (lenSq == 0.0F) return tV3F32_Zero();
+	return tV3F32_Mul(vec, tF32_InvSqrt(lenSq));
+}
+tF32 tV3F32_DistSq(tV3F32 vec1, tV3F32 vec2)
+{
+	return tV3F32_LngSq(tV3F32_Sub(vec1, vec2));
+}
+tF32 tV3F32_Dist(tV3F32 vec1, tV3F32 vec2)
+{
+	return tV3F32_Lng(tV3F32_Sub(vec1, vec2));
+}
+tV3F32 tV3F32_Lerp(tV3F32 vec1, tV3F32 vec2, tF32 stp)
+{
+	tV3F32 vec;
+	vec.x = vec1.x + (vec2.x - vec1.x) * stp;
+	vec.y = vec1.y + (vec2.y - vec1.y) * stp;
+	vec.z = vec1.z + (vec2.z - vec1.z) * stp;
+	return vec;
+}
+tV3F32 tV3F32_Cross(tV3F32 vec1, tV3F32 vec2)
+{
+	tV3F32 vec;
+	vec.x = vec1.y * vec2.z - vec1.z * vec2.y;
+	vec.y = vec1.z * vec2.x - vec1.x * vec2.z;
+	vec.z = vec1.x * vec2.y - vec1.y * vec2.x;
+	return vec;
+}
+#endif
+typedef union { struct { tF32 x, y, z, w; }; tF32 v[4]; } tV4F32;
+tV4F32 tV4F32_Make(tF32 x, tF32 y, tF32 z, tF32 w);
+tV4F32 tV4F32_Zero(tNone);
+tV4F32 tV4F32_Add(tV4F32 vec1, tV4F32 vec2);
+tV4F32 tV4F32_Sub(tV4F32 vec1, tV4F32 vec2);
+tV4F32 tV4F32_Mul(tV4F32 vec, tF32 mod);
+tV4F32 tV4F32_Div(tV4F32 vec, tF32 mod);
+tF32 tV4F32_Dot(tV4F32 vec1, tV4F32 vec2);
+tBln tV4F32_Eq(tV4F32 vec1, tV4F32 vec2);
+tBln tV4F32_Near(tV4F32 vec1, tV4F32 vec2, tF32 eps);
+tF32 tV4F32_LngSq(tV4F32 vec);
+tF32 tV4F32_Lng(tV4F32 vec);
+tV4F32 tV4F32_Norm(tV4F32 vec);
+tV4F32 tV4F32_FastNorm(tV4F32 vec);
+tF32 tV4F32_DistSq(tV4F32 vec1, tV4F32 vec2);
+tF32 tV4F32_Dist(tV4F32 vec1, tV4F32 vec2);
+tV4F32 tV4F32_Lerp(tV4F32 vec1, tV4F32 vec2, tF32 stp);
+#ifdef BQSE_MASTER
+tV4F32 tV4F32_Make(tF32 x, tF32 y, tF32 z, tF32 w)
+{
+	tV4F32 vec;
+	vec.x = x;
+	vec.y = y;
+	vec.z = z;
+	vec.w = w;
+	return vec;
+}
+tV4F32 tV4F32_Zero(tNone)
+{
+	tV4F32 vec;
+	vec.x = 0.0F;
+	vec.y = 0.0F;
+	vec.z = 0.0F;
+	vec.w = 0.0F;
+	return vec;
+}
+tV4F32 tV4F32_Add(tV4F32 vec1, tV4F32 vec2)
+{
+	tV4F32 vec;
+	vec.x = vec1.x + vec2.x;
+	vec.y = vec1.y + vec2.y;
+	vec.z = vec1.z + vec2.z;
+	vec.w = vec1.w + vec2.w;
+	return vec;
+}
+tV4F32 tV4F32_Sub(tV4F32 vec1, tV4F32 vec2)
+{
+	tV4F32 vec;
+	vec.x = vec1.x - vec2.x;
+	vec.y = vec1.y - vec2.y;
+	vec.z = vec1.z - vec2.z;
+	vec.w = vec1.w - vec2.w;
+	return vec;
+}
+tV4F32 tV4F32_Mul(tV4F32 vec, tF32 mod)
+{
+	vec.x *= mod;
+	vec.y *= mod;
+	vec.z *= mod;
+	vec.w *= mod;
+	return vec;
+}
+tV4F32 tV4F32_Div(tV4F32 vec, tF32 mod)
+{
+	vec.x /= mod;
+	vec.y /= mod;
+	vec.z /= mod;
+	vec.w /= mod;
+	return vec;
+}
+tF32 tV4F32_Dot(tV4F32 vec1, tV4F32 vec2)
+{
+	return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z + vec1.w * vec2.w;
+}
+tBln tV4F32_Eq(tV4F32 vec1, tV4F32 vec2)
+{
+	return (vec1.x == vec2.x) && (vec1.y == vec2.y) && (vec1.z == vec2.z) && (vec1.w == vec2.w);
+}
+tBln tV4F32_Near(tV4F32 vec1, tV4F32 vec2, tF32 eps)
+{
+	return (tF32_Abs(vec1.x - vec2.x) <= eps) && (tF32_Abs(vec1.y - vec2.y) <= eps) && (tF32_Abs(vec1.z - vec2.z) <= eps) && (tF32_Abs(vec1.w - vec2.w) <= eps);
+}
+tF32 tV4F32_LngSq(tV4F32 vec)
+{
+	return tV4F32_Dot(vec, vec);
+}
+tF32 tV4F32_Lng(tV4F32 vec)
+{
+	return tF32_Sqrt(tV4F32_LngSq(vec));
+}
+tV4F32 tV4F32_Norm(tV4F32 vec)
+{
+	tF32 len = tV4F32_Lng(vec);
+	if (len == 0.0F) return tV4F32_Zero();
+	return tV4F32_Div(vec, len);
+}
+tV4F32 tV4F32_FastNorm(tV4F32 vec)
+{
+	tF32 lenSq = tV4F32_LngSq(vec);
+	if (lenSq == 0.0F) return tV4F32_Zero();
+	return tV4F32_Mul(vec, tF32_InvSqrt(lenSq));
+}
+tF32 tV4F32_DistSq(tV4F32 vec1, tV4F32 vec2)
+{
+	return tV4F32_LngSq(tV4F32_Sub(vec1, vec2));
+}
+tF32 tV4F32_Dist(tV4F32 vec1, tV4F32 vec2)
+{
+	return tV4F32_Lng(tV4F32_Sub(vec1, vec2));
+}
+tV4F32 tV4F32_Lerp(tV4F32 vec1, tV4F32 vec2, tF32 stp)
+{
+	tV4F32 vec;
+	vec.x = vec1.x + (vec2.x - vec1.x) * stp;
+	vec.y = vec1.y + (vec2.y - vec1.y) * stp;
+	vec.z = vec1.z + (vec2.z - vec1.z) * stp;
+	vec.w = vec1.w + (vec2.w - vec1.w) * stp;
+	return vec;
+}
+#endif
+typedef union { struct { tF64 x, y; }; tF64 v[2]; } tV2F64;
+tV2F64 tV2F64_Make(tF64 x, tF64 y);
+tV2F64 tV2F64_Zero(tNone);
+tV2F64 tV2F64_Add(tV2F64 vec1, tV2F64 vec2);
+tV2F64 tV2F64_Sub(tV2F64 vec1, tV2F64 vec2);
+tV2F64 tV2F64_Mul(tV2F64 vec, tF64 mod);
+tV2F64 tV2F64_Div(tV2F64 vec, tF64 mod);
+tF64 tV2F64_Dot(tV2F64 vec1, tV2F64 vec2);
+tBln tV2F64_Eq(tV2F64 vec1, tV2F64 vec2);
+tBln tV2F64_Near(tV2F64 vec1, tV2F64 vec2, tF64 eps);
+tF64 tV2F64_LngSq(tV2F64 vec);
+tF64 tV2F64_Lng(tV2F64 vec);
+tV2F64 tV2F64_Norm(tV2F64 vec);
+tV2F64 tV2F64_FastNorm(tV2F64 vec);
+tF64 tV2F64_DistSq(tV2F64 vec1, tV2F64 vec2);
+tF64 tV2F64_Dist(tV2F64 vec1, tV2F64 vec2);
+tV2F64 tV2F64_Lerp(tV2F64 vec1, tV2F64 vec2, tF64 stp);
+#ifdef BQSE_MASTER
+tV2F64 tV2F64_Make(tF64 x, tF64 y)
+{
+	tV2F64 vec;
+	vec.x = x;
+	vec.y = y;
+	return vec;
+}
+tV2F64 tV2F64_Zero(tNone)
+{
+	tV2F64 vec;
+	vec.x = 0.0F;
+	vec.y = 0.0F;
+	return vec;
+}
+tV2F64 tV2F64_Add(tV2F64 vec1, tV2F64 vec2)
+{
+	tV2F64 vec;
+	vec.x = vec1.x + vec2.x;
+	vec.y = vec1.y + vec2.y;
+	return vec;
+}
+tV2F64 tV2F64_Sub(tV2F64 vec1, tV2F64 vec2)
+{
+	tV2F64 vec;
+	vec.x = vec1.x - vec2.x;
+	vec.y = vec1.y - vec2.y;
+	return vec;
+}
+tV2F64 tV2F64_Mul(tV2F64 vec, tF64 mod)
+{
+	vec.x *= mod;
+	vec.y *= mod;
+	return vec;
+}
+tV2F64 tV2F64_Div(tV2F64 vec, tF64 mod)
+{
+	vec.x /= mod;
+	vec.y /= mod;
+	return vec;
+}
+tF64 tV2F64_Dot(tV2F64 vec1, tV2F64 vec2)
+{
+	return vec1.x * vec2.x + vec1.y * vec2.y;
+}
+tBln tV2F64_Eq(tV2F64 vec1, tV2F64 vec2)
+{
+	return (vec1.x == vec2.x) && (vec1.y == vec2.y);
+}
+tBln tV2F64_Near(tV2F64 vec1, tV2F64 vec2, tF64 eps)
+{
+	return (tF64_Abs(vec1.x - vec2.x) <= eps) && (tF64_Abs(vec1.y - vec2.y) <= eps);
+}
+tF64 tV2F64_LngSq(tV2F64 vec)
+{
+	return tV2F64_Dot(vec, vec);
+}
+tF64 tV2F64_Lng(tV2F64 vec)
+{
+	return tF64_Sqrt(tV2F64_LngSq(vec));
+}
+tV2F64 tV2F64_Norm(tV2F64 vec)
+{
+	tF64 len = tV2F64_Lng(vec);
+	if (len == 0.0F) return tV2F64_Zero();
+	return tV2F64_Div(vec, len);
+}
+tV2F64 tV2F64_FastNorm(tV2F64 vec)
+{
+	tF64 lenSq = tV2F64_LngSq(vec);
+	if (lenSq == 0.0F) return tV2F64_Zero();
+	return tV2F64_Mul(vec, tF64_InvSqrt(lenSq));
+}
+tF64 tV2F64_DistSq(tV2F64 vec1, tV2F64 vec2)
+{
+	return tV2F64_LngSq(tV2F64_Sub(vec1, vec2));
+}
+tF64 tV2F64_Dist(tV2F64 vec1, tV2F64 vec2)
+{
+	return tV2F64_Lng(tV2F64_Sub(vec1, vec2));
+}
+tV2F64 tV2F64_Lerp(tV2F64 vec1, tV2F64 vec2, tF64 stp)
+{
+	tV2F64 vec;
+	vec.x = vec1.x + (vec2.x - vec1.x) * stp;
+	vec.y = vec1.y + (vec2.y - vec1.y) * stp;
+	return vec;
+}
+#endif
+typedef union { struct { tF64 x, y, z; }; tF64 v[3]; } tV3F64;
+tV3F64 tV3F64_Make(tF64 x, tF64 y, tF64 z);
+tV3F64 tV3F64_Zero(tNone);
+tV3F64 tV3F64_Add(tV3F64 vec1, tV3F64 vec2);
+tV3F64 tV3F64_Sub(tV3F64 vec1, tV3F64 vec2);
+tV3F64 tV3F64_Mul(tV3F64 vec, tF64 mod);
+tV3F64 tV3F64_Div(tV3F64 vec, tF64 mod);
+tF64 tV3F64_Dot(tV3F64 vec1, tV3F64 vec2);
+tBln tV3F64_Eq(tV3F64 vec1, tV3F64 vec2);
+tBln tV3F64_Near(tV3F64 vec1, tV3F64 vec2, tF64 eps);
+tF64 tV3F64_LngSq(tV3F64 vec);
+tF64 tV3F64_Lng(tV3F64 vec);
+tV3F64 tV3F64_Norm(tV3F64 vec);
+tV3F64 tV3F64_FastNorm(tV3F64 vec);
+tF64 tV3F64_DistSq(tV3F64 vec1, tV3F64 vec2);
+tF64 tV3F64_Dist(tV3F64 vec1, tV3F64 vec2);
+tV3F64 tV3F64_Lerp(tV3F64 vec1, tV3F64 vec2, tF64 stp);
+tV3F64 tV3F64_Cross(tV3F64 vec1, tV3F64 vec2);
+#ifdef BQSE_MASTER
+tV3F64 tV3F64_Make(tF64 x, tF64 y, tF64 z)
+{
+	tV3F64 vec;
+	vec.x = x;
+	vec.y = y;
+	vec.z = z;
+	return vec;
+}
+tV3F64 tV3F64_Zero(tNone)
+{
+	tV3F64 vec;
+	vec.x = 0.0F;
+	vec.y = 0.0F;
+	vec.z = 0.0F;
+	return vec;
+}
+tV3F64 tV3F64_Add(tV3F64 vec1, tV3F64 vec2)
+{
+	tV3F64 vec;
+	vec.x = vec1.x + vec2.x;
+	vec.y = vec1.y + vec2.y;
+	vec.z = vec1.z + vec2.z;
+	return vec;
+}
+tV3F64 tV3F64_Sub(tV3F64 vec1, tV3F64 vec2)
+{
+	tV3F64 vec;
+	vec.x = vec1.x - vec2.x;
+	vec.y = vec1.y - vec2.y;
+	vec.z = vec1.z - vec2.z;
+	return vec;
+}
+tV3F64 tV3F64_Mul(tV3F64 vec, tF64 mod)
+{
+	vec.x *= mod;
+	vec.y *= mod;
+	vec.z *= mod;
+	return vec;
+}
+tV3F64 tV3F64_Div(tV3F64 vec, tF64 mod)
+{
+	vec.x /= mod;
+	vec.y /= mod;
+	vec.z /= mod;
+	return vec;
+}
+tF64 tV3F64_Dot(tV3F64 vec1, tV3F64 vec2)
+{
+	return vec1.x * vec2.x +
+		vec1.y * vec2.y +
+		vec1.z * vec2.z;
+}
+tBln tV3F64_Eq(tV3F64 vec1, tV3F64 vec2)
+{
+	return (vec1.x == vec2.x) &&
+		(vec1.y == vec2.y) &&
+		(vec1.z == vec2.z);
+}
+tBln tV3F64_Near(tV3F64 vec1, tV3F64 vec2, tF64 eps)
+{
+	return (tF64_Abs(vec1.x - vec2.x) <= eps) && (tF64_Abs(vec1.y - vec2.y) <= eps) && (tF64_Abs(vec1.z - vec2.z) <= eps);
+}
+tF64 tV3F64_LngSq(tV3F64 vec)
+{
+	return tV3F64_Dot(vec, vec);
+}
+tF64 tV3F64_Lng(tV3F64 vec)
+{
+	return tF64_Sqrt(tV3F64_LngSq(vec));
+}
+tV3F64 tV3F64_Norm(tV3F64 vec)
+{
+	tF64 len = tV3F64_Lng(vec);
+
+	if (len == 0.0F)
+	{
+		return tV3F64_Zero();
+	}
+	return tV3F64_Div(vec, len);
+}
+tV3F64 tV3F64_FastNorm(tV3F64 vec)
+{
+	tF64 lenSq = tV3F64_LngSq(vec);
+	if (lenSq == 0.0F) return tV3F64_Zero();
+	return tV3F64_Mul(vec, tF64_InvSqrt(lenSq));
+}
+tF64 tV3F64_DistSq(tV3F64 vec1, tV3F64 vec2)
+{
+	return tV3F64_LngSq(tV3F64_Sub(vec1, vec2));
+}
+tF64 tV3F64_Dist(tV3F64 vec1, tV3F64 vec2)
+{
+	return tV3F64_Lng(tV3F64_Sub(vec1, vec2));
+}
+tV3F64 tV3F64_Lerp(tV3F64 vec1, tV3F64 vec2, tF64 stp)
+{
+	tV3F64 vec;
+	vec.x = vec1.x + (vec2.x - vec1.x) * stp;
+	vec.y = vec1.y + (vec2.y - vec1.y) * stp;
+	vec.z = vec1.z + (vec2.z - vec1.z) * stp;
+	return vec;
+}
+tV3F64 tV3F64_Cross(tV3F64 vec1, tV3F64 vec2)
+{
+	tV3F64 vec;
+	vec.x = vec1.y * vec2.z - vec1.z * vec2.y;
+	vec.y = vec1.z * vec2.x - vec1.x * vec2.z;
+	vec.z = vec1.x * vec2.y - vec1.y * vec2.x;
+	return vec;
+}
+#endif
+typedef union { struct { tF64 x, y, z, w; }; tF64 v[4]; } tV4F64;
+tV4F64 tV4F64_Make(tF64 x, tF64 y, tF64 z, tF64 w);
+tV4F64 tV4F64_Zero(tNone);
+tV4F64 tV4F64_Add(tV4F64 vec1, tV4F64 vec2);
+tV4F64 tV4F64_Sub(tV4F64 vec1, tV4F64 vec2);
+tV4F64 tV4F64_Mul(tV4F64 vec, tF64 mod);
+tV4F64 tV4F64_Div(tV4F64 vec, tF64 mod);
+tF64 tV4F64_Dot(tV4F64 vec1, tV4F64 vec2);
+tBln tV4F64_Eq(tV4F64 vec1, tV4F64 vec2);
+tBln tV4F64_Near(tV4F64 vec1, tV4F64 vec2, tF64 eps);
+tF64 tV4F64_LngSq(tV4F64 vec);
+tF64 tV4F64_Lng(tV4F64 vec);
+tV4F64 tV4F64_Norm(tV4F64 vec);
+tV4F64 tV4F64_FastNorm(tV4F64 vec);
+tF64 tV4F64_DistSq(tV4F64 vec1, tV4F64 vec2);
+tF64 tV4F64_Dist(tV4F64 vec1, tV4F64 vec2);
+tV4F64 tV4F64_Lerp(tV4F64 vec1, tV4F64 vec2, tF64 stp);
+#ifdef BQSE_MASTER
+tV4F64 tV4F64_Make(tF64 x, tF64 y, tF64 z, tF64 w)
+{
+	tV4F64 vec;
+	vec.x = x;
+	vec.y = y;
+	vec.z = z;
+	vec.w = w;
+	return vec;
+}
+tV4F64 tV4F64_Zero(tNone)
+{
+	tV4F64 vec;
+	vec.x = 0.0F;
+	vec.y = 0.0F;
+	vec.z = 0.0F;
+	vec.w = 0.0F;
+	return vec;
+}
+tV4F64 tV4F64_Add(tV4F64 vec1, tV4F64 vec2)
+{
+	tV4F64 vec;
+	vec.x = vec1.x + vec2.x;
+	vec.y = vec1.y + vec2.y;
+	vec.z = vec1.z + vec2.z;
+	vec.w = vec1.w + vec2.w;
+	return vec;
+}
+tV4F64 tV4F64_Sub(tV4F64 vec1, tV4F64 vec2)
+{
+	tV4F64 vec;
+	vec.x = vec1.x - vec2.x;
+	vec.y = vec1.y - vec2.y;
+	vec.z = vec1.z - vec2.z;
+	vec.w = vec1.w - vec2.w;
+	return vec;
+}
+tV4F64 tV4F64_Mul(tV4F64 vec, tF64 mod)
+{
+	vec.x *= mod;
+	vec.y *= mod;
+	vec.z *= mod;
+	vec.w *= mod;
+	return vec;
+}
+tV4F64 tV4F64_Div(tV4F64 vec, tF64 mod)
+{
+	vec.x /= mod;
+	vec.y /= mod;
+	vec.z /= mod;
+	vec.w /= mod;
+	return vec;
+}
+tF64 tV4F64_Dot(tV4F64 vec1, tV4F64 vec2)
+{
+	return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z + vec1.w * vec2.w;
+}
+tBln tV4F64_Eq(tV4F64 vec1, tV4F64 vec2)
+{
+	return (vec1.x == vec2.x) && (vec1.y == vec2.y) && (vec1.z == vec2.z) && (vec1.w == vec2.w);
+}
+tBln tV4F64_Near(tV4F64 vec1, tV4F64 vec2, tF64 eps)
+{
+	return (tF64_Abs(vec1.x - vec2.x) <= eps) && (tF64_Abs(vec1.y - vec2.y) <= eps) && (tF64_Abs(vec1.z - vec2.z) <= eps) && (tF64_Abs(vec1.w - vec2.w) <= eps);
+}
+tF64 tV4F64_LngSq(tV4F64 vec)
+{
+	return tV4F64_Dot(vec, vec);
+}
+tF64 tV4F64_Lng(tV4F64 vec)
+{
+	return tF64_Sqrt(tV4F64_LngSq(vec));
+}
+tV4F64 tV4F64_Norm(tV4F64 vec)
+{
+	tF64 len = tV4F64_Lng(vec);
+	if (len == 0.0F) return tV4F64_Zero();
+	return tV4F64_Div(vec, len);
+}
+tV4F64 tV4F64_FastNorm(tV4F64 vec)
+{
+	tF64 lenSq = tV4F64_LngSq(vec);
+	if (lenSq == 0.0F) return tV4F64_Zero();
+	return tV4F64_Mul(vec, tF64_InvSqrt(lenSq));
+}
+tF64 tV4F64_DistSq(tV4F64 vec1, tV4F64 vec2)
+{
+	return tV4F64_LngSq(tV4F64_Sub(vec1, vec2));
+}
+tF64 tV4F64_Dist(tV4F64 vec1, tV4F64 vec2)
+{
+	return tV4F64_Lng(tV4F64_Sub(vec1, vec2));
+}
+tV4F64 tV4F64_Lerp(tV4F64 vec1, tV4F64 vec2, tF64 stp)
+{
+	tV4F64 vec;
+	vec.x = vec1.x + (vec2.x - vec1.x) * stp;
+	vec.y = vec1.y + (vec2.y - vec1.y) * stp;
+	vec.z = vec1.z + (vec2.z - vec1.z) * stp;
+	vec.w = vec1.w + (vec2.w - vec1.w) * stp;
+	return vec;
+}
+#endif
 #endif//BQSELAYER_H
