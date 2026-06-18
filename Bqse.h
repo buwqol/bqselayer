@@ -220,6 +220,13 @@ tF32 tF32_SigNaN(tNone);
 tF32 tF32_Sine(tF32 ang);
 tF32 tF32_Cosine(tF32 ang);
 tF32 tF32_Tangent(tF32 ang);
+tF32 tF32_SineInv(tF32 num);
+tF32 tF32_CosineInv(tF32 num);
+tF32 tF32_TangentInv(tF32 num);
+tF32 tF32_TangentInv2(tF32 opp, tF32 adj);
+tF32 tF32_HypSine(tF32 ang);
+tF32 tF32_HypCosine(tF32 ang);
+tF32 tF32_HypTangent(tF32 ang);
 tF32 tF32_Sqrt(tF32 num);
 tF32 tF32_InvSqrt(tF32 num);
 tF32 tF32_Ln(tF32 num);
@@ -292,6 +299,34 @@ tF32 tF32_Tangent(tF32 ang)
 {
 	return tanf(ang);
 }
+tF32 tF32_SineInv(tF32 num)
+{
+	return asinf(num);
+}
+tF32 tF32_CosineInv(tF32 num)
+{
+	return acosf(num);
+}
+tF32 tF32_TangentInv(tF32 num)
+{
+	return atanf(num);
+}
+tF32 tF32_TangentInv2(tF32 opp, tF32 adj)
+{
+	return atan2(opp, adj);
+}
+tF32 tF32_HypSine(tF32 ang)
+{
+	return sinhf(ang);
+}
+tF32 tF32_HypCosine(tF32 ang)
+{
+	return coshf(ang);
+}
+tF32 tF32_HypTangent(tF32 ang)
+{
+	return tanhf(ang);
+}
 tF32 tF32_Sqrt(tF32 num)
 {
 	return sqrtf(num);
@@ -361,6 +396,13 @@ tF64 tF64_SigNaN(tNone);
 tF64 tF64_Sine(tF64 ang);
 tF64 tF64_Cosine(tF64 ang);
 tF64 tF64_Tangent(tF64 ang);
+tF64 tF64_SineInv(tF64 num);
+tF64 tF64_CosineInv(tF64 num);
+tF64 tF64_TangentInv(tF64 num);
+tF64 tF64_TangentInv2(tF64 opp, tF64 adj);
+tF64 tF64_HypSine(tF64 ang);
+tF64 tF64_HypCosine(tF64 ang);
+tF64 tF64_HypTangent(tF64 ang);
 tF64 tF64_Sqrt(tF64 num);
 tF64 tF64_InvSqrt(tF64 num);
 tF64 tF64_Ln(tF64 num);
@@ -432,6 +474,34 @@ tF64 tF64_Tangent(tF64 ang)
 {
 	return tan(ang);
 }
+tF64 tF64_SineInv(tF64 num)
+{
+	return asin(num);
+}
+tF64 tF64_CosineInv(tF64 num)
+{
+	return acos(num);
+}
+tF64 tF64_TangentInv(tF64 num)
+{
+	return atan(num);
+}
+tF64 tF64_TangentInv2(tF64 opp, tF64 adj)
+{
+	return atan2(opp, adj);
+}
+tF64 tF64_HypSine(tF64 ang)
+{
+	return sinh(ang);
+}
+tF64 tF64_HypCosine(tF64 ang)
+{
+	return cosh(ang);
+}
+tF64 tF64_HypTangent(tF64 ang)
+{
+	return tanh(ang);
+}
 tF64 tF64_Sqrt(tF64 num)
 {
 	return sqrt(num);
@@ -444,7 +514,7 @@ tF64 tF64_InvSqrt(tF64 num)
 	tF64 halfNum = number.dbl * 0.5;
 	number.raw = 0X5FE6EC85E7DE30DAULL - (number.raw >> 1U);
 	number.dbl = number.dbl * (threeHalfs - (halfNum * number.dbl * number.dbl));
-	// number.dbl = number.dbl * (threeHalfs - (halfNum * number.dbl * number.dbl));
+	// number.dbl = number.dbl * (threeHalfs - (halfNum * number.dbl * number.dbl)); // Optional second iteration.
 	return number.dbl;
 }
 tF64 tF64_Ln(tF64 num)
@@ -495,7 +565,7 @@ typedef tU32 tUSz;
 #endif
 
 #define WrapStatement(Stmnt) do{Stmnt}while(0U)
-#define ForceDump() (*(voltaile int *)0U = 0U)
+#define ForceDump() (*(voltaile long *)0U = 0U)
 #define Assertion(Cnd) WrapStatement(if(!(Cnd)){ForceDump();})
 #define Stringify_inner(Str) #Str
 #define Stringify(Str) Stringify_inner(Str)
@@ -524,7 +594,7 @@ tS32V2D tS32V2D_Zero(tNone);
 tS32V2D tS32V2D_Add(tS32V2D vec1, tS32V2D vec2);
 tS32V2D tS32V2D_Sub(tS32V2D vec1, tS32V2D vec2);
 tS32V2D tS32V2D_Mul(tS32V2D vec, tS32 mod);
-/*Warn: Silently returns `tS32V2D_Zero` on failure.*/
+/*Warn: Silently returns `tS32V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tS32V2D tS32V2D_Div(tS32V2D vec, tS32 mod);
 /*Note: Returns `False` on success.*/
 tBln tS32V2D_Div_safe(tS32V2D *vec, tS32 mod);
@@ -567,7 +637,11 @@ tS32V2D tS32V2D_Mul(tS32V2D vec, tS32 mod)
 }
 tS32V2D tS32V2D_Div(tS32V2D vec, tS32 mod)
 {
+#ifndef BQSE_DEBUG
 	if (mod == 0) return tS32V2D_Zero();
+#else
+	Assertion(mod != 0);
+#endif
 	vec.x /= mod;
 	vec.y /= mod;
 	return vec;
@@ -594,7 +668,7 @@ tS64V2D tS64V2D_Zero(tNone);
 tS64V2D tS64V2D_Add(tS64V2D vec1, tS64V2D vec2);
 tS64V2D tS64V2D_Sub(tS64V2D vec1, tS64V2D vec2);
 tS64V2D tS64V2D_Mul(tS64V2D vec, tS64 mod);
-/*Warn: Silently returns `tS64V2D_Zero` on failure.*/
+/*Warn: Silently returns `tS64V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tS64V2D tS64V2D_Div(tS64V2D vec, tS64 mod);
 /*Note: Returns `False` on success.*/
 tBln tS64V2D_Div_safe(tS64V2D *vec, tS64 mod);
@@ -644,7 +718,11 @@ tS64V2D tS64V2D_Div(tS64V2D vec, tS64 mod)
 }
 tBln tS64V2D_Div_safe(tS64V2D *vec, tS64 mod)
 {
+#ifndef BQSE_DEBUG
 	if (mod == 0) return True;
+#else
+	Assertion(mod != 0);
+#endif
 	vec->x /= mod;
 	vec->y /= mod;
 	return False;
@@ -664,7 +742,7 @@ tF32V2D tF32V2D_Zero(tNone);
 tF32V2D tF32V2D_Add(tF32V2D vec1, tF32V2D vec2);
 tF32V2D tF32V2D_Sub(tF32V2D vec1, tF32V2D vec2);
 tF32V2D tF32V2D_Mul(tF32V2D vec, tF32 mod);
-/*Warn: Silently returns `tF32V2D_Zero` on failure.*/
+/*Warn: Silently returns `tF32V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32V2D tF32V2D_Div(tF32V2D vec, tF32 mod);
 /*Note: Returns `False` on success.*/
 tBln tF32V2D_Div_safe(tF32V2D *vec, tF32 mod);
@@ -673,11 +751,11 @@ tBln tF32V2D_Eq(tF32V2D vec1, tF32V2D vec2);
 tBln tF32V2D_Nearby(tF32V2D vec1, tF32V2D vec2, tF32 eps);
 tF32 tF32V2D_LngSq(tF32V2D vec);
 tF32 tF32V2D_Lng(tF32V2D vec);
-/*Warn: Silently returns `tF32V2D_Zero` on failure.*/
+/*Warn: Silently returns `tF32V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32V2D tF32V2D_Norm(tF32V2D vec);
 /*Note: Returns `False` on success.*/
 tBln tF32V2D_Norm_safe(tF32V2D *vec);
-/*Warn: Silently returns `tF32V2D_Zero` on failure.*/
+/*Warn: Silently returns `tF32V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32V2D tF32V2D_FastNorm(tF32V2D vec);
 /*Note: Returns `False` on success.*/
 tBln tF32V2D_FastNorm_safe(tF32V2D *vec);
@@ -728,7 +806,11 @@ tF32V2D tF32V2D_Div(tF32V2D vec, tF32 mod)
 }
 tBln tF32V2D_Div_safe(tF32V2D *vec, tF32 mod)
 {
+#ifndef BQSE_DEBUG
 	if (mod == 0.0F) return True;
+#else
+	Assertion(mod != 0.0F);
+#endif
 	vec->x /= mod;
 	vec->y /= mod;
 	return False;
@@ -755,9 +837,13 @@ tF32 tF32V2D_Lng(tF32V2D vec)
 }
 tF32V2D tF32V2D_Norm(tF32V2D vec)
 {
-	tF32 len = tF32V2D_Lng(vec);
-	if (len == 0.0F) return tF32V2D_Zero();
-	return tF32V2D_Div(vec, len);
+	tF32 lng = tF32V2D_Lng(vec);
+#ifndef BQSE_DEBUG
+	if (lng == 0.0F) return tF32V2D_Zero();
+#else
+	Assertion(len != 0.0F);
+#endif
+	return tF32V2D_Div(vec, lng);
 }
 tBln tF32V2D_Norm_safe(tF32V2D *vec)
 {
@@ -765,15 +851,19 @@ tBln tF32V2D_Norm_safe(tF32V2D *vec)
 }
 tF32V2D tF32V2D_FastNorm(tF32V2D vec)
 {
-	tF32 lenSq = tF32V2D_LngSq(vec);
-	if (lenSq == 0.0F) return tF32V2D_Zero();
-	return tF32V2D_Mul(vec, tF32_InvSqrt(lenSq));
+	tF32 lngSq = tF32V2D_LngSq(vec);
+#ifndef BQSE_DEBUG
+	if (lngSq == 0.0F) return tF32V2D_Zero();
+#else
+	Assertion(lngSq != 0.0F);
+#endif
+	return tF32V2D_Mul(vec, tF32_InvSqrt(lngSq));
 }
 tBln tF32V2D_FastNorm_safe(tF32V2D *vec)
 {
-	tF32 lenSq = tF32V2D_LngSq(*vec);
-	if (lenSq == 0.0F) return True;
-	tF32V2D_Mul(*vec, tF32_InvSqrt(lenSq));
+	tF32 lngSq = tF32V2D_LngSq(*vec);
+	if (lngSq == 0.0F) return True;
+	tF32V2D_Mul(*vec, tF32_InvSqrt(lngSq));
 	return False;
 }
 tF32 tF32V2D_DistSq(tF32V2D vec1, tF32V2D vec2)
@@ -798,7 +888,7 @@ tF32V3D tF32V3D_Zero(tNone);
 tF32V3D tF32V3D_Add(tF32V3D vec1, tF32V3D vec2);
 tF32V3D tF32V3D_Sub(tF32V3D vec1, tF32V3D vec2);
 tF32V3D tF32V3D_Mul(tF32V3D vec, tF32 mod);
-/*Warn: Silently returns `tF32V3D_Zero` on failure.*/
+/*Warn: Silently returns `tF32V3D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32V3D tF32V3D_Div(tF32V3D vec, tF32 mod);
 /*Note: Returns `False` on success.*/
 tBln tF32V3D_Div_safe(tF32V3D *vec, tF32 mod);
@@ -807,11 +897,11 @@ tBln tF32V3D_Eq(tF32V3D vec1, tF32V3D vec2);
 tBln tF32V3D_Nearby(tF32V3D vec1, tF32V3D vec2, tF32 eps);
 tF32 tF32V3D_LngSq(tF32V3D vec);
 tF32 tF32V3D_Lng(tF32V3D vec);
-/*Warn: Silently returns `tF32V3D_Zero` on failure.*/
+/*Warn: Silently returns `tF32V3D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32V3D tF32V3D_Norm(tF32V3D vec);
 /*Note: Returns `False` on success.*/
 tBln tF32V3D_Norm_safe(tF32V3D *vec);
-/*Warn: Silently returns `tF32V3D_Zero` on failure.*/
+/*Warn: Silently returns `tF32V3D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32V3D tF32V3D_FastNorm(tF32V3D vec);
 /*Note: Returns `False` on success.*/
 tBln tF32V3D_FastNorm_safe(tF32V3D *vec);
@@ -861,7 +951,11 @@ tF32V3D tF32V3D_Mul(tF32V3D vec, tF32 mod)
 }
 tF32V3D tF32V3D_Div(tF32V3D vec, tF32 mod)
 {
+#ifndef BQSE_DEBUG
 	if (mod == 0.0F) return tF32V3D_Zero();
+#else
+	Assertion(mod != 0.0F);
+#endif
 	vec.x /= mod;
 	vec.y /= mod;
 	vec.z /= mod;
@@ -897,9 +991,13 @@ tF32 tF32V3D_Lng(tF32V3D vec)
 }
 tF32V3D tF32V3D_Norm(tF32V3D vec)
 {
-	tF32 len = tF32V3D_Lng(vec);
-	if (len == 0.0F) return tF32V3D_Zero();
-	return tF32V3D_Div(vec, len);
+	tF32 lng = tF32V3D_Lng(vec);
+#ifndef BQSE_DEBUG
+	if (lng == 0.0F) return tF32V3D_Zero();
+#else
+	Assertion(len != 0.0F);
+#endif
+	return tF32V3D_Div(vec, lng);
 }
 tBln tF32V3D_Norm_safe(tF32V3D *vec)
 {
@@ -907,15 +1005,19 @@ tBln tF32V3D_Norm_safe(tF32V3D *vec)
 }
 tF32V3D tF32V3D_FastNorm(tF32V3D vec)
 {
-	tF32 lenSq = tF32V3D_LngSq(vec);
-	if (lenSq == 0.0F) return tF32V3D_Zero();
-	return tF32V3D_Mul(vec, tF32_InvSqrt(lenSq));
+	tF32 lngSq = tF32V3D_LngSq(vec);
+#ifndef BQSE_DEBUG
+	if (lngSq == 0.0F) return tF32V3D_Zero();
+#else
+	Assertion(lngSq != 0.0F);
+#endif
+	return tF32V3D_Mul(vec, tF32_InvSqrt(lngSq));
 }
 tBln tF32V3D_FastNorm_safe(tF32V3D *vec)
 {
-	tF32 lenSq = tF32V3D_LngSq(*vec);
-	if (lenSq == 0.0F) return True;
-	tF32V3D_Mul(*vec, tF32_InvSqrt(lenSq));
+	tF32 lngSq = tF32V3D_LngSq(*vec);
+	if (lngSq == 0.0F) return True;
+	tF32V3D_Mul(*vec, tF32_InvSqrt(lngSq));
 	return False;
 }
 tF32 tF32V3D_DistSq(tF32V3D vec1, tF32V3D vec2)
@@ -949,7 +1051,7 @@ tF32V4D tF32V4D_Zero(tNone);
 tF32V4D tF32V4D_Add(tF32V4D vec1, tF32V4D vec2);
 tF32V4D tF32V4D_Sub(tF32V4D vec1, tF32V4D vec2);
 tF32V4D tF32V4D_Mul(tF32V4D vec, tF32 mod);
-/*Warn: Silently returns `tF32V4D_Zero` on failure.*/
+/*Warn: Silently returns `tF32V4D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32V4D tF32V4D_Div(tF32V4D vec, tF32 mod);
 /*Note: Returns `False` on success.*/
 tBln tF32V4D_Div_safe(tF32V4D *vec, tF32 mod);
@@ -958,11 +1060,11 @@ tBln tF32V4D_Eq(tF32V4D vec1, tF32V4D vec2);
 tBln tF32V4D_Nearby(tF32V4D vec1, tF32V4D vec2, tF32 eps);
 tF32 tF32V4D_LngSq(tF32V4D vec);
 tF32 tF32V4D_Lng(tF32V4D vec);
-/*Warn: Silently returns `tF32V4D_Zero` on failure.*/
+/*Warn: Silently returns `tF32V4D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32V4D tF32V4D_Norm(tF32V4D vec);
 /*Note: Returns `False` on success.*/
 tBln tF32V4D_Norm_safe(tF32V4D *vec);
-/*Warn: Silently returns `tF32V4D_Zero` on failure.*/
+/*Warn: Silently returns `tF32V4D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32V4D tF32V4D_FastNorm(tF32V4D vec);
 /*Note: Returns `False` on success.*/
 tBln tF32V4D_FastNorm_safe(tF32V4D *vec);
@@ -1016,7 +1118,11 @@ tF32V4D tF32V4D_Mul(tF32V4D vec, tF32 mod)
 }
 tF32V4D tF32V4D_Div(tF32V4D vec, tF32 mod)
 {
+#ifndef BQSE_DEBUG
 	if (mod == 0.0F) return tF32V4D_Zero();
+#else
+	Assertion(mod != 0.0F);
+#endif
 	vec.x /= mod;
 	vec.y /= mod;
 	vec.z /= mod;
@@ -1054,9 +1160,13 @@ tF32 tF32V4D_Lng(tF32V4D vec)
 }
 tF32V4D tF32V4D_Norm(tF32V4D vec)
 {
-	tF32 len = tF32V4D_Lng(vec);
-	if (len == 0.0F) return tF32V4D_Zero();
-	return tF32V4D_Div(vec, len);
+	tF32 lng = tF32V4D_Lng(vec);
+#ifndef BQSE_DEBUG
+	if (lng == 0.0F) return tF32V4D_Zero();
+#else
+	Assertion(len != 0.0F);
+#endif
+	return tF32V4D_Div(vec, lng);
 }
 tBln tF32V4D_Norm_safe(tF32V4D *vec)
 {
@@ -1064,15 +1174,19 @@ tBln tF32V4D_Norm_safe(tF32V4D *vec)
 }
 tF32V4D tF32V4D_FastNorm(tF32V4D vec)
 {
-	tF32 lenSq = tF32V4D_LngSq(vec);
-	if (lenSq == 0.0F) return tF32V4D_Zero();
-	return tF32V4D_Mul(vec, tF32_InvSqrt(lenSq));
+	tF32 lngSq = tF32V4D_LngSq(vec);
+#ifndef BQSE_DEBUG
+	if (lngSq == 0.0F) return tF32V4D_Zero();
+#else
+	Assertion(lngSq != 0.0F);
+#endif
+	return tF32V4D_Mul(vec, tF32_InvSqrt(lngSq));
 }
 tBln tF32V4D_FastNorm_safe(tF32V4D *vec)
 {
-	tF32 lenSq = tF32V4D_LngSq(*vec);
-	if (lenSq == 0.0F) return True;
-	tF32V4D_Mul(*vec, tF32_InvSqrt(lenSq));
+	tF32 lngSq = tF32V4D_LngSq(*vec);
+	if (lngSq == 0.0F) return True;
+	tF32V4D_Mul(*vec, tF32_InvSqrt(lngSq));
 	return False;
 }
 tF32 tF32V4D_DistSq(tF32V4D vec1, tF32V4D vec2)
@@ -1099,7 +1213,7 @@ tF64V2D tF64V2D_Zero(tNone);
 tF64V2D tF64V2D_Add(tF64V2D vec1, tF64V2D vec2);
 tF64V2D tF64V2D_Sub(tF64V2D vec1, tF64V2D vec2);
 tF64V2D tF64V2D_Mul(tF64V2D vec, tF64 mod);
-/*Warn: Silently returns `tF64V2D_Zero` on failure.*/
+/*Warn: Silently returns `tF64V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF64V2D tF64V2D_Div(tF64V2D vec, tF64 mod);
 /*Note: Returns `False` on success.*/
 tBln tF64V2D_Div_safe(tF64V2D *vec, tF64 mod);
@@ -1108,11 +1222,11 @@ tBln tF64V2D_Eq(tF64V2D vec1, tF64V2D vec2);
 tBln tF64V2D_Nearby(tF64V2D vec1, tF64V2D vec2, tF64 eps);
 tF64 tF64V2D_LngSq(tF64V2D vec);
 tF64 tF64V2D_Lng(tF64V2D vec);
-/*Warn: Silently returns `tF64V2D_Zero` on failure.*/
+/*Warn: Silently returns `tF64V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF64V2D tF64V2D_Norm(tF64V2D vec);
 /*Note: Returns `False` on success.*/
 tBln tF64V2D_Norm_safe(tF64V2D *vec);
-/*Warn: Silently returns `tF64V2D_Zero` on failure.*/
+/*Warn: Silently returns `tF64V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF64V2D tF64V2D_FastNorm(tF64V2D vec);
 /*Note: Returns `False` on success.*/
 tBln tF64V2D_FastNorm_safe(tF64V2D *vec);
@@ -1163,7 +1277,11 @@ tF64V2D tF64V2D_Div(tF64V2D vec, tF64 mod)
 }
 tBln tF64V2D_Div_safe(tF64V2D *vec, tF64 mod)
 {
+#ifndef BQSE_DEBUG
 	if (mod == 0.0) return True;
+#else
+	Assertion(mod != 0.0);
+#endif
 	vec->x /= mod;
 	vec->y /= mod;
 	return False;
@@ -1190,9 +1308,13 @@ tF64 tF64V2D_Lng(tF64V2D vec)
 }
 tF64V2D tF64V2D_Norm(tF64V2D vec)
 {
-	tF64 len = tF64V2D_Lng(vec);
-	if (len == 0.0) return tF64V2D_Zero();
-	return tF64V2D_Div(vec, len);
+	tF64 lng = tF64V2D_Lng(vec);
+#ifndef BQSE_DEBUG
+	if (lng == 0.0) return tF64V2D_Zero();
+#else
+	Assertion(len != 0.0);
+#endif
+	return tF64V2D_Div(vec, lng);
 }
 tBln tF64V2D_Norm_safe(tF64V2D *vec)
 {
@@ -1200,15 +1322,19 @@ tBln tF64V2D_Norm_safe(tF64V2D *vec)
 }
 tF64V2D tF64V2D_FastNorm(tF64V2D vec)
 {
-	tF64 lenSq = tF64V2D_LngSq(vec);
-	if (lenSq == 0.0) return tF64V2D_Zero();
-	return tF64V2D_Mul(vec, tF64_InvSqrt(lenSq));
+	tF64 lngSq = tF64V2D_LngSq(vec);
+#ifndef BQSE_DEBUG
+	if (lngSq == 0.0) return tF64V2D_Zero();
+#else
+	Assertion(lngSq != 0.0);
+#endif
+	return tF64V2D_Mul(vec, tF64_InvSqrt(lngSq));
 }
 tBln tF64V2D_FastNorm_safe(tF64V2D *vec)
 {
-	tF64 lenSq = tF64V2D_LngSq(*vec);
-	if (lenSq == 0.0) return True;
-	tF64V2D_Mul(*vec, tF64_InvSqrt(lenSq));
+	tF64 lngSq = tF64V2D_LngSq(*vec);
+	if (lngSq == 0.0) return True;
+	tF64V2D_Mul(*vec, tF64_InvSqrt(lngSq));
 	return False;
 }
 tF64 tF64V2D_DistSq(tF64V2D vec1, tF64V2D vec2)
@@ -1233,7 +1359,7 @@ tF64V3D tF64V3D_Zero(tNone);
 tF64V3D tF64V3D_Add(tF64V3D vec1, tF64V3D vec2);
 tF64V3D tF64V3D_Sub(tF64V3D vec1, tF64V3D vec2);
 tF64V3D tF64V3D_Mul(tF64V3D vec, tF64 mod);
-/*Warn: Silently returns `tF64V3D_Zero` on failure.*/
+/*Warn: Silently returns `tF64V3D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF64V3D tF64V3D_Div(tF64V3D vec, tF64 mod);
 /*Note: Returns `False` on success.*/
 tBln tF64V3D_Div_safe(tF64V3D *vec, tF64 mod);
@@ -1242,11 +1368,11 @@ tBln tF64V3D_Eq(tF64V3D vec1, tF64V3D vec2);
 tBln tF64V3D_Nearby(tF64V3D vec1, tF64V3D vec2, tF64 eps);
 tF64 tF64V3D_LngSq(tF64V3D vec);
 tF64 tF64V3D_Lng(tF64V3D vec);
-/*Warn: Silently returns `tF64V3D_Zero` on failure.*/
+/*Warn: Silently returns `tF64V3D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF64V3D tF64V3D_Norm(tF64V3D vec);
 /*Note: Returns `False` on success.*/
 tBln tF64V3D_Norm_safe(tF64V3D *vec);
-/*Warn: Silently returns `tF64V3D_Zero` on failure.*/
+/*Warn: Silently returns `tF64V3D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF64V3D tF64V3D_FastNorm(tF64V3D vec);
 /*Note: Returns `False` on success.*/
 tBln tF64V3D_FastNorm_safe(tF64V3D *vec);
@@ -1296,7 +1422,11 @@ tF64V3D tF64V3D_Mul(tF64V3D vec, tF64 mod)
 }
 tF64V3D tF64V3D_Div(tF64V3D vec, tF64 mod)
 {
+#ifndef BQSE_DEBUG
 	if (mod == 0.0) return tF64V3D_Zero();
+#else
+	Assertion(mod != 0.0);
+#endif
 	vec.x /= mod;
 	vec.y /= mod;
 	vec.z /= mod;
@@ -1332,9 +1462,13 @@ tF64 tF64V3D_Lng(tF64V3D vec)
 }
 tF64V3D tF64V3D_Norm(tF64V3D vec)
 {
-	tF64 len = tF64V3D_Lng(vec);
-	if (len == 0.0) return tF64V3D_Zero();
-	return tF64V3D_Div(vec, len);
+	tF64 lng = tF64V3D_Lng(vec);
+#ifndef BQSE_DEBUG
+	if (lng == 0.0) return tF64V3D_Zero();
+#else
+	Assertion(len != 0.0);
+#endif
+	return tF64V3D_Div(vec, lng);
 }
 tBln tF64V3D_Norm_safe(tF64V3D *vec)
 {
@@ -1342,15 +1476,19 @@ tBln tF64V3D_Norm_safe(tF64V3D *vec)
 }
 tF64V3D tF64V3D_FastNorm(tF64V3D vec)
 {
-	tF64 lenSq = tF64V3D_LngSq(vec);
-	if (lenSq == 0.0) return tF64V3D_Zero();
-	return tF64V3D_Mul(vec, tF64_InvSqrt(lenSq));
+	tF64 lngSq = tF64V3D_LngSq(vec);
+#ifndef BQSE_DEBUG
+	if (lngSq == 0.0) return tF64V3D_Zero();
+#else
+	Assertion(lngSq != 0.0);
+#endif
+	return tF64V3D_Mul(vec, tF64_InvSqrt(lngSq));
 }
 tBln tF64V3D_FastNorm_safe(tF64V3D *vec)
 {
-	tF64 lenSq = tF64V3D_LngSq(*vec);
-	if (lenSq == 0.0) return True;
-	tF64V3D_Mul(*vec, tF64_InvSqrt(lenSq));
+	tF64 lngSq = tF64V3D_LngSq(*vec);
+	if (lngSq == 0.0) return True;
+	tF64V3D_Mul(*vec, tF64_InvSqrt(lngSq));
 	return False;
 }
 tF64 tF64V3D_DistSq(tF64V3D vec1, tF64V3D vec2)
@@ -1384,7 +1522,7 @@ tF64V4D tF64V4D_Zero(tNone);
 tF64V4D tF64V4D_Add(tF64V4D vec1, tF64V4D vec2);
 tF64V4D tF64V4D_Sub(tF64V4D vec1, tF64V4D vec2);
 tF64V4D tF64V4D_Mul(tF64V4D vec, tF64 mod);
-/*Warn: Silently returns `tF64V4D_Zero` on failure.*/
+/*Warn: Silently returns `tF64V4D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF64V4D tF64V4D_Div(tF64V4D vec, tF64 mod);
 /*Note: Returns `False` on success.*/
 tBln tF64V4D_Div_safe(tF64V4D *vec, tF64 mod);
@@ -1393,11 +1531,11 @@ tBln tF64V4D_Eq(tF64V4D vec1, tF64V4D vec2);
 tBln tF64V4D_Nearby(tF64V4D vec1, tF64V4D vec2, tF64 eps);
 tF64 tF64V4D_LngSq(tF64V4D vec);
 tF64 tF64V4D_Lng(tF64V4D vec);
-/*Warn: Silently returns `tF64V4D_Zero` on failure.*/
+/*Warn: Silently returns `tF64V4D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF64V4D tF64V4D_Norm(tF64V4D vec);
 /*Note: Returns `False` on success.*/
 tBln tF64V4D_Norm_safe(tF64V4D *vec);
-/*Warn: Silently returns `tF64V4D_Zero` on failure.*/
+/*Warn: Silently returns `tF64V4D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF64V4D tF64V4D_FastNorm(tF64V4D vec);
 /*Note: Returns `False` on success.*/
 tBln tF64V4D_FastNorm_safe(tF64V4D *vec);
@@ -1451,7 +1589,11 @@ tF64V4D tF64V4D_Mul(tF64V4D vec, tF64 mod)
 }
 tF64V4D tF64V4D_Div(tF64V4D vec, tF64 mod)
 {
+#ifndef BQSE_DEBUG
 	if (mod == 0.0) return tF64V4D_Zero();
+#else
+	Assertion(mod != 0.0);
+#endif
 	vec.x /= mod;
 	vec.y /= mod;
 	vec.z /= mod;
@@ -1489,9 +1631,13 @@ tF64 tF64V4D_Lng(tF64V4D vec)
 }
 tF64V4D tF64V4D_Norm(tF64V4D vec)
 {
-	tF64 len = tF64V4D_Lng(vec);
-	if (len == 0.0) return tF64V4D_Zero();
-	return tF64V4D_Div(vec, len);
+	tF64 lng = tF64V4D_Lng(vec);
+#ifndef BQSE_DEBUG
+	if (lng == 0.0) return tF64V4D_Zero();
+#else
+	Assertion(len != 0.0);
+#endif
+	return tF64V4D_Div(vec, lng);
 }
 tBln tF64V4D_Norm_safe(tF64V4D *vec)
 {
@@ -1499,15 +1645,19 @@ tBln tF64V4D_Norm_safe(tF64V4D *vec)
 }
 tF64V4D tF64V4D_FastNorm(tF64V4D vec)
 {
-	tF64 lenSq = tF64V4D_LngSq(vec);
-	if (lenSq == 0.0) return tF64V4D_Zero();
-	return tF64V4D_Mul(vec, tF64_InvSqrt(lenSq));
+	tF64 lngSq = tF64V4D_LngSq(vec);
+#ifndef BQSE_DEBUG
+	if (lngSq == 0.0) return tF64V4D_Zero();
+#else
+	Assertion(lngSq != 0.0);
+#endif
+	return tF64V4D_Mul(vec, tF64_InvSqrt(lngSq));
 }
 tBln tF64V4D_FastNorm_safe(tF64V4D *vec)
 {
-	tF64 lenSq = tF64V4D_LngSq(*vec);
-	if (lenSq == 0.0) return True;
-	tF64V4D_Mul(*vec, tF64_InvSqrt(lenSq));
+	tF64 lngSq = tF64V4D_LngSq(*vec);
+	if (lngSq == 0.0) return True;
+	tF64V4D_Mul(*vec, tF64_InvSqrt(lngSq));
 	return False;
 }
 tF64 tF64V4D_DistSq(tF64V4D vec1, tF64V4D vec2)
@@ -1536,7 +1686,7 @@ tF32M2x2 tF32M2x2_Add(tF32M2x2 mat1, tF32M2x2 mat2);
 tF32M2x2 tF32M2x2_Sub(tF32M2x2 mat1, tF32M2x2 mat2);
 tF32M2x2 tF32M2x2_Mul(tF32M2x2 mat1, tF32M2x2 mat2);
 tF32M2x2 tF32M2x2_MulFlt(tF32M2x2 mat, tF32 mod);
-/*Warn: Silently returns `tF32M2x2_Zero` on failure.*/
+/*Warn: Silently returns `tF32M2x2_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32M2x2 tF32M2x2_DivFlt(tF32M2x2 mat, tF32 mod);
 /*Note: Returns `False` on success.*/
 tBln tF32M2x2_DivFlt_safe(tF32M2x2 *mat, tF32 mod);
@@ -1545,7 +1695,7 @@ tBln tF32M2x2_Nearby(tF32M2x2 mat1, tF32M2x2 mat2, tF32 eps);
 tF32V2D tF32M2x2_MulVec(tF32M2x2 mat, tF32V2D vec);
 tF32M2x2 tF32M2x2_Transp(tF32M2x2 mat);
 tF32 tF32M2x2_Det(tF32M2x2 mat);
-/*Warn: Silently returns `tF32M2x2_Zero` on failure.*/
+/*Warn: Silently returns `tF32M2x2_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32M2x2 tF32M2x2_Inv(tF32M2x2 mat);
 /*Note: Returns `False` on success.*/
 tBln tF32M2x2_Inv_safe(tF32M2x2 *mat);
@@ -1615,7 +1765,11 @@ tF32M2x2 tF32M2x2_MulFlt(tF32M2x2 mat, tF32 mod)
 }
 tF32M2x2 tF32M2x2_DivFlt(tF32M2x2 mat, tF32 mod)
 {
+#ifndef BQSE_DEBUG
 	if (mod == 0.0F) return tF32M2x2_Zero();
+#else
+	Assertion(mod != 0.0F);
+#endif
 	mat.m00 /= mod;
 	mat.m01 /= mod;
 	mat.m10 /= mod;
@@ -1660,7 +1814,11 @@ tF32 tF32M2x2_Det(tF32M2x2 mat)
 tF32M2x2 tF32M2x2_Inv(tF32M2x2 mat)
 {
 	tF32 det = tF32M2x2_Det(mat);
+#ifndef BQSE_DEBUG
 	if (tF32_Abs(det) <= tF32_Eps) return tF32M2x2_Zero();
+#else
+	Assertion(tF32_Abs(det) > tF32_Eps);
+#endif
 	tF32 tmp = mat.m00;
 	mat.m00 = mat.m11;
 	mat.m11 = tmp;
@@ -1709,7 +1867,7 @@ tF32M3x3 tF32M3x3_Add(tF32M3x3 mat1, tF32M3x3 mat2);
 tF32M3x3 tF32M3x3_Sub(tF32M3x3 mat1, tF32M3x3 mat2);
 tF32M3x3 tF32M3x3_Mul(tF32M3x3 mat1, tF32M3x3 mat2);
 tF32M3x3 tF32M3x3_MulFlt(tF32M3x3 mat, tF32 mod);
-/*Warn: Silently returns `tF32M3x3_Zero` on failure.*/
+/*Warn: Silently returns `tF32M3x3_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32M3x3 tF32M3x3_DivFlt(tF32M3x3 mat, tF32 mod);
 /*Note: Returns `False` on success.*/
 tBln tF32M3x3_DivFlt_safe(tF32M3x3 *mat, tF32 mod);
@@ -1718,7 +1876,7 @@ tBln tF32M3x3_Nearby(tF32M3x3 mat1, tF32M3x3 mat2, tF32 eps);
 tF32V3D tF32M3x3_MulVec(tF32M3x3 mat, tF32V3D vec);
 tF32M3x3 tF32M3x3_Transp(tF32M3x3 mat);
 tF32 tF32M3x3_Det(tF32M3x3 mat);
-/*Warn: Silently returns `tF32M3x3_Zero` on failure.*/
+/*Warn: Silently returns `tF32M3x3_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32M3x3 tF32M3x3_Inv(tF32M3x3 mat);
 /*Note: Returns `False` on success.*/
 tBln tF32M3x3_Inv_safe(tF32M3x3 *mat);
@@ -1738,7 +1896,7 @@ tF32M4x4 tF32M4x4_Add(tF32M4x4 mat1, tF32M4x4 mat2);
 tF32M4x4 tF32M4x4_Sub(tF32M4x4 mat1, tF32M4x4 mat2);
 tF32M4x4 tF32M4x4_Mul(tF32M4x4 mat1, tF32M4x4 mat2);
 tF32M4x4 tF32M4x4_MulFlt(tF32M4x4 mat, tF32 mod);
-/*Warn: Silently returns `tF32M4x4_Zero` on failure.*/
+/*Warn: Silently returns `tF32M4x4_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32M4x4 tF32M4x4_DivFlt(tF32M4x4 mat, tF32 mod);
 /*Note: Returns `False` on success.*/
 tBln tF32M4x4_DivFlt_safe(tF32M4x4 *mat, tF32 mod);
@@ -1747,7 +1905,7 @@ tBln tF32M4x4_Nearby(tF32M4x4 mat1, tF32M4x4 mat2, tF32 eps);
 tF32V4D tF32M4x4_MulVec(tF32M4x4 mat, tF32V4D vec);
 tF32M4x4 tF32M4x4_Transp(tF32M4x4 mat);
 tF32 tF32M4x4_Det(tF32M4x4 mat);
-/*Warn: Silently returns `tF32M4x4_Zero` on failure.*/
+/*Warn: Silently returns `tF32M4x4_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32M4x4 tF32M4x4_Inv(tF32M4x4 mat);
 /*Note: Returns `False` on success.*/
 tBln tF32M4x4_Inv_safe(tF32M4x4 *mat);
