@@ -1709,6 +1709,7 @@ tBln tF32M2x2_Nearby(tF32M2x2 mat1, tF32M2x2 mat2, tF32 eps);
 tF32V2D tF32M2x2_MulVec(tF32M2x2 mat, tF32V2D vec);
 tF32M2x2 tF32M2x2_Transp(tF32M2x2 mat);
 tF32 tF32M2x2_Det(tF32M2x2 mat);
+tF32M2x2 tF32M2x2_Adj(tF32M2x2 mat);
 /*Warn: Silently returns `tF32M2x2_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32M2x2 tF32M2x2_Inv(tF32M2x2 mat);
 /*Note: Returns `False` on success.*/
@@ -1825,6 +1826,15 @@ tF32 tF32M2x2_Det(tF32M2x2 mat)
 {
 	return (mat.m00 * mat.m11) - (mat.m01 * mat.m10);
 }
+tF32M2x2 tF32M2x2_Adj(tF32M2x2 mat)
+{
+	tF32 tmp = mat.m00;
+	mat.m00 = mat.m11;
+	mat.m11 = tmp;
+	mat.m01 = tF32_Neg(mat.m01);
+	mat.m10 = tF32_Neg(mat.m10);
+	return mat;
+}
 tF32M2x2 tF32M2x2_Inv(tF32M2x2 mat)
 {
 	tF32 det = tF32M2x2_Det(mat);
@@ -1833,23 +1843,13 @@ tF32M2x2 tF32M2x2_Inv(tF32M2x2 mat)
 #else
 	Assertion(tF32_Abs(det) > tF32_Eps);
 #endif
-	tF32 tmp = mat.m00;
-	mat.m00 = mat.m11;
-	mat.m11 = tmp;
-	mat.m01 = tF32_Neg(mat.m01);
-	mat.m10 = tF32_Neg(mat.m10);
-	return tF32M2x2_DivFlt(mat, det);
+	return tF32M2x2_DivFlt(tF32M2x2_Adj(mat), det);
 }
 tBln tF32M2x2_Inv_safe(tF32M2x2 *mat)
 {
 	tF32 det = tF32M2x2_Det(*mat);
 	if (tF32_Abs(det) <= tF32_Eps) return True;
-	tF32 tmp = mat->m00;
-	mat->m00 = mat->m11;
-	mat->m11 = tmp;
-	mat->m01 = tF32_Neg(mat->m01);
-	mat->m10 = tF32_Neg(mat->m10);
-	tF32M2x2_DivFlt(*mat, det);
+	*mat = tF32M2x2_DivFlt(tF32M2x2_Adj(*mat), det);
 	return False;
 }
 tF32M2x2 tF32M2x2_Rot(tF32 ang)
@@ -1890,6 +1890,7 @@ tBln tF32M3x3_Nearby(tF32M3x3 mat1, tF32M3x3 mat2, tF32 eps);
 tF32V3D tF32M3x3_MulVec(tF32M3x3 mat, tF32V3D vec);
 tF32M3x3 tF32M3x3_Transp(tF32M3x3 mat);
 tF32 tF32M3x3_Det(tF32M3x3 mat);
+tF32M3x3 tF32M3x3_Adj(tF32M3x3 mat);
 /*Warn: Silently returns `tF32M3x3_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32M3x3 tF32M3x3_Inv(tF32M3x3 mat);
 /*Note: Returns `False` on success.*/
@@ -1901,7 +1902,234 @@ tF32 tF32M3x3_Trace(tF32M3x3 mat);
 tF32V2D tF32M3x3_TransfPoint(tF32M3x3 mat, tF32V2D vec);
 tF32V2D tF32M3x3_TransfDir(tF32M3x3 mat, tF32V2D vec);
 #ifdef BQSE_MASTER
-// TODO: tF32M3x3 function implementations.
+tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22)
+{
+	tF32M3x3 mat;
+	mat.m00 = m00;
+	mat.m01 = m01;
+	mat.m02 = m02;
+	mat.m10 = m10;
+	mat.m11 = m11;
+	mat.m12 = m12;
+	mat.m20 = m20;
+	mat.m21 = m21;
+	mat.m22 = m22;
+	return mat;
+}
+tF32M3x3 tF32M3x3_Zero(tNone)
+{
+	tF32M3x3 mat;
+	mat.m00 = mat.m01 = mat.m02 = mat.m10 = mat.m11 = mat.m12 = mat.m20 = mat.m21 = mat.m22 = 0.0F;
+	return mat;
+}
+tF32M3x3 tF32M3x3_Id(tNone)
+{
+	tF32M3x3 mat;
+	mat.m01 = mat.m02 = mat.m10 = mat.m12 = mat.m20 = mat.m21 = 0.0F;
+	mat.m00 = mat.m11 = mat.m22 = 1.0F;
+	return mat;
+}
+tF32M3x3 tF32M3x3_Add(tF32M3x3 mat1, tF32M3x3 mat2)
+{
+	mat1.m00 += mat2.m00;
+	mat1.m01 += mat2.m01;
+	mat1.m02 += mat2.m02;
+	mat1.m10 += mat2.m10;
+	mat1.m11 += mat2.m11;
+	mat1.m12 += mat2.m12;
+	mat1.m20 += mat2.m20;
+	mat1.m21 += mat2.m21;
+	mat1.m22 += mat2.m22;
+	return mat1;
+}
+tF32M3x3 tF32M3x3_Sub(tF32M3x3 mat1, tF32M3x3 mat2)
+{
+	mat1.m00 -= mat2.m00;
+	mat1.m01 -= mat2.m01;
+	mat1.m02 -= mat2.m02;
+	mat1.m10 -= mat2.m10;
+	mat1.m11 -= mat2.m11;
+	mat1.m12 -= mat2.m12;
+	mat1.m20 -= mat2.m20;
+	mat1.m21 -= mat2.m21;
+	mat1.m22 -= mat2.m22;
+	return mat1;
+}
+tF32M3x3 tF32M3x3_Mul(tF32M3x3 mat1, tF32M3x3 mat2)
+{
+	tF32M3x3 res;
+	res.m00 = (mat1.m00 * mat2.m00) + (mat1.m01 * mat2.m10) + (mat1.m02 * mat2.m20);
+	res.m01 = (mat1.m00 * mat2.m01) + (mat1.m01 * mat2.m11) + (mat1.m02 * mat2.m21);
+	res.m02 = (mat1.m00 * mat2.m02) + (mat1.m01 * mat2.m12) + (mat1.m02 * mat2.m22);
+	res.m10 = (mat1.m10 * mat2.m00) + (mat1.m11 * mat2.m10) + (mat1.m12 * mat2.m20);
+	res.m11 = (mat1.m10 * mat2.m01) + (mat1.m11 * mat2.m11) + (mat1.m12 * mat2.m21);
+	res.m12 = (mat1.m10 * mat2.m02) + (mat1.m11 * mat2.m12) + (mat1.m12 * mat2.m22);
+	res.m20 = (mat1.m20 * mat2.m00) + (mat1.m21 * mat2.m10) + (mat1.m22 * mat2.m20);
+	res.m21 = (mat1.m20 * mat2.m01) + (mat1.m21 * mat2.m11) + (mat1.m22 * mat2.m21);
+	res.m22 = (mat1.m20 * mat2.m02) + (mat1.m21 * mat2.m12) + (mat1.m22 * mat2.m22);
+	return res;
+}
+tF32M3x3 tF32M3x3_MulFlt(tF32M3x3 mat, tF32 mod)
+{
+	mat.m00 *= mod;
+	mat.m01 *= mod;
+	mat.m02 *= mod;
+	mat.m10 *= mod;
+	mat.m11 *= mod;
+	mat.m12 *= mod;
+	mat.m20 *= mod;
+	mat.m21 *= mod;
+	mat.m22 *= mod;
+	return mat;
+}
+tF32M3x3 tF32M3x3_DivFlt(tF32M3x3 mat, tF32 mod)
+{
+#ifndef BQSE_DEBUG
+	if (mod == 0.0F) return tF32M3x3_Zero();
+#else
+	Assertion(mod != 0.0F);
+#endif
+	mat.m00 /= mod;
+	mat.m01 /= mod;
+	mat.m02 /= mod;
+	mat.m10 /= mod;
+	mat.m11 /= mod;
+	mat.m12 /= mod;
+	mat.m20 /= mod;
+	mat.m21 /= mod;
+	mat.m22 /= mod;
+	return mat;
+}
+tBln tF32M3x3_DivFlt_safe(tF32M3x3 *mat, tF32 mod)
+{
+	if (mod == 0.0F) return True;
+	mat->m00 /= mod;
+	mat->m01 /= mod;
+	mat->m02 /= mod;
+	mat->m10 /= mod;
+	mat->m11 /= mod;
+	mat->m12 /= mod;
+	mat->m20 /= mod;
+	mat->m21 /= mod;
+	mat->m22 /= mod;
+	return False;
+}
+tBln tF32M3x3_Eq(tF32M3x3 mat1, tF32M3x3 mat2)
+{
+	return (mat1.m00 == mat2.m00) && (mat1.m01 == mat2.m01) && (mat1.m02 == mat2.m02) && (mat1.m10 == mat2.m10) && (mat1.m11 == mat2.m11) && (mat1.m12 == mat2.m12) && (mat1.m20 == mat2.m20) && (mat1.m21 == mat2.m21) && (mat1.m22 == mat2.m22);
+}
+tBln tF32M3x3_Nearby(tF32M3x3 mat1, tF32M3x3 mat2, tF32 eps)
+{
+	return (tF32_Abs(mat1.m00 - mat2.m00) <= eps) && (tF32_Abs(mat1.m01 - mat2.m01) <= eps) && (tF32_Abs(mat1.m02 - mat2.m02) <= eps) && (tF32_Abs(mat1.m10 - mat2.m10) <= eps) && (tF32_Abs(mat1.m11 - mat2.m11) <= eps) && (tF32_Abs(mat1.m12 - mat2.m12) <= eps) && (tF32_Abs(mat1.m20 - mat2.m20) <= eps) && (tF32_Abs(mat1.m21 - mat2.m21) <= eps) && (tF32_Abs(mat1.m22 - mat2.m22) <= eps);
+}
+tF32V3D tF32M3x3_MulVec(tF32M3x3 mat, tF32V3D vec)
+{
+	tF32V3D res;
+	res.x = (mat.m00 * vec.x) + (mat.m01 * vec.y) + (mat.m02 * vec.z);
+	res.y = (mat.m10 * vec.x) + (mat.m11 * vec.y) + (mat.m12 * vec.z);
+	res.z = (mat.m20 * vec.x) + (mat.m21 * vec.y) + (mat.m22 * vec.z);
+	return res;
+}
+tF32M3x3 tF32M3x3_Transp(tF32M3x3 mat)
+{
+	tF32 tmp = mat.m01;
+	mat.m01 = mat.m10;
+	mat.m10 = tmp;
+	tmp = mat.m02;
+	mat.m02 = mat.m20;
+	mat.m20 = tmp;
+	tmp = mat.m12;
+	mat.m12 = mat.m21;
+	mat.m21 = tmp;
+	return mat;
+}
+tF32 tF32M3x3_Det(tF32M3x3 mat)
+{
+	return (mat.m00 * ((mat.m11 * mat.m22) - (mat.m12 * mat.m21))) - (mat.m01 * ((mat.m10 * mat.m22) - (mat.m12 * mat.m20))) + (mat.m02 * ((mat.m10 * mat.m21) - (mat.m11 * mat.m20)));
+}
+tF32M3x3 tF32M3x3_Adj(tF32M3x3 mat)
+{
+	tF32M3x3 adj;
+	// What was I thinking?
+	// adj.m00 = mat.m11 * mat.m22 - mat.m21 * mat.m12;
+	// adj.m01 = tF32_Neg(mat.m01 * mat.m22 - mat.m21 * mat.m02);
+	// adj.m02 = mat.m01 * mat.m22 - mat.m21 * mat.m02;
+	// adj.m10 = tF32_Neg(mat.m10 * mat.m22 - mat.m20 * mat.m12);
+	// adj.m11 = mat.m00 * mat.m22 - mat.m20 * mat.m02;
+	// adj.m12 = tF32_Neg(mat.m00 * mat.m12 - mat.m10 * mat.m02);
+	// adj.m20 = mat.m10 * mat.m21 - mat.m20 * mat.m11;
+	// adj.m21 = tF32_Neg(mat.m00 * mat.m21 - mat.m20 * mat.m01);
+	// adj.m22 = mat.m00 * mat.m11 - mat.m10 * mat.m01;
+	adj.m00 = mat.m11 * mat.m22 - mat.m12 * mat.m21;
+	adj.m01 = tF32_Neg(mat.m10 * mat.m22 - mat.m12 * mat.m20);
+	adj.m02 = mat.m10 * mat.m21 - mat.m11 * mat.m20;
+	adj.m10 = tF32_Neg(mat.m01 * mat.m22 - mat.m02 * mat.m21);
+	adj.m11 = mat.m00 * mat.m22 - mat.m02 * mat.m20;
+	adj.m12 = tF32_Neg(mat.m00 * mat.m21 - mat.m01 * mat.m20);
+	adj.m20 = mat.m01 * mat.m12 - mat.m02 * mat.m11;
+	adj.m21 = tF32_Neg(mat.m00 * mat.m12 - mat.m02 * mat.m10);
+	adj.m22 = mat.m00 * mat.m11 - mat.m01 * mat.m10;
+	return adj;
+}
+tF32M3x3 tF32M3x3_Inv(tF32M3x3 mat)
+{
+	tF32 det = tF32M3x3_Det(mat);
+#ifndef BQSE_DEBUG
+	if (tF32_Abs(det) <= tF32_Eps) return tF32M3x3_Zero();
+#else
+	Assertion(tF32_Abs(det) > tF32_Eps);
+#endif
+	return tF32M3x3_DivFlt(tF32M3x3_Adj(mat), det);
+}
+tBln tF32M3x3_Inv_safe(tF32M3x3 *mat)
+{
+	tF32 det = tF32M3x3_Det(*mat);
+	if (tF32_Abs(det) <= tF32_Eps) return True;
+	*mat = tF32M3x3_DivFlt(tF32M3x3_Adj(*mat), det);
+	return False;
+}
+tF32M3x3 tF32M3x3_Transl(tF32 x, tF32 y)
+{
+	tF32M3x3 mat = tF32M3x3_Id();
+	mat.m02 = x;
+	mat.m12 = y;
+	return mat;
+}
+tF32M3x3 tF32M3x3_Scale(tF32 x, tF32 y)
+{
+	tF32M3x3 mat = tF32M3x3_Id();
+
+	mat.m00 = x;
+	mat.m11 = y;
+
+	return mat;
+}
+tF32M3x3 tF32M3x3_Rot(tF32 ang)
+{
+	tF32M3x3 mat = tF32M3x3_Id();
+	mat.m00 = mat.m11 = tF32_Cosine(ang);
+	mat.m10 = tF32_Sine(ang);
+	mat.m01 = tF32_Neg(mat.m10);
+	return mat;
+}
+tF32 tF32M3x3_Trace(tF32M3x3 mat)
+{
+	return mat.m00 + mat.m11 + mat.m22;
+}
+tF32V2D tF32M3x3_TransfPoint(tF32M3x3 mat, tF32V2D vec)
+{
+	tF32V2D res;
+	res.x = mat.m00 * vec.x + mat.m01 * vec.y + mat.m02;
+	res.y = mat.m10 * vec.x + mat.m11 * vec.y + mat.m12;
+	return res;
+}
+tF32V2D tF32M3x3_TransfDir(tF32M3x3 mat, tF32V2D vec)
+{
+	tF32V2D res;
+	res.x = mat.m00 * vec.x + mat.m01 * vec.y;
+	res.y = mat.m10 * vec.x + mat.m11 * vec.y;
+	return res;
+}
 #endif
 typedef union { struct { tF32 m00, m01, m02, m03; tF32 m10, m11, m12, m13; tF32 m20, m21, m22, m23; tF32 m30, m31, m32, m33; }; tF32 m[4][4]; tF32V4D row[4]; } tF32M4x4;
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33);
@@ -1920,6 +2148,7 @@ tBln tF32M4x4_Nearby(tF32M4x4 mat1, tF32M4x4 mat2, tF32 eps);
 tF32V4D tF32M4x4_MulVec(tF32M4x4 mat, tF32V4D vec);
 tF32M4x4 tF32M4x4_Transp(tF32M4x4 mat);
 tF32 tF32M4x4_Det(tF32M4x4 mat);
+tF32M4x4 tF32M4x4_Adj(tF32M4x4 mat);
 /*Warn: Silently returns `tF32M4x4_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32M4x4 tF32M4x4_Inv(tF32M4x4 mat);
 /*Note: Returns `False` on success.*/
@@ -1954,6 +2183,7 @@ typedef union { struct { tF64 m00, m01, m02, m03; tF64 m10, m11, m12, m13; tF64 
 #ifdef BQSE_MASTER
 // TODO: tF64M4x4 function implementations.
 #endif
+// TODO: Quaternions
 enum eAxis
 {
 	eAxis_X,
@@ -1969,9 +2199,18 @@ enum eCompiler
 	eCompiler_Clang,
 	eCompiler_COUNT
 };
-// TODO: enum eCompiler string literal map extern declaration.
+const tChr *BQSE_GetCompiler(enum eCompiler comp);
 #ifdef BQSE_MASTER
-// TODO: enum eCompiler string literal map. 
+const tChr *BQSE_GetCompiler(enum eCompiler comp)
+{
+	switch (comp)
+	{
+	case eCompiler_MSVC: return "Microsoft Visual C";
+	case eCompiler_GNUC: return "GNU Compiler";
+	case eCompiler_Clang: return "Clang/LLVM";
+	default: return "Unknown";
+	}
+}
 #endif
 enum eOperatingSystem
 {
@@ -1984,9 +2223,21 @@ enum eOperatingSystem
 	eOperatingSystem_Unix,
 	eOperatingSystem_COUNT
 };
-// TODO: enum eOperatingSystem string literal map extern declaration.
+const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os);
 #ifdef BQSE_MASTER
-// TODO: enum eOperatingSystem string literal map. 
+const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os)
+{
+	switch (os)
+	{
+	case eOperatingSystem_Windows: return "Windows";
+	case eOperatingSystem_Linux: return "Linux";
+	case eOperatingSystem_MacOS: return "MacOS";
+	case eOperatingSystem_FreeBSD: return "FreeBSD";
+	case eOperatingSystem_MSDOS: return "MSDOS";
+	case eOperatingSystem_Unix: return "Unix";
+	default: return "Unknown";
+	}
+}
 #endif
 enum eArchitecture
 {
@@ -1997,9 +2248,19 @@ enum eArchitecture
 	eArchitecture_Arm,
 	eArchitecture_COUNT
 };
-// TODO: enum eArchitecture string literal map extern declaration.
+const tChr *BQSE_GetArchitecture(enum eArchitecture arch);
 #ifdef BQSE_MASTER
-// TODO: enum eArchitecture string literal map. 
+const tChr *BQSE_GetArchitecture(enum eArchitecture arch)
+{
+	switch (arch)
+	{
+	case eArchitecture_AMD64: return "AMD64";
+	case eArchitecture_Intel86: return "Intel86";
+	case eArchitecture_Arm64: return "Arm64";
+	case eArchitecture_Arm: return "Arm";
+	default: return "Unknown";
+	}
+}
 #endif
 enum eMonth
 {
@@ -2014,11 +2275,49 @@ enum eMonth
 	eMonth_Sep,
 	eMonth_Oct,
 	eMonth_Nov,
-	eMonth_Dec,
+	eMonth_Dec
 };
-// TODO: enum eMonth string literal map extern declaration.
+const tChr *BQSE_GetMonth(enum eMonth mon);
+const tChr *BQSE_GetMonthFull(enum eMonth mon);
 #ifdef BQSE_MASTER
-// TODO: enum eMonth string literal map. 
+const tChr *BQSE_GetMonth(enum eMonth mon)
+{
+	switch (mon)
+	{
+	case eMonth_Jan: return "Jan";
+	case eMonth_Feb: return "Feb";
+	case eMonth_Mar: return "Mar";
+	case eMonth_Apr: return "Apr";
+	case eMonth_May: return "May";
+	case eMonth_Jun: return "Jun";
+	case eMonth_Jul: return "Jul";
+	case eMonth_Aug: return "Aug";
+	case eMonth_Sep: return "Sep";
+	case eMonth_Oct: return "Oct";
+	case eMonth_Nov: return "Nov";
+	case eMonth_Dec: return "Dec";
+	default: return "Unknown";
+	}
+}
+const tChr *BQSE_GetMonthFull(enum eMonth mon)
+{
+	switch (mon)
+	{
+	case eMonth_Jan: return "January";
+	case eMonth_Feb: return "February";
+	case eMonth_Mar: return "March";
+	case eMonth_Apr: return "April";
+	case eMonth_May: return "May";
+	case eMonth_Jun: return "June";
+	case eMonth_Jul: return "July";
+	case eMonth_Aug: return "August";
+	case eMonth_Sep: return "September";
+	case eMonth_Oct: return "October";
+	case eMonth_Nov: return "November";
+	case eMonth_Dec: return "December";
+	default: return "Unknown";
+	}
+}
 #endif
 enum eDay
 {
@@ -2030,8 +2329,36 @@ enum eDay
 	eDay_Fri,
 	eDay_Sat
 };
-// TODO: enum eDay string literal map extern declaration.
+const tChr *BQSE_GetDay(enum eDay day);
+const tChr *BQSE_GetDayFull(enum eDay day);
 #ifdef BQSE_MASTER
-// TODO: enum eDay string literal map. 
+const tChr *BQSE_GetDay(enum eDay day)
+{
+	switch (day)
+	{
+	case eDay_Sun: return "Sun";
+	case eDay_Mon: return "Mon";
+	case eDay_Tue: return "Tue";
+	case eDay_Wed: return "Wed";
+	case eDay_Thu: return "Thu";
+	case eDay_Fri: return "Fri";
+	case eDay_Sat: return "Sat";
+	default: return "Unknown";
+	}
+}
+const tChr *BQSE_GetDayFull(enum eDay day)
+{
+	switch (day)
+	{
+	case eDay_Sun: return "Sunday";
+	case eDay_Mon: return "Monday";
+	case eDay_Tue: return "Tuesday";
+	case eDay_Wed: return "Wednesday";
+	case eDay_Thu: return "Thursday";
+	case eDay_Fri: return "Friday";
+	case eDay_Sat: return "Saturday";
+	default: return "Unknown";
+	}
+}
 #endif
 #endif//BQSELAYER_H
