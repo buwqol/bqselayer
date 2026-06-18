@@ -48,10 +48,13 @@
 // Compiler
 #if defined(__clang__)
 #define COMP_Clang 1
+#define COMP_Curr eCompiler_Clang
 #elif defined(_MSC_VER)
 #define COMP_MSVC 1
+#define COMP_Curr eCompiler_MSVC
 #elif defined(__GNUC__)
 #define COMP_GNUC 1
+#define COMP_Curr eCompiler_GNUC
 #else
 #error "Unknown compiler"
 #endif
@@ -59,16 +62,22 @@
 // Operating system
 #if defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
 #define OS_FreeBSD 1
+#define OS_Curr eOperatingSystem_FreeBSD
 #elif defined(__linux__) || defined(__gnu_linux__) || defined(linux) || defined(__linux)
 #define OS_Linux 1
+#define OS_Curr eOperatingSystem_Linux
 #elif defined(_WIN16) || defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) || defined(__TOS_WIN__) || defined(__WINDOWS__)
 #define OS_Windows 1
+#define OS_Curr eOperatingSystem_Windows
 #elif defined(macintosh) || defined(Macintosh) || (defined(__APPLE__) && defined(__MACH__))
 #define OS_MacOS 1
+#define OS_Curr eOperatingSystem_MacOS
 #elif defined(MSDOS) || defined(__MSDOS__) || defined(_MSDOS) || defined(__DOS__)
 #define OS_MSDOS 1
+#define OS_Curr eOperatingSystem_MSDOS
 #elif defined(__unix__) || defined(__unix)
 #define OS_Unix 1
+#define OS_Curr eOperatingSystem_Unix
 #else
 #error "Unknown operating system"
 #endif
@@ -76,12 +85,16 @@
 // Architecture
 #if defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64)
 #define ARCH_AMD64 1
+#define ARCH_Curr eArchitecture_AMD64
 #elif defined(i386) || defined(__i386) || defined(__i386__) || defined(__i386) || defined(__IA32__) || defined(_M_I86) || defined(_M_IX86) || defined(__X86__) || defined(_X86_) || defined(__THW_INTEL__) || defined(__I86__) || defined(__INTEL__) || defined(__386)
 #define ARCH_Intel86 1
+#define ARCH_Curr eArchitecture_Intel86
 #elif defined(__aarch64__)
 #define ARCH_Arm64 1
+#define ARCH_Curr eArchitecture_Arm64
 #elif defined(__arm__) || defined(__thumb__) || defined(__TARGET_ARCH_ARM) || defined(__TARGET_ARCH_THUMB) || defined(_ARM) || defined(_M_ARM) || defined(_M_ARMT) || defined(__arm)
 #define ARCH_Arm 1
+#define ARCH_Curr eArchitecture_Arm
 #else
 #error "Unknown architecture"
 #endif
@@ -204,6 +217,7 @@ BQSE_DEFINE_MINMAXCLAMPS(tU64);
 #endif
 #undef BQSE_DECLARE_MINMAXCLAMPS
 #undef BQSE_DEFINE_MINMAXCLAMPS
+// TODO: tF16 half precision floating point type.
 typedef float tF32;
 typedef char Bqse_StaticAssert_IEEE754_tF32[(sizeof(tF32) == 4U) ? 1U : -1];
 #define tF32_Pi 3.141592653589793F
@@ -286,7 +300,7 @@ tF32 tF32_SigNaN(tNone)
 	num.raw = 0XFF800001U;
 	return num.flt;
 }
-#include <math.h> // TODO: Move away from this eventually
+#include <math.h> // TODO: Move away from this eventually.
 tF32 tF32_Sine(tF32 ang)
 {
 	return sinf(ang);
@@ -331,7 +345,7 @@ tF32 tF32_Sqrt(tF32 num)
 {
 	return sqrtf(num);
 }
-tF32 tF32_InvSqrt(tF32 num) // Fast inverse sqrt from Quake 3
+tF32 tF32_InvSqrt(tF32 num) // Fast inverse sqrt from Quake 3.
 {
 	static const tF32 threeHalfs = 1.5F;
 	tF32Bits number;
@@ -339,7 +353,7 @@ tF32 tF32_InvSqrt(tF32 num) // Fast inverse sqrt from Quake 3
 	tF32 halfNum = number.flt * 0.5F;
 	number.raw = 0X5F3759DFU - (number.raw >> 1U);
 	number.flt = number.flt * (threeHalfs - (halfNum * number.flt * number.flt));
-	// number.flt = number.flt * (threeHalf - (halfNum * number.flt * number.flt)); // I'll enable this if I need the precision
+	// number.flt = number.flt * (threeHalf - (halfNum * number.flt * number.flt)); // Enable this if you need the precision.
 	return number.flt;
 }
 tF32 tF32_Ln(tF32 num)
@@ -1887,6 +1901,7 @@ tF32 tF32M3x3_Trace(tF32M3x3 mat);
 tF32V2D tF32M3x3_TransfPoint(tF32M3x3 mat, tF32V2D vec);
 tF32V2D tF32M3x3_TransfDir(tF32M3x3 mat, tF32V2D vec);
 #ifdef BQSE_MASTER
+// TODO: tF32M3x3 function implementations.
 #endif
 typedef union { struct { tF32 m00, m01, m02, m03; tF32 m10, m11, m12, m13; tF32 m20, m21, m22, m23; tF32 m30, m31, m32, m33; }; tF32 m[4][4]; tF32V4D row[4]; } tF32M4x4;
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33);
@@ -1922,14 +1937,101 @@ tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang);
 tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mat, tF32V3D vec);
 tF32V3D tF32M4x4_TransfDir(tF32M4x4 mat, tF32V3D vec);
 #ifdef BQSE_MASTER
+// TODO: tF32M4x4 function implementations.
 #endif
 typedef union { struct { tF64 m00, m01; tF64 m10, m11; }; tF64 m[2][2]; tF64V2D row[2]; } tF64M2x2;
+// TODO: tF64M2x2 function declarations.
 #ifdef BQSE_MASTER
+// TODO: tF64M2x2 function implementations.
 #endif
 typedef union { struct { tF64 m00, m01, m02; tF64 m10, m11, m12; tF64 m20, m21, m22; }; tF64 m[3][3]; tF64V3D row[3]; } tF64M3x3;
+// TODO: tF64M3x3 function declarations.
 #ifdef BQSE_MASTER
+// TODO: tF64M3x3 function implementations.
 #endif
 typedef union { struct { tF64 m00, m01, m02, m03; tF64 m10, m11, m12, m13; tF64 m20, m21, m22, m23; tF64 m30, m31, m32, m33; }; tF64 m[4][4]; tF64V4D row[4]; } tF64M4x4;
+// TODO: tF64M4x4 function declarations.
 #ifdef BQSE_MASTER
+// TODO: tF64M4x4 function implementations.
+#endif
+enum eAxis
+{
+	eAxis_X,
+	eAxis_Y,
+	eAxis_Z,
+	eAxis_W
+};
+enum eCompiler
+{
+	eCompiler_None,
+	eCompiler_MSVC,
+	eCompiler_GNUC,
+	eCompiler_Clang,
+	eCompiler_COUNT
+};
+// TODO: enum eCompiler string literal map extern declaration.
+#ifdef BQSE_MASTER
+// TODO: enum eCompiler string literal map. 
+#endif
+enum eOperatingSystem
+{
+	eOperatingSystem_None,
+	eOperatingSystem_Windows,
+	eOperatingSystem_Linux,
+	eOperatingSystem_MacOS,
+	eOperatingSystem_FreeBSD,
+	eOperatingSystem_MSDOS,
+	eOperatingSystem_Unix,
+	eOperatingSystem_COUNT
+};
+// TODO: enum eOperatingSystem string literal map extern declaration.
+#ifdef BQSE_MASTER
+// TODO: enum eOperatingSystem string literal map. 
+#endif
+enum eArchitecture
+{
+	eArchitecture_None,
+	eArchitecture_AMD64,
+	eArchitecture_Intel86,
+	eArchitecture_Arm64,
+	eArchitecture_Arm,
+	eArchitecture_COUNT
+};
+// TODO: enum eArchitecture string literal map extern declaration.
+#ifdef BQSE_MASTER
+// TODO: enum eArchitecture string literal map. 
+#endif
+enum eMonth
+{
+	eMonth_Jan,
+	eMonth_Feb,
+	eMonth_Mar,
+	eMonth_Apr,
+	eMonth_May,
+	eMonth_Jun,
+	eMonth_Jul,
+	eMonth_Aug,
+	eMonth_Sep,
+	eMonth_Oct,
+	eMonth_Nov,
+	eMonth_Dec,
+};
+// TODO: enum eMonth string literal map extern declaration.
+#ifdef BQSE_MASTER
+// TODO: enum eMonth string literal map. 
+#endif
+enum eDay
+{
+	eDay_Sun,
+	eDay_Mon,
+	eDay_Tue,
+	eDay_Wed,
+	eDay_Thu,
+	eDay_Fri,
+	eDay_Sat
+};
+// TODO: enum eDay string literal map extern declaration.
+#ifdef BQSE_MASTER
+// TODO: enum eDay string literal map. 
 #endif
 #endif//BQSELAYER_H
