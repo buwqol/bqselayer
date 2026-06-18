@@ -113,6 +113,12 @@ typedef _Bool tBln;
 #else
 typedef char unsigned tBln;
 #endif
+#ifndef True
+#define True ((tBln)1)
+#endif
+#ifndef False
+#define False ((tBln)0)
+#endif
 #define tNone void
 #define tGen void
 typedef tNone tFnc(tNone);
@@ -512,415 +518,495 @@ typedef tU32 tUSz;
 #endif
 
 // Compound types
-typedef union { struct { tS32 x, y; }; tS32 v[2]; } tV2S32;
-tV2S32 tV2S32_Make(tS32 x, tS32 y);
-tV2S32 tV2S32_Zero(tNone);
-tV2S32 tV2S32_Add(tV2S32 vec1, tV2S32 vec2);
-tV2S32 tV2S32_Sub(tV2S32 vec1, tV2S32 vec2);
-tV2S32 tV2S32_Mul(tV2S32 vec, tS32 mod);
-tV2S32 tV2S32_Div(tV2S32 vec, tS32 mod);
-tBln tV2S32_Eq(tV2S32 vec1, tV2S32 vec2);
-tS32 tV2S32_Dot(tV2S32 vec1, tV2S32 vec2);
+typedef union { struct { tS32 x, y; }; tS32 v[2]; } tS32V2D;
+tS32V2D tS32V2D_Make(tS32 x, tS32 y);
+tS32V2D tS32V2D_Zero(tNone);
+tS32V2D tS32V2D_Add(tS32V2D vec1, tS32V2D vec2);
+tS32V2D tS32V2D_Sub(tS32V2D vec1, tS32V2D vec2);
+tS32V2D tS32V2D_Mul(tS32V2D vec, tS32 mod);
+/*Warn: Silently returns `tS32V2D_Zero` on failure.*/
+tS32V2D tS32V2D_Div(tS32V2D vec, tS32 mod);
+/*Note: Returns `False` on success.*/
+tBln tS32V2D_Div_safe(tS32V2D *vec, tS32 mod);
+tBln tS32V2D_Eq(tS32V2D vec1, tS32V2D vec2);
+tS32 tS32V2D_Dot(tS32V2D vec1, tS32V2D vec2);
 #ifdef BQSE_MASTER
-tV2S32 tV2S32_Make(tS32 x, tS32 y)
+tS32V2D tS32V2D_Make(tS32 x, tS32 y)
 {
-	tV2S32 vec;
+	tS32V2D vec;
 	vec.x = x;
 	vec.y = y;
 	return vec;
 }
-tV2S32 tV2S32_Zero(tNone)
+tS32V2D tS32V2D_Zero(tNone)
 {
-	tV2S32 vec;
+	tS32V2D vec;
 	vec.x = 0;
 	vec.y = 0;
 	return vec;
 }
-tV2S32 tV2S32_Add(tV2S32 vec1, tV2S32 vec2)
+tS32V2D tS32V2D_Add(tS32V2D vec1, tS32V2D vec2)
 {
-	tV2S32 vec;
+	tS32V2D vec;
 	vec.x = vec1.x + vec2.x;
 	vec.y = vec1.y + vec2.y;
 	return vec;
 }
-tV2S32 tV2S32_Sub(tV2S32 vec1, tV2S32 vec2)
+tS32V2D tS32V2D_Sub(tS32V2D vec1, tS32V2D vec2)
 {
-	tV2S32 vec;
+	tS32V2D vec;
 	vec.x = vec1.x - vec2.x;
 	vec.y = vec1.y - vec2.y;
 	return vec;
 }
-tV2S32 tV2S32_Mul(tV2S32 vec, tS32 mod)
+tS32V2D tS32V2D_Mul(tS32V2D vec, tS32 mod)
 {
 	vec.x *= mod;
 	vec.y *= mod;
 	return vec;
 }
-tV2S32 tV2S32_Div(tV2S32 vec, tS32 mod)
+tS32V2D tS32V2D_Div(tS32V2D vec, tS32 mod)
 {
+	if (mod == 0) return tS32V2D_Zero();
 	vec.x /= mod;
 	vec.y /= mod;
 	return vec;
 }
-tBln tV2S32_Eq(tV2S32 vec1, tV2S32 vec2)
+tBln tS32V2D_Div_safe(tS32V2D *vec, tS32 mod)
+{
+	if (mod == 0) return True;
+	vec->x /= mod;
+	vec->y /= mod;
+	return False;
+}
+tBln tS32V2D_Eq(tS32V2D vec1, tS32V2D vec2)
 {
 	return (vec1.x == vec2.x) && (vec1.y == vec2.y);
 }
-tS32 tV2S32_Dot(tV2S32 vec1, tV2S32 vec2)
+tS32 tS32V2D_Dot(tS32V2D vec1, tS32V2D vec2)
 {
 	return vec1.x * vec2.x + vec1.y * vec2.y;
 }
 #endif
-typedef union { struct { tS64 x, y; }; tS64 v[2]; } tV2S64;
-tV2S64 tV2S64_Make(tS64 x, tS64 y);
-tV2S64 tV2S64_Zero(tNone);
-tV2S64 tV2S64_Add(tV2S64 vec1, tV2S64 vec2);
-tV2S64 tV2S64_Sub(tV2S64 vec1, tV2S64 vec2);
-tV2S64 tV2S64_Mul(tV2S64 vec, tS64 mod);
-tV2S64 tV2S64_Div(tV2S64 vec, tS64 mod);
-tBln tV2S64_Eq(tV2S64 vec1, tV2S64 vec2);
-tS64 tV2S64_Dot(tV2S64 vec1, tV2S64 vec2);
+typedef union { struct { tS64 x, y; }; tS64 v[2]; } tS64V2D;
+tS64V2D tS64V2D_Make(tS64 x, tS64 y);
+tS64V2D tS64V2D_Zero(tNone);
+tS64V2D tS64V2D_Add(tS64V2D vec1, tS64V2D vec2);
+tS64V2D tS64V2D_Sub(tS64V2D vec1, tS64V2D vec2);
+tS64V2D tS64V2D_Mul(tS64V2D vec, tS64 mod);
+/*Warn: Silently returns `tS64V2D_Zero` on failure.*/
+tS64V2D tS64V2D_Div(tS64V2D vec, tS64 mod);
+/*Note: Returns `False` on success.*/
+tBln tS64V2D_Div_safe(tS64V2D *vec, tS64 mod);
+tBln tS64V2D_Eq(tS64V2D vec1, tS64V2D vec2);
+tS64 tS64V2D_Dot(tS64V2D vec1, tS64V2D vec2);
 #ifdef BQSE_MASTER
-tV2S64 tV2S64_Make(tS64 x, tS64 y)
+tS64V2D tS64V2D_Make(tS64 x, tS64 y)
 {
-	tV2S64 vec;
+	tS64V2D vec;
 	vec.x = x;
 	vec.y = y;
 	return vec;
 }
-tV2S64 tV2S64_Zero(tNone)
+tS64V2D tS64V2D_Zero(tNone)
 {
-	tV2S64 vec;
+	tS64V2D vec;
 	vec.x = 0;
 	vec.y = 0;
 	return vec;
 }
-tV2S64 tV2S64_Add(tV2S64 vec1, tV2S64 vec2)
+tS64V2D tS64V2D_Add(tS64V2D vec1, tS64V2D vec2)
 {
-	tV2S64 vec;
+	tS64V2D vec;
 	vec.x = vec1.x + vec2.x;
 	vec.y = vec1.y + vec2.y;
 	return vec;
 }
-tV2S64 tV2S64_Sub(tV2S64 vec1, tV2S64 vec2)
+tS64V2D tS64V2D_Sub(tS64V2D vec1, tS64V2D vec2)
 {
-	tV2S64 vec;
+	tS64V2D vec;
 	vec.x = vec1.x - vec2.x;
 	vec.y = vec1.y - vec2.y;
 	return vec;
 }
-tV2S64 tV2S64_Mul(tV2S64 vec, tS64 mod)
+tS64V2D tS64V2D_Mul(tS64V2D vec, tS64 mod)
 {
 	vec.x *= mod;
 	vec.y *= mod;
 	return vec;
 }
-tV2S64 tV2S64_Div(tV2S64 vec, tS64 mod)
+tS64V2D tS64V2D_Div(tS64V2D vec, tS64 mod)
 {
+	if (mod == 0) return tS64V2D_Zero();
 	vec.x /= mod;
 	vec.y /= mod;
 	return vec;
 }
-tBln tV2S64_Eq(tV2S64 vec1, tV2S64 vec2)
+tBln tS64V2D_Div_safe(tS64V2D *vec, tS64 mod)
+{
+	if (mod == 0) return True;
+	vec->x /= mod;
+	vec->y /= mod;
+	return False;
+}
+tBln tS64V2D_Eq(tS64V2D vec1, tS64V2D vec2)
 {
 	return (vec1.x == vec2.x) && (vec1.y == vec2.y);
 }
-tS64 tV2S64_Dot(tV2S64 vec1, tV2S64 vec2)
+tS64 tS64V2D_Dot(tS64V2D vec1, tS64V2D vec2)
 {
 	return vec1.x * vec2.x + vec1.y * vec2.y;
 }
 #endif
-typedef union { struct { tF32 x, y; }; tF32 v[2]; } tV2F32;
-tV2F32 tV2F32_Make(tF32 x, tF32 y);
-tV2F32 tV2F32_Zero(tNone);
-tV2F32 tV2F32_Add(tV2F32 vec1, tV2F32 vec2);
-tV2F32 tV2F32_Sub(tV2F32 vec1, tV2F32 vec2);
-tV2F32 tV2F32_Mul(tV2F32 vec, tF32 mod);
-tV2F32 tV2F32_Div(tV2F32 vec, tF32 mod);
-tF32 tV2F32_Dot(tV2F32 vec1, tV2F32 vec2);
-tBln tV2F32_Eq(tV2F32 vec1, tV2F32 vec2);
-tBln tV2F32_Near(tV2F32 vec1, tV2F32 vec2, tF32 eps);
-tF32 tV2F32_LngSq(tV2F32 vec);
-tF32 tV2F32_Lng(tV2F32 vec);
-tV2F32 tV2F32_Norm(tV2F32 vec);
-tV2F32 tV2F32_FastNorm(tV2F32 vec);
-tF32 tV2F32_DistSq(tV2F32 vec1, tV2F32 vec2);
-tF32 tV2F32_Dist(tV2F32 vec1, tV2F32 vec2);
-tV2F32 tV2F32_Lerp(tV2F32 vec1, tV2F32 vec2, tF32 stp);
+typedef union { struct { tF32 x, y; }; tF32 v[2]; } tF32V2D;
+tF32V2D tF32V2D_Make(tF32 x, tF32 y);
+tF32V2D tF32V2D_Zero(tNone);
+tF32V2D tF32V2D_Add(tF32V2D vec1, tF32V2D vec2);
+tF32V2D tF32V2D_Sub(tF32V2D vec1, tF32V2D vec2);
+tF32V2D tF32V2D_Mul(tF32V2D vec, tF32 mod);
+/*Warn: Silently returns `tF32V2D_Zero` on failure.*/
+tF32V2D tF32V2D_Div(tF32V2D vec, tF32 mod);
+/*Note: Returns `False` on success.*/
+tBln tF32V2D_Div_safe(tF32V2D *vec, tF32 mod);
+tF32 tF32V2D_Dot(tF32V2D vec1, tF32V2D vec2);
+tBln tF32V2D_Eq(tF32V2D vec1, tF32V2D vec2);
+tBln tF32V2D_Nearby(tF32V2D vec1, tF32V2D vec2, tF32 eps);
+tF32 tF32V2D_LngSq(tF32V2D vec);
+tF32 tF32V2D_Lng(tF32V2D vec);
+/*Warn: Silently returns `tF32V2D_Zero` on failure.*/
+tF32V2D tF32V2D_Norm(tF32V2D vec);
+/*Note: Returns `False` on success.*/
+tBln tF32V2D_Norm_safe(tF32V2D *vec);
+/*Warn: Silently returns `tF32V2D_Zero` on failure.*/
+tF32V2D tF32V2D_FastNorm(tF32V2D vec);
+/*Note: Returns `False` on success.*/
+tBln tF32V2D_FastNorm_safe(tF32V2D *vec);
+tF32 tF32V2D_DistSq(tF32V2D vec1, tF32V2D vec2);
+tF32 tF32V2D_Dist(tF32V2D vec1, tF32V2D vec2);
+tF32V2D tF32V2D_Lerp(tF32V2D vec1, tF32V2D vec2, tF32 stp);
 #ifdef BQSE_MASTER
-tV2F32 tV2F32_Make(tF32 x, tF32 y)
+tF32V2D tF32V2D_Make(tF32 x, tF32 y)
 {
-	tV2F32 vec;
+	tF32V2D vec;
 	vec.x = x;
 	vec.y = y;
 	return vec;
 }
-tV2F32 tV2F32_Zero(tNone)
+tF32V2D tF32V2D_Zero(tNone)
 {
-	tV2F32 vec;
+	tF32V2D vec;
 	vec.x = 0.0F;
 	vec.y = 0.0F;
 	return vec;
 }
-tV2F32 tV2F32_Add(tV2F32 vec1, tV2F32 vec2)
+tF32V2D tF32V2D_Add(tF32V2D vec1, tF32V2D vec2)
 {
-	tV2F32 vec;
+	tF32V2D vec;
 	vec.x = vec1.x + vec2.x;
 	vec.y = vec1.y + vec2.y;
 	return vec;
 }
-tV2F32 tV2F32_Sub(tV2F32 vec1, tV2F32 vec2)
+tF32V2D tF32V2D_Sub(tF32V2D vec1, tF32V2D vec2)
 {
-	tV2F32 vec;
+	tF32V2D vec;
 	vec.x = vec1.x - vec2.x;
 	vec.y = vec1.y - vec2.y;
 	return vec;
 }
-tV2F32 tV2F32_Mul(tV2F32 vec, tF32 mod)
+tF32V2D tF32V2D_Mul(tF32V2D vec, tF32 mod)
 {
 	vec.x *= mod;
 	vec.y *= mod;
 	return vec;
 }
-tV2F32 tV2F32_Div(tV2F32 vec, tF32 mod)
+tF32V2D tF32V2D_Div(tF32V2D vec, tF32 mod)
 {
+	if (mod == 0.0F) return tF32V2D_Zero();
 	vec.x /= mod;
 	vec.y /= mod;
 	return vec;
 }
-tF32 tV2F32_Dot(tV2F32 vec1, tV2F32 vec2)
+tBln tF32V2D_Div_safe(tF32V2D *vec, tF32 mod)
+{
+	if (mod == 0.0F) return True;
+	vec->x /= mod;
+	vec->y /= mod;
+	return False;
+}
+tF32 tF32V2D_Dot(tF32V2D vec1, tF32V2D vec2)
 {
 	return vec1.x * vec2.x + vec1.y * vec2.y;
 }
-tBln tV2F32_Eq(tV2F32 vec1, tV2F32 vec2)
+tBln tF32V2D_Eq(tF32V2D vec1, tF32V2D vec2)
 {
 	return (vec1.x == vec2.x) && (vec1.y == vec2.y);
 }
-tBln tV2F32_Near(tV2F32 vec1, tV2F32 vec2, tF32 eps)
+tBln tF32V2D_Nearby(tF32V2D vec1, tF32V2D vec2, tF32 eps)
 {
 	return (tF32_Abs(vec1.x - vec2.x) <= eps) && (tF32_Abs(vec1.y - vec2.y) <= eps);
 }
-tF32 tV2F32_LngSq(tV2F32 vec)
+tF32 tF32V2D_LngSq(tF32V2D vec)
 {
-	return tV2F32_Dot(vec, vec);
+	return tF32V2D_Dot(vec, vec);
 }
-tF32 tV2F32_Lng(tV2F32 vec)
+tF32 tF32V2D_Lng(tF32V2D vec)
 {
-	return tF32_Sqrt(tV2F32_LngSq(vec));
+	return tF32_Sqrt(tF32V2D_LngSq(vec));
 }
-tV2F32 tV2F32_Norm(tV2F32 vec)
+tF32V2D tF32V2D_Norm(tF32V2D vec)
 {
-	tF32 len = tV2F32_Lng(vec);
-	if (len == 0.0F) return tV2F32_Zero();
-	return tV2F32_Div(vec, len);
+	tF32 len = tF32V2D_Lng(vec);
+	if (len == 0.0F) return tF32V2D_Zero();
+	return tF32V2D_Div(vec, len);
 }
-tV2F32 tV2F32_FastNorm(tV2F32 vec)
+tBln tF32V2D_Norm_safe(tF32V2D *vec)
 {
-	tF32 lenSq = tV2F32_LngSq(vec);
-	if (lenSq == 0.0F) return tV2F32_Zero();
-	return tV2F32_Mul(vec, tF32_InvSqrt(lenSq));
+	return tF32V2D_Div_safe(vec, tF32V2D_Lng(*vec));
 }
-tF32 tV2F32_DistSq(tV2F32 vec1, tV2F32 vec2)
+tF32V2D tF32V2D_FastNorm(tF32V2D vec)
 {
-	return tV2F32_LngSq(tV2F32_Sub(vec1, vec2));
+	tF32 lenSq = tF32V2D_LngSq(vec);
+	if (lenSq == 0.0F) return tF32V2D_Zero();
+	return tF32V2D_Mul(vec, tF32_InvSqrt(lenSq));
 }
-tF32 tV2F32_Dist(tV2F32 vec1, tV2F32 vec2)
+tBln tF32V2D_FastNorm_safe(tF32V2D *vec)
 {
-	return tV2F32_Lng(tV2F32_Sub(vec1, vec2));
+	tF32 lenSq = tF32V2D_LngSq(*vec);
+	if (lenSq == 0.0F) return True;
+	tF32V2D_Mul(*vec, tF32_InvSqrt(lenSq));
+	return False;
 }
-tV2F32 tV2F32_Lerp(tV2F32 vec1, tV2F32 vec2, tF32 stp)
+tF32 tF32V2D_DistSq(tF32V2D vec1, tF32V2D vec2)
 {
-	tV2F32 vec;
+	return tF32V2D_LngSq(tF32V2D_Sub(vec1, vec2));
+}
+tF32 tF32V2D_Dist(tF32V2D vec1, tF32V2D vec2)
+{
+	return tF32V2D_Lng(tF32V2D_Sub(vec1, vec2));
+}
+tF32V2D tF32V2D_Lerp(tF32V2D vec1, tF32V2D vec2, tF32 stp)
+{
+	tF32V2D vec;
 	vec.x = vec1.x + (vec2.x - vec1.x) * stp;
 	vec.y = vec1.y + (vec2.y - vec1.y) * stp;
 	return vec;
 }
 #endif
-typedef union { struct { tF32 x, y, z; }; tF32 v[3]; } tV3F32;
-tV3F32 tV3F32_Make(tF32 x, tF32 y, tF32 z);
-tV3F32 tV3F32_Zero(tNone);
-tV3F32 tV3F32_Add(tV3F32 vec1, tV3F32 vec2);
-tV3F32 tV3F32_Sub(tV3F32 vec1, tV3F32 vec2);
-tV3F32 tV3F32_Mul(tV3F32 vec, tF32 mod);
-tV3F32 tV3F32_Div(tV3F32 vec, tF32 mod);
-tF32 tV3F32_Dot(tV3F32 vec1, tV3F32 vec2);
-tBln tV3F32_Eq(tV3F32 vec1, tV3F32 vec2);
-tBln tV3F32_Near(tV3F32 vec1, tV3F32 vec2, tF32 eps);
-tF32 tV3F32_LngSq(tV3F32 vec);
-tF32 tV3F32_Lng(tV3F32 vec);
-tV3F32 tV3F32_Norm(tV3F32 vec);
-tV3F32 tV3F32_FastNorm(tV3F32 vec);
-tF32 tV3F32_DistSq(tV3F32 vec1, tV3F32 vec2);
-tF32 tV3F32_Dist(tV3F32 vec1, tV3F32 vec2);
-tV3F32 tV3F32_Lerp(tV3F32 vec1, tV3F32 vec2, tF32 stp);
-tV3F32 tV3F32_Cross(tV3F32 vec1, tV3F32 vec2);
+typedef union { struct { tF32 x, y, z; }; tF32 v[3]; } tF32V3D;
+tF32V3D tF32V3D_Make(tF32 x, tF32 y, tF32 z);
+tF32V3D tF32V3D_Zero(tNone);
+tF32V3D tF32V3D_Add(tF32V3D vec1, tF32V3D vec2);
+tF32V3D tF32V3D_Sub(tF32V3D vec1, tF32V3D vec2);
+tF32V3D tF32V3D_Mul(tF32V3D vec, tF32 mod);
+/*Warn: Silently returns `tF32V3D_Zero` on failure.*/
+tF32V3D tF32V3D_Div(tF32V3D vec, tF32 mod);
+/*Note: Returns `False` on success.*/
+tBln tF32V3D_Div_safe(tF32V3D *vec, tF32 mod);
+tF32 tF32V3D_Dot(tF32V3D vec1, tF32V3D vec2);
+tBln tF32V3D_Eq(tF32V3D vec1, tF32V3D vec2);
+tBln tF32V3D_Nearby(tF32V3D vec1, tF32V3D vec2, tF32 eps);
+tF32 tF32V3D_LngSq(tF32V3D vec);
+tF32 tF32V3D_Lng(tF32V3D vec);
+/*Warn: Silently returns `tF32V3D_Zero` on failure.*/
+tF32V3D tF32V3D_Norm(tF32V3D vec);
+/*Note: Returns `False` on success.*/
+tBln tF32V3D_Norm_safe(tF32V3D *vec);
+/*Warn: Silently returns `tF32V3D_Zero` on failure.*/
+tF32V3D tF32V3D_FastNorm(tF32V3D vec);
+/*Note: Returns `False` on success.*/
+tBln tF32V3D_FastNorm_safe(tF32V3D *vec);
+tF32 tF32V3D_DistSq(tF32V3D vec1, tF32V3D vec2);
+tF32 tF32V3D_Dist(tF32V3D vec1, tF32V3D vec2);
+tF32V3D tF32V3D_Lerp(tF32V3D vec1, tF32V3D vec2, tF32 stp);
+tF32V3D tF32V3D_Cross(tF32V3D vec1, tF32V3D vec2);
 #ifdef BQSE_MASTER
-tV3F32 tV3F32_Make(tF32 x, tF32 y, tF32 z)
+tF32V3D tF32V3D_Make(tF32 x, tF32 y, tF32 z)
 {
-	tV3F32 vec;
+	tF32V3D vec;
 	vec.x = x;
 	vec.y = y;
 	vec.z = z;
 	return vec;
 }
-tV3F32 tV3F32_Zero(tNone)
+tF32V3D tF32V3D_Zero(tNone)
 {
-	tV3F32 vec;
+	tF32V3D vec;
 	vec.x = 0.0F;
 	vec.y = 0.0F;
 	vec.z = 0.0F;
 	return vec;
 }
-tV3F32 tV3F32_Add(tV3F32 vec1, tV3F32 vec2)
+tF32V3D tF32V3D_Add(tF32V3D vec1, tF32V3D vec2)
 {
-	tV3F32 vec;
+	tF32V3D vec;
 	vec.x = vec1.x + vec2.x;
 	vec.y = vec1.y + vec2.y;
 	vec.z = vec1.z + vec2.z;
 	return vec;
 }
-tV3F32 tV3F32_Sub(tV3F32 vec1, tV3F32 vec2)
+tF32V3D tF32V3D_Sub(tF32V3D vec1, tF32V3D vec2)
 {
-	tV3F32 vec;
+	tF32V3D vec;
 	vec.x = vec1.x - vec2.x;
 	vec.y = vec1.y - vec2.y;
 	vec.z = vec1.z - vec2.z;
 	return vec;
 }
-tV3F32 tV3F32_Mul(tV3F32 vec, tF32 mod)
+tF32V3D tF32V3D_Mul(tF32V3D vec, tF32 mod)
 {
 	vec.x *= mod;
 	vec.y *= mod;
 	vec.z *= mod;
 	return vec;
 }
-tV3F32 tV3F32_Div(tV3F32 vec, tF32 mod)
+tF32V3D tF32V3D_Div(tF32V3D vec, tF32 mod)
 {
+	if (mod == 0.0F) return tF32V3D_Zero();
 	vec.x /= mod;
 	vec.y /= mod;
 	vec.z /= mod;
 	return vec;
 }
-tF32 tV3F32_Dot(tV3F32 vec1, tV3F32 vec2)
+tBln tF32V3D_Div_safe(tF32V3D *vec, tF32 mod)
 {
-	return vec1.x * vec2.x +
-		vec1.y * vec2.y +
-		vec1.z * vec2.z;
+	if (mod == 0.0F) return True;
+	vec->x /= mod;
+	vec->y /= mod;
+	vec->z /= mod;
+	return False;
 }
-tBln tV3F32_Eq(tV3F32 vec1, tV3F32 vec2)
+tF32 tF32V3D_Dot(tF32V3D vec1, tF32V3D vec2)
 {
-	return (vec1.x == vec2.x) &&
-		(vec1.y == vec2.y) &&
-		(vec1.z == vec2.z);
+	return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
 }
-tBln tV3F32_Near(tV3F32 vec1, tV3F32 vec2, tF32 eps)
+tBln tF32V3D_Eq(tF32V3D vec1, tF32V3D vec2)
+{
+	return (vec1.x == vec2.x) && (vec1.y == vec2.y) && (vec1.z == vec2.z);
+}
+tBln tF32V3D_Nearby(tF32V3D vec1, tF32V3D vec2, tF32 eps)
 {
 	return (tF32_Abs(vec1.x - vec2.x) <= eps) && (tF32_Abs(vec1.y - vec2.y) <= eps) && (tF32_Abs(vec1.z - vec2.z) <= eps);
 }
-tF32 tV3F32_LngSq(tV3F32 vec)
+tF32 tF32V3D_LngSq(tF32V3D vec)
 {
-	return tV3F32_Dot(vec, vec);
+	return tF32V3D_Dot(vec, vec);
 }
-tF32 tV3F32_Lng(tV3F32 vec)
+tF32 tF32V3D_Lng(tF32V3D vec)
 {
-	return tF32_Sqrt(tV3F32_LngSq(vec));
+	return tF32_Sqrt(tF32V3D_LngSq(vec));
 }
-tV3F32 tV3F32_Norm(tV3F32 vec)
+tF32V3D tF32V3D_Norm(tF32V3D vec)
 {
-	tF32 len = tV3F32_Lng(vec);
-
-	if (len == 0.0F)
-	{
-		return tV3F32_Zero();
-	}
-	return tV3F32_Div(vec, len);
+	tF32 len = tF32V3D_Lng(vec);
+	if (len == 0.0F) return tF32V3D_Zero();
+	return tF32V3D_Div(vec, len);
 }
-tV3F32 tV3F32_FastNorm(tV3F32 vec)
+tBln tF32V3D_Norm_safe(tF32V3D *vec)
 {
-	tF32 lenSq = tV3F32_LngSq(vec);
-	if (lenSq == 0.0F) return tV3F32_Zero();
-	return tV3F32_Mul(vec, tF32_InvSqrt(lenSq));
+	return tF32V3D_Div_safe(vec, tF32V3D_Lng(*vec));
 }
-tF32 tV3F32_DistSq(tV3F32 vec1, tV3F32 vec2)
+tF32V3D tF32V3D_FastNorm(tF32V3D vec)
 {
-	return tV3F32_LngSq(tV3F32_Sub(vec1, vec2));
+	tF32 lenSq = tF32V3D_LngSq(vec);
+	if (lenSq == 0.0F) return tF32V3D_Zero();
+	return tF32V3D_Mul(vec, tF32_InvSqrt(lenSq));
 }
-tF32 tV3F32_Dist(tV3F32 vec1, tV3F32 vec2)
+tBln tF32V3D_FastNorm_safe(tF32V3D *vec)
 {
-	return tV3F32_Lng(tV3F32_Sub(vec1, vec2));
+	tF32 lenSq = tF32V3D_LngSq(*vec);
+	if (lenSq == 0.0F) return True;
+	tF32V3D_Mul(*vec, tF32_InvSqrt(lenSq));
+	return False;
 }
-tV3F32 tV3F32_Lerp(tV3F32 vec1, tV3F32 vec2, tF32 stp)
+tF32 tF32V3D_DistSq(tF32V3D vec1, tF32V3D vec2)
 {
-	tV3F32 vec;
+	return tF32V3D_LngSq(tF32V3D_Sub(vec1, vec2));
+}
+tF32 tF32V3D_Dist(tF32V3D vec1, tF32V3D vec2)
+{
+	return tF32V3D_Lng(tF32V3D_Sub(vec1, vec2));
+}
+tF32V3D tF32V3D_Lerp(tF32V3D vec1, tF32V3D vec2, tF32 stp)
+{
+	tF32V3D vec;
 	vec.x = vec1.x + (vec2.x - vec1.x) * stp;
 	vec.y = vec1.y + (vec2.y - vec1.y) * stp;
 	vec.z = vec1.z + (vec2.z - vec1.z) * stp;
 	return vec;
 }
-tV3F32 tV3F32_Cross(tV3F32 vec1, tV3F32 vec2)
+tF32V3D tF32V3D_Cross(tF32V3D vec1, tF32V3D vec2)
 {
-	tV3F32 vec;
+	tF32V3D vec;
 	vec.x = vec1.y * vec2.z - vec1.z * vec2.y;
 	vec.y = vec1.z * vec2.x - vec1.x * vec2.z;
 	vec.z = vec1.x * vec2.y - vec1.y * vec2.x;
 	return vec;
 }
 #endif
-typedef union { struct { tF32 x, y, z, w; }; tF32 v[4]; } tV4F32;
-tV4F32 tV4F32_Make(tF32 x, tF32 y, tF32 z, tF32 w);
-tV4F32 tV4F32_Zero(tNone);
-tV4F32 tV4F32_Add(tV4F32 vec1, tV4F32 vec2);
-tV4F32 tV4F32_Sub(tV4F32 vec1, tV4F32 vec2);
-tV4F32 tV4F32_Mul(tV4F32 vec, tF32 mod);
-tV4F32 tV4F32_Div(tV4F32 vec, tF32 mod);
-tF32 tV4F32_Dot(tV4F32 vec1, tV4F32 vec2);
-tBln tV4F32_Eq(tV4F32 vec1, tV4F32 vec2);
-tBln tV4F32_Near(tV4F32 vec1, tV4F32 vec2, tF32 eps);
-tF32 tV4F32_LngSq(tV4F32 vec);
-tF32 tV4F32_Lng(tV4F32 vec);
-tV4F32 tV4F32_Norm(tV4F32 vec);
-tV4F32 tV4F32_FastNorm(tV4F32 vec);
-tF32 tV4F32_DistSq(tV4F32 vec1, tV4F32 vec2);
-tF32 tV4F32_Dist(tV4F32 vec1, tV4F32 vec2);
-tV4F32 tV4F32_Lerp(tV4F32 vec1, tV4F32 vec2, tF32 stp);
+typedef union { struct { tF32 x, y, z, w; }; tF32 v[4]; } tF32V4D;
+tF32V4D tF32V4D_Make(tF32 x, tF32 y, tF32 z, tF32 w);
+tF32V4D tF32V4D_Zero(tNone);
+tF32V4D tF32V4D_Add(tF32V4D vec1, tF32V4D vec2);
+tF32V4D tF32V4D_Sub(tF32V4D vec1, tF32V4D vec2);
+tF32V4D tF32V4D_Mul(tF32V4D vec, tF32 mod);
+/*Warn: Silently returns `tF32V4D_Zero` on failure.*/
+tF32V4D tF32V4D_Div(tF32V4D vec, tF32 mod);
+/*Note: Returns `False` on success.*/
+tBln tF32V4D_Div_safe(tF32V4D *vec, tF32 mod);
+tF32 tF32V4D_Dot(tF32V4D vec1, tF32V4D vec2);
+tBln tF32V4D_Eq(tF32V4D vec1, tF32V4D vec2);
+tBln tF32V4D_Nearby(tF32V4D vec1, tF32V4D vec2, tF32 eps);
+tF32 tF32V4D_LngSq(tF32V4D vec);
+tF32 tF32V4D_Lng(tF32V4D vec);
+/*Warn: Silently returns `tF32V4D_Zero` on failure.*/
+tF32V4D tF32V4D_Norm(tF32V4D vec);
+/*Note: Returns `False` on success.*/
+tBln tF32V4D_Norm_safe(tF32V4D *vec);
+/*Warn: Silently returns `tF32V4D_Zero` on failure.*/
+tF32V4D tF32V4D_FastNorm(tF32V4D vec);
+/*Note: Returns `False` on success.*/
+tBln tF32V4D_FastNorm_safe(tF32V4D *vec);
+tF32 tF32V4D_DistSq(tF32V4D vec1, tF32V4D vec2);
+tF32 tF32V4D_Dist(tF32V4D vec1, tF32V4D vec2);
+tF32V4D tF32V4D_Lerp(tF32V4D vec1, tF32V4D vec2, tF32 stp);
 #ifdef BQSE_MASTER
-tV4F32 tV4F32_Make(tF32 x, tF32 y, tF32 z, tF32 w)
+tF32V4D tF32V4D_Make(tF32 x, tF32 y, tF32 z, tF32 w)
 {
-	tV4F32 vec;
+	tF32V4D vec;
 	vec.x = x;
 	vec.y = y;
 	vec.z = z;
 	vec.w = w;
 	return vec;
 }
-tV4F32 tV4F32_Zero(tNone)
+tF32V4D tF32V4D_Zero(tNone)
 {
-	tV4F32 vec;
+	tF32V4D vec;
 	vec.x = 0.0F;
 	vec.y = 0.0F;
 	vec.z = 0.0F;
 	vec.w = 0.0F;
 	return vec;
 }
-tV4F32 tV4F32_Add(tV4F32 vec1, tV4F32 vec2)
+tF32V4D tF32V4D_Add(tF32V4D vec1, tF32V4D vec2)
 {
-	tV4F32 vec;
+	tF32V4D vec;
 	vec.x = vec1.x + vec2.x;
 	vec.y = vec1.y + vec2.y;
 	vec.z = vec1.z + vec2.z;
 	vec.w = vec1.w + vec2.w;
 	return vec;
 }
-tV4F32 tV4F32_Sub(tV4F32 vec1, tV4F32 vec2)
+tF32V4D tF32V4D_Sub(tF32V4D vec1, tF32V4D vec2)
 {
-	tV4F32 vec;
+	tF32V4D vec;
 	vec.x = vec1.x - vec2.x;
 	vec.y = vec1.y - vec2.y;
 	vec.z = vec1.z - vec2.z;
 	vec.w = vec1.w - vec2.w;
 	return vec;
 }
-tV4F32 tV4F32_Mul(tV4F32 vec, tF32 mod)
+tF32V4D tF32V4D_Mul(tF32V4D vec, tF32 mod)
 {
 	vec.x *= mod;
 	vec.y *= mod;
@@ -928,57 +1014,78 @@ tV4F32 tV4F32_Mul(tV4F32 vec, tF32 mod)
 	vec.w *= mod;
 	return vec;
 }
-tV4F32 tV4F32_Div(tV4F32 vec, tF32 mod)
+tF32V4D tF32V4D_Div(tF32V4D vec, tF32 mod)
 {
+	if (mod == 0.0F) return tF32V4D_Zero();
 	vec.x /= mod;
 	vec.y /= mod;
 	vec.z /= mod;
 	vec.w /= mod;
 	return vec;
 }
-tF32 tV4F32_Dot(tV4F32 vec1, tV4F32 vec2)
+tBln tF32V4D_Div_safe(tF32V4D *vec, tF32 mod)
+{
+	if (mod == 0.0F) return True;
+	vec->x /= mod;
+	vec->y /= mod;
+	vec->z /= mod;
+	vec->w /= mod;
+	return False;
+}
+tF32 tF32V4D_Dot(tF32V4D vec1, tF32V4D vec2)
 {
 	return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z + vec1.w * vec2.w;
 }
-tBln tV4F32_Eq(tV4F32 vec1, tV4F32 vec2)
+tBln tF32V4D_Eq(tF32V4D vec1, tF32V4D vec2)
 {
 	return (vec1.x == vec2.x) && (vec1.y == vec2.y) && (vec1.z == vec2.z) && (vec1.w == vec2.w);
 }
-tBln tV4F32_Near(tV4F32 vec1, tV4F32 vec2, tF32 eps)
+tBln tF32V4D_Nearby(tF32V4D vec1, tF32V4D vec2, tF32 eps)
 {
 	return (tF32_Abs(vec1.x - vec2.x) <= eps) && (tF32_Abs(vec1.y - vec2.y) <= eps) && (tF32_Abs(vec1.z - vec2.z) <= eps) && (tF32_Abs(vec1.w - vec2.w) <= eps);
 }
-tF32 tV4F32_LngSq(tV4F32 vec)
+tF32 tF32V4D_LngSq(tF32V4D vec)
 {
-	return tV4F32_Dot(vec, vec);
+	return tF32V4D_Dot(vec, vec);
 }
-tF32 tV4F32_Lng(tV4F32 vec)
+tF32 tF32V4D_Lng(tF32V4D vec)
 {
-	return tF32_Sqrt(tV4F32_LngSq(vec));
+	return tF32_Sqrt(tF32V4D_LngSq(vec));
 }
-tV4F32 tV4F32_Norm(tV4F32 vec)
+tF32V4D tF32V4D_Norm(tF32V4D vec)
 {
-	tF32 len = tV4F32_Lng(vec);
-	if (len == 0.0F) return tV4F32_Zero();
-	return tV4F32_Div(vec, len);
+	tF32 len = tF32V4D_Lng(vec);
+	if (len == 0.0F) return tF32V4D_Zero();
+	return tF32V4D_Div(vec, len);
 }
-tV4F32 tV4F32_FastNorm(tV4F32 vec)
+tBln tF32V4D_Norm_safe(tF32V4D *vec)
 {
-	tF32 lenSq = tV4F32_LngSq(vec);
-	if (lenSq == 0.0F) return tV4F32_Zero();
-	return tV4F32_Mul(vec, tF32_InvSqrt(lenSq));
+	return tF32V4D_Div_safe(vec, tF32V4D_Lng(*vec));
 }
-tF32 tV4F32_DistSq(tV4F32 vec1, tV4F32 vec2)
+tF32V4D tF32V4D_FastNorm(tF32V4D vec)
 {
-	return tV4F32_LngSq(tV4F32_Sub(vec1, vec2));
+	tF32 lenSq = tF32V4D_LngSq(vec);
+	if (lenSq == 0.0F) return tF32V4D_Zero();
+	return tF32V4D_Mul(vec, tF32_InvSqrt(lenSq));
 }
-tF32 tV4F32_Dist(tV4F32 vec1, tV4F32 vec2)
+tBln tF32V4D_FastNorm_safe(tF32V4D *vec)
 {
-	return tV4F32_Lng(tV4F32_Sub(vec1, vec2));
+	tF32 lenSq = tF32V4D_LngSq(*vec);
+	if (lenSq == 0.0F) return True;
+	tF32V4D_Mul(*vec, tF32_InvSqrt(lenSq));
+	return False;
 }
-tV4F32 tV4F32_Lerp(tV4F32 vec1, tV4F32 vec2, tF32 stp)
+tF32 tF32V4D_DistSq(tF32V4D vec1, tF32V4D vec2)
 {
-	tV4F32 vec;
+	return tF32V4D_LngSq(tF32V4D_Sub(vec1, vec2));
+}
+tF32 tF32V4D_Dist(tF32V4D vec1, tF32V4D vec2)
+{
+	return tF32V4D_Lng(tF32V4D_Sub(vec1, vec2));
+}
+tF32V4D tF32V4D_Lerp(tF32V4D vec1, tF32V4D vec2, tF32 stp)
+{
+	tF32V4D vec;
 	vec.x = vec1.x + (vec2.x - vec1.x) * stp;
 	vec.y = vec1.y + (vec2.y - vec1.y) * stp;
 	vec.z = vec1.z + (vec2.z - vec1.z) * stp;
@@ -986,297 +1093,355 @@ tV4F32 tV4F32_Lerp(tV4F32 vec1, tV4F32 vec2, tF32 stp)
 	return vec;
 }
 #endif
-typedef union { struct { tF64 x, y; }; tF64 v[2]; } tV2F64;
-tV2F64 tV2F64_Make(tF64 x, tF64 y);
-tV2F64 tV2F64_Zero(tNone);
-tV2F64 tV2F64_Add(tV2F64 vec1, tV2F64 vec2);
-tV2F64 tV2F64_Sub(tV2F64 vec1, tV2F64 vec2);
-tV2F64 tV2F64_Mul(tV2F64 vec, tF64 mod);
-tV2F64 tV2F64_Div(tV2F64 vec, tF64 mod);
-tF64 tV2F64_Dot(tV2F64 vec1, tV2F64 vec2);
-tBln tV2F64_Eq(tV2F64 vec1, tV2F64 vec2);
-tBln tV2F64_Near(tV2F64 vec1, tV2F64 vec2, tF64 eps);
-tF64 tV2F64_LngSq(tV2F64 vec);
-tF64 tV2F64_Lng(tV2F64 vec);
-tV2F64 tV2F64_Norm(tV2F64 vec);
-tV2F64 tV2F64_FastNorm(tV2F64 vec);
-tF64 tV2F64_DistSq(tV2F64 vec1, tV2F64 vec2);
-tF64 tV2F64_Dist(tV2F64 vec1, tV2F64 vec2);
-tV2F64 tV2F64_Lerp(tV2F64 vec1, tV2F64 vec2, tF64 stp);
+typedef union { struct { tF64 x, y; }; tF64 v[2]; } tF64V2D;
+tF64V2D tF64V2D_Make(tF64 x, tF64 y);
+tF64V2D tF64V2D_Zero(tNone);
+tF64V2D tF64V2D_Add(tF64V2D vec1, tF64V2D vec2);
+tF64V2D tF64V2D_Sub(tF64V2D vec1, tF64V2D vec2);
+tF64V2D tF64V2D_Mul(tF64V2D vec, tF64 mod);
+/*Warn: Silently returns `tF64V2D_Zero` on failure.*/
+tF64V2D tF64V2D_Div(tF64V2D vec, tF64 mod);
+/*Note: Returns `False` on success.*/
+tBln tF64V2D_Div_safe(tF64V2D *vec, tF64 mod);
+tF64 tF64V2D_Dot(tF64V2D vec1, tF64V2D vec2);
+tBln tF64V2D_Eq(tF64V2D vec1, tF64V2D vec2);
+tBln tF64V2D_Nearby(tF64V2D vec1, tF64V2D vec2, tF64 eps);
+tF64 tF64V2D_LngSq(tF64V2D vec);
+tF64 tF64V2D_Lng(tF64V2D vec);
+/*Warn: Silently returns `tF64V2D_Zero` on failure.*/
+tF64V2D tF64V2D_Norm(tF64V2D vec);
+/*Note: Returns `False` on success.*/
+tBln tF64V2D_Norm_safe(tF64V2D *vec);
+/*Warn: Silently returns `tF64V2D_Zero` on failure.*/
+tF64V2D tF64V2D_FastNorm(tF64V2D vec);
+/*Note: Returns `False` on success.*/
+tBln tF64V2D_FastNorm_safe(tF64V2D *vec);
+tF64 tF64V2D_DistSq(tF64V2D vec1, tF64V2D vec2);
+tF64 tF64V2D_Dist(tF64V2D vec1, tF64V2D vec2);
+tF64V2D tF64V2D_Lerp(tF64V2D vec1, tF64V2D vec2, tF64 stp);
 #ifdef BQSE_MASTER
-tV2F64 tV2F64_Make(tF64 x, tF64 y)
+tF64V2D tF64V2D_Make(tF64 x, tF64 y)
 {
-	tV2F64 vec;
+	tF64V2D vec;
 	vec.x = x;
 	vec.y = y;
 	return vec;
 }
-tV2F64 tV2F64_Zero(tNone)
+tF64V2D tF64V2D_Zero(tNone)
 {
-	tV2F64 vec;
-	vec.x = 0.0F;
-	vec.y = 0.0F;
+	tF64V2D vec;
+	vec.x = 0.0;
+	vec.y = 0.0;
 	return vec;
 }
-tV2F64 tV2F64_Add(tV2F64 vec1, tV2F64 vec2)
+tF64V2D tF64V2D_Add(tF64V2D vec1, tF64V2D vec2)
 {
-	tV2F64 vec;
+	tF64V2D vec;
 	vec.x = vec1.x + vec2.x;
 	vec.y = vec1.y + vec2.y;
 	return vec;
 }
-tV2F64 tV2F64_Sub(tV2F64 vec1, tV2F64 vec2)
+tF64V2D tF64V2D_Sub(tF64V2D vec1, tF64V2D vec2)
 {
-	tV2F64 vec;
+	tF64V2D vec;
 	vec.x = vec1.x - vec2.x;
 	vec.y = vec1.y - vec2.y;
 	return vec;
 }
-tV2F64 tV2F64_Mul(tV2F64 vec, tF64 mod)
+tF64V2D tF64V2D_Mul(tF64V2D vec, tF64 mod)
 {
 	vec.x *= mod;
 	vec.y *= mod;
 	return vec;
 }
-tV2F64 tV2F64_Div(tV2F64 vec, tF64 mod)
+tF64V2D tF64V2D_Div(tF64V2D vec, tF64 mod)
 {
+	if (mod == 0.0) return tF64V2D_Zero();
 	vec.x /= mod;
 	vec.y /= mod;
 	return vec;
 }
-tF64 tV2F64_Dot(tV2F64 vec1, tV2F64 vec2)
+tBln tF64V2D_Div_safe(tF64V2D *vec, tF64 mod)
+{
+	if (mod == 0.0) return True;
+	vec->x /= mod;
+	vec->y /= mod;
+	return False;
+}
+tF64 tF64V2D_Dot(tF64V2D vec1, tF64V2D vec2)
 {
 	return vec1.x * vec2.x + vec1.y * vec2.y;
 }
-tBln tV2F64_Eq(tV2F64 vec1, tV2F64 vec2)
+tBln tF64V2D_Eq(tF64V2D vec1, tF64V2D vec2)
 {
 	return (vec1.x == vec2.x) && (vec1.y == vec2.y);
 }
-tBln tV2F64_Near(tV2F64 vec1, tV2F64 vec2, tF64 eps)
+tBln tF64V2D_Nearby(tF64V2D vec1, tF64V2D vec2, tF64 eps)
 {
 	return (tF64_Abs(vec1.x - vec2.x) <= eps) && (tF64_Abs(vec1.y - vec2.y) <= eps);
 }
-tF64 tV2F64_LngSq(tV2F64 vec)
+tF64 tF64V2D_LngSq(tF64V2D vec)
 {
-	return tV2F64_Dot(vec, vec);
+	return tF64V2D_Dot(vec, vec);
 }
-tF64 tV2F64_Lng(tV2F64 vec)
+tF64 tF64V2D_Lng(tF64V2D vec)
 {
-	return tF64_Sqrt(tV2F64_LngSq(vec));
+	return tF64_Sqrt(tF64V2D_LngSq(vec));
 }
-tV2F64 tV2F64_Norm(tV2F64 vec)
+tF64V2D tF64V2D_Norm(tF64V2D vec)
 {
-	tF64 len = tV2F64_Lng(vec);
-	if (len == 0.0F) return tV2F64_Zero();
-	return tV2F64_Div(vec, len);
+	tF64 len = tF64V2D_Lng(vec);
+	if (len == 0.0) return tF64V2D_Zero();
+	return tF64V2D_Div(vec, len);
 }
-tV2F64 tV2F64_FastNorm(tV2F64 vec)
+tBln tF64V2D_Norm_safe(tF64V2D *vec)
 {
-	tF64 lenSq = tV2F64_LngSq(vec);
-	if (lenSq == 0.0F) return tV2F64_Zero();
-	return tV2F64_Mul(vec, tF64_InvSqrt(lenSq));
+	return tF64V2D_Div_safe(vec, tF64V2D_Lng(*vec));
 }
-tF64 tV2F64_DistSq(tV2F64 vec1, tV2F64 vec2)
+tF64V2D tF64V2D_FastNorm(tF64V2D vec)
 {
-	return tV2F64_LngSq(tV2F64_Sub(vec1, vec2));
+	tF64 lenSq = tF64V2D_LngSq(vec);
+	if (lenSq == 0.0) return tF64V2D_Zero();
+	return tF64V2D_Mul(vec, tF64_InvSqrt(lenSq));
 }
-tF64 tV2F64_Dist(tV2F64 vec1, tV2F64 vec2)
+tBln tF64V2D_FastNorm_safe(tF64V2D *vec)
 {
-	return tV2F64_Lng(tV2F64_Sub(vec1, vec2));
+	tF64 lenSq = tF64V2D_LngSq(*vec);
+	if (lenSq == 0.0) return True;
+	tF64V2D_Mul(*vec, tF64_InvSqrt(lenSq));
+	return False;
 }
-tV2F64 tV2F64_Lerp(tV2F64 vec1, tV2F64 vec2, tF64 stp)
+tF64 tF64V2D_DistSq(tF64V2D vec1, tF64V2D vec2)
 {
-	tV2F64 vec;
+	return tF64V2D_LngSq(tF64V2D_Sub(vec1, vec2));
+}
+tF64 tF64V2D_Dist(tF64V2D vec1, tF64V2D vec2)
+{
+	return tF64V2D_Lng(tF64V2D_Sub(vec1, vec2));
+}
+tF64V2D tF64V2D_Lerp(tF64V2D vec1, tF64V2D vec2, tF64 stp)
+{
+	tF64V2D vec;
 	vec.x = vec1.x + (vec2.x - vec1.x) * stp;
 	vec.y = vec1.y + (vec2.y - vec1.y) * stp;
 	return vec;
 }
 #endif
-typedef union { struct { tF64 x, y, z; }; tF64 v[3]; } tV3F64;
-tV3F64 tV3F64_Make(tF64 x, tF64 y, tF64 z);
-tV3F64 tV3F64_Zero(tNone);
-tV3F64 tV3F64_Add(tV3F64 vec1, tV3F64 vec2);
-tV3F64 tV3F64_Sub(tV3F64 vec1, tV3F64 vec2);
-tV3F64 tV3F64_Mul(tV3F64 vec, tF64 mod);
-tV3F64 tV3F64_Div(tV3F64 vec, tF64 mod);
-tF64 tV3F64_Dot(tV3F64 vec1, tV3F64 vec2);
-tBln tV3F64_Eq(tV3F64 vec1, tV3F64 vec2);
-tBln tV3F64_Near(tV3F64 vec1, tV3F64 vec2, tF64 eps);
-tF64 tV3F64_LngSq(tV3F64 vec);
-tF64 tV3F64_Lng(tV3F64 vec);
-tV3F64 tV3F64_Norm(tV3F64 vec);
-tV3F64 tV3F64_FastNorm(tV3F64 vec);
-tF64 tV3F64_DistSq(tV3F64 vec1, tV3F64 vec2);
-tF64 tV3F64_Dist(tV3F64 vec1, tV3F64 vec2);
-tV3F64 tV3F64_Lerp(tV3F64 vec1, tV3F64 vec2, tF64 stp);
-tV3F64 tV3F64_Cross(tV3F64 vec1, tV3F64 vec2);
+typedef union { struct { tF64 x, y, z; }; tF64 v[3]; } tF64V3D;
+tF64V3D tF64V3D_Make(tF64 x, tF64 y, tF64 z);
+tF64V3D tF64V3D_Zero(tNone);
+tF64V3D tF64V3D_Add(tF64V3D vec1, tF64V3D vec2);
+tF64V3D tF64V3D_Sub(tF64V3D vec1, tF64V3D vec2);
+tF64V3D tF64V3D_Mul(tF64V3D vec, tF64 mod);
+/*Warn: Silently returns `tF64V3D_Zero` on failure.*/
+tF64V3D tF64V3D_Div(tF64V3D vec, tF64 mod);
+/*Note: Returns `False` on success.*/
+tBln tF64V3D_Div_safe(tF64V3D *vec, tF64 mod);
+tF64 tF64V3D_Dot(tF64V3D vec1, tF64V3D vec2);
+tBln tF64V3D_Eq(tF64V3D vec1, tF64V3D vec2);
+tBln tF64V3D_Nearby(tF64V3D vec1, tF64V3D vec2, tF64 eps);
+tF64 tF64V3D_LngSq(tF64V3D vec);
+tF64 tF64V3D_Lng(tF64V3D vec);
+/*Warn: Silently returns `tF64V3D_Zero` on failure.*/
+tF64V3D tF64V3D_Norm(tF64V3D vec);
+/*Note: Returns `False` on success.*/
+tBln tF64V3D_Norm_safe(tF64V3D *vec);
+/*Warn: Silently returns `tF64V3D_Zero` on failure.*/
+tF64V3D tF64V3D_FastNorm(tF64V3D vec);
+/*Note: Returns `False` on success.*/
+tBln tF64V3D_FastNorm_safe(tF64V3D *vec);
+tF64 tF64V3D_DistSq(tF64V3D vec1, tF64V3D vec2);
+tF64 tF64V3D_Dist(tF64V3D vec1, tF64V3D vec2);
+tF64V3D tF64V3D_Lerp(tF64V3D vec1, tF64V3D vec2, tF64 stp);
+tF64V3D tF64V3D_Cross(tF64V3D vec1, tF64V3D vec2);
 #ifdef BQSE_MASTER
-tV3F64 tV3F64_Make(tF64 x, tF64 y, tF64 z)
+tF64V3D tF64V3D_Make(tF64 x, tF64 y, tF64 z)
 {
-	tV3F64 vec;
+	tF64V3D vec;
 	vec.x = x;
 	vec.y = y;
 	vec.z = z;
 	return vec;
 }
-tV3F64 tV3F64_Zero(tNone)
+tF64V3D tF64V3D_Zero(tNone)
 {
-	tV3F64 vec;
-	vec.x = 0.0F;
-	vec.y = 0.0F;
-	vec.z = 0.0F;
+	tF64V3D vec;
+	vec.x = 0.0;
+	vec.y = 0.0;
+	vec.z = 0.0;
 	return vec;
 }
-tV3F64 tV3F64_Add(tV3F64 vec1, tV3F64 vec2)
+tF64V3D tF64V3D_Add(tF64V3D vec1, tF64V3D vec2)
 {
-	tV3F64 vec;
+	tF64V3D vec;
 	vec.x = vec1.x + vec2.x;
 	vec.y = vec1.y + vec2.y;
 	vec.z = vec1.z + vec2.z;
 	return vec;
 }
-tV3F64 tV3F64_Sub(tV3F64 vec1, tV3F64 vec2)
+tF64V3D tF64V3D_Sub(tF64V3D vec1, tF64V3D vec2)
 {
-	tV3F64 vec;
+	tF64V3D vec;
 	vec.x = vec1.x - vec2.x;
 	vec.y = vec1.y - vec2.y;
 	vec.z = vec1.z - vec2.z;
 	return vec;
 }
-tV3F64 tV3F64_Mul(tV3F64 vec, tF64 mod)
+tF64V3D tF64V3D_Mul(tF64V3D vec, tF64 mod)
 {
 	vec.x *= mod;
 	vec.y *= mod;
 	vec.z *= mod;
 	return vec;
 }
-tV3F64 tV3F64_Div(tV3F64 vec, tF64 mod)
+tF64V3D tF64V3D_Div(tF64V3D vec, tF64 mod)
 {
+	if (mod == 0.0) return tF64V3D_Zero();
 	vec.x /= mod;
 	vec.y /= mod;
 	vec.z /= mod;
 	return vec;
 }
-tF64 tV3F64_Dot(tV3F64 vec1, tV3F64 vec2)
+tBln tF64V3D_Div_safe(tF64V3D *vec, tF64 mod)
 {
-	return vec1.x * vec2.x +
-		vec1.y * vec2.y +
-		vec1.z * vec2.z;
+	if (mod == 0.0) return True;
+	vec->x /= mod;
+	vec->y /= mod;
+	vec->z /= mod;
+	return False;
 }
-tBln tV3F64_Eq(tV3F64 vec1, tV3F64 vec2)
+tF64 tF64V3D_Dot(tF64V3D vec1, tF64V3D vec2)
 {
-	return (vec1.x == vec2.x) &&
-		(vec1.y == vec2.y) &&
-		(vec1.z == vec2.z);
+	return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
 }
-tBln tV3F64_Near(tV3F64 vec1, tV3F64 vec2, tF64 eps)
+tBln tF64V3D_Eq(tF64V3D vec1, tF64V3D vec2)
+{
+	return (vec1.x == vec2.x) && (vec1.y == vec2.y) && (vec1.z == vec2.z);
+}
+tBln tF64V3D_Nearby(tF64V3D vec1, tF64V3D vec2, tF64 eps)
 {
 	return (tF64_Abs(vec1.x - vec2.x) <= eps) && (tF64_Abs(vec1.y - vec2.y) <= eps) && (tF64_Abs(vec1.z - vec2.z) <= eps);
 }
-tF64 tV3F64_LngSq(tV3F64 vec)
+tF64 tF64V3D_LngSq(tF64V3D vec)
 {
-	return tV3F64_Dot(vec, vec);
+	return tF64V3D_Dot(vec, vec);
 }
-tF64 tV3F64_Lng(tV3F64 vec)
+tF64 tF64V3D_Lng(tF64V3D vec)
 {
-	return tF64_Sqrt(tV3F64_LngSq(vec));
+	return tF64_Sqrt(tF64V3D_LngSq(vec));
 }
-tV3F64 tV3F64_Norm(tV3F64 vec)
+tF64V3D tF64V3D_Norm(tF64V3D vec)
 {
-	tF64 len = tV3F64_Lng(vec);
-
-	if (len == 0.0F)
-	{
-		return tV3F64_Zero();
-	}
-	return tV3F64_Div(vec, len);
+	tF64 len = tF64V3D_Lng(vec);
+	if (len == 0.0) return tF64V3D_Zero();
+	return tF64V3D_Div(vec, len);
 }
-tV3F64 tV3F64_FastNorm(tV3F64 vec)
+tBln tF64V3D_Norm_safe(tF64V3D *vec)
 {
-	tF64 lenSq = tV3F64_LngSq(vec);
-	if (lenSq == 0.0F) return tV3F64_Zero();
-	return tV3F64_Mul(vec, tF64_InvSqrt(lenSq));
+	return tF64V3D_Div_safe(vec, tF64V3D_Lng(*vec));
 }
-tF64 tV3F64_DistSq(tV3F64 vec1, tV3F64 vec2)
+tF64V3D tF64V3D_FastNorm(tF64V3D vec)
 {
-	return tV3F64_LngSq(tV3F64_Sub(vec1, vec2));
+	tF64 lenSq = tF64V3D_LngSq(vec);
+	if (lenSq == 0.0) return tF64V3D_Zero();
+	return tF64V3D_Mul(vec, tF64_InvSqrt(lenSq));
 }
-tF64 tV3F64_Dist(tV3F64 vec1, tV3F64 vec2)
+tBln tF64V3D_FastNorm_safe(tF64V3D *vec)
 {
-	return tV3F64_Lng(tV3F64_Sub(vec1, vec2));
+	tF64 lenSq = tF64V3D_LngSq(*vec);
+	if (lenSq == 0.0) return True;
+	tF64V3D_Mul(*vec, tF64_InvSqrt(lenSq));
+	return False;
 }
-tV3F64 tV3F64_Lerp(tV3F64 vec1, tV3F64 vec2, tF64 stp)
+tF64 tF64V3D_DistSq(tF64V3D vec1, tF64V3D vec2)
 {
-	tV3F64 vec;
+	return tF64V3D_LngSq(tF64V3D_Sub(vec1, vec2));
+}
+tF64 tF64V3D_Dist(tF64V3D vec1, tF64V3D vec2)
+{
+	return tF64V3D_Lng(tF64V3D_Sub(vec1, vec2));
+}
+tF64V3D tF64V3D_Lerp(tF64V3D vec1, tF64V3D vec2, tF64 stp)
+{
+	tF64V3D vec;
 	vec.x = vec1.x + (vec2.x - vec1.x) * stp;
 	vec.y = vec1.y + (vec2.y - vec1.y) * stp;
 	vec.z = vec1.z + (vec2.z - vec1.z) * stp;
 	return vec;
 }
-tV3F64 tV3F64_Cross(tV3F64 vec1, tV3F64 vec2)
+tF64V3D tF64V3D_Cross(tF64V3D vec1, tF64V3D vec2)
 {
-	tV3F64 vec;
+	tF64V3D vec;
 	vec.x = vec1.y * vec2.z - vec1.z * vec2.y;
 	vec.y = vec1.z * vec2.x - vec1.x * vec2.z;
 	vec.z = vec1.x * vec2.y - vec1.y * vec2.x;
 	return vec;
 }
 #endif
-typedef union { struct { tF64 x, y, z, w; }; tF64 v[4]; } tV4F64;
-tV4F64 tV4F64_Make(tF64 x, tF64 y, tF64 z, tF64 w);
-tV4F64 tV4F64_Zero(tNone);
-tV4F64 tV4F64_Add(tV4F64 vec1, tV4F64 vec2);
-tV4F64 tV4F64_Sub(tV4F64 vec1, tV4F64 vec2);
-tV4F64 tV4F64_Mul(tV4F64 vec, tF64 mod);
-tV4F64 tV4F64_Div(tV4F64 vec, tF64 mod);
-tF64 tV4F64_Dot(tV4F64 vec1, tV4F64 vec2);
-tBln tV4F64_Eq(tV4F64 vec1, tV4F64 vec2);
-tBln tV4F64_Near(tV4F64 vec1, tV4F64 vec2, tF64 eps);
-tF64 tV4F64_LngSq(tV4F64 vec);
-tF64 tV4F64_Lng(tV4F64 vec);
-tV4F64 tV4F64_Norm(tV4F64 vec);
-tV4F64 tV4F64_FastNorm(tV4F64 vec);
-tF64 tV4F64_DistSq(tV4F64 vec1, tV4F64 vec2);
-tF64 tV4F64_Dist(tV4F64 vec1, tV4F64 vec2);
-tV4F64 tV4F64_Lerp(tV4F64 vec1, tV4F64 vec2, tF64 stp);
+typedef union { struct { tF64 x, y, z, w; }; tF64 v[4]; } tF64V4D;
+tF64V4D tF64V4D_Make(tF64 x, tF64 y, tF64 z, tF64 w);
+tF64V4D tF64V4D_Zero(tNone);
+tF64V4D tF64V4D_Add(tF64V4D vec1, tF64V4D vec2);
+tF64V4D tF64V4D_Sub(tF64V4D vec1, tF64V4D vec2);
+tF64V4D tF64V4D_Mul(tF64V4D vec, tF64 mod);
+/*Warn: Silently returns `tF64V4D_Zero` on failure.*/
+tF64V4D tF64V4D_Div(tF64V4D vec, tF64 mod);
+/*Note: Returns `False` on success.*/
+tBln tF64V4D_Div_safe(tF64V4D *vec, tF64 mod);
+tF64 tF64V4D_Dot(tF64V4D vec1, tF64V4D vec2);
+tBln tF64V4D_Eq(tF64V4D vec1, tF64V4D vec2);
+tBln tF64V4D_Nearby(tF64V4D vec1, tF64V4D vec2, tF64 eps);
+tF64 tF64V4D_LngSq(tF64V4D vec);
+tF64 tF64V4D_Lng(tF64V4D vec);
+/*Warn: Silently returns `tF64V4D_Zero` on failure.*/
+tF64V4D tF64V4D_Norm(tF64V4D vec);
+/*Note: Returns `False` on success.*/
+tBln tF64V4D_Norm_safe(tF64V4D *vec);
+/*Warn: Silently returns `tF64V4D_Zero` on failure.*/
+tF64V4D tF64V4D_FastNorm(tF64V4D vec);
+/*Note: Returns `False` on success.*/
+tBln tF64V4D_FastNorm_safe(tF64V4D *vec);
+tF64 tF64V4D_DistSq(tF64V4D vec1, tF64V4D vec2);
+tF64 tF64V4D_Dist(tF64V4D vec1, tF64V4D vec2);
+tF64V4D tF64V4D_Lerp(tF64V4D vec1, tF64V4D vec2, tF64 stp);
 #ifdef BQSE_MASTER
-tV4F64 tV4F64_Make(tF64 x, tF64 y, tF64 z, tF64 w)
+tF64V4D tF64V4D_Make(tF64 x, tF64 y, tF64 z, tF64 w)
 {
-	tV4F64 vec;
+	tF64V4D vec;
 	vec.x = x;
 	vec.y = y;
 	vec.z = z;
 	vec.w = w;
 	return vec;
 }
-tV4F64 tV4F64_Zero(tNone)
+tF64V4D tF64V4D_Zero(tNone)
 {
-	tV4F64 vec;
-	vec.x = 0.0F;
-	vec.y = 0.0F;
-	vec.z = 0.0F;
-	vec.w = 0.0F;
+	tF64V4D vec;
+	vec.x = 0.0;
+	vec.y = 0.0;
+	vec.z = 0.0;
+	vec.w = 0.0;
 	return vec;
 }
-tV4F64 tV4F64_Add(tV4F64 vec1, tV4F64 vec2)
+tF64V4D tF64V4D_Add(tF64V4D vec1, tF64V4D vec2)
 {
-	tV4F64 vec;
+	tF64V4D vec;
 	vec.x = vec1.x + vec2.x;
 	vec.y = vec1.y + vec2.y;
 	vec.z = vec1.z + vec2.z;
 	vec.w = vec1.w + vec2.w;
 	return vec;
 }
-tV4F64 tV4F64_Sub(tV4F64 vec1, tV4F64 vec2)
+tF64V4D tF64V4D_Sub(tF64V4D vec1, tF64V4D vec2)
 {
-	tV4F64 vec;
+	tF64V4D vec;
 	vec.x = vec1.x - vec2.x;
 	vec.y = vec1.y - vec2.y;
 	vec.z = vec1.z - vec2.z;
 	vec.w = vec1.w - vec2.w;
 	return vec;
 }
-tV4F64 tV4F64_Mul(tV4F64 vec, tF64 mod)
+tF64V4D tF64V4D_Mul(tF64V4D vec, tF64 mod)
 {
 	vec.x *= mod;
 	vec.y *= mod;
@@ -1284,62 +1449,329 @@ tV4F64 tV4F64_Mul(tV4F64 vec, tF64 mod)
 	vec.w *= mod;
 	return vec;
 }
-tV4F64 tV4F64_Div(tV4F64 vec, tF64 mod)
+tF64V4D tF64V4D_Div(tF64V4D vec, tF64 mod)
 {
+	if (mod == 0.0) return tF64V4D_Zero();
 	vec.x /= mod;
 	vec.y /= mod;
 	vec.z /= mod;
 	vec.w /= mod;
 	return vec;
 }
-tF64 tV4F64_Dot(tV4F64 vec1, tV4F64 vec2)
+tBln tF64V4D_Div_safe(tF64V4D *vec, tF64 mod)
+{
+	if (mod == 0.0) return True;
+	vec->x /= mod;
+	vec->y /= mod;
+	vec->z /= mod;
+	vec->w /= mod;
+	return False;
+}
+tF64 tF64V4D_Dot(tF64V4D vec1, tF64V4D vec2)
 {
 	return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z + vec1.w * vec2.w;
 }
-tBln tV4F64_Eq(tV4F64 vec1, tV4F64 vec2)
+tBln tF64V4D_Eq(tF64V4D vec1, tF64V4D vec2)
 {
 	return (vec1.x == vec2.x) && (vec1.y == vec2.y) && (vec1.z == vec2.z) && (vec1.w == vec2.w);
 }
-tBln tV4F64_Near(tV4F64 vec1, tV4F64 vec2, tF64 eps)
+tBln tF64V4D_Nearby(tF64V4D vec1, tF64V4D vec2, tF64 eps)
 {
 	return (tF64_Abs(vec1.x - vec2.x) <= eps) && (tF64_Abs(vec1.y - vec2.y) <= eps) && (tF64_Abs(vec1.z - vec2.z) <= eps) && (tF64_Abs(vec1.w - vec2.w) <= eps);
 }
-tF64 tV4F64_LngSq(tV4F64 vec)
+tF64 tF64V4D_LngSq(tF64V4D vec)
 {
-	return tV4F64_Dot(vec, vec);
+	return tF64V4D_Dot(vec, vec);
 }
-tF64 tV4F64_Lng(tV4F64 vec)
+tF64 tF64V4D_Lng(tF64V4D vec)
 {
-	return tF64_Sqrt(tV4F64_LngSq(vec));
+	return tF64_Sqrt(tF64V4D_LngSq(vec));
 }
-tV4F64 tV4F64_Norm(tV4F64 vec)
+tF64V4D tF64V4D_Norm(tF64V4D vec)
 {
-	tF64 len = tV4F64_Lng(vec);
-	if (len == 0.0F) return tV4F64_Zero();
-	return tV4F64_Div(vec, len);
+	tF64 len = tF64V4D_Lng(vec);
+	if (len == 0.0) return tF64V4D_Zero();
+	return tF64V4D_Div(vec, len);
 }
-tV4F64 tV4F64_FastNorm(tV4F64 vec)
+tBln tF64V4D_Norm_safe(tF64V4D *vec)
 {
-	tF64 lenSq = tV4F64_LngSq(vec);
-	if (lenSq == 0.0F) return tV4F64_Zero();
-	return tV4F64_Mul(vec, tF64_InvSqrt(lenSq));
+	return tF64V4D_Div_safe(vec, tF64V4D_Lng(*vec));
 }
-tF64 tV4F64_DistSq(tV4F64 vec1, tV4F64 vec2)
+tF64V4D tF64V4D_FastNorm(tF64V4D vec)
 {
-	return tV4F64_LngSq(tV4F64_Sub(vec1, vec2));
+	tF64 lenSq = tF64V4D_LngSq(vec);
+	if (lenSq == 0.0) return tF64V4D_Zero();
+	return tF64V4D_Mul(vec, tF64_InvSqrt(lenSq));
 }
-tF64 tV4F64_Dist(tV4F64 vec1, tV4F64 vec2)
+tBln tF64V4D_FastNorm_safe(tF64V4D *vec)
 {
-	return tV4F64_Lng(tV4F64_Sub(vec1, vec2));
+	tF64 lenSq = tF64V4D_LngSq(*vec);
+	if (lenSq == 0.0) return True;
+	tF64V4D_Mul(*vec, tF64_InvSqrt(lenSq));
+	return False;
 }
-tV4F64 tV4F64_Lerp(tV4F64 vec1, tV4F64 vec2, tF64 stp)
+tF64 tF64V4D_DistSq(tF64V4D vec1, tF64V4D vec2)
 {
-	tV4F64 vec;
+	return tF64V4D_LngSq(tF64V4D_Sub(vec1, vec2));
+}
+tF64 tF64V4D_Dist(tF64V4D vec1, tF64V4D vec2)
+{
+	return tF64V4D_Lng(tF64V4D_Sub(vec1, vec2));
+}
+tF64V4D tF64V4D_Lerp(tF64V4D vec1, tF64V4D vec2, tF64 stp)
+{
+	tF64V4D vec;
 	vec.x = vec1.x + (vec2.x - vec1.x) * stp;
 	vec.y = vec1.y + (vec2.y - vec1.y) * stp;
 	vec.z = vec1.z + (vec2.z - vec1.z) * stp;
 	vec.w = vec1.w + (vec2.w - vec1.w) * stp;
 	return vec;
 }
+#endif
+typedef union { struct { tF32 m00, m01; tF32 m10, m11; }; tF32 m[2][2]; tF32V2D row[2]; } tF32M2x2;
+tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11);
+tF32M2x2 tF32M2x2_Zero(tNone);
+tF32M2x2 tF32M2x2_Id(tNone);
+tF32M2x2 tF32M2x2_Add(tF32M2x2 mat1, tF32M2x2 mat2);
+tF32M2x2 tF32M2x2_Sub(tF32M2x2 mat1, tF32M2x2 mat2);
+tF32M2x2 tF32M2x2_Mul(tF32M2x2 mat1, tF32M2x2 mat2);
+tF32M2x2 tF32M2x2_MulFlt(tF32M2x2 mat, tF32 mod);
+/*Warn: Silently returns `tF32M2x2_Zero` on failure.*/
+tF32M2x2 tF32M2x2_DivFlt(tF32M2x2 mat, tF32 mod);
+/*Note: Returns `False` on success.*/
+tBln tF32M2x2_DivFlt_safe(tF32M2x2 *mat, tF32 mod);
+tBln tF32M2x2_Eq(tF32M2x2 mat1, tF32M2x2 mat2);
+tBln tF32M2x2_Nearby(tF32M2x2 mat1, tF32M2x2 mat2, tF32 eps);
+tF32V2D tF32M2x2_MulVec(tF32M2x2 mat, tF32V2D vec);
+tF32M2x2 tF32M2x2_Transp(tF32M2x2 mat);
+tF32 tF32M2x2_Det(tF32M2x2 mat);
+/*Warn: Silently returns `tF32M2x2_Zero` on failure.*/
+tF32M2x2 tF32M2x2_Inv(tF32M2x2 mat);
+/*Note: Returns `False` on success.*/
+tBln tF32M2x2_Inv_safe(tF32M2x2 *mat);
+tF32M2x2 tF32M2x2_Rot(tF32 ang);
+tF32M2x2 tF32M2x2_Scale(tF32 x, tF32 y);
+tF32 tF32M2x2_Trace(tF32M2x2 mat);
+#ifdef BQSE_MASTER
+tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11)
+{
+	tF32M2x2 mat;
+	mat.m00 = m00;
+	mat.m01 = m01;
+	mat.m10 = m10;
+	mat.m11 = m11;
+	return mat;
+}
+tF32M2x2 tF32M2x2_Zero(tNone)
+{
+	tF32M2x2 mat;
+	mat.m00 = 0.0F;
+	mat.m01 = 0.0F;
+	mat.m10 = 0.0F;
+	mat.m11 = 0.0F;
+	return mat;
+}
+tF32M2x2 tF32M2x2_Id(tNone)
+{
+	tF32M2x2 mat;
+	mat.m00 = 1.0F;
+	mat.m01 = 0.0F;
+	mat.m10 = 0.0F;
+	mat.m11 = 1.0F;
+	return mat;
+}
+tF32M2x2 tF32M2x2_Add(tF32M2x2 mat1, tF32M2x2 mat2)
+{
+	mat1.m00 += mat2.m00;
+	mat1.m01 += mat2.m01;
+	mat1.m10 += mat2.m10;
+	mat1.m11 += mat2.m11;
+	return mat1;
+}
+tF32M2x2 tF32M2x2_Sub(tF32M2x2 mat1, tF32M2x2 mat2)
+{
+	mat1.m00 -= mat2.m00;
+	mat1.m01 -= mat2.m01;
+	mat1.m10 -= mat2.m10;
+	mat1.m11 -= mat2.m11;
+	return mat1;
+}
+tF32M2x2 tF32M2x2_Mul(tF32M2x2 mat1, tF32M2x2 mat2)
+{
+	tF32M2x2 mat;
+	mat.m00 = mat1.m00 * mat2.m00 + mat1.m01 * mat2.m10;
+	mat.m01 = mat1.m00 * mat2.m01 + mat1.m01 * mat2.m11;
+	mat.m10 = mat1.m10 * mat2.m00 + mat1.m11 * mat2.m10;
+	mat.m11 = mat1.m10 * mat2.m01 + mat1.m11 * mat2.m11;
+	return mat;
+}
+tF32M2x2 tF32M2x2_MulFlt(tF32M2x2 mat, tF32 mod)
+{
+	mat.m00 *= mod;
+	mat.m01 *= mod;
+	mat.m10 *= mod;
+	mat.m11 *= mod;
+	return mat;
+}
+tF32M2x2 tF32M2x2_DivFlt(tF32M2x2 mat, tF32 mod)
+{
+	if (mod == 0.0F) return tF32M2x2_Zero();
+	mat.m00 /= mod;
+	mat.m01 /= mod;
+	mat.m10 /= mod;
+	mat.m11 /= mod;
+	return mat;
+}
+tBln tF32M2x2_DivFlt_safe(tF32M2x2 *mat, tF32 mod)
+{
+	if (mod == 0.0F) return True;
+	mat->m00 /= mod;
+	mat->m01 /= mod;
+	mat->m10 /= mod;
+	mat->m11 /= mod;
+	return False;
+}
+tBln tF32M2x2_Eq(tF32M2x2 mat1, tF32M2x2 mat2)
+{
+	return (mat1.m00 == mat2.m00) && (mat1.m01 == mat2.m01) && (mat1.m10 == mat2.m10) && (mat1.m11 == mat2.m11);
+}
+tBln tF32M2x2_Nearby(tF32M2x2 mat1, tF32M2x2 mat2, tF32 eps)
+{
+	return (tF32_Abs(mat1.m00 - mat2.m00) <= eps) && (tF32_Abs(mat1.m01 - mat2.m01) <= eps) && (tF32_Abs(mat1.m10 - mat2.m10) <= eps) && (tF32_Abs(mat1.m11 - mat2.m11) <= eps);
+}
+tF32V2D tF32M2x2_MulVec(tF32M2x2 mat, tF32V2D vec)
+{
+	tF32V2D res;
+	res.x = mat.m00 * vec.x + mat.m01 * vec.y;
+	res.y = mat.m10 * vec.x + mat.m11 * vec.y;
+	return res;
+}
+tF32M2x2 tF32M2x2_Transp(tF32M2x2 mat)
+{
+	tF32 tmp = mat.m01;
+	mat.m01 = mat.m10;
+	mat.m10 = tmp;
+	return mat;
+}
+tF32 tF32M2x2_Det(tF32M2x2 mat)
+{
+	return (mat.m00 * mat.m11) - (mat.m01 * mat.m10);
+}
+tF32M2x2 tF32M2x2_Inv(tF32M2x2 mat)
+{
+	tF32 det = tF32M2x2_Det(mat);
+	if (tF32_Abs(det) <= tF32_Eps) return tF32M2x2_Zero();
+	tF32 tmp = mat.m00;
+	mat.m00 = mat.m11;
+	mat.m11 = tmp;
+	mat.m01 = tF32_Neg(mat.m01);
+	mat.m10 = tF32_Neg(mat.m10);
+	return tF32M2x2_DivFlt(mat, det);
+}
+tBln tF32M2x2_Inv_safe(tF32M2x2 *mat)
+{
+	tF32 det = tF32M2x2_Det(*mat);
+	if (tF32_Abs(det) <= tF32_Eps) return True;
+	tF32 tmp = mat->m00;
+	mat->m00 = mat->m11;
+	mat->m11 = tmp;
+	mat->m01 = tF32_Neg(mat->m01);
+	mat->m10 = tF32_Neg(mat->m10);
+	tF32M2x2_DivFlt(*mat, det);
+	return False;
+}
+tF32M2x2 tF32M2x2_Rot(tF32 ang)
+{
+	tF32M2x2 mat;
+	mat.m00 = mat.m11 = tF32_Cosine(ang);
+	mat.m10 = tF32_Sine(ang);
+	mat.m01 = tF32_Neg(mat.m10);
+	return mat;
+}
+tF32M2x2 tF32M2x2_Scale(tF32 x, tF32 y)
+{
+	tF32M2x2 mat;
+	mat.m00 = x;
+	mat.m11 = y;
+	mat.m01 = mat.m10 = 0.0F;
+	return mat;
+}
+tF32 tF32M2x2_Trace(tF32M2x2 mat)
+{
+	return mat.m00 + mat.m11;
+}
+#endif
+typedef union { struct { tF32 m00, m01, m02; tF32 m10, m11, m12; tF32 m20, m21, m22; }; tF32 m[3][3]; tF32V3D row[3]; } tF32M3x3;
+tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22);
+tF32M3x3 tF32M3x3_Zero(tNone);
+tF32M3x3 tF32M3x3_Id(tNone);
+tF32M3x3 tF32M3x3_Add(tF32M3x3 mat1, tF32M3x3 mat2);
+tF32M3x3 tF32M3x3_Sub(tF32M3x3 mat1, tF32M3x3 mat2);
+tF32M3x3 tF32M3x3_Mul(tF32M3x3 mat1, tF32M3x3 mat2);
+tF32M3x3 tF32M3x3_MulFlt(tF32M3x3 mat, tF32 mod);
+/*Warn: Silently returns `tF32M3x3_Zero` on failure.*/
+tF32M3x3 tF32M3x3_DivFlt(tF32M3x3 mat, tF32 mod);
+/*Note: Returns `False` on success.*/
+tBln tF32M3x3_DivFlt_safe(tF32M3x3 *mat, tF32 mod);
+tBln tF32M3x3_Eq(tF32M3x3 mat1, tF32M3x3 mat2);
+tBln tF32M3x3_Nearby(tF32M3x3 mat1, tF32M3x3 mat2, tF32 eps);
+tF32V3D tF32M3x3_MulVec(tF32M3x3 mat, tF32V3D vec);
+tF32M3x3 tF32M3x3_Transp(tF32M3x3 mat);
+tF32 tF32M3x3_Det(tF32M3x3 mat);
+/*Warn: Silently returns `tF32M3x3_Zero` on failure.*/
+tF32M3x3 tF32M3x3_Inv(tF32M3x3 mat);
+/*Note: Returns `False` on success.*/
+tBln tF32M3x3_Inv_safe(tF32M3x3 *mat);
+tF32M3x3 tF32M3x3_Transl(tF32 x, tF32 y);
+tF32M3x3 tF32M3x3_Scale(tF32 x, tF32 y);
+tF32M3x3 tF32M3x3_Rot(tF32 ang);
+tF32 tF32M3x3_Trace(tF32M3x3 mat);
+tF32V2D tF32M3x3_TransfPoint(tF32M3x3 mat, tF32V2D vec);
+tF32V2D tF32M3x3_TransfDir(tF32M3x3 mat, tF32V2D vec);
+#ifdef BQSE_MASTER
+#endif
+typedef union { struct { tF32 m00, m01, m02, m03; tF32 m10, m11, m12, m13; tF32 m20, m21, m22, m23; tF32 m30, m31, m32, m33; }; tF32 m[4][4]; tF32V4D row[4]; } tF32M4x4;
+tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33);
+tF32M4x4 tF32M4x4_Zero(tNone);
+tF32M4x4 tF32M4x4_Id(tNone);
+tF32M4x4 tF32M4x4_Add(tF32M4x4 mat1, tF32M4x4 mat2);
+tF32M4x4 tF32M4x4_Sub(tF32M4x4 mat1, tF32M4x4 mat2);
+tF32M4x4 tF32M4x4_Mul(tF32M4x4 mat1, tF32M4x4 mat2);
+tF32M4x4 tF32M4x4_MulFlt(tF32M4x4 mat, tF32 mod);
+/*Warn: Silently returns `tF32M4x4_Zero` on failure.*/
+tF32M4x4 tF32M4x4_DivFlt(tF32M4x4 mat, tF32 mod);
+/*Note: Returns `False` on success.*/
+tBln tF32M4x4_DivFlt_safe(tF32M4x4 *mat, tF32 mod);
+tBln tF32M4x4_Eq(tF32M4x4 mat1, tF32M4x4 mat2);
+tBln tF32M4x4_Nearby(tF32M4x4 mat1, tF32M4x4 mat2, tF32 eps);
+tF32V4D tF32M4x4_MulVec(tF32M4x4 mat, tF32V4D vec);
+tF32M4x4 tF32M4x4_Transp(tF32M4x4 mat);
+tF32 tF32M4x4_Det(tF32M4x4 mat);
+/*Warn: Silently returns `tF32M4x4_Zero` on failure.*/
+tF32M4x4 tF32M4x4_Inv(tF32M4x4 mat);
+/*Note: Returns `False` on success.*/
+tBln tF32M4x4_Inv_safe(tF32M4x4 *mat);
+tF32M4x4 tF32M4x4_Transl(tF32 x, tF32 y, tF32 z);
+tF32M4x4 tF32M4x4_Scale(tF32 x, tF32 y, tF32 z);
+tF32M4x4 tF32M4x4_RotX(tF32 ang);
+tF32M4x4 tF32M4x4_RotY(tF32 ang);
+tF32M4x4 tF32M4x4_RotZ(tF32 ang);
+tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspect, tF32 near, tF32 far);
+tF32M4x4 tF32M4x4_Ortho(tF32 left, tF32 right, tF32 bottom, tF32 top, tF32 near, tF32 far);
+tF32 tF32M4x4_Trace(tF32M4x4 mat);
+tF32M4x4 tF32M4x4_InvAffine(tF32M4x4 mat);
+tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang);
+tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mat, tF32V3D vec);
+tF32V3D tF32M4x4_TransfDir(tF32M4x4 mat, tF32V3D vec);
+#ifdef BQSE_MASTER
+#endif
+typedef union { struct { tF64 m00, m01; tF64 m10, m11; }; tF64 m[2][2]; tF64V2D row[2]; } tF64M2x2;
+#ifdef BQSE_MASTER
+#endif
+typedef union { struct { tF64 m00, m01, m02; tF64 m10, m11, m12; tF64 m20, m21, m22; }; tF64 m[3][3]; tF64V3D row[3]; } tF64M3x3;
+#ifdef BQSE_MASTER
+#endif
+typedef union { struct { tF64 m00, m01, m02, m03; tF64 m10, m11, m12, m13; tF64 m20, m21, m22, m23; tF64 m30, m31, m32, m33; }; tF64 m[4][4]; tF64V4D row[4]; } tF64M4x4;
+#ifdef BQSE_MASTER
 #endif
 #endif//BQSELAYER_H
