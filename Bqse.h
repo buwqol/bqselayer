@@ -1709,6 +1709,7 @@ tBln tF32M2x2_Nearby(tF32M2x2 mat1, tF32M2x2 mat2, tF32 eps);
 tF32V2D tF32M2x2_MulVec(tF32M2x2 mat, tF32V2D vec);
 tF32M2x2 tF32M2x2_Transp(tF32M2x2 mat);
 tF32 tF32M2x2_Det(tF32M2x2 mat);
+tF32M2x2 tF32M2x2_Cofact(tF32M2x2 mat);
 tF32M2x2 tF32M2x2_Adj(tF32M2x2 mat);
 /*Warn: Silently returns `tF32M2x2_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32M2x2 tF32M2x2_Inv(tF32M2x2 mat);
@@ -1826,6 +1827,15 @@ tF32 tF32M2x2_Det(tF32M2x2 mat)
 {
 	return (mat.m00 * mat.m11) - (mat.m01 * mat.m10);
 }
+tF32M2x2 tF32M2x2_Cofact(tF32M2x2 mat)
+{
+	tF32 tmp = mat.m00;
+	mat.m00 = mat.m11;
+	mat.m11 = tmp;
+	mat.m01 = tF32_Neg(mat.m10);
+	mat.m10 = tF32_Neg(mat.m01);
+	return mat;
+}
 tF32M2x2 tF32M2x2_Adj(tF32M2x2 mat)
 {
 	tF32 tmp = mat.m00;
@@ -1890,6 +1900,7 @@ tBln tF32M3x3_Nearby(tF32M3x3 mat1, tF32M3x3 mat2, tF32 eps);
 tF32V3D tF32M3x3_MulVec(tF32M3x3 mat, tF32V3D vec);
 tF32M3x3 tF32M3x3_Transp(tF32M3x3 mat);
 tF32 tF32M3x3_Det(tF32M3x3 mat);
+tF32M3x3 tF32M3x3_Cofact(tF32M3x3 mat);
 tF32M3x3 tF32M3x3_Adj(tF32M3x3 mat);
 /*Warn: Silently returns `tF32M3x3_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32M3x3 tF32M3x3_Inv(tF32M3x3 mat);
@@ -2047,29 +2058,23 @@ tF32 tF32M3x3_Det(tF32M3x3 mat)
 {
 	return (mat.m00 * ((mat.m11 * mat.m22) - (mat.m12 * mat.m21))) - (mat.m01 * ((mat.m10 * mat.m22) - (mat.m12 * mat.m20))) + (mat.m02 * ((mat.m10 * mat.m21) - (mat.m11 * mat.m20)));
 }
+tF32M3x3 tF32M3x3_Cofact(tF32M3x3 mat)
+{
+	tF32M3x3 cof;
+	cof.m00 = mat.m11 * mat.m22 - mat.m12 * mat.m21;
+	cof.m01 = tF32_Neg(mat.m10 * mat.m22 - mat.m12 * mat.m20);
+	cof.m02 = mat.m10 * mat.m21 - mat.m11 * mat.m20;
+	cof.m10 = tF32_Neg(mat.m01 * mat.m22 - mat.m02 * mat.m21);
+	cof.m11 = mat.m00 * mat.m22 - mat.m02 * mat.m20;
+	cof.m12 = tF32_Neg(mat.m00 * mat.m21 - mat.m01 * mat.m20);
+	cof.m20 = mat.m01 * mat.m12 - mat.m02 * mat.m11;
+	cof.m21 = tF32_Neg(mat.m00 * mat.m12 - mat.m02 * mat.m10);
+	cof.m22 = mat.m00 * mat.m11 - mat.m01 * mat.m10;
+	return cof;
+}
 tF32M3x3 tF32M3x3_Adj(tF32M3x3 mat)
 {
-	tF32M3x3 adj;
-	// What was I thinking?
-	// adj.m00 = mat.m11 * mat.m22 - mat.m21 * mat.m12;
-	// adj.m01 = tF32_Neg(mat.m01 * mat.m22 - mat.m21 * mat.m02);
-	// adj.m02 = mat.m01 * mat.m22 - mat.m21 * mat.m02;
-	// adj.m10 = tF32_Neg(mat.m10 * mat.m22 - mat.m20 * mat.m12);
-	// adj.m11 = mat.m00 * mat.m22 - mat.m20 * mat.m02;
-	// adj.m12 = tF32_Neg(mat.m00 * mat.m12 - mat.m10 * mat.m02);
-	// adj.m20 = mat.m10 * mat.m21 - mat.m20 * mat.m11;
-	// adj.m21 = tF32_Neg(mat.m00 * mat.m21 - mat.m20 * mat.m01);
-	// adj.m22 = mat.m00 * mat.m11 - mat.m10 * mat.m01;
-	adj.m00 = mat.m11 * mat.m22 - mat.m12 * mat.m21;
-	adj.m01 = tF32_Neg(mat.m10 * mat.m22 - mat.m12 * mat.m20);
-	adj.m02 = mat.m10 * mat.m21 - mat.m11 * mat.m20;
-	adj.m10 = tF32_Neg(mat.m01 * mat.m22 - mat.m02 * mat.m21);
-	adj.m11 = mat.m00 * mat.m22 - mat.m02 * mat.m20;
-	adj.m12 = tF32_Neg(mat.m00 * mat.m21 - mat.m01 * mat.m20);
-	adj.m20 = mat.m01 * mat.m12 - mat.m02 * mat.m11;
-	adj.m21 = tF32_Neg(mat.m00 * mat.m12 - mat.m02 * mat.m10);
-	adj.m22 = mat.m00 * mat.m11 - mat.m01 * mat.m10;
-	return adj;
+	return tF32M3x3_Transp(tF32M3x3_Cofact(mat));
 }
 tF32M3x3 tF32M3x3_Inv(tF32M3x3 mat)
 {
@@ -2098,10 +2103,8 @@ tF32M3x3 tF32M3x3_Transl(tF32 x, tF32 y)
 tF32M3x3 tF32M3x3_Scale(tF32 x, tF32 y)
 {
 	tF32M3x3 mat = tF32M3x3_Id();
-
 	mat.m00 = x;
 	mat.m11 = y;
-
 	return mat;
 }
 tF32M3x3 tF32M3x3_Rot(tF32 ang)
@@ -2148,6 +2151,7 @@ tBln tF32M4x4_Nearby(tF32M4x4 mat1, tF32M4x4 mat2, tF32 eps);
 tF32V4D tF32M4x4_MulVec(tF32M4x4 mat, tF32V4D vec);
 tF32M4x4 tF32M4x4_Transp(tF32M4x4 mat);
 tF32 tF32M4x4_Det(tF32M4x4 mat);
+tF32M4x4 tF32M4x4_Cofact(tF32M4x4 mat);
 tF32M4x4 tF32M4x4_Adj(tF32M4x4 mat);
 /*Warn: Silently returns `tF32M4x4_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32M4x4 tF32M4x4_Inv(tF32M4x4 mat);
