@@ -2169,7 +2169,7 @@ tF32M4x4 tF32M4x4_RotX(tF32 ang);
 tF32M4x4 tF32M4x4_RotY(tF32 ang);
 tF32M4x4 tF32M4x4_RotZ(tF32 ang);
 tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspect, tF32 near, tF32 far);
-tF32M4x4 tF32M4x4_Ortho(tF32 left, tF32 right, tF32 bottom, tF32 top, tF32 near, tF32 far);
+tF32M4x4 tF32M4x4_Ortho(tF32 left, tF32 right, tF32 bot, tF32 top, tF32 near, tF32 far);
 tF32 tF32M4x4_Trace(tF32M4x4 mat);
 tF32M4x4 tF32M4x4_InvAffine(tF32M4x4 mat);
 tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang);
@@ -2446,26 +2446,38 @@ tF32M4x4 tF32M4x4_Scale(tF32 x, tF32 y, tF32 z)
 }
 tF32M4x4 tF32M4x4_RotX(tF32 ang)
 {
-	const tF32 tmp_c = tF32_Cos(ang);
-	const tF32 tmp_s = tF32_Sin(ang);
+	const tF32 tmp_c = tF32_Cosine(ang);
+	const tF32 tmp_s = tF32_Sine(ang);
 	return tF32M4x4_Make(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, tmp_c, -tmp_s, 0.0F, 0.0F, tmp_s, tmp_c, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 }
 tF32M4x4 tF32M4x4_RotY(tF32 ang)
 {
-	tF32 tmp_c = tF32_Cos(ang);
-	tF32 tmp_s = tF32_Sin(ang);
+	tF32 tmp_c = tF32_Cosine(ang);
+	tF32 tmp_s = tF32_Sine(ang);
 	return tF32M4x4_Make(tmp_c, 0.0F, tmp_s, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, -tmp_s, 0.0F, tmp_c, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 }
 tF32M4x4 tF32M4x4_RotZ(tF32 ang)
 {
-	tF32 tmp_c = tF32_Cos(ang);
-	tF32 tmp_s = tF32_Sin(ang);
+	tF32 tmp_c = tF32_Cosine(ang);
+	tF32 tmp_s = tF32_Sine(ang);
 	return tF32M4x4_Make(tmp_c, -tmp_s, 0.0F, 0.0F, tmp_s, tmp_c, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
+}
+tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspect, tF32 near, tF32 far);
+tF32M4x4 tF32M4x4_Ortho(tF32 left, tF32 right, tF32 bot, tF32 top, tF32 near, tF32 far)
+{
+	tF32 tmpX = 1.0F / (right - left);
+	tF32 tmpY = 1.0F / (top - bot);
+	tF32 tmpZ = 1.0F / (far - near);
+	return tF32M4x4_Make(2.0F * tmpX, 0.0F, 0.0F, tF32_Neg(right + left) * tmpX, 0.0F, 2.0F * tmpY, 0.0F, tF32_Neg(top + bot) * tmpY, 0.0F, 0.0F, tmpZ, tF32_Neg(near * tmpZ), 0.0F, 0.0F, 0.0F, 1.0F);
 }
 tF32 tF32M4x4_Trace(tF32M4x4 mat)
 {
 	return mat.m00 + mat.m11 + mat.m22 + mat.m33;
 }
+tF32M4x4 tF32M4x4_InvAffine(tF32M4x4 mat);
+tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang);
+tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mat, tF32V3D vec);
+tF32V3D tF32M4x4_TransfDir(tF32M4x4 mat, tF32V3D vec);
 // TODO: tF32M4x4 function implementations.
 #endif
 typedef union { struct { tF64 m00, m01; tF64 m10, m11; }; tF64 m[2][2]; tF64V2D row[2]; } tF64M2x2;
