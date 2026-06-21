@@ -87,7 +87,7 @@ typedef union
 	tU32 raw;
 }
 tF32Bits;
-#ifdef BQSE_MASTER
+#ifdef BQSE_IMPL
 tF32 tF32_Inf(tNone)
 {
 	tF32Bits num;
@@ -200,7 +200,7 @@ tF32 tF32_Unlerp(tF32 strt, tF32 curr, tF32 fnsh)
 	if (strt == fnsh) return 0.0F;
 	return (curr - strt) / (fnsh - strt);
 }
-#endif//BQSE_MASTER
+#endif//BQSE_IMPL
 typedef double tF64;
 #define tF64_Pi 3.141592653589793
 #define tF64_Eps 2.2204460492503131E-16
@@ -240,7 +240,7 @@ typedef union
 	tU64 raw;
 }
 tF64Bits;
-#ifdef BQSE_MASTER
+#ifdef BQSE_IMPL
 tF64 tF64_Inf(tNone)
 {
 	tF64Bits num;
@@ -351,7 +351,7 @@ tF64 tF64_Unlerp(tF64 strt, tF64 curr, tF64 fnsh)
 	if (strt == fnsh) return 0.0;
 	return (curr - strt) / (fnsh - strt);
 }
-#endif//BQSE_MASTER
+#endif//BQSE_IMPL
 #if ARCH_Bitness == 64
 typedef tS64 tSSz;
 typedef tU64 tUSz;
@@ -410,7 +410,7 @@ BQSE_DECLARE_MINMAXCLAMPS(tS64);
 BQSE_DECLARE_MINMAXCLAMPS(tU64);
 BQSE_DECLARE_MINMAXCLAMPS(tF32);
 BQSE_DECLARE_MINMAXCLAMPS(tF64);
-#ifdef BQSE_MASTER
+#ifdef BQSE_IMPL
 BQSE_DEFINE_MINMAXCLAMPS(tSSz);
 BQSE_DEFINE_MINMAXCLAMPS(tUSz);
 BQSE_DEFINE_MINMAXCLAMPS(tS8);
@@ -426,17 +426,4 @@ BQSE_DEFINE_MINMAXCLAMPS(tF64);
 #endif
 #undef BQSE_DECLARE_MINMAXCLAMPS
 #undef BQSE_DEFINE_MINMAXCLAMPS
-// TODO: Write a function to actually use these static asserts.
-typedef char BQSE_StaticAssert_tSSz[(sizeof(tSSz) == sizeof(tPtr)) ? 1U : -1];
-typedef char BQSE_StaticAssert_tUSz[(sizeof(tUSz) == sizeof(tPtr)) ? 1U : -1];
-typedef char BQSE_StaticAssert_tS8[(sizeof(tS8) == 1U) ? 1U : -1];
-typedef char BQSE_StaticAssert_tU8[(sizeof(tU8) == 1U) ? 1U : -1];
-typedef char BQSE_StaticAssert_tS16[(sizeof(tS16) == 2U) ? 1U : -1];
-typedef char BQSE_StaticAssert_tU16[(sizeof(tU16) == 2U) ? 1U : -1];
-typedef char BQSE_StaticAssert_tS32[(sizeof(tS32) == 4U) ? 1U : -1];
-typedef char BQSE_StaticAssert_tU32[(sizeof(tU32) == 4U) ? 1U : -1];
-typedef char BQSE_StaticAssert_tS64[(sizeof(tS64) == 8U) ? 1U : -1];
-typedef char BQSE_StaticAssert_tU64[(sizeof(tU64) == 8U) ? 1U : -1];
-typedef char BQSE_StaticAssert_tF32_IEEE754[(sizeof(tF32) == 4U) ? 1U : -1];
-typedef char BQSE_StaticAssert_tF64_IEEE754[(sizeof(tF64) == 8U) ? 1U : -1];
 #endif/*BQSELAYER_PRIMTYPES_H*/

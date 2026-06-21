@@ -1,6 +1,5 @@
 #ifndef BQSELAYER_CTXCRACK_H
 #define BQSELAYER_CTXCRACK_H
-
 /*Language*/
 #ifdef __cplusplus
 #define LANG_Cpp 1
@@ -46,12 +45,20 @@
 #endif
 
 /*Compiler*/
-#if defined(__clang__)
-#define COMP_Clang 1
-#define COMP_Curr eCompiler_Clang
+enum eCompiler
+{
+	eCompiler_None,
+	eCompiler_MSC,
+	eCompiler_GNUC,
+	eCompiler_LLVM,
+	eCompiler_COUNT
+};
+#if defined(__LLVM__)
+#define COMP_LLVM 1
+#define COMP_Curr eCompiler_LLVM
 #elif defined(_MSC_VER)
-#define COMP_MSVC 1
-#define COMP_Curr eCompiler_MSVC
+#define COMP_MSC 1
+#define COMP_Curr eCompiler_MSC
 #elif defined(__GNUC__)
 #define COMP_GNUC 1
 #define COMP_Curr eCompiler_GNUC
@@ -60,6 +67,17 @@
 #endif
 
 /*Operating system*/
+enum eOperatingSystem
+{
+	eOperatingSystem_None,
+	eOperatingSystem_Windows,
+	eOperatingSystem_Linux,
+	eOperatingSystem_MacOS,
+	eOperatingSystem_FreeBSD,
+	eOperatingSystem_MSDOS,
+	eOperatingSystem_Unix,
+	eOperatingSystem_COUNT
+};
 #if defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
 #define OS_FreeBSD 1
 #define OS_Curr eOperatingSystem_FreeBSD
@@ -83,6 +101,15 @@
 #endif
 
 /*Architecture*/
+enum eArchitecture
+{
+	eArchitecture_None,
+	eArchitecture_AMD64,
+	eArchitecture_Intel86,
+	eArchitecture_Arm64,
+	eArchitecture_Arm,
+	eArchitecture_COUNT
+};
 #if defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64)
 #define ARCH_AMD64 1
 #define ARCH_Curr eArchitecture_AMD64
@@ -117,4 +144,32 @@
 #define LINK_C_End
 #endif
 
+/*Function prefixes*/
+#if defined(COMP_MSC)
+#define BQSE_FORCEINLINE __forceinline
+#define BQSE_NOINLINE __declspec(noinline)
+#define BQSE_DLLEXPORT __declspec(dllexport)
+#define BQSE_DLLIMPORT __declspec(dllimport)
+#define BQSE_RESTRICT __restrict
+#elif defined(COMP_GNUC) || defined(COMP_LLVM)
+#define BQSE_FORCEINLINE inline __attribute__((always_inline))
+#define BQSE_NOINLINE __attribute__((noinline))
+#define BQSE_DLLEXPORT __attribute__((visibility("default")))
+#define BQSE_DLLIMPORT
+#define BQSE_RESTRICT __restrict__
+#else
+#define BQSE_FORCEINLINE inline
+#define BQSE_NOINLINE
+#define BQSE_DLLEXPORT
+#define BQSE_DLLIMPORT
+#define BQSE_RESTRICT
+#endif
+
+#if defined(COMP_GNUC) || defined(COMP_LLVM)
+#define BQSE_LIKELY(Cnd)   __builtin_expect(!!(Cnd), 1)
+#define BQSE_UNLIKELY(Cnd) __builtin_expect(!!(Cnd), 0)
+#else
+#define BQSE_LIKELY(Cnd)   (Cnd)
+#define BQSE_UNLIKELY(Cnd) (Cnd)
+#endif
 #endif/*BQSELAYER_CTXCRACK_H*/

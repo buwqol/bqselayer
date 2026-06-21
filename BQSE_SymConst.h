@@ -2,47 +2,21 @@
 #define BQSELAYER_SYMCONST_H
 #include "BQSE_CtxCrack.h"
 #include "BQSE_PrimTypes.h"
-enum eAxis
-{
-	eAxis_X,
-	eAxis_Y,
-	eAxis_Z,
-	eAxis_W
-};
-enum eCompiler
-{
-	eCompiler_None,
-	eCompiler_MSVC,
-	eCompiler_GNUC,
-	eCompiler_Clang,
-	eCompiler_COUNT
-};
 const tChr *BQSE_GetCompiler(enum eCompiler comp);
-#ifdef BQSE_MASTER
+#ifdef BQSE_IMPL
 const tChr *BQSE_GetCompiler(enum eCompiler comp)
 {
 	switch (comp)
 	{
-	case eCompiler_MSVC: return "Microsoft Visual C";
+	case eCompiler_MSC: return "Microsoft Visual C";
 	case eCompiler_GNUC: return "GNU Compiler";
-	case eCompiler_Clang: return "Clang/LLVM";
+	case eCompiler_LLVM: return "Clang/LLVM";
 	default: return "Unknown";
 	}
 }
 #endif
-enum eOperatingSystem
-{
-	eOperatingSystem_None,
-	eOperatingSystem_Windows,
-	eOperatingSystem_Linux,
-	eOperatingSystem_MacOS,
-	eOperatingSystem_FreeBSD,
-	eOperatingSystem_MSDOS,
-	eOperatingSystem_Unix,
-	eOperatingSystem_COUNT
-};
 const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os);
-#ifdef BQSE_MASTER
+#ifdef BQSE_IMPL
 const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os)
 {
 	switch (os)
@@ -57,17 +31,8 @@ const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os)
 	}
 }
 #endif
-enum eArchitecture
-{
-	eArchitecture_None,
-	eArchitecture_AMD64,
-	eArchitecture_Intel86,
-	eArchitecture_Arm64,
-	eArchitecture_Arm,
-	eArchitecture_COUNT
-};
 const tChr *BQSE_GetArchitecture(enum eArchitecture arch);
-#ifdef BQSE_MASTER
+#ifdef BQSE_IMPL
 const tChr *BQSE_GetArchitecture(enum eArchitecture arch)
 {
 	switch (arch)
@@ -97,7 +62,7 @@ enum eMonth
 };
 const tChr *BQSE_GetMonth(enum eMonth mon);
 const tChr *BQSE_GetMonthFull(enum eMonth mon);
-#ifdef BQSE_MASTER
+#ifdef BQSE_IMPL
 const tChr *BQSE_GetMonth(enum eMonth mon)
 {
 	switch (mon)
@@ -149,7 +114,7 @@ enum eDay
 };
 const tChr *BQSE_GetDay(enum eDay day);
 const tChr *BQSE_GetDayFull(enum eDay day);
-#ifdef BQSE_MASTER
+#ifdef BQSE_IMPL
 const tChr *BQSE_GetDay(enum eDay day)
 {
 	switch (day)
