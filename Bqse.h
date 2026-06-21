@@ -1,14 +1,14 @@
 #ifndef BQSELAYER_H
 #define BQSELAYER_H
 
-// Language
+/*Language*/
 #ifdef __cplusplus
 #define LANG_Cpp 1
 #else
 #define LANG_C 1
 #endif
 
-// Language version
+/*Language version*/
 #ifdef LANG_C
 #ifdef __STDC_VERSION__
 #if __STDC_VERSION__ >= 202311L
@@ -45,7 +45,7 @@
 #endif
 #endif
 
-// Compiler
+/*Compiler*/
 #if defined(__clang__)
 #define COMP_Clang 1
 #define COMP_Curr eCompiler_Clang
@@ -59,7 +59,7 @@
 #error "Unknown compiler"
 #endif
 
-// Operating system
+/*Operating system*/
 #if defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
 #define OS_FreeBSD 1
 #define OS_Curr eOperatingSystem_FreeBSD
@@ -82,7 +82,7 @@
 #error "Unknown operating system"
 #endif
 
-// Architecture
+/*Architecture*/
 #if defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64)
 #define ARCH_AMD64 1
 #define ARCH_Curr eArchitecture_AMD64
@@ -99,13 +99,14 @@
 #error "Unknown architecture"
 #endif
 
-// Bitness
+/*Bitness*/
 #if defined(ARCH_AMD64) || defined(ARCH_Arm64)
 #define ARCH_Bitness 64
 #else
 #define ARCH_Bitness 32
 #endif
 
+/*Some helpers*/
 #ifndef Min
 #define Min(Num1, Num2) (((Num1)<(Num2))?(Num1):(Num2))
 #endif
@@ -118,7 +119,7 @@
 #define ClampTop(Num1, Num2) Min(Num1, Num2)
 #define ClampBot(Num1, Num2) Max(Num1, Num2)
 
-// Types
+/*Types*/
 #if defined(LANG_Cpp)
 typedef bool tBln;
 #elif defined(LANG_C) && LANG_Ver >= 1999
@@ -226,6 +227,8 @@ typedef char Bqse_StaticAssert_IEEE754_tF32[(sizeof(tF32) == 4U) ? 1U : -1];
 #define tF32_Tol 1E-5F
 #define tF32_EulNum 2.718281828459045F
 #define tF32_EulCnst 0.577215664901532F
+#define tF32_RadToDeg(flt) ((flt) * 57.29577951308233F)
+#define tF32_DegToRad(flt) ((flt) * 0.0174532925199433F)
 tF32 tF32_Inf(tNone);
 tF32 tF32_Abs(tF32 flt);
 tF32 tF32_Neg(tF32 flt);
@@ -402,6 +405,8 @@ typedef char Bqse_StaticAssert_IEEE754_tF64[(sizeof(tF64) == 8U) ? 1U : -1];
 #define tF64_Tol 1E-5
 #define tF64_EulNum 2.718281828459045
 #define tF64_EulCnst 0.577215664901532
+#define tF64_RadToDeg(dbl) ((dbl) * 57.29577951308233)
+#define tF64_DegToRad(dbl) ((dbl) * 0.0174532925199433)
 tF64 tF64_Inf(tNone);
 tF64 tF64_Abs(tF64 dbl);
 tF64 tF64_Neg(tF64 dbl);
@@ -766,6 +771,8 @@ tBln tF32V2D_Eq(tF32V2D vec1, tF32V2D vec2);
 tBln tF32V2D_Nearby(tF32V2D vec1, tF32V2D vec2, tF32 eps);
 tF32 tF32V2D_LngSq(tF32V2D vec);
 tF32 tF32V2D_Lng(tF32V2D vec);
+// TODO: Implement this function for all vectors, and determine 0 degree angle (along positive X-axis?).
+tF32V2D tF32V2D_Unit(tF32 rot);
 /*Warn: Silently returns `tF32V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32V2D tF32V2D_Norm(tF32V2D vec);
 /*Note: Returns `False` on success.*/
@@ -1719,6 +1726,8 @@ tBln tF32M2x2_Inv_safe(tF32M2x2 *mat);
 tF32M2x2 tF32M2x2_Rot(tF32 ang);
 tF32M2x2 tF32M2x2_Scale(tF32 x, tF32 y);
 tF32 tF32M2x2_Trace(tF32M2x2 mat);
+// TODO: Implement row reduction for all matrices.
+// TODO: Implement row echelon form for all matrices.
 #ifdef BQSE_MASTER
 tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11)
 {
@@ -2171,7 +2180,7 @@ tF32M4x4 tF32M4x4_RotZ(tF32 ang);
 tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspect, tF32 near, tF32 far);
 tF32M4x4 tF32M4x4_Ortho(tF32 left, tF32 right, tF32 bot, tF32 top, tF32 near, tF32 far);
 tF32 tF32M4x4_Trace(tF32M4x4 mat);
-tF32M4x4 tF32M4x4_InvAffine(tF32M4x4 mat);
+tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mat);
 tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang);
 tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mat, tF32V3D vec);
 tF32V3D tF32M4x4_TransfDir(tF32M4x4 mat, tF32V3D vec);
@@ -2474,7 +2483,7 @@ tF32 tF32M4x4_Trace(tF32M4x4 mat)
 {
 	return mat.m00 + mat.m11 + mat.m22 + mat.m33;
 }
-tF32M4x4 tF32M4x4_InvAffine(tF32M4x4 mat);
+tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mat);
 tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang);
 tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mat, tF32V3D vec);
 tF32V3D tF32M4x4_TransfDir(tF32M4x4 mat, tF32V3D vec);
@@ -2672,5 +2681,7 @@ const tChr *BQSE_GetDayFull(enum eDay day)
 	default: return "Unknown";
 	}
 }
+
+/*Abstract data types*/
 #endif
-#endif//BQSELAYER_H
+#endif/*BQSELAYER_H*/
