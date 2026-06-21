@@ -2446,21 +2446,21 @@ tF32M4x4 tF32M4x4_Scale(tF32 x, tF32 y, tF32 z)
 }
 tF32M4x4 tF32M4x4_RotX(tF32 ang)
 {
-	const tF32 tmp_c = tF32_Cosine(ang);
-	const tF32 tmp_s = tF32_Sine(ang);
-	return tF32M4x4_Make(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, tmp_c, -tmp_s, 0.0F, 0.0F, tmp_s, tmp_c, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
+	const tF32 tmpC = tF32_Cosine(ang);
+	const tF32 tmpS = tF32_Sine(ang);
+	return tF32M4x4_Make(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, tmpC, -tmpS, 0.0F, 0.0F, tmpS, tmpC, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 }
 tF32M4x4 tF32M4x4_RotY(tF32 ang)
 {
-	tF32 tmp_c = tF32_Cosine(ang);
-	tF32 tmp_s = tF32_Sine(ang);
-	return tF32M4x4_Make(tmp_c, 0.0F, tmp_s, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, -tmp_s, 0.0F, tmp_c, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
+	tF32 tmpC = tF32_Cosine(ang);
+	tF32 tmpS = tF32_Sine(ang);
+	return tF32M4x4_Make(tmpC, 0.0F, tmpS, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, -tmpS, 0.0F, tmpC, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 }
 tF32M4x4 tF32M4x4_RotZ(tF32 ang)
 {
-	tF32 tmp_c = tF32_Cosine(ang);
-	tF32 tmp_s = tF32_Sine(ang);
-	return tF32M4x4_Make(tmp_c, -tmp_s, 0.0F, 0.0F, tmp_s, tmp_c, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
+	tF32 tmpC = tF32_Cosine(ang);
+	tF32 tmpS = tF32_Sine(ang);
+	return tF32M4x4_Make(tmpC, -tmpS, 0.0F, 0.0F, tmpS, tmpC, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 }
 tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspect, tF32 near, tF32 far);
 tF32M4x4 tF32M4x4_Ortho(tF32 left, tF32 right, tF32 bot, tF32 top, tF32 near, tF32 far)
