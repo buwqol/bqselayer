@@ -171,7 +171,7 @@ tBln tF32V2D_Eq(tF32V2D vect1, tF32V2D vect2);
 tBln tF32V2D_Nearby(tF32V2D vect1, tF32V2D vect2, tF32 eps);
 tF32 tF32V2D_LngSq(tF32V2D vect);
 tF32 tF32V2D_Lng(tF32V2D vect);
-// TODO: Implement this function for all vectors, and determine 0 degree angle (along positive X-axis?).
+/*Note: `rot` is in radians. A value of 0 will produce a unit vector along the positive X-axis.*/
 tF32V2D tF32V2D_Unit(tF32 rot);
 /*Warn: Silently returns `tF32V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32V2D tF32V2D_Norm(tF32V2D vect);
@@ -257,6 +257,13 @@ tF32 tF32V2D_Lng(tF32V2D vect)
 {
 	return tF32_Sqrt(tF32V2D_LngSq(vect));
 }
+tF32V2D tF32V2D_Unit(tF32 rot)
+{
+	tF32V2D vect;
+	vect.x = tF32_Cosine(rot);
+	vect.y = tF32_Sine(rot);
+	return vect;
+}
 tF32V2D tF32V2D_Norm(tF32V2D vect)
 {
 	tF32 lng = tF32V2D_Lng(vect);
@@ -319,6 +326,8 @@ tBln tF32V3D_Eq(tF32V3D vect1, tF32V3D vect2);
 tBln tF32V3D_Nearby(tF32V3D vect1, tF32V3D vect2, tF32 eps);
 tF32 tF32V3D_LngSq(tF32V3D vect);
 tF32 tF32V3D_Lng(tF32V3D vect);
+/*Note: `yaw` and `pitch` are in radians.*/
+tF32V3D tF32V3D_Unit(tF32 yaw, tF32 pitch);
 /*Warn: Silently returns `tF32V3D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF32V3D tF32V3D_Norm(tF32V3D vect);
 /*Note: Returns `False` on success.*/
@@ -410,6 +419,14 @@ tF32 tF32V3D_LngSq(tF32V3D vect)
 tF32 tF32V3D_Lng(tF32V3D vect)
 {
 	return tF32_Sqrt(tF32V3D_LngSq(vect));
+}
+tF32V3D tF32V3D_Unit(tF32 yaw, tF32 pitch)
+{
+	tF32V3D vect;
+	vect.x = tF32_Cosine(pitch) * tF32_Cosine(yaw);
+	vect.y = tF32_Sine(pitch);
+	vect.z = tF32_Cosine(pitch) * tF32_Sine(yaw);
+	return vect;
 }
 tF32V3D tF32V3D_Norm(tF32V3D vect)
 {
@@ -644,6 +661,8 @@ tBln tF64V2D_Eq(tF64V2D vect1, tF64V2D vect2);
 tBln tF64V2D_Nearby(tF64V2D vect1, tF64V2D vect2, tF64 eps);
 tF64 tF64V2D_LngSq(tF64V2D vect);
 tF64 tF64V2D_Lng(tF64V2D vect);
+/*Note: `rot` is in radians. A value of 0 will produce a unit vector along the positive X-axis.*/
+tF64V2D tF64V2D_Unit(tF64 rot);
 /*Warn: Silently returns `tF64V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF64V2D tF64V2D_Norm(tF64V2D vect);
 /*Note: Returns `False` on success.*/
@@ -728,6 +747,13 @@ tF64 tF64V2D_Lng(tF64V2D vect)
 {
 	return tF64_Sqrt(tF64V2D_LngSq(vect));
 }
+tF64V2D tF64V2D_Unit(tF64 rot)
+{
+	tF64V2D vect;
+	vect.x = tF64_Cosine(rot);
+	vect.y = tF64_Sine(rot);
+	return vect;
+}
 tF64V2D tF64V2D_Norm(tF64V2D vect)
 {
 	tF64 lng = tF64V2D_Lng(vect);
@@ -790,6 +816,8 @@ tBln tF64V3D_Eq(tF64V3D vect1, tF64V3D vect2);
 tBln tF64V3D_Nearby(tF64V3D vect1, tF64V3D vect2, tF64 eps);
 tF64 tF64V3D_LngSq(tF64V3D vect);
 tF64 tF64V3D_Lng(tF64V3D vect);
+/*Note: `yaw` and `pitch` are in radians.*/
+tF64V3D tF64V3D_Unit(tF64 yaw, tF64 pitch);
 /*Warn: Silently returns `tF64V3D_Zero` on failure when BQSE_DEBUG is not defined.*/
 tF64V3D tF64V3D_Norm(tF64V3D vect);
 /*Note: Returns `False` on success.*/
@@ -881,6 +909,14 @@ tF64 tF64V3D_LngSq(tF64V3D vect)
 tF64 tF64V3D_Lng(tF64V3D vect)
 {
 	return tF64_Sqrt(tF64V3D_LngSq(vect));
+}
+tF64V3D tF64V3D_Unit(tF64 yaw, tF64 pitch)
+{
+	tF64V3D vect;
+	vect.x = tF64_Cosine(pitch) * tF64_Cosine(yaw);
+	vect.y = tF64_Sine(pitch);
+	vect.z = tF64_Cosine(pitch) * tF64_Sine(yaw);
+	return vect;
 }
 tF64V3D tF64V3D_Norm(tF64V3D vect)
 {
