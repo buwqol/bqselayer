@@ -29,8 +29,11 @@ tBln tF32M2x2_Inv_safe(tF32M2x2 *mtrx);
 tF32M2x2 tF32M2x2_Rot(tF32 ang);
 tF32M2x2 tF32M2x2_Scale(tF32 x, tF32 y);
 tF32 tF32M2x2_Trace(tF32M2x2 mtrx);
+tNone tF32M2x2_RowSwap(tF32M2x2 *mtrx, tU8 idx1, tU8 idx2);
+tNone tF32M2x2_RowAdd(tF32M2x2 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult);
+tNone tF32M2x2_RowMult(tF32M2x2 *mtrx, tU8 idx, tF32 mult);
 // TODO: Implement row reduction for all matrices.
-// TODO: Implement row echelon form for all matrices.
+// TODO: Implement row reduced echelon form for all matrices.
 #ifdef BQSE_IMPL
 tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11)
 {
@@ -195,6 +198,21 @@ tF32 tF32M2x2_Trace(tF32M2x2 mtrx)
 {
 	return mtrx.m00 + mtrx.m11;
 }
+tNone tF32M2x2_RowSwap(tF32M2x2 *mtrx, tU8 idx1, tU8 idx2)
+{
+	tF32_Swap(&mtrx->m[idx1][0], &mtrx->m[idx2][0]);
+	tF32_Swap(&mtrx->m[idx1][1], &mtrx->m[idx2][1]);
+}
+tNone tF32M2x2_RowAdd(tF32M2x2 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult)
+{
+	mtrx->m[dstRow][0] += mtrx->m[srcRow][0] * mult;
+	mtrx->m[dstRow][1] += mtrx->m[srcRow][1] * mult;
+}
+tNone tF32M2x2_RowMult(tF32M2x2 *mtrx, tU8 idx, tF32 mult)
+{
+	mtrx->m[idx][0] *= mult;
+	mtrx->m[idx][1] *= mult;
+}
 #endif
 typedef union { struct { tF32 m00, m01, m02; tF32 m10, m11, m12; tF32 m20, m21, m22; }; tF32 m[3][3]; tF32V3D row[3]; } tF32M3x3;
 tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22);
@@ -226,6 +244,9 @@ tF32M3x3 tF32M3x3_Rot(tF32 ang);
 tF32 tF32M3x3_Trace(tF32M3x3 mtrx);
 tF32V2D tF32M3x3_TransfPoint(tF32M3x3 mtrx, tF32V2D vec);
 tF32V2D tF32M3x3_TransfDir(tF32M3x3 mtrx, tF32V2D vec);
+tNone tF32M3x3_RowSwap(tF32M3x3 *mtrx, tU8 idx1, tU8 idx2);
+tNone tF32M3x3_RowAdd(tF32M3x3 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult);
+tNone tF32M3x3_RowMult(tF32M3x3 *mtrx, tU8 idx, tF32 mult);
 #ifdef BQSE_IMPL
 tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22)
 {
@@ -447,6 +468,24 @@ tF32V2D tF32M3x3_TransfDir(tF32M3x3 mtrx, tF32V2D vec)
 	res.y = mtrx.m10 * vec.x + mtrx.m11 * vec.y;
 	return res;
 }
+tNone tF32M3x3_RowSwap(tF32M3x3 *mtrx, tU8 idx1, tU8 idx2)
+{
+	tF32_Swap(&mtrx->m[idx1][0], &mtrx->m[idx2][0]);
+	tF32_Swap(&mtrx->m[idx1][1], &mtrx->m[idx2][1]);
+	tF32_Swap(&mtrx->m[idx1][2], &mtrx->m[idx2][2]);
+}
+tNone tF32M3x3_RowAdd(tF32M3x3 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult)
+{
+	mtrx->m[dstRow][0] += mtrx->m[srcRow][0] * mult;
+	mtrx->m[dstRow][1] += mtrx->m[srcRow][1] * mult;
+	mtrx->m[dstRow][2] += mtrx->m[srcRow][2] * mult;
+}
+tNone tF32M3x3_RowMult(tF32M3x3 *mtrx, tU8 idx, tF32 mult)
+{
+	mtrx->m[idx][0] *= mult;
+	mtrx->m[idx][1] *= mult;
+	mtrx->m[idx][2] *= mult;
+}
 #endif
 typedef union { struct { tF32 m00, m01, m02, m03; tF32 m10, m11, m12, m13; tF32 m20, m21, m22, m23; tF32 m30, m31, m32, m33; }; tF32 m[4][4]; tF32V4D row[4]; } tF32M4x4;
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33);
@@ -488,9 +527,13 @@ tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspect, tF32 near, tF32 far);
 tF32M4x4 tF32M4x4_Ortho(tF32 left, tF32 right, tF32 bot, tF32 top, tF32 near, tF32 far);
 tF32 tF32M4x4_Trace(tF32M4x4 mtrx);
 tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mtrx);
+/*Note: `ang` is in radians.*/
 tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang);
 tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mtrx, tF32V3D vec);
 tF32V3D tF32M4x4_TransfDir(tF32M4x4 mtrx, tF32V3D vec);
+tNone tF32M4x4_RowSwap(tF32M4x4 *mtrx, tU8 idx1, tU8 idx2);
+tNone tF32M4x4_RowAdd(tF32M4x4 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult);
+tNone tF32M4x4_RowMult(tF32M4x4 *mtrx, tU8 idx, tF32 mult);
 #ifdef BQSE_IMPL
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33)
 {
@@ -791,10 +834,30 @@ tF32 tF32M4x4_Trace(tF32M4x4 mtrx)
 	return mtrx.m00 + mtrx.m11 + mtrx.m22 + mtrx.m33;
 }
 tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mtrx);
-/*Note: `ang` is in radians.*/
 tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang);
 tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mtrx, tF32V3D vec);
 tF32V3D tF32M4x4_TransfDir(tF32M4x4 mtrx, tF32V3D vec);
+tNone tF32M4x4_RowSwap(tF32M4x4 *mtrx, tU8 idx1, tU8 idx2)
+{
+	tF32_Swap(&mtrx->m[idx1][0], &mtrx->m[idx2][0]);
+	tF32_Swap(&mtrx->m[idx1][1], &mtrx->m[idx2][1]);
+	tF32_Swap(&mtrx->m[idx1][2], &mtrx->m[idx2][2]);
+	tF32_Swap(&mtrx->m[idx1][3], &mtrx->m[idx2][3]);
+}
+tNone tF32M4x4_RowAdd(tF32M4x4 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult)
+{
+	mtrx->m[dstRow][0] += mtrx->m[srcRow][0] * mult;
+	mtrx->m[dstRow][1] += mtrx->m[srcRow][1] * mult;
+	mtrx->m[dstRow][2] += mtrx->m[srcRow][2] * mult;
+	mtrx->m[dstRow][3] += mtrx->m[srcRow][3] * mult;
+}
+tNone tF32M4x4_RowMult(tF32M4x4 *mtrx, tU8 idx, tF32 mult)
+{
+	mtrx->m[idx][0] *= mult;
+	mtrx->m[idx][1] *= mult;
+	mtrx->m[idx][2] *= mult;
+	mtrx->m[idx][3] *= mult;
+}
 // TODO: tF32M4x4 function implementations.
 #endif
 typedef union { struct { tF64 m00, m01; tF64 m10, m11; }; tF64 m[2][2]; tF64V2D row[2]; } tF64M2x2;

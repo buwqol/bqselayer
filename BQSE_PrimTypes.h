@@ -10,10 +10,10 @@ typedef _Bool tBln;
 typedef char unsigned tBln;
 #endif
 #ifndef True
-#define True ((tBln)1)
+#define True ((tBln)1U)
 #endif
 #ifndef False
-#define False ((tBln)0)
+#define False ((tBln)0U)
 #endif
 #define tNone void
 #define tGen void
@@ -359,13 +359,14 @@ typedef tU64 tUSz;
 typedef tS32 tSSz;
 typedef tU32 tUSz;
 #endif
-#define BQSE_DECLARE_MINMAXCLAMPS(tType)			\
+#define BQSE_DECLARE_MINMAXCLAMPSWAP(tType)			\
 tType tType##_MinOf(tType Num1, tType Num2);		\
 tType tType##_MaxOf(tType Num1, tType Num2);		\
 tType tType##_Clamp(tType Lo, tType Num, tType Hi);	\
 tType tType##_ClampTop(tType Num1, tType Num2);		\
-tType tType##_ClampBot(tType Num1, tType Num2);		
-#define BQSE_DEFINE_MINMAXCLAMPS(tType)				\
+tType tType##_ClampBot(tType Num1, tType Num2);		\
+tNone tType##_Swap(tType *Num1, tType *Num2);		    
+#define BQSE_DEFINE_MINMAXCLAMPSWAP(tType)			\
 tType tType##_MinOf(tType Num1, tType Num2)			\
 {													\
 	return Num1 < Num2 ? Num1 : Num2;				\
@@ -385,6 +386,12 @@ tType tType##_ClampTop(tType Num1, tType Num2)		\
 tType tType##_ClampBot(tType Num1, tType Num2)		\
 {													\
 	return Num1 > Num2 ? Num1 : Num2;				\
+}													\
+tNone tType##_Swap(tType *Num1, tType *Num2)	    \
+{													\
+	tType tmp = *Num1;                              \
+	*Num1 = *Num2;                                  \
+	*Num2 = tmp;                                    \
 }
 #define WrapStatement(Stmnt) do{Stmnt}while(0U)
 #define ForceDump() (*(voltaile tUSz *)0U = 0U)
@@ -396,34 +403,34 @@ tType tType##_ClampBot(tType Num1, tType Num2)		\
 #define ArrLng(Arr) (sizeof(Arr)/sizeof(Arr[0]))
 #define NumFromPtr(Ptr) (tUSz)((tU8 *)Ptr - (tU8 *)0U)
 #define PtrFromNum(Num) (tPtr)((tU8 *)0U + (Num))
-#define OffsetOf(tType, Memb) ((tUSz)&(((tType*)0U)->Memb))
+#define OffsetOf(tType, Memb) ((tUSz)&(((tType *)0U)->Memb))
 #define MemberSize(tType, Memb) (sizeof(((tType *)0U)->Memb))
-BQSE_DECLARE_MINMAXCLAMPS(tSSz);
-BQSE_DECLARE_MINMAXCLAMPS(tUSz);
-BQSE_DECLARE_MINMAXCLAMPS(tS8);
-BQSE_DECLARE_MINMAXCLAMPS(tU8);
-BQSE_DECLARE_MINMAXCLAMPS(tS16);
-BQSE_DECLARE_MINMAXCLAMPS(tU16);
-BQSE_DECLARE_MINMAXCLAMPS(tS32);
-BQSE_DECLARE_MINMAXCLAMPS(tU32);
-BQSE_DECLARE_MINMAXCLAMPS(tS64);
-BQSE_DECLARE_MINMAXCLAMPS(tU64);
-BQSE_DECLARE_MINMAXCLAMPS(tF32);
-BQSE_DECLARE_MINMAXCLAMPS(tF64);
+BQSE_DECLARE_MINMAXCLAMPSWAP(tSSz);
+BQSE_DECLARE_MINMAXCLAMPSWAP(tUSz);
+BQSE_DECLARE_MINMAXCLAMPSWAP(tS8);
+BQSE_DECLARE_MINMAXCLAMPSWAP(tU8);
+BQSE_DECLARE_MINMAXCLAMPSWAP(tS16);
+BQSE_DECLARE_MINMAXCLAMPSWAP(tU16);
+BQSE_DECLARE_MINMAXCLAMPSWAP(tS32);
+BQSE_DECLARE_MINMAXCLAMPSWAP(tU32);
+BQSE_DECLARE_MINMAXCLAMPSWAP(tS64);
+BQSE_DECLARE_MINMAXCLAMPSWAP(tU64);
+BQSE_DECLARE_MINMAXCLAMPSWAP(tF32);
+BQSE_DECLARE_MINMAXCLAMPSWAP(tF64);
 #ifdef BQSE_IMPL
-BQSE_DEFINE_MINMAXCLAMPS(tSSz);
-BQSE_DEFINE_MINMAXCLAMPS(tUSz);
-BQSE_DEFINE_MINMAXCLAMPS(tS8);
-BQSE_DEFINE_MINMAXCLAMPS(tU8);
-BQSE_DEFINE_MINMAXCLAMPS(tS16);
-BQSE_DEFINE_MINMAXCLAMPS(tU16);
-BQSE_DEFINE_MINMAXCLAMPS(tS32);
-BQSE_DEFINE_MINMAXCLAMPS(tU32);
-BQSE_DEFINE_MINMAXCLAMPS(tS64);
-BQSE_DEFINE_MINMAXCLAMPS(tU64);
-BQSE_DEFINE_MINMAXCLAMPS(tF32);
-BQSE_DEFINE_MINMAXCLAMPS(tF64);
+BQSE_DEFINE_MINMAXCLAMPSWAP(tSSz);
+BQSE_DEFINE_MINMAXCLAMPSWAP(tUSz);
+BQSE_DEFINE_MINMAXCLAMPSWAP(tS8);
+BQSE_DEFINE_MINMAXCLAMPSWAP(tU8);
+BQSE_DEFINE_MINMAXCLAMPSWAP(tS16);
+BQSE_DEFINE_MINMAXCLAMPSWAP(tU16);
+BQSE_DEFINE_MINMAXCLAMPSWAP(tS32);
+BQSE_DEFINE_MINMAXCLAMPSWAP(tU32);
+BQSE_DEFINE_MINMAXCLAMPSWAP(tS64);
+BQSE_DEFINE_MINMAXCLAMPSWAP(tU64);
+BQSE_DEFINE_MINMAXCLAMPSWAP(tF32);
+BQSE_DEFINE_MINMAXCLAMPSWAP(tF64);
 #endif
-#undef BQSE_DECLARE_MINMAXCLAMPS
-#undef BQSE_DEFINE_MINMAXCLAMPS
+#undef BQSE_DECLARE_MINMAXCLAMPSWAP
+#undef BQSE_DEFINE_MINMAXCLAMPSWAP
 #endif/*BQSELAYER_PRIMTYPES_H*/
