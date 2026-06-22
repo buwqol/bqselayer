@@ -29,11 +29,11 @@ tBln tF32M2x2_Inv_safe(tF32M2x2 *mtrx);
 tF32M2x2 tF32M2x2_Rot(tF32 ang);
 tF32M2x2 tF32M2x2_Scale(tF32 x, tF32 y);
 tF32 tF32M2x2_Trace(tF32M2x2 mtrx);
-tNone tF32M2x2_RowSwap(tF32M2x2 *mtrx, tU8 idx1, tU8 idx2);
+tNone tF32M2x2_RowSwap(tF32M2x2 *mtrx);
 tNone tF32M2x2_RowAdd(tF32M2x2 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult);
 tNone tF32M2x2_RowMult(tF32M2x2 *mtrx, tU8 idx, tF32 mult);
-// TODO: Implement row reduction for all matrices.
-// TODO: Implement row reduced echelon form for all matrices.
+tNone tF32M2x2_RowEch(tF32M2x2 *mtrx);
+tNone tF32M2x2_RowRedEch(tF32M2x2 *mtrx);
 #ifdef BQSE_IMPL
 tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11)
 {
@@ -198,10 +198,10 @@ tF32 tF32M2x2_Trace(tF32M2x2 mtrx)
 {
 	return mtrx.m00 + mtrx.m11;
 }
-tNone tF32M2x2_RowSwap(tF32M2x2 *mtrx, tU8 idx1, tU8 idx2)
+tNone tF32M2x2_RowSwap(tF32M2x2 *mtrx)
 {
-	tF32_Swap(&mtrx->m[idx1][0], &mtrx->m[idx2][0]);
-	tF32_Swap(&mtrx->m[idx1][1], &mtrx->m[idx2][1]);
+	tF32_Swap(&mtrx->m[0][0], &mtrx->m[1][0]);
+	tF32_Swap(&mtrx->m[0][1], &mtrx->m[1][1]);
 }
 tNone tF32M2x2_RowAdd(tF32M2x2 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult)
 {
@@ -212,6 +212,44 @@ tNone tF32M2x2_RowMult(tF32M2x2 *mtrx, tU8 idx, tF32 mult)
 {
 	mtrx->m[idx][0] *= mult;
 	mtrx->m[idx][1] *= mult;
+}
+// TODO: Optimize these two functions eventually, but for now they're fine - more so for my own understanding.
+tNone tF32M2x2_RowEch(tF32M2x2 *mtrx)
+{
+	tU8 pivotRow = 0U;
+	for (tU8 col = 0U; col < 2U; ++col)
+	{
+		if (pivotRow >= 2U) break;
+		tBln foundPivot = False;
+		if (mtrx->m[pivotRow][col] != 0.0F) foundPivot = True;
+		else
+		{
+			for (tU8 idx = 1U; idx < 2U - pivotRow; ++idx)
+			{
+				if (mtrx->m[pivotRow + idx][col] != 0.0F)
+				{
+					tF32M2x2_RowSwap(mtrx);
+					foundPivot = True;
+					break;
+				}
+			}
+			if (foundPivot == False) continue;
+		}
+		tF32M2x2_RowMult(mtrx, pivotRow, 1.0F / mtrx->m[pivotRow][col]);
+		for (tU8 idx = 1U; idx < 2U - pivotRow; ++idx) tF32M2x2_RowAdd(mtrx, pivotRow + idx, pivotRow, tF32_Neg(mtrx->m[pivotRow + idx][col]));
+		++pivotRow;
+	}
+}
+tNone tF32M2x2_RowRedEch(tF32M2x2 *mtrx)
+{
+	tF32M2x2_RowEch(mtrx);
+	tU8 pivotRow = 1U;
+	for (tU8 col = pivotRow; col > 0U; --col)
+	{
+		if (pivotRow == 0U) break;
+		for (tU8 idx = 0U; idx < pivotRow; ++idx) tF32M2x2_RowAdd(mtrx, idx, pivotRow, tF32_Neg(mtrx->m[idx][col]));
+		--pivotRow;
+	}
 }
 #endif
 typedef union { struct { tF32 m00, m01, m02; tF32 m10, m11, m12; tF32 m20, m21, m22; }; tF32 m[3][3]; tF32V3D row[3]; } tF32M3x3;
@@ -247,6 +285,8 @@ tF32V2D tF32M3x3_TransfDir(tF32M3x3 mtrx, tF32V2D vec);
 tNone tF32M3x3_RowSwap(tF32M3x3 *mtrx, tU8 idx1, tU8 idx2);
 tNone tF32M3x3_RowAdd(tF32M3x3 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult);
 tNone tF32M3x3_RowMult(tF32M3x3 *mtrx, tU8 idx, tF32 mult);
+tNone tF32M3x3_RowEch(tF32M3x3 *mtrx);
+tNone tF32M3x3_RowRedEch(tF32M3x3 *mtrx);
 #ifdef BQSE_IMPL
 tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22)
 {
@@ -486,6 +526,52 @@ tNone tF32M3x3_RowMult(tF32M3x3 *mtrx, tU8 idx, tF32 mult)
 	mtrx->m[idx][1] *= mult;
 	mtrx->m[idx][2] *= mult;
 }
+tNone tF32M3x3_RowEch(tF32M3x3 *mtrx)
+{
+	tU8 pivotRow = 0U;
+	for (tU8 col = 0U; col < 3U; ++col)
+	{
+		if (pivotRow >= 3U) break;
+		tBln foundPivot = False;
+		if (mtrx->m[pivotRow][col] != 0.0F) foundPivot = True;
+		else
+		{
+			for (tU8 idx = 1U; idx < 3U - pivotRow; ++idx)
+			{
+				if (mtrx->m[pivotRow + idx][col] != 0.0F)
+				{
+					tF32M3x3_RowSwap(mtrx, pivotRow, pivotRow + idx);
+					foundPivot = True;
+					break;
+				}
+			}
+			if (foundPivot == False) continue;
+		}
+		tF32M3x3_RowMult(mtrx, pivotRow, 1.0F / mtrx->m[pivotRow][col]);
+		for (tU8 idx = 1U; idx < 3U - pivotRow; ++idx) tF32M3x3_RowAdd(mtrx, pivotRow + idx, pivotRow, tF32_Neg(mtrx->m[pivotRow + idx][col]));
+		++pivotRow;
+	}
+}
+tNone tF32M3x3_RowRedEch(tF32M3x3 *mtrx)
+{
+	tF32M3x3_RowEch(mtrx);
+	for (tS8 row = 2; row >= 0; --row)
+	{
+		tBln foundPivot = False;
+		tU8 pivotCol = 0;
+		for (tU8 col = 0U; col < 3; ++col)
+		{
+			if (mtrx->m[row][col] != 0.0F)
+			{
+				foundPivot = True;
+				pivotCol = col;
+				break;
+			}
+		}
+		if (foundPivot == False) continue;
+		for (tU8 aboveRow = 0U; aboveRow < row; ++aboveRow) tF32M3x3_RowAdd(mtrx, aboveRow, row, tF32_Neg(mtrx->m[aboveRow][pivotCol]));
+	}
+}
 #endif
 typedef union { struct { tF32 m00, m01, m02, m03; tF32 m10, m11, m12, m13; tF32 m20, m21, m22, m23; tF32 m30, m31, m32, m33; }; tF32 m[4][4]; tF32V4D row[4]; } tF32M4x4;
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33);
@@ -534,6 +620,7 @@ tF32V3D tF32M4x4_TransfDir(tF32M4x4 mtrx, tF32V3D vec);
 tNone tF32M4x4_RowSwap(tF32M4x4 *mtrx, tU8 idx1, tU8 idx2);
 tNone tF32M4x4_RowAdd(tF32M4x4 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult);
 tNone tF32M4x4_RowMult(tF32M4x4 *mtrx, tU8 idx, tF32 mult);
+tNone tF32M4x4_RowEch(tF32M4x4 *mtrx);
 #ifdef BQSE_IMPL
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33)
 {
@@ -857,6 +944,78 @@ tNone tF32M4x4_RowMult(tF32M4x4 *mtrx, tU8 idx, tF32 mult)
 	mtrx->m[idx][1] *= mult;
 	mtrx->m[idx][2] *= mult;
 	mtrx->m[idx][3] *= mult;
+}
+tNone tF32M4x4_RowEch(tF32M4x4 *mtrx)
+{
+	tU8 pivotRow = 0U;
+	for (tU8 col = 0U; col < 4U; ++col)
+	{
+		if (pivotRow >= 4U) break;
+		tBln foundPivot = False;
+		if (mtrx->m[pivotRow][col] != 0.0F) foundPivot = True;
+		else
+		{
+			for (tU8 idx = 1U; idx < 4U - pivotRow; ++idx)
+			{
+				if (mtrx->m[pivotRow + idx][col] != 0.0F)
+				{
+					tF32M4x4_RowSwap(mtrx, pivotRow, pivotRow + idx);
+					foundPivot = True;
+					break;
+				}
+			}
+			if (foundPivot == False) continue;
+		}
+		tF32M4x4_RowMult(mtrx, pivotRow, 1.0F / mtrx->m[pivotRow][col]);
+		for (tU8 idx = 1U; idx < 4U - pivotRow; ++idx) tF32M4x4_RowAdd(mtrx, pivotRow + idx, pivotRow, tF32_Neg(mtrx->m[pivotRow + idx][col]));
+		++pivotRow;
+	}
+}
+tNone tF32M4x4_RowEch(tF32M4x4 *mtrx)
+{
+	tU8 pivotRow = 0U;
+	for (tU8 col = 0U; col < 4U; ++col)
+	{
+		if (pivotRow >= 4U) break;
+		tBln foundPivot = False;
+		if (mtrx->m[pivotRow][col] != 0.0F) foundPivot = True;
+		else
+		{
+			for (tU8 idx = 1U; idx < 4U - pivotRow; ++idx)
+			{
+				if (mtrx->m[pivotRow + idx][col] != 0.0F)
+				{
+					tF32M4x4_RowSwap(mtrx, pivotRow, pivotRow + idx);
+					foundPivot = True;
+					break;
+				}
+			}
+			if (foundPivot == False) continue;
+		}
+		tF32M4x4_RowMult(mtrx, pivotRow, 1.0F / mtrx->m[pivotRow][col]);
+		for (tU8 idx = 1U; idx < 4U - pivotRow; ++idx) tF32M4x4_RowAdd(mtrx, pivotRow + idx, pivotRow, tF32_Neg(mtrx->m[pivotRow + idx][col]));
+		++pivotRow;
+	}
+}
+tNone tF32M4x4_RowRedEch(tF32M4x4 *mtrx)
+{
+	tF32M4x4_RowEch(mtrx);
+	for (tS8 row = 3; row >= 0; --row)
+	{
+		tBln foundPivot = False;
+		tU8 pivotCol = 0;
+		for (tU8 col = 0U; col < 4; ++col)
+		{
+			if (mtrx->m[row][col] != 0.0F)
+			{
+				foundPivot = True;
+				pivotCol = col;
+				break;
+			}
+		}
+		if (foundPivot == False) continue;
+		for (tU8 aboveRow = 0U; aboveRow < row; ++aboveRow) tF32M4x4_RowAdd(mtrx, aboveRow, row, tF32_Neg(mtrx->m[aboveRow][pivotCol]));
+	}
 }
 // TODO: tF32M4x4 function implementations.
 #endif
