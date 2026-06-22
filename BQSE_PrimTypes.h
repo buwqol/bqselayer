@@ -50,6 +50,8 @@ typedef long long unsigned tU64;
 // TODO: tF16 half precision floating point type.
 typedef float tF32;
 #define tF32_Pi 3.141592653589793F
+#define tF32_2Pi 6.283185307F
+#define tF32_HalfPi 1.570796327F
 #define tF32_Eps 1.19209290E-7F
 #define tF32_Tol 1E-5F
 #define tF32_EulNum 2.718281828459045F
@@ -126,47 +128,73 @@ tF32 tF32_SigNaN(tNone)
 	num.raw = 0XFF800001U;
 	return num.flt;
 }
-#include <math.h> // TODO: Move away from this eventually.
 tF32 tF32_Sine(tF32 ang)
 {
-	return sinf(ang);
+	// Bhaskara I approximation.
+	tBln neg = False;
+	if (ang == 0.0F) return 0.0F;
+	while (ang > tF32_2Pi) ang -= tF32_2Pi;
+	while (ang < 0) ang += tF32_2Pi;
+	if (ang > tF32_Pi)
+	{
+		ang -= tF32_Pi;
+		neg = True;
+	}
+	const tF32 magicNum = ang * (tF32_Pi - ang);
+	const tF32 res = (4.0F * magicNum) / (12.33700550F - magicNum);
+	if (neg == True) return tF32_Neg(res);
+	return res;
 }
+// TODO: Do another Bhaskara I approximation here.
 tF32 tF32_Cosine(tF32 ang)
 {
-	return cosf(ang);
+	return tF32_Sine(tF32_HalfPi - ang);
 }
+// TODO: Find an approximation for this.
 tF32 tF32_Tangent(tF32 ang)
 {
-	return tanf(ang);
+	const tF32 cosAng = tF32_Cosine(ang);
+	const tF32 sinAng = tF32_Sine(ang);
+	if (cosAng == 0.0F) return (*((tU32 *)&sinAng) & tF32_SignMask) ? tF32_NegInf() : tF32_Inf();
+	return sinAng / cosAng;
 }
+#include <math.h> // TODO: Move away from this eventually.
+// TODO: Find an approximation for this.
 tF32 tF32_SineInv(tF32 num)
 {
 	return asinf(num);
 }
+// TODO: Find an approximation for this.
 tF32 tF32_CosineInv(tF32 num)
 {
 	return acosf(num);
 }
+// TODO: Find an approximation for this.
 tF32 tF32_TangentInv(tF32 num)
 {
 	return atanf(num);
 }
+// TODO: Find an approximation for this.
 tF32 tF32_TangentInv2(tF32 opp, tF32 adj)
 {
 	return atan2(opp, adj);
 }
+// TODO: Find an approximation for this.
 tF32 tF32_HypSine(tF32 ang)
 {
 	return sinhf(ang);
 }
+// TODO: Find an approximation for this.
 tF32 tF32_HypCosine(tF32 ang)
 {
 	return coshf(ang);
 }
+// TODO: Find an approximation for this.
 tF32 tF32_HypTangent(tF32 ang)
 {
 	return tanhf(ang);
 }
+// TODO: Find an approximation for this.
 tF32 tF32_Sqrt(tF32 num)
 {
 	return sqrtf(num);
@@ -183,10 +211,12 @@ tF32 tF32_InvSqrt(tF32 num)
 	// number.flt = number.flt * (threeHalf - (halfNum * number.flt * number.flt)); // Enable this if you need the precision.
 	return number.flt;
 }
+// TODO: Find an approximation for this.
 tF32 tF32_Ln(tF32 num)
 {
 	return logf(num);
 }
+// TODO: Find an approximation for this.
 tF32 tF32_Log(tF32 num, tF32 btm)
 {
 	return tF32_Ln(num) / tF32_Ln(btm);
@@ -279,6 +309,7 @@ tF64 tF64_SigNaN(tNone)
 	num.raw = 0XFFF0000000000001LLU;
 	return num.dbl;
 }
+//TODO: Port approximations from tF32 to tF64.
 tF64 tF64_Sine(tF64 ang)
 {
 	return sin(ang);
