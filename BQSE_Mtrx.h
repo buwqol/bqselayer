@@ -971,32 +971,6 @@ tNone tF32M4x4_RowEch(tF32M4x4 *mtrx)
 		++pivotRow;
 	}
 }
-tNone tF32M4x4_RowEch(tF32M4x4 *mtrx)
-{
-	tU8 pivotRow = 0U;
-	for (tU8 col = 0U; col < 4U; ++col)
-	{
-		if (pivotRow >= 4U) break;
-		tBln foundPivot = False;
-		if (mtrx->m[pivotRow][col] != 0.0F) foundPivot = True;
-		else
-		{
-			for (tU8 idx = 1U; idx < 4U - pivotRow; ++idx)
-			{
-				if (mtrx->m[pivotRow + idx][col] != 0.0F)
-				{
-					tF32M4x4_RowSwap(mtrx, pivotRow, pivotRow + idx);
-					foundPivot = True;
-					break;
-				}
-			}
-			if (foundPivot == False) continue;
-		}
-		tF32M4x4_RowMult(mtrx, pivotRow, 1.0F / mtrx->m[pivotRow][col]);
-		for (tU8 idx = 1U; idx < 4U - pivotRow; ++idx) tF32M4x4_RowAdd(mtrx, pivotRow + idx, pivotRow, tF32_Neg(mtrx->m[pivotRow + idx][col]));
-		++pivotRow;
-	}
-}
 tNone tF32M4x4_RowRedEch(tF32M4x4 *mtrx)
 {
 	tF32M4x4_RowEch(mtrx);

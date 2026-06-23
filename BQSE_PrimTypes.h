@@ -47,6 +47,13 @@ typedef long long signed tS64;
 typedef long long unsigned tU64;
 #define tU64_Max 18446744073709551615LLU
 #define tU64_Min 0LLU
+#if ARCH_Bitness == 64
+typedef tS64 tSSz;
+typedef tU64 tUSz;
+#else
+typedef tS32 tSSz;
+typedef tU32 tUSz;
+#endif
 // TODO: tF16 half precision floating point type.
 typedef float tF32;
 #define tF32_Pi 3.141592653589793F
@@ -67,15 +74,17 @@ tF32 tF32_SigNaN(tNone);
 tF32 tF32_Sine(tF32 ang);
 tF32 tF32_Cosine(tF32 ang);
 tF32 tF32_Tangent(tF32 ang);
-tF32 tF32_SineInv(tF32 num);
-tF32 tF32_CosineInv(tF32 num);
-tF32 tF32_TangentInv(tF32 num);
-tF32 tF32_TangentInv2(tF32 opp, tF32 adj);
+tF32 tF32_ArcSine(tF32 num);
+tF32 tF32_ArcCosine(tF32 num);
+tF32 tF32_ArcTangent(tF32 num);
+tF32 tF32_ArcTangent2(tF32 opp, tF32 adj);
 tF32 tF32_HypSine(tF32 ang);
 tF32 tF32_HypCosine(tF32 ang);
 tF32 tF32_HypTangent(tF32 ang);
-tF32 tF32_Sqrt(tF32 num);
+tF32 tF32_InvSqrt_iter(tF32 num, tUSz itr);
 tF32 tF32_InvSqrt(tF32 num);
+tF32 tF32_Sqrt(tF32 num);
+tF32 tF32_Sqrt_iter(tF32 num, tUSz itr);
 tF32 tF32_Ln(tF32 num);
 tF32 tF32_Log(tF32 num, tF32 btm);
 tF32 tF32_Lerp(tF32 strt, tF32 stp, tF32 fnsh);
@@ -128,13 +137,24 @@ tF32 tF32_SigNaN(tNone)
 	num.raw = 0XFF800001U;
 	return num.flt;
 }
+tF32 tF32_PowI(tF32 base, tUSz exp)
+{
+	tF32 result = 1.0F;
+	while (exp != 0U)
+	{
+		if (exp & 1U) result *= base;
+		base *= base;
+		exp >>= 1U;
+	}
+	return result;
+}
+// Bhaskara I approximation.
 tF32 tF32_Sine(tF32 ang)
 {
-	// Bhaskara I approximation.
 	tBln neg = False;
 	if (ang == 0.0F) return 0.0F;
 	while (ang > tF32_2Pi) ang -= tF32_2Pi;
-	while (ang < 0) ang += tF32_2Pi;
+	while (ang < 0.0F) ang += tF32_2Pi;
 	if (ang > tF32_Pi)
 	{
 		ang -= tF32_Pi;
@@ -160,22 +180,22 @@ tF32 tF32_Tangent(tF32 ang)
 }
 #include <math.h> // TODO: Move away from this eventually.
 // TODO: Find an approximation for this.
-tF32 tF32_SineInv(tF32 num)
+tF32 tF32_ArcSine(tF32 num)
 {
 	return asinf(num);
 }
 // TODO: Find an approximation for this.
-tF32 tF32_CosineInv(tF32 num)
+tF32 tF32_ArcCosine(tF32 num)
 {
 	return acosf(num);
 }
 // TODO: Find an approximation for this.
-tF32 tF32_TangentInv(tF32 num)
+tF32 tF32_ArcTangent(tF32 num)
 {
 	return atanf(num);
 }
 // TODO: Find an approximation for this.
-tF32 tF32_TangentInv2(tF32 opp, tF32 adj)
+tF32 tF32_ArcTangent2(tF32 opp, tF32 adj)
 {
 	return atan2(opp, adj);
 }
@@ -194,22 +214,28 @@ tF32 tF32_HypTangent(tF32 ang)
 {
 	return tanhf(ang);
 }
-// TODO: Find an approximation for this.
-tF32 tF32_Sqrt(tF32 num)
-{
-	return sqrtf(num);
-}
 // Fast inverse sqrt from Quake 3.
-tF32 tF32_InvSqrt(tF32 num)
+tF32 tF32_InvSqrt_iter(tF32 num, tUSz itr)
 {
 	static const tF32 threeHalfs = 1.5F;
 	tF32Bits number;
 	number.flt = num;
 	tF32 halfNum = number.flt * 0.5F;
 	number.raw = 0X5F3759DFU - (number.raw >> 1U);
-	number.flt = number.flt * (threeHalfs - (halfNum * number.flt * number.flt));
-	// number.flt = number.flt * (threeHalf - (halfNum * number.flt * number.flt)); // Enable this if you need the precision.
+	for (tUSz idx = 0U; idx < itr; ++idx) number.flt = number.flt * (threeHalfs - (halfNum * number.flt * number.flt));
 	return number.flt;
+}
+tF32 tF32_InvSqrt(tF32 num)
+{
+	return tF32_InvSqrt_iter(num, 1U);
+}
+tF32 tF32_Sqrt_iter(tF32 num, tUSz itr)
+{
+	return num * tF32_InvSqrt_iter(num, itr);
+}
+tF32 tF32_Sqrt(tF32 num)
+{
+	return num * tF32_InvSqrt(num);
 }
 // TODO: Find an approximation for this.
 tF32 tF32_Ln(tF32 num)
@@ -233,6 +259,8 @@ tF32 tF32_Unlerp(tF32 strt, tF32 curr, tF32 fnsh)
 #endif//BQSE_IMPL
 typedef double tF64;
 #define tF64_Pi 3.141592653589793
+#define tF64_2Pi 6.283185307
+#define tF64_HalfPi 1.570796327
 #define tF64_Eps 2.2204460492503131E-16
 #define tF64_Tol 1E-5
 #define tF64_EulNum 2.718281828459045
@@ -248,15 +276,17 @@ tF64 tF64_SigNaN(tNone);
 tF64 tF64_Sine(tF64 ang);
 tF64 tF64_Cosine(tF64 ang);
 tF64 tF64_Tangent(tF64 ang);
-tF64 tF64_SineInv(tF64 num);
-tF64 tF64_CosineInv(tF64 num);
-tF64 tF64_TangentInv(tF64 num);
-tF64 tF64_TangentInv2(tF64 opp, tF64 adj);
+tF64 tF64_ArcSine(tF64 num);
+tF64 tF64_ArcCosine(tF64 num);
+tF64 tF64_ArcTangent(tF64 num);
+tF64 tF64_ArcTangent2(tF64 opp, tF64 adj);
 tF64 tF64_HypSine(tF64 ang);
 tF64 tF64_HypCosine(tF64 ang);
 tF64 tF64_HypTangent(tF64 ang);
-tF64 tF64_Sqrt(tF64 num);
+tF64 tF64_InvSqrt_iter(tF64 num, tUSz itr);
 tF64 tF64_InvSqrt(tF64 num);
+tF64 tF64_Sqrt(tF64 num);
+tF64 tF64_Sqrt_iter(tF64 num, tUSz itr);
 tF64 tF64_Ln(tF64 num);
 tF64 tF64_Log(tF64 num, tF64 btm);
 tF64 tF64_Lerp(tF64 strt, tF64 stp, tF64 fnsh);
@@ -309,32 +339,60 @@ tF64 tF64_SigNaN(tNone)
 	num.raw = 0XFFF0000000000001LLU;
 	return num.dbl;
 }
-//TODO: Port approximations from tF32 to tF64.
+tF64 tF64_PowI(tF64 base, tUSz exp)
+{
+	tF64 result = 1.0F;
+	while (exp != 0U)
+	{
+		if (exp & 1U) result *= base;
+		base *= base;
+		exp >>= 1U;
+	}
+	return result;
+}
+// Bhaskara I approximation.
 tF64 tF64_Sine(tF64 ang)
 {
-	return sin(ang);
+	tBln neg = False;
+	if (ang == 0.0) return 0.0;
+	while (ang > tF64_2Pi) ang -= tF64_2Pi;
+	while (ang < 0.0) ang += tF64_2Pi;
+	if (ang > tF64_Pi)
+	{
+		ang -= tF64_Pi;
+		neg = True;
+	}
+	const tF64 magicNum = ang * (tF64_Pi - ang);
+	const tF64 res = (4.0 * magicNum) / (12.33700550 - magicNum);
+	if (neg == True) return tF64_Neg(res);
+	return res;
 }
+// TODO: Do another Bhaskara I approximation here.
 tF64 tF64_Cosine(tF64 ang)
 {
-	return cos(ang);
+	return tF64_Sine(tF64_HalfPi - ang);
 }
+// TODO: Find an approximation for this.
 tF64 tF64_Tangent(tF64 ang)
 {
-	return tan(ang);
+	const tF64 cosAng = tF64_Cosine(ang);
+	const tF64 sinAng = tF64_Sine(ang);
+	if (cosAng == 0.0F) return (*((tU32 *)&sinAng) & tF64_SignMask) ? tF64_NegInf() : tF64_Inf();
+	return sinAng / cosAng;
 }
-tF64 tF64_SineInv(tF64 num)
+tF64 tF64_ArcSine(tF64 num)
 {
 	return asin(num);
 }
-tF64 tF64_CosineInv(tF64 num)
+tF64 tF64_ArcCosine(tF64 num)
 {
 	return acos(num);
 }
-tF64 tF64_TangentInv(tF64 num)
+tF64 tF64_ArcTangent(tF64 num)
 {
 	return atan(num);
 }
-tF64 tF64_TangentInv2(tF64 opp, tF64 adj)
+tF64 tF64_ArcTangent2(tF64 opp, tF64 adj)
 {
 	return atan2(opp, adj);
 }
@@ -350,24 +408,32 @@ tF64 tF64_HypTangent(tF64 ang)
 {
 	return tanh(ang);
 }
-tF64 tF64_Sqrt(tF64 num)
+tF64 tF64_Ln(tF64 num)
 {
-	return sqrt(num);
+	return log(num);
 }
-tF64 tF64_InvSqrt(tF64 num)
+// Fast inverse sqrt from Quake 3.
+tF64 tF64_InvSqrt_iter(tF64 num, tUSz itr)
 {
 	static const tF64 threeHalfs = 1.5;
 	tF64Bits number;
 	number.dbl = num;
 	tF64 halfNum = number.dbl * 0.5;
 	number.raw = 0X5FE6EC85E7DE30DAULL - (number.raw >> 1U);
-	number.dbl = number.dbl * (threeHalfs - (halfNum * number.dbl * number.dbl));
-	// number.dbl = number.dbl * (threeHalfs - (halfNum * number.dbl * number.dbl)); // Optional second iteration.
+	for (tUSz idx = 0U; idx < itr; ++idx) number.dbl = number.dbl * (threeHalfs - (halfNum * number.dbl * number.dbl));
 	return number.dbl;
 }
-tF64 tF64_Ln(tF64 num)
+tF64 tF64_InvSqrt(tF64 num)
 {
-	return log(num);
+	return tF64_InvSqrt_iter(num, 1U);
+}
+tF64 tF64_Sqrt_iter(tF64 num, tUSz itr)
+{
+	return num * tF64_InvSqrt_iter(num, itr);
+}
+tF64 tF64_Sqrt(tF64 num)
+{
+	return num * tF64_InvSqrt(num);
 }
 tF64 tF64_Log(tF64 num, tF64 btm)
 {
@@ -383,13 +449,6 @@ tF64 tF64_Unlerp(tF64 strt, tF64 curr, tF64 fnsh)
 	return (curr - strt) / (fnsh - strt);
 }
 #endif//BQSE_IMPL
-#if ARCH_Bitness == 64
-typedef tS64 tSSz;
-typedef tU64 tUSz;
-#else
-typedef tS32 tSSz;
-typedef tU32 tUSz;
-#endif
 #define BQSE_DECLARE_MINMAXCLAMPSWAP(tType)			\
 tType tType##_MinOf(tType Num1, tType Num2);		\
 tType tType##_MaxOf(tType Num1, tType Num2);		\
