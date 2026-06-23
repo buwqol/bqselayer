@@ -129,15 +129,6 @@ tF32 tF32_ArcTangent_iter(tF32 num, tUSz itr);
 tF32 tF32_ArcTangent(tF32 num);
 tF32 tF32_ArcTangent2_iter(tF32 opp, tF32 adj, tUSz itr);
 tF32 tF32_ArcTangent2(tF32 opp, tF32 adj);
-/*TODO: Implement this.*/
-/*Note: Parameter `ang` is expected to be in radians.*/
-tF32 tF32_HypSine(tF32 ang);
-/*TODO: Implement this.*/
-/*Note: Parameter `ang` is expected to be in radians.*/
-tF32 tF32_HypCosine(tF32 ang);
-/*TODO: Implement this.*/
-/*Note: Parameter `ang` is expected to be in radians.*/
-tF32 tF32_HypTangent(tF32 ang);
 /*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
 tF32 tF32_InvSqrt_iter(tF32 num, tUSz itr);
 /*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
@@ -158,6 +149,14 @@ tF32 tF32_Log_iter(tF32 num, tF32 base, tUSz itr);
 tF32 tF32_Log(tF32 num, tF32 base);
 tF32 tF32_Lerp(tF32 strt, tF32 stp, tF32 fnsh);
 tF32 tF32_Unlerp(tF32 strt, tF32 curr, tF32 fnsh);
+tF32 tF32_Exp_iter(tF32 pow, tUSz itr);
+tF32 tF32_Exp(tF32 pow);
+tF32 tF32_HypSine_iter(tF32 num, tUSz itr);
+tF32 tF32_HypCosine_iter(tF32 num, tUSz itr);
+tF32 tF32_HypTangent_iter(tF32 num, tUSz itr);
+tF32 tF32_HypSine(tF32 num);
+tF32 tF32_HypCosine(tF32 num);
+tF32 tF32_HypTangent(tF32 num);
 #define tF32_SignMask 0X80000000U
 #define tF32_ExpoMask 0X7F800000U
 #define tF32_FracMask 0X007FFFFFU
@@ -270,21 +269,14 @@ tF32 tF32_Sine_iter(tF32 ang, tUSz itr)
 		ang -= tF32_Pi;
 		neg = True;
 	}
-	tF32 angSq = ang * ang;
-	tBln sub = True;
-	tF32 res = ang;
-	tF32 powItr = ang;
-	tUSz factItr = 1U;
-	tUSz factSum = 1U;
+	const tF32 angSq = ang * ang;
+	tF32 term = ang;
+	tF32 res = term;
 	for (tUSz idx = 0U; idx < itr; ++idx)
 	{
-		factItr += 2U;
-		// TODO: Calculate next term from previous term.
-		factSum *= factItr * (factItr - 1U);
-		powItr *= angSq;
-		if (sub) res -= (powItr / (tF32)factSum);
-		else res += (powItr / (tF32)factSum);
-		sub = !sub;
+		const tF32 denom = (tF32)((2U * idx + 2U) * (2U * idx + 3U));
+		term *= -angSq / denom;
+		res += term;
 	}
 	if (neg == True) return tF32_Neg(res);
 	return res;
@@ -475,6 +467,59 @@ tF32 tF32_Unlerp(tF32 strt, tF32 curr, tF32 fnsh)
 	if (strt == fnsh) return 0.0F;
 	return (curr - strt) / (fnsh - strt);
 }
+tF32 tF32_Exp_iter(tF32 pow, tUSz itr)
+{
+	if (pow == 0.0F) return 1.0F;
+	if (pow == 1.0F) return tF32_EulNum;
+	tF32 res = 1.0F;
+	tF32 term = 1.0F;
+	for (tUSz idx = 1U; idx <= itr; ++idx)
+	{
+		term *= pow / (tF32)idx;
+		res += term;
+	}
+	return res;
+}
+tF32 tF32_Exp(tF32 pow)
+{
+	return tF32_Exp_iter(pow, 10U);
+}
+tF32 tF32_HypSine_iter(tF32 num, tUSz itr)
+{
+	tF32 expNum = tF32_Exp_iter(num, itr);
+	return (expNum - (1.0F / expNum)) * 0.5F;
+}
+tF32 tF32_HypCosine_iter(tF32 num, tUSz itr)
+{
+	tF32 expNum = tF32_Exp_iter(num, itr);
+	return (expNum + (1.0F / expNum)) * 0.5F;
+}
+tF32 tF32_HypTangent_iter(tF32 num, tUSz itr)
+{
+	tF32 expNum = tF32_Exp_iter(num, itr);
+	tF32 invExpNum = 1.0F / expNum;
+	const tF32 hypSine = (expNum - invExpNum) * 0.5F;
+	const tF32 hypCosine = (expNum + invExpNum) * 0.5F;
+	return hypSine / hypCosine;
+}
+tF32 tF32_HypSine(tF32 num)
+{
+	tF32 expNum = tF32_Exp(num);
+	return (expNum - (1.0F / expNum)) * 0.5F;
+}
+tF32 tF32_HypCosine(tF32 num)
+{
+	tF32 expNum = tF32_Exp(num);
+	return (expNum + (1.0F / expNum)) * 0.5F;
+}
+tF32 tF32_HypTangent(tF32 num)
+{
+	tF32 expNum = tF32_Exp(num);
+	tF32 invExpNum = 1.0F / expNum;
+	const tF32 hypSine = (expNum - invExpNum) * 0.5F;
+	const tF32 hypCosine = (expNum + invExpNum) * 0.5F;
+	return hypSine / hypCosine;
+}
 #endif//BQSE_IMPL
 typedef double tF64;
 #define tF64_Pi 3.141592653589793
@@ -526,15 +571,6 @@ tF64 tF64_ArcTangent_iter(tF64 num, tUSz itr);
 tF64 tF64_ArcTangent(tF64 num);
 tF64 tF64_ArcTangent2_iter(tF64 opp, tF64 adj, tUSz itr);
 tF64 tF64_ArcTangent2(tF64 opp, tF64 adj);
-/*TODO: Implement this.*/
-/*Note: Parameter `ang` is expected to be in radians.*/
-tF64 tF64_HypSine(tF64 ang);
-/*TODO: Implement this.*/
-/*Note: Parameter `ang` is expected to be in radians.*/
-tF64 tF64_HypCosine(tF64 ang);
-/*TODO: Implement this.*/
-/*Note: Parameter `ang` is expected to be in radians.*/
-tF64 tF64_HypTangent(tF64 ang);
 /*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
 tF64 tF64_InvSqrt_iter(tF64 num, tUSz itr);
 /*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
@@ -555,6 +591,14 @@ tF64 tF64_Log_iter(tF64 num, tF64 base, tUSz itr);
 tF64 tF64_Log(tF64 num, tF64 base);
 tF64 tF64_Lerp(tF64 strt, tF64 stp, tF64 fnsh);
 tF64 tF64_Unlerp(tF64 strt, tF64 curr, tF64 fnsh);
+tF64 tF64_Exp_iter(tF64 pow, tUSz itr);
+tF64 tF64_Exp(tF64 pow);
+tF64 tF64_HypSine_iter(tF64 num, tUSz itr);
+tF64 tF64_HypCosine_iter(tF64 num, tUSz itr);
+tF64 tF64_HypTangent_iter(tF64 num, tUSz itr);
+tF64 tF64_HypSine(tF64 num);
+tF64 tF64_HypCosine(tF64 num);
+tF64 tF64_HypTangent(tF64 num);
 #define tF64_SignMask 0X8000000000000000LLU
 #define tF64_ExpoMask 0X7FF0000000000000LLU
 #define tF64_FracMask 0X000FFFFFFFFFFFFFLLU
@@ -667,21 +711,14 @@ tF64 tF64_Sine_iter(tF64 ang, tUSz itr)
 		ang -= tF64_Pi;
 		neg = True;
 	}
-	tF64 angSq = ang * ang;
-	tBln sub = True;
-	tF64 res = ang;
-	tF64 powItr = ang;
-	tUSz factItr = 1U;
-	tUSz factSum = 1U;
+	const tF64 angSq = ang * ang;
+	tF64 term = ang;
+	tF64 res = term;
 	for (tUSz idx = 0U; idx < itr; ++idx)
 	{
-		factItr += 2U;
-		// TODO: Calculate next term from previous term.
-		factSum *= factItr * (factItr - 1U);
-		powItr *= angSq;
-		if (sub) res -= (powItr / (tF64)factSum);
-		else res += (powItr / (tF64)factSum);
-		sub = !sub;
+		const tF64 denom = (tF64)((2U * idx + 2U) * (2U * idx + 3U));
+		term *= -angSq / denom;
+		res += term;
 	}
 	if (neg == True) return tF64_Neg(res);
 	return res;
@@ -870,6 +907,59 @@ tF64 tF64_Unlerp(tF64 strt, tF64 curr, tF64 fnsh)
 {
 	if (strt == fnsh) return 0.0;
 	return (curr - strt) / (fnsh - strt);
+}
+tF64 tF64_Exp_iter(tF64 pow, tUSz itr)
+{
+	if (pow == 0.0F) return 1.0F;
+	if (pow == 1.0F) return tF64_EulNum;
+	tF64 res = 1.0F;
+	tF64 term = 1.0F;
+	for (tUSz idx = 1U; idx <= itr; ++idx)
+	{
+		term *= pow / (tF64)idx;
+		res += term;
+	}
+	return res;
+}
+tF64 tF64_Exp(tF64 pow)
+{
+	return tF64_Exp_iter(pow, 10U);
+}
+tF64 tF64_HypSine_iter(tF64 num, tUSz itr)
+{
+	tF64 expNum = tF64_Exp_iter(num, itr);
+	return (expNum - (1.0F / expNum)) * 0.5F;
+}
+tF64 tF64_HypCosine_iter(tF64 num, tUSz itr)
+{
+	tF64 expNum = tF64_Exp_iter(num, itr);
+	return (expNum + (1.0F / expNum)) * 0.5F;
+}
+tF64 tF64_HypTangent_iter(tF64 num, tUSz itr)
+{
+	tF64 expNum = tF64_Exp_iter(num, itr);
+	tF64 invExpNum = 1.0F / expNum;
+	const tF64 hypSine = (expNum - invExpNum) * 0.5F;
+	const tF64 hypCosine = (expNum + invExpNum) * 0.5F;
+	return hypSine / hypCosine;
+}
+tF64 tF64_HypSine(tF64 num)
+{
+	tF64 expNum = tF64_Exp(num);
+	return (expNum - (1.0F / expNum)) * 0.5F;
+}
+tF64 tF64_HypCosine(tF64 num)
+{
+	tF64 expNum = tF64_Exp(num);
+	return (expNum + (1.0F / expNum)) * 0.5F;
+}
+tF64 tF64_HypTangent(tF64 num)
+{
+	tF64 expNum = tF64_Exp(num);
+	tF64 invExpNum = 1.0F / expNum;
+	const tF64 hypSine = (expNum - invExpNum) * 0.5F;
+	const tF64 hypCosine = (expNum + invExpNum) * 0.5F;
+	return hypSine / hypCosine;
 }
 #endif//BQSE_IMPL
 #ifdef BQSE_IMPL

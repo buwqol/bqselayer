@@ -6,7 +6,6 @@
 #else
 #define LANG_C 1
 #endif
-
 /*Language version*/
 #ifdef LANG_C
 #ifdef __STDC_VERSION__
@@ -43,7 +42,6 @@
 #error "Unknown CPP standard"
 #endif
 #endif
-
 /*Compiler*/
 enum eCompiler
 {
@@ -65,7 +63,6 @@ enum eCompiler
 #else
 #error "Unknown compiler"
 #endif
-
 /*Operating system*/
 enum eOperatingSystem
 {
@@ -99,7 +96,6 @@ enum eOperatingSystem
 #else
 #error "Unknown operating system"
 #endif
-
 /*Architecture*/
 enum eArchitecture
 {
@@ -125,14 +121,12 @@ enum eArchitecture
 #else
 #error "Unknown architecture"
 #endif
-
 /*Bitness*/
 #if defined(ARCH_AMD64) || defined(ARCH_Arm64)
 #define ARCH_Bitness 64
 #else
 #define ARCH_Bitness 32
 #endif
-
 /*Linking*/
 #if defined(LANG_Cpp)
 #define LINK_C extern "C"
@@ -143,7 +137,6 @@ enum eArchitecture
 #define LINK_C_Begin
 #define LINK_C_End
 #endif
-
 /*Function prefixes*/
 #if defined(COMP_MSC)
 #define BQSE_FORCEINLINE __forceinline
@@ -164,7 +157,6 @@ enum eArchitecture
 #define BQSE_DLLIMPORT
 #define BQSE_RESTRICT
 #endif
-
 #if defined(COMP_GNUC) || defined(COMP_LLVM)
 #define BQSE_LIKELY(Cnd)   __builtin_expect(!!(Cnd), 1)
 #define BQSE_UNLIKELY(Cnd) __builtin_expect(!!(Cnd), 0)
