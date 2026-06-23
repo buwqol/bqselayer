@@ -89,7 +89,7 @@ tS32 tS32V2D_Dot(tS32V2D vect1, tS32V2D vect2)
 {
 	return vect1.x * vect2.x + vect1.y * vect2.y;
 }
-#endif
+#endif/*BQSE_IMPL*/
 typedef union { struct { tS64 x, y; }; tS64 v[2]; } tS64V2D;
 tS64V2D tS64V2D_Make(tS64 x, tS64 y);
 tS64V2D tS64V2D_Zero(tNone);
@@ -168,7 +168,7 @@ tS64 tS64V2D_Dot(tS64V2D vect1, tS64V2D vect2)
 {
 	return vect1.x * vect2.x + vect1.y * vect2.y;
 }
-#endif
+#endif/*BQSE_IMPL*/
 typedef union { struct { tF32 x, y; }; tF32 v[2]; } tF32V2D;
 tF32V2D tF32V2D_Make(tF32 x, tF32 y);
 tF32V2D tF32V2D_Zero(tNone);
@@ -323,7 +323,7 @@ tF32V2D tF32V2D_Lerp(tF32V2D vect1, tF32V2D vect2, tF32 stp)
 	vect.y = vect1.y + (vect2.y - vect1.y) * stp;
 	return vect;
 }
-#endif
+#endif/*BQSE_IMPL*/
 typedef union { struct { tF32 x, y, z; }; tF32 v[3]; } tF32V3D;
 tF32V3D tF32V3D_Make(tF32 x, tF32 y, tF32 z);
 tF32V3D tF32V3D_Zero(tNone);
@@ -506,7 +506,7 @@ tF32V3D tF32V3D_Cross(tF32V3D vect1, tF32V3D vect2)
 	vect.z = vect1.x * vect2.y - vect1.y * vect2.x;
 	return vect;
 }
-#endif
+#endif/*BQSE_IMPL*/
 typedef union { struct { tF32 x, y, z, w; }; tF32 v[4]; } tF32V4D;
 tF32V4D tF32V4D_Make(tF32 x, tF32 y, tF32 z, tF32 w);
 tF32V4D tF32V4D_Zero(tNone);
@@ -675,7 +675,7 @@ tF32V4D tF32V4D_Lerp(tF32V4D vect1, tF32V4D vect2, tF32 stp)
 	vect.w = vect1.w + (vect2.w - vect1.w) * stp;
 	return vect;
 }
-#endif
+#endif/*BQSE_IMPL*/
 typedef union { struct { tF64 x, y; }; tF64 v[2]; } tF64V2D;
 tF64V2D tF64V2D_Make(tF64 x, tF64 y);
 tF64V2D tF64V2D_Zero(tNone);
@@ -835,7 +835,7 @@ tF64V2D tF64V2D_Lerp(tF64V2D vect1, tF64V2D vect2, tF64 stp)
 	vect.y = vect1.y + (vect2.y - vect1.y) * stp;
 	return vect;
 }
-#endif
+#endif/*BQSE_IMPL*/
 typedef union { struct { tF64 x, y, z; }; tF64 v[3]; } tF64V3D;
 tF64V3D tF64V3D_Make(tF64 x, tF64 y, tF64 z);
 tF64V3D tF64V3D_Zero(tNone);
@@ -1188,5 +1188,5 @@ tF64V4D tF64V4D_Lerp(tF64V4D vect1, tF64V4D vect2, tF64 stp)
 	vect.w = vect1.w + (vect2.w - vect1.w) * stp;
 	return vect;
 }
-#endif
+#endif/*BQSE_IMPL*/
 #endif/*BQSELAYER_VECT_H*/

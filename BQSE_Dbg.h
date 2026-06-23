@@ -19,5 +19,5 @@ tNone BQSE_StaticChecks(tNone)
 	typedef char BQSE_StaticAssert_tF32_IEEE754_size[(sizeof(tF32) == 4U) ? 1U : -1];
 	typedef char BQSE_StaticAssert_tF64_IEEE754_size[(sizeof(tF64) == 8U) ? 1U : -1];
 }
-#endif
+#endif/*BQSE_IMPL*/
 #endif/*BQSELAYER_DBG_H*/

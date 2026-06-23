@@ -272,7 +272,7 @@ tF32M2x2 tF32M2x2_InvAff(tF32M2x2 mtrx)
 	out.m11 = 1.0F;
 	return out;
 }
-#endif
+#endif/*BQSE_IMPL*/
 typedef union { struct { tF32 m00, m01, m02; tF32 m10, m11, m12; tF32 m20, m21, m22; }; tF32 m[3][3]; tF32V3D row[3]; } tF32M3x3;
 tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22);
 tF32M3x3 tF32M3x3_Zero(tNone);
@@ -622,7 +622,7 @@ tF32M3x3 tF32M3x3_InvAff(tF32M3x3 mtrx)
 	out.m22 = 1.0F;
 	return out;
 }
-#endif
+#endif/*BQSE_IMPL*/
 typedef union { struct { tF32 m00, m01, m02, m03; tF32 m10, m11, m12, m13; tF32 m20, m21, m22, m23; tF32 m30, m31, m32, m33; }; tF32 m[4][4]; tF32V4D row[4]; } tF32M4x4;
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33);
 tF32M4x4 tF32M4x4_Zero(tNone);
@@ -1145,21 +1145,20 @@ tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspRatio, tF32 near, tF32 far, tS8 minZ)
 	out.m32 = -1.0F;
 	return out;
 }
-// TODO: tF32M4x4 function implementations.
-#endif
+#endif/*BQSE_IMPL*/
 typedef union { struct { tF64 m00, m01; tF64 m10, m11; }; tF64 m[2][2]; tF64V2D row[2]; } tF64M2x2;
 // TODO: tF64M2x2 function declarations.
 #ifdef BQSE_IMPL
 // TODO: tF64M2x2 function implementations.
-#endif
+#endif/*BQSE_IMPL*/
 typedef union { struct { tF64 m00, m01, m02; tF64 m10, m11, m12; tF64 m20, m21, m22; }; tF64 m[3][3]; tF64V3D row[3]; } tF64M3x3;
 // TODO: tF64M3x3 function declarations.
 #ifdef BQSE_IMPL
 // TODO: tF64M3x3 function implementations.
-#endif
+#endif/*BQSE_IMPL*/
 typedef union { struct { tF64 m00, m01, m02, m03; tF64 m10, m11, m12, m13; tF64 m20, m21, m22, m23; tF64 m30, m31, m32, m33; }; tF64 m[4][4]; tF64V4D row[4]; } tF64M4x4;
 // TODO: tF64M4x4 function declarations.
 #ifdef BQSE_IMPL
 // TODO: tF64M4x4 function implementations.
-#endif
+#endif/*BQSE_IMPL*/
 #endif/*BQSELAYER_MTRX_H*/

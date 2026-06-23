@@ -14,7 +14,7 @@ const tChr *BQSE_GetCompiler(enum eCompiler comp)
 	default: return "Unknown";
 	}
 }
-#endif
+#endif/*BQSE_IMPL*/
 const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os);
 #ifdef BQSE_IMPL
 const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os)
@@ -30,7 +30,7 @@ const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os)
 	default: return "Unknown";
 	}
 }
-#endif
+#endif/*BQSE_IMPL*/
 const tChr *BQSE_GetArchitecture(enum eArchitecture arch);
 #ifdef BQSE_IMPL
 const tChr *BQSE_GetArchitecture(enum eArchitecture arch)
@@ -44,7 +44,7 @@ const tChr *BQSE_GetArchitecture(enum eArchitecture arch)
 	default: return "Unknown";
 	}
 }
-#endif
+#endif/*BQSE_IMPL*/
 enum eMonth
 {
 	eMonth_Jan,
@@ -101,7 +101,7 @@ const tChr *BQSE_GetMonthFull(enum eMonth mon)
 	default: return "Unknown";
 	}
 }
-#endif
+#endif/*BQSE_IMPL*/
 enum eDay
 {
 	eDay_Sun,
@@ -143,5 +143,5 @@ const tChr *BQSE_GetDayFull(enum eDay day)
 	default: return "Unknown";
 	}
 }
-#endif
+#endif/*BQSE_IMPL*/
 #endif/*BQSELAYER_SYMCONST_H*/
