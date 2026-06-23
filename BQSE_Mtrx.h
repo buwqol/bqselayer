@@ -37,6 +37,7 @@ tNone tF32M2x2_RowAdd(tF32M2x2 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult);
 tNone tF32M2x2_RowMult(tF32M2x2 *mtrx, tU8 idx, tF32 mult);
 tNone tF32M2x2_RowEch(tF32M2x2 *mtrx);
 tNone tF32M2x2_RowRedEch(tF32M2x2 *mtrx);
+tF32M2x2 tF32M2x2_InvAff(tF32M2x2 mtrx);
 #ifdef BQSE_IMPL
 tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11)
 {
@@ -261,6 +262,16 @@ tNone tF32M2x2_RowRedEch(tF32M2x2 *mtrx)
 		--pivotRow;
 	}
 }
+tF32M2x2 tF32M2x2_InvAff(tF32M2x2 mtrx)
+{
+	tF32 invA = 1.0f / mtrx.m00;
+	tF32M2x2 out;
+	out.m00 = invA;
+	out.m01 = -mtrx.m01 * invA;
+	out.m10 = 0.0f;
+	out.m11 = 1.0f;
+	return out;
+}
 #endif
 typedef union { struct { tF32 m00, m01, m02; tF32 m10, m11, m12; tF32 m20, m21, m22; }; tF32 m[3][3]; tF32V3D row[3]; } tF32M3x3;
 tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22);
@@ -297,6 +308,7 @@ tNone tF32M3x3_RowAdd(tF32M3x3 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult);
 tNone tF32M3x3_RowMult(tF32M3x3 *mtrx, tU8 idx, tF32 mult);
 tNone tF32M3x3_RowEch(tF32M3x3 *mtrx);
 tNone tF32M3x3_RowRedEch(tF32M3x3 *mtrx);
+tF32M3x3 tF32M3x3_InvAff(tF32M3x3 mtrx);
 #ifdef BQSE_IMPL
 tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22)
 {
@@ -594,6 +606,22 @@ tNone tF32M3x3_RowRedEch(tF32M3x3 *mtrx)
 		for (tU8 aboveRow = 0U; aboveRow < row; ++aboveRow) tF32M3x3_RowAdd(mtrx, aboveRow, row, tF32_Neg(mtrx->m[aboveRow][pivotCol]));
 	}
 }
+tF32M3x3 tF32M3x3_InvAff(tF32M3x3 m)
+{
+	tF32 det = m.m00 * m.m11 - m.m01 * m.m10;
+	tF32 invDet = 1.0f / det;
+	tF32M3x3 out;
+	out.m00 = m.m11 * invDet;
+	out.m01 = tF32_Neg(m.m01 * invDet);
+	out.m10 = tF32_Neg(m.m10 * invDet);
+	out.m11 = m.m00 * invDet;
+	out.m02 = tF32_Neg(out.m00 * m.m02 + out.m01 * m.m12);
+	out.m12 = tF32_Neg(out.m10 * m.m02 + out.m11 * m.m12);
+	out.m20 = 0.0f;
+	out.m21 = 0.0f;
+	out.m22 = 1.0f;
+	return out;
+}
 #endif
 typedef union { struct { tF32 m00, m01, m02, m03; tF32 m10, m11, m12, m13; tF32 m20, m21, m22, m23; tF32 m30, m31, m32, m33; }; tF32 m[4][4]; tF32V4D row[4]; } tF32M4x4;
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33);
@@ -630,11 +658,8 @@ tF32M4x4 tF32M4x4_RotX(tF32 ang);
 tF32M4x4 tF32M4x4_RotY(tF32 ang);
 /*Note: Parameter `ang` is in radians.*/
 tF32M4x4 tF32M4x4_RotZ(tF32 ang);
-// TODO: Do the rest of these
-tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspect, tF32 near, tF32 far);
 tF32M4x4 tF32M4x4_Ortho(tF32 left, tF32 right, tF32 bot, tF32 top, tF32 near, tF32 far);
 tF32 tF32M4x4_Trace(tF32M4x4 mtrx);
-tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mtrx);
 /*Note: Parameter `ang` is in radians.*/
 tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang);
 tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mtrx, tF32V3D vect);
@@ -643,6 +668,9 @@ tNone tF32M4x4_RowSwap(tF32M4x4 *mtrx, tU8 idx1, tU8 idx2);
 tNone tF32M4x4_RowAdd(tF32M4x4 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult);
 tNone tF32M4x4_RowMult(tF32M4x4 *mtrx, tU8 idx, tF32 mult);
 tNone tF32M4x4_RowEch(tF32M4x4 *mtrx);
+tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mtrx);
+// TODO: Do this.
+tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspect, tF32 near, tF32 far);
 #ifdef BQSE_IMPL
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33)
 {
@@ -1072,6 +1100,29 @@ tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang)
 	mat.m32 = 0.0F;
 	mat.m33 = 1.0F;
 	return mat;
+}
+tF32M4x4 tF32M4x4_InvAffine(tF32M4x4 m)
+{
+	tF32 det = m.m00 * (m.m11 * m.m22 - m.m12 * m.m21) - m.m01 * (m.m10 * m.m22 - m.m12 * m.m20) + m.m02 * (m.m10 * m.m21 - m.m11 * m.m20);
+	tF32 invDet = 1.0f / det;
+	tF32M4x4 out;
+	out.m00 = (m.m11 * m.m22 - m.m12 * m.m21) * invDet;
+	out.m01 = tF32_Neg(m.m01 * m.m22 - m.m02 * m.m21) * invDet;
+	out.m02 = (m.m01 * m.m12 - m.m02 * m.m11) * invDet;
+	out.m10 = tF32_Neg(m.m10 * m.m22 - m.m12 * m.m20) * invDet;
+	out.m11 = (m.m00 * m.m22 - m.m02 * m.m20) * invDet;
+	out.m12 = tF32_Neg(m.m00 * m.m12 - m.m02 * m.m10) * invDet;
+	out.m20 = (m.m10 * m.m21 - m.m11 * m.m20) * invDet;
+	out.m21 = tF32_Neg(m.m00 * m.m21 - m.m01 * m.m20) * invDet;
+	out.m22 = (m.m00 * m.m11 - m.m01 * m.m10) * invDet;
+	out.m03 = tF32_Neg(out.m00 * m.m03 + out.m01 * m.m13 + out.m02 * m.m23);
+	out.m13 = tF32_Neg(out.m10 * m.m03 + out.m11 * m.m13 + out.m12 * m.m23);
+	out.m23 = tF32_Neg(out.m20 * m.m03 + out.m21 * m.m13 + out.m22 * m.m23);
+	out.m30 = 0.0f;
+	out.m31 = 0.0f;
+	out.m32 = 0.0f;
+	out.m33 = 1.0f;
+	return out;
 }
 // TODO: tF32M4x4 function implementations.
 #endif
