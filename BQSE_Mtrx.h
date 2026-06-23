@@ -13,7 +13,7 @@ tF32M2x2 tF32M2x2_Add(tF32M2x2 mtrx1, tF32M2x2 mtrx2);
 tF32M2x2 tF32M2x2_Sub(tF32M2x2 mtrx1, tF32M2x2 mtrx2);
 tF32M2x2 tF32M2x2_Mul(tF32M2x2 mtrx1, tF32M2x2 mtrx2);
 tF32M2x2 tF32M2x2_MulFlt(tF32M2x2 mtrx, tF32 mod);
-/*Warn: Silently returns `tF32M2x2_Zero` on failure when BQSE_DEBUG is not defined.*/
+/*Warn: Silently returns a matrix with all components either -Inf or +Inf when `mod` is 0.*/
 tF32M2x2 tF32M2x2_DivFlt(tF32M2x2 mtrx, tF32 mod);
 /*Note: Returns `False` on success.*/
 tBln tF32M2x2_DivFlt_safe(tF32M2x2 *mtrx, tF32 mod);
@@ -24,11 +24,11 @@ tF32M2x2 tF32M2x2_Transp(tF32M2x2 mtrx);
 tF32 tF32M2x2_Det(tF32M2x2 mtrx);
 tF32M2x2 tF32M2x2_Cofact(tF32M2x2 mtrx);
 tF32M2x2 tF32M2x2_Adj(tF32M2x2 mtrx);
-/*Warn: Silently returns `tF32M2x2_Zero` on failure when BQSE_DEBUG is not defined.*/
+/*Warn: Silently returns `tF32M2x2_Zero` on failure.*/
 tF32M2x2 tF32M2x2_Inv(tF32M2x2 mtrx);
 /*Note: Returns `False` on success.*/
 tBln tF32M2x2_Inv_safe(tF32M2x2 *mtrx);
-/*Note: `ang` is in radians.*/
+/*Note: Parameter `ang` is in radians.*/
 tF32M2x2 tF32M2x2_Rot(tF32 ang);
 tF32M2x2 tF32M2x2_Scale(tF32 x, tF32 y);
 tF32 tF32M2x2_Trace(tF32M2x2 mtrx);
@@ -101,7 +101,14 @@ tF32M2x2 tF32M2x2_MulFlt(tF32M2x2 mtrx, tF32 mod)
 tF32M2x2 tF32M2x2_DivFlt(tF32M2x2 mtrx, tF32 mod)
 {
 #ifndef BQSE_DEBUG
-	if (mod == 0.0F) return tF32M2x2_Zero();
+	if (mod == 0.0F)
+	{
+		mtrx.m00 = tF32_IsNeg(mtrx.m00) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m01 = tF32_IsNeg(mtrx.m01) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m10 = tF32_IsNeg(mtrx.m10) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m11 = tF32_IsNeg(mtrx.m11) ? tF32_NegInf() : tF32_Inf();
+		return mtrx;
+	}
 #else
 	Assertion(mod != 0.0F);
 #endif
@@ -263,7 +270,7 @@ tF32M3x3 tF32M3x3_Add(tF32M3x3 mtrx1, tF32M3x3 mtrx2);
 tF32M3x3 tF32M3x3_Sub(tF32M3x3 mtrx1, tF32M3x3 mtrx2);
 tF32M3x3 tF32M3x3_Mul(tF32M3x3 mtrx1, tF32M3x3 mtrx2);
 tF32M3x3 tF32M3x3_MulFlt(tF32M3x3 mtrx, tF32 mod);
-/*Warn: Silently returns `tF32M3x3_Zero` on failure when BQSE_DEBUG is not defined.*/
+/*Warn: Silently returns a matrix with all components either -Inf or +Inf when `mod` is 0.*/
 tF32M3x3 tF32M3x3_DivFlt(tF32M3x3 mtrx, tF32 mod);
 /*Note: Returns `False` on success.*/
 tBln tF32M3x3_DivFlt_safe(tF32M3x3 *mtrx, tF32 mod);
@@ -274,13 +281,13 @@ tF32M3x3 tF32M3x3_Transp(tF32M3x3 mtrx);
 tF32 tF32M3x3_Det(tF32M3x3 mtrx);
 tF32M3x3 tF32M3x3_Cofact(tF32M3x3 mtrx);
 tF32M3x3 tF32M3x3_Adj(tF32M3x3 mtrx);
-/*Warn: Silently returns `tF32M3x3_Zero` on failure when BQSE_DEBUG is not defined.*/
+/*Warn: Silently returns `tF32M3x3_Zero` on failure.*/
 tF32M3x3 tF32M3x3_Inv(tF32M3x3 mtrx);
 /*Note: Returns `False` on success.*/
 tBln tF32M3x3_Inv_safe(tF32M3x3 *mtrx);
 tF32M3x3 tF32M3x3_Transl(tF32 x, tF32 y);
 tF32M3x3 tF32M3x3_Scale(tF32 x, tF32 y);
-/*Note: `ang` is in radians.*/
+/*Note: Parameter `ang` is in radians.*/
 tF32M3x3 tF32M3x3_Rot(tF32 ang);
 tF32 tF32M3x3_Trace(tF32M3x3 mtrx);
 tF32V2D tF32M3x3_TransfPoint(tF32M3x3 mtrx, tF32V2D vec);
@@ -374,7 +381,19 @@ tF32M3x3 tF32M3x3_MulFlt(tF32M3x3 mtrx, tF32 mod)
 tF32M3x3 tF32M3x3_DivFlt(tF32M3x3 mtrx, tF32 mod)
 {
 #ifndef BQSE_DEBUG
-	if (mod == 0.0F) return tF32M3x3_Zero();
+	if (mod == 0.0F)
+	{
+		mtrx.m00 = tF32_IsNeg(mtrx.m00) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m01 = tF32_IsNeg(mtrx.m01) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m02 = tF32_IsNeg(mtrx.m02) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m10 = tF32_IsNeg(mtrx.m10) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m11 = tF32_IsNeg(mtrx.m11) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m12 = tF32_IsNeg(mtrx.m12) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m20 = tF32_IsNeg(mtrx.m20) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m21 = tF32_IsNeg(mtrx.m21) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m22 = tF32_IsNeg(mtrx.m22) ? tF32_NegInf() : tF32_Inf();
+		return mtrx;
+	}
 #else
 	Assertion(mod != 0.0F);
 #endif
@@ -584,7 +603,7 @@ tF32M4x4 tF32M4x4_Add(tF32M4x4 mtrx1, tF32M4x4 mtrx2);
 tF32M4x4 tF32M4x4_Sub(tF32M4x4 mtrx1, tF32M4x4 mtrx2);
 tF32M4x4 tF32M4x4_Mul(tF32M4x4 mtrx1, tF32M4x4 mtrx2);
 tF32M4x4 tF32M4x4_MulFlt(tF32M4x4 mtrx, tF32 mod);
-/*Warn: Silently returns `tF32M4x4_Zero` on failure when BQSE_DEBUG is not defined.*/
+/*Warn: Silently returns a matrix with all components either -Inf or +Inf when `mod` is 0.*/
 tF32M4x4 tF32M4x4_DivFlt(tF32M4x4 mtrx, tF32 mod);
 /*Note: Returns `False` on success.*/
 tBln tF32M4x4_DivFlt_safe(tF32M4x4 *mtrx, tF32 mod);
@@ -593,30 +612,30 @@ tBln tF32M4x4_Nearby(tF32M4x4 mtrx1, tF32M4x4 mtrx2, tF32 eps);
 tF32V4D tF32M4x4_MulVec(tF32M4x4 mtrx, tF32V4D vec);
 tF32M4x4 tF32M4x4_Transp(tF32M4x4 mtrx);
 tF32 tF32M4x4_Det(tF32M4x4 mtrx);
-/*Warn: Silently returns `tF32M3x3_Zero` on failure when BQSE_DEBUG is not defined.*/
+/*Warn: Silently returns `tF32M3x3_Zero` on failure.*/
 tF32M3x3 tF32M4x4_Minor(tF32M4x4 mtrx, tU8 row, tU8 col);
 /*Note: Returns `False` on success.*/
 tBln tF32M4x4_Minor_s(tF32M3x3 *out, tF32M4x4 mtrx, tU8 row, tU8 col);
 tF32M4x4 tF32M4x4_Cofact(tF32M4x4 mtrx);
 tF32M4x4 tF32M4x4_Adj(tF32M4x4 mtrx);
-/*Warn: Silently returns `tF32M4x4_Zero` on failure when BQSE_DEBUG is not defined.*/
+/*Warn: Silently returns `tF32M4x4_Zero` on failure.*/
 tF32M4x4 tF32M4x4_Inv(tF32M4x4 mtrx);
 /*Note: Returns `False` on success.*/
 tBln tF32M4x4_Inv_safe(tF32M4x4 *mtrx);
 tF32M4x4 tF32M4x4_Transl(tF32 x, tF32 y, tF32 z);
 tF32M4x4 tF32M4x4_Scale(tF32 x, tF32 y, tF32 z);
-/*Note: `ang` is in radians.*/
+/*Note: Parameter `ang` is in radians.*/
 tF32M4x4 tF32M4x4_RotX(tF32 ang);
-/*Note: `ang` is in radians.*/
+/*Note: Parameter `ang` is in radians.*/
 tF32M4x4 tF32M4x4_RotY(tF32 ang);
-/*Note: `ang` is in radians.*/
+/*Note: Parameter `ang` is in radians.*/
 tF32M4x4 tF32M4x4_RotZ(tF32 ang);
 // TODO: Do the rest of these
 tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspect, tF32 near, tF32 far);
 tF32M4x4 tF32M4x4_Ortho(tF32 left, tF32 right, tF32 bot, tF32 top, tF32 near, tF32 far);
 tF32 tF32M4x4_Trace(tF32M4x4 mtrx);
 tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mtrx);
-/*Note: `ang` is in radians.*/
+/*Note: Parameter `ang` is in radians.*/
 tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang);
 tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mtrx, tF32V3D vec);
 tF32V3D tF32M4x4_TransfDir(tF32M4x4 mtrx, tF32V3D vec);
@@ -743,7 +762,26 @@ tF32M4x4 tF32M4x4_MulFlt(tF32M4x4 mtrx, tF32 mod)
 tF32M4x4 tF32M4x4_DivFlt(tF32M4x4 mtrx, tF32 mod)
 {
 #ifndef BQSE_DEBUG
-	if (mod == 0.0F) return tF32M4x4_Zero();
+	if (mod == 0.0F)
+	{
+		mtrx.m00 = tF32_IsNeg(mtrx.m00) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m01 = tF32_IsNeg(mtrx.m01) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m02 = tF32_IsNeg(mtrx.m02) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m03 = tF32_IsNeg(mtrx.m03) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m10 = tF32_IsNeg(mtrx.m10) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m11 = tF32_IsNeg(mtrx.m11) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m12 = tF32_IsNeg(mtrx.m12) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m13 = tF32_IsNeg(mtrx.m13) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m20 = tF32_IsNeg(mtrx.m20) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m21 = tF32_IsNeg(mtrx.m21) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m22 = tF32_IsNeg(mtrx.m22) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m23 = tF32_IsNeg(mtrx.m23) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m30 = tF32_IsNeg(mtrx.m30) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m31 = tF32_IsNeg(mtrx.m31) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m32 = tF32_IsNeg(mtrx.m32) ? tF32_NegInf() : tF32_Inf();
+		mtrx.m33 = tF32_IsNeg(mtrx.m33) ? tF32_NegInf() : tF32_Inf();
+		return mtrx;
+	}
 #else
 	Assertion(mod != 0.0F);
 #endif

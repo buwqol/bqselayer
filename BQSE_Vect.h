@@ -61,7 +61,12 @@ tS32V2D tS32V2D_Mul(tS32V2D vect, tS32 mod)
 tS32V2D tS32V2D_Div(tS32V2D vect, tS32 mod)
 {
 #ifndef BQSE_DEBUG
-	if (mod == 0) return tS32V2D_Zero();
+	if (mod == 0)
+	{
+		vect.x = tS32_Max;
+		vect.y = tS32_Max;
+		return vect;
+	}
 #else
 	Assertion(mod != 0);
 #endif
@@ -134,18 +139,23 @@ tS64V2D tS64V2D_Mul(tS64V2D vect, tS64 mod)
 }
 tS64V2D tS64V2D_Div(tS64V2D vect, tS64 mod)
 {
-	if (mod == 0) return tS64V2D_Zero();
+#ifndef BQSE_DEBUG
+	if (mod == 0)
+	{
+		vect.x = tS64_Max;
+		vect.y = tS64_Max;
+		return vect;
+	}
+#else
+	Assertion(mod != 0);
+#endif
 	vect.x /= mod;
 	vect.y /= mod;
 	return vect;
 }
 tBln tS64V2D_Div_safe(tS64V2D *vect, tS64 mod)
 {
-#ifndef BQSE_DEBUG
 	if (mod == 0) return True;
-#else
-	Assertion(mod != 0);
-#endif
 	vect->x /= mod;
 	vect->y /= mod;
 	return False;
@@ -181,9 +191,9 @@ tF32V2D tF32V2D_Norm(tF32V2D vect);
 /*Note: Returns `False` on success.*/
 tBln tF32V2D_Norm_safe(tF32V2D *vect);
 /*Warn: Silently returns `tF32V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
-tF32V2D tF32V2D_FastNorm(tF32V2D vect);
+tF32V2D tF32V2D_Norm_fast(tF32V2D vect);
 /*Note: Returns `False` on success.*/
-tBln tF32V2D_FastNorm_safe(tF32V2D *vect);
+tBln tF32V2D_Norm_fast_safe(tF32V2D *vect);
 tF32 tF32V2D_DistSq(tF32V2D vect1, tF32V2D vect2);
 tF32 tF32V2D_Dist(tF32V2D vect1, tF32V2D vect2);
 tF32V2D tF32V2D_Lerp(tF32V2D vect1, tF32V2D vect2, tF32 stp);
@@ -224,18 +234,23 @@ tF32V2D tF32V2D_Mul(tF32V2D vect, tF32 mod)
 }
 tF32V2D tF32V2D_Div(tF32V2D vect, tF32 mod)
 {
-	if (mod == 0.0F) return tF32V2D_Zero();
+#ifndef BQSE_DEBUG
+	if (mod == 0.0F)
+	{
+		vect.x = tF32_IsNeg(vect.x) ? tF32_NegInf() : tF32_Inf();
+		vect.y = tF32_IsNeg(vect.y) ? tF32_NegInf() : tF32_Inf();
+		return vect;
+	}
+#else
+	Assertion(mod != 0.0F);
+#endif
 	vect.x /= mod;
 	vect.y /= mod;
 	return vect;
 }
 tBln tF32V2D_Div_safe(tF32V2D *vect, tF32 mod)
 {
-#ifndef BQSE_DEBUG
 	if (mod == 0.0F) return True;
-#else
-	Assertion(mod != 0.0F);
-#endif
 	vect->x /= mod;
 	vect->y /= mod;
 	return False;
@@ -270,18 +285,13 @@ tF32V2D tF32V2D_Unit(tF32 rot)
 tF32V2D tF32V2D_Norm(tF32V2D vect)
 {
 	tF32 lng = tF32V2D_Lng(vect);
-#ifndef BQSE_DEBUG
-	if (lng == 0.0F) return tF32V2D_Zero();
-#else
-	Assertion(len != 0.0F);
-#endif
 	return tF32V2D_Div(vect, lng);
 }
 tBln tF32V2D_Norm_safe(tF32V2D *vect)
 {
 	return tF32V2D_Div_safe(vect, tF32V2D_Lng(*vect));
 }
-tF32V2D tF32V2D_FastNorm(tF32V2D vect)
+tF32V2D tF32V2D_Norm_fast(tF32V2D vect)
 {
 	tF32 lngSq = tF32V2D_LngSq(vect);
 #ifndef BQSE_DEBUG
@@ -291,7 +301,7 @@ tF32V2D tF32V2D_FastNorm(tF32V2D vect)
 #endif
 	return tF32V2D_Mul(vect, tF32_InvSqrt(lngSq));
 }
-tBln tF32V2D_FastNorm_safe(tF32V2D *vect)
+tBln tF32V2D_Norm_fast_safe(tF32V2D *vect)
 {
 	tF32 lngSq = tF32V2D_LngSq(*vect);
 	if (lngSq == 0.0F) return True;
@@ -336,9 +346,9 @@ tF32V3D tF32V3D_Norm(tF32V3D vect);
 /*Note: Returns `False` on success.*/
 tBln tF32V3D_Norm_safe(tF32V3D *vect);
 /*Warn: Silently returns `tF32V3D_Zero` on failure when BQSE_DEBUG is not defined.*/
-tF32V3D tF32V3D_FastNorm(tF32V3D vect);
+tF32V3D tF32V3D_Norm_fast(tF32V3D vect);
 /*Note: Returns `False` on success.*/
-tBln tF32V3D_FastNorm_safe(tF32V3D *vect);
+tBln tF32V3D_Norm_fast_safe(tF32V3D *vect);
 tF32 tF32V3D_DistSq(tF32V3D vect1, tF32V3D vect2);
 tF32 tF32V3D_Dist(tF32V3D vect1, tF32V3D vect2);
 tF32V3D tF32V3D_Lerp(tF32V3D vect1, tF32V3D vect2, tF32 stp);
@@ -386,7 +396,13 @@ tF32V3D tF32V3D_Mul(tF32V3D vect, tF32 mod)
 tF32V3D tF32V3D_Div(tF32V3D vect, tF32 mod)
 {
 #ifndef BQSE_DEBUG
-	if (mod == 0.0F) return tF32V3D_Zero();
+	if (mod == 0.0F)
+	{
+		vect.x = tF32_IsNeg(vect.x) ? tF32_NegInf() : tF32_Inf();
+		vect.y = tF32_IsNeg(vect.y) ? tF32_NegInf() : tF32_Inf();
+		vect.z = tF32_IsNeg(vect.z) ? tF32_NegInf() : tF32_Inf();
+		return vect;
+	}
 #else
 	Assertion(mod != 0.0F);
 #endif
@@ -449,7 +465,7 @@ tBln tF32V3D_Norm_safe(tF32V3D *vect)
 {
 	return tF32V3D_Div_safe(vect, tF32V3D_Lng(*vect));
 }
-tF32V3D tF32V3D_FastNorm(tF32V3D vect)
+tF32V3D tF32V3D_Norm_fast(tF32V3D vect)
 {
 	tF32 lngSq = tF32V3D_LngSq(vect);
 #ifndef BQSE_DEBUG
@@ -459,7 +475,7 @@ tF32V3D tF32V3D_FastNorm(tF32V3D vect)
 #endif
 	return tF32V3D_Mul(vect, tF32_InvSqrt(lngSq));
 }
-tBln tF32V3D_FastNorm_safe(tF32V3D *vect)
+tBln tF32V3D_Norm_fast_safe(tF32V3D *vect)
 {
 	tF32 lngSq = tF32V3D_LngSq(*vect);
 	if (lngSq == 0.0F) return True;
@@ -511,9 +527,9 @@ tF32V4D tF32V4D_Norm(tF32V4D vect);
 /*Note: Returns `False` on success.*/
 tBln tF32V4D_Norm_safe(tF32V4D *vect);
 /*Warn: Silently returns `tF32V4D_Zero` on failure when BQSE_DEBUG is not defined.*/
-tF32V4D tF32V4D_FastNorm(tF32V4D vect);
+tF32V4D tF32V4D_Norm_fast(tF32V4D vect);
 /*Note: Returns `False` on success.*/
-tBln tF32V4D_FastNorm_safe(tF32V4D *vect);
+tBln tF32V4D_Norm_fast_safe(tF32V4D *vect);
 tF32 tF32V4D_DistSq(tF32V4D vect1, tF32V4D vect2);
 tF32 tF32V4D_Dist(tF32V4D vect1, tF32V4D vect2);
 tF32V4D tF32V4D_Lerp(tF32V4D vect1, tF32V4D vect2, tF32 stp);
@@ -565,7 +581,14 @@ tF32V4D tF32V4D_Mul(tF32V4D vect, tF32 mod)
 tF32V4D tF32V4D_Div(tF32V4D vect, tF32 mod)
 {
 #ifndef BQSE_DEBUG
-	if (mod == 0.0F) return tF32V4D_Zero();
+	if (mod == 0.0F)
+	{
+		vect.x = tF32_IsNeg(vect.x) ? tF32_NegInf() : tF32_Inf();
+		vect.y = tF32_IsNeg(vect.y) ? tF32_NegInf() : tF32_Inf();
+		vect.z = tF32_IsNeg(vect.z) ? tF32_NegInf() : tF32_Inf();
+		vect.w = tF32_IsNeg(vect.w) ? tF32_NegInf() : tF32_Inf();
+		return vect;
+	}
 #else
 	Assertion(mod != 0.0F);
 #endif
@@ -618,7 +641,7 @@ tBln tF32V4D_Norm_safe(tF32V4D *vect)
 {
 	return tF32V4D_Div_safe(vect, tF32V4D_Lng(*vect));
 }
-tF32V4D tF32V4D_FastNorm(tF32V4D vect)
+tF32V4D tF32V4D_Norm_fast(tF32V4D vect)
 {
 	tF32 lngSq = tF32V4D_LngSq(vect);
 #ifndef BQSE_DEBUG
@@ -628,7 +651,7 @@ tF32V4D tF32V4D_FastNorm(tF32V4D vect)
 #endif
 	return tF32V4D_Mul(vect, tF32_InvSqrt(lngSq));
 }
-tBln tF32V4D_FastNorm_safe(tF32V4D *vect)
+tBln tF32V4D_Norm_fast_safe(tF32V4D *vect)
 {
 	tF32 lngSq = tF32V4D_LngSq(*vect);
 	if (lngSq == 0.0F) return True;
@@ -675,9 +698,9 @@ tF64V2D tF64V2D_Norm(tF64V2D vect);
 /*Note: Returns `False` on success.*/
 tBln tF64V2D_Norm_safe(tF64V2D *vect);
 /*Warn: Silently returns `tF64V2D_Zero` on failure when BQSE_DEBUG is not defined.*/
-tF64V2D tF64V2D_FastNorm(tF64V2D vect);
+tF64V2D tF64V2D_Norm_fast(tF64V2D vect);
 /*Note: Returns `False` on success.*/
-tBln tF64V2D_FastNorm_safe(tF64V2D *vect);
+tBln tF64V2D_Norm_fast_safe(tF64V2D *vect);
 tF64 tF64V2D_DistSq(tF64V2D vect1, tF64V2D vect2);
 tF64 tF64V2D_Dist(tF64V2D vect1, tF64V2D vect2);
 tF64V2D tF64V2D_Lerp(tF64V2D vect1, tF64V2D vect2, tF64 stp);
@@ -718,18 +741,23 @@ tF64V2D tF64V2D_Mul(tF64V2D vect, tF64 mod)
 }
 tF64V2D tF64V2D_Div(tF64V2D vect, tF64 mod)
 {
-	if (mod == 0.0) return tF64V2D_Zero();
+#ifndef BQSE_DEBUG
+	if (mod == 0.0F)
+	{
+		vect.x = tF32_IsNeg(vect.x) ? tF32_NegInf() : tF32_Inf();
+		vect.y = tF32_IsNeg(vect.y) ? tF32_NegInf() : tF32_Inf();
+		return vect;
+	}
+#else
+	Assertion(mod != 0.0F);
+#endif
 	vect.x /= mod;
 	vect.y /= mod;
 	return vect;
 }
 tBln tF64V2D_Div_safe(tF64V2D *vect, tF64 mod)
 {
-#ifndef BQSE_DEBUG
 	if (mod == 0.0) return True;
-#else
-	Assertion(mod != 0.0);
-#endif
 	vect->x /= mod;
 	vect->y /= mod;
 	return False;
@@ -775,7 +803,7 @@ tBln tF64V2D_Norm_safe(tF64V2D *vect)
 {
 	return tF64V2D_Div_safe(vect, tF64V2D_Lng(*vect));
 }
-tF64V2D tF64V2D_FastNorm(tF64V2D vect)
+tF64V2D tF64V2D_Norm_fast(tF64V2D vect)
 {
 	tF64 lngSq = tF64V2D_LngSq(vect);
 #ifndef BQSE_DEBUG
@@ -785,7 +813,7 @@ tF64V2D tF64V2D_FastNorm(tF64V2D vect)
 #endif
 	return tF64V2D_Mul(vect, tF64_InvSqrt(lngSq));
 }
-tBln tF64V2D_FastNorm_safe(tF64V2D *vect)
+tBln tF64V2D_Norm_fast_safe(tF64V2D *vect)
 {
 	tF64 lngSq = tF64V2D_LngSq(*vect);
 	if (lngSq == 0.0) return True;
@@ -830,9 +858,9 @@ tF64V3D tF64V3D_Norm(tF64V3D vect);
 /*Note: Returns `False` on success.*/
 tBln tF64V3D_Norm_safe(tF64V3D *vect);
 /*Warn: Silently returns `tF64V3D_Zero` on failure when BQSE_DEBUG is not defined.*/
-tF64V3D tF64V3D_FastNorm(tF64V3D vect);
+tF64V3D tF64V3D_Norm_fast(tF64V3D vect);
 /*Note: Returns `False` on success.*/
-tBln tF64V3D_FastNorm_safe(tF64V3D *vect);
+tBln tF64V3D_Norm_fast_safe(tF64V3D *vect);
 tF64 tF64V3D_DistSq(tF64V3D vect1, tF64V3D vect2);
 tF64 tF64V3D_Dist(tF64V3D vect1, tF64V3D vect2);
 tF64V3D tF64V3D_Lerp(tF64V3D vect1, tF64V3D vect2, tF64 stp);
@@ -880,7 +908,13 @@ tF64V3D tF64V3D_Mul(tF64V3D vect, tF64 mod)
 tF64V3D tF64V3D_Div(tF64V3D vect, tF64 mod)
 {
 #ifndef BQSE_DEBUG
-	if (mod == 0.0) return tF64V3D_Zero();
+	if (mod == 0.0F)
+	{
+		vect.x = tF64_IsNeg(vect.x) ? tF64_NegInf() : tF64_Inf();
+		vect.y = tF64_IsNeg(vect.y) ? tF64_NegInf() : tF64_Inf();
+		vect.z = tF64_IsNeg(vect.z) ? tF64_NegInf() : tF64_Inf();
+		return vect;
+	}
 #else
 	Assertion(mod != 0.0);
 #endif
@@ -944,7 +978,7 @@ tBln tF64V3D_Norm_safe(tF64V3D *vect)
 {
 	return tF64V3D_Div_safe(vect, tF64V3D_Lng(*vect));
 }
-tF64V3D tF64V3D_FastNorm(tF64V3D vect)
+tF64V3D tF64V3D_Norm_fast(tF64V3D vect)
 {
 	tF64 lngSq = tF64V3D_LngSq(vect);
 #ifndef BQSE_DEBUG
@@ -954,7 +988,7 @@ tF64V3D tF64V3D_FastNorm(tF64V3D vect)
 #endif
 	return tF64V3D_Mul(vect, tF64_InvSqrt(lngSq));
 }
-tBln tF64V3D_FastNorm_safe(tF64V3D *vect)
+tBln tF64V3D_Norm_fast_safe(tF64V3D *vect)
 {
 	tF64 lngSq = tF64V3D_LngSq(*vect);
 	if (lngSq == 0.0) return True;
@@ -1006,9 +1040,9 @@ tF64V4D tF64V4D_Norm(tF64V4D vect);
 /*Note: Returns `False` on success.*/
 tBln tF64V4D_Norm_safe(tF64V4D *vect);
 /*Warn: Silently returns `tF64V4D_Zero` on failure when BQSE_DEBUG is not defined.*/
-tF64V4D tF64V4D_FastNorm(tF64V4D vect);
+tF64V4D tF64V4D_Norm_fast(tF64V4D vect);
 /*Note: Returns `False` on success.*/
-tBln tF64V4D_FastNorm_safe(tF64V4D *vect);
+tBln tF64V4D_Norm_fast_safe(tF64V4D *vect);
 tF64 tF64V4D_DistSq(tF64V4D vect1, tF64V4D vect2);
 tF64 tF64V4D_Dist(tF64V4D vect1, tF64V4D vect2);
 tF64V4D tF64V4D_Lerp(tF64V4D vect1, tF64V4D vect2, tF64 stp);
@@ -1060,7 +1094,14 @@ tF64V4D tF64V4D_Mul(tF64V4D vect, tF64 mod)
 tF64V4D tF64V4D_Div(tF64V4D vect, tF64 mod)
 {
 #ifndef BQSE_DEBUG
-	if (mod == 0.0) return tF64V4D_Zero();
+	if (mod == 0.0F)
+	{
+		vect.x = tF64_IsNeg(vect.x) ? tF64_NegInf() : tF64_Inf();
+		vect.y = tF64_IsNeg(vect.y) ? tF64_NegInf() : tF64_Inf();
+		vect.z = tF64_IsNeg(vect.z) ? tF64_NegInf() : tF64_Inf();
+		vect.w = tF64_IsNeg(vect.w) ? tF64_NegInf() : tF64_Inf();
+		return vect;
+	}
 #else
 	Assertion(mod != 0.0);
 #endif
@@ -1113,7 +1154,7 @@ tBln tF64V4D_Norm_safe(tF64V4D *vect)
 {
 	return tF64V4D_Div_safe(vect, tF64V4D_Lng(*vect));
 }
-tF64V4D tF64V4D_FastNorm(tF64V4D vect)
+tF64V4D tF64V4D_Norm_fast(tF64V4D vect)
 {
 	tF64 lngSq = tF64V4D_LngSq(vect);
 #ifndef BQSE_DEBUG
@@ -1123,7 +1164,7 @@ tF64V4D tF64V4D_FastNorm(tF64V4D vect)
 #endif
 	return tF64V4D_Mul(vect, tF64_InvSqrt(lngSq));
 }
-tBln tF64V4D_FastNorm_safe(tF64V4D *vect)
+tBln tF64V4D_Norm_fast_safe(tF64V4D *vect)
 {
 	tF64 lngSq = tF64V4D_LngSq(*vect);
 	if (lngSq == 0.0) return True;

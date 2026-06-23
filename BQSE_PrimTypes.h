@@ -94,38 +94,67 @@ typedef float tF32;
 tF32 tF32_Inf(tNone);
 tF32 tF32_Abs(tF32 flt);
 tF32 tF32_Neg(tF32 flt);
+tBln tF32_IsNeg(tF32 flt);
 tF32 tF32_NegInf(tNone);
 tF32 tF32_QuiNaN(tNone);
 tF32 tF32_SigNaN(tNone);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_Sine_fast(tF32 ang);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_Cosine_fast(tF32 ang);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_Tangent_fast(tF32 ang);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_Sine_iter(tF32 ang, tUSz itr);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_Cosine_iter(tF32 ang, tUSz itr);
+/*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
 tF32 tF32_Tangent_iter(tF32 ang, tUSz itr);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_Sine(tF32 ang);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_Cosine(tF32 ang);
+/*TODO: Implement this.*/
+/*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
 tF32 tF32_Tangent(tF32 ang);
+/*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tF32 tF32_ArcSine_iter(tF32 num, tUSz sqrtItr, tUSz trigItr);
+/*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tF32 tF32_ArcSine(tF32 num);
+/*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tF32 tF32_ArcCosine_iter(tF32 num, tUSz sqrtItr, tUSz trigItr);
+/*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tF32 tF32_ArcCosine(tF32 num);
 tF32 tF32_ArcTangent_iter(tF32 num, tUSz itr);
 tF32 tF32_ArcTangent(tF32 num);
 tF32 tF32_ArcTangent2_iter(tF32 opp, tF32 adj, tUSz itr);
 tF32 tF32_ArcTangent2(tF32 opp, tF32 adj);
+/*TODO: Implement this.*/
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_HypSine(tF32 ang);
+/*TODO: Implement this.*/
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_HypCosine(tF32 ang);
+/*TODO: Implement this.*/
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_HypTangent(tF32 ang);
+/*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
 tF32 tF32_InvSqrt_iter(tF32 num, tUSz itr);
+/*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
 tF32 tF32_InvSqrt(tF32 num);
-tF32 tF32_Sqrt(tF32 num);
 tF32 tF32_Sqrt_iter(tF32 num, tUSz itr);
+tF32 tF32_Sqrt(tF32 num);
+/*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF32 tF32_Log2_iter(tF32 num, tUSz itr);
+/*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF32 tF32_Log2(tF32 num);
+/*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF32 tF32_Ln_iter(tF32 num, tUSz itr);
+/*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF32 tF32_Ln(tF32 num);
+/*Note: Returns SigNaN when num is less than or equal to 0, base is less than or equal to 0, or base equal to 1.*/
 tF32 tF32_Log_iter(tF32 num, tF32 base, tUSz itr);
+/*Note: Returns SigNaN when num is less than or equal to 0, base is less than or equal to 0, or base equal to 1.*/
 tF32 tF32_Log(tF32 num, tF32 base);
 tF32 tF32_Lerp(tF32 strt, tF32 stp, tF32 fnsh);
 tF32 tF32_Unlerp(tF32 strt, tF32 curr, tF32 fnsh);
@@ -139,6 +168,12 @@ typedef union
 }
 tF32Bits;
 #ifdef BQSE_IMPL
+tBln tF32_IsNeg(tF32 flt)
+{
+	tF32Bits num;
+	num.flt = flt;
+	return (tBln)!!(num.raw & tF32_SignMask);
+}
 tF32 tF32_Inf(tNone)
 {
 	tF32Bits num;
@@ -214,8 +249,12 @@ tF32 tF32_Cosine_fast(tF32 ang)
 tF32 tF32_Tangent_fast(tF32 ang)
 {
 	const tF32 cosAng = tF32_Cosine_fast(ang);
+#ifndef BQSE_DEBUG
+	if (cosAng == 0.0F) return tF32_IsNeg(cosAng) ? tF32_NegInf() : tF32_Inf();
+#else
+	Assertion(cosAng != 0.0F);
+#endif
 	const tF32 sinAng = tF32_Sine_fast(ang);
-	if (cosAng == 0.0F) return (*((tU32 *)&sinAng) & tF32_SignMask) ? tF32_NegInf() : tF32_Inf();
 	return sinAng / cosAng;
 }
 tF32 tF32_Sine_iter(tF32 ang, tUSz itr)
@@ -277,14 +316,22 @@ tF32 tF32_Tangent(tF32 ang)
 }
 tF32 tF32_ArcSine_iter(tF32 num, tUSz sqrtItr, tUSz trigItr)
 {
+#ifndef BQSE_DEBUG
 	if (tF32_Abs(num) > 1.0F) return tF32_SigNaN();
+#else
+	Assertion(tF32_Abs(num) <= 1.0F);
+#endif
 	if (num == 1.0F)  return tF32_HalfPi;
 	if (num == -1.0F) return -tF32_HalfPi;
 	return tF32_ArcTangent_iter(num / tF32_Sqrt_iter(1 - (num * num), sqrtItr), trigItr);
 }
 tF32 tF32_ArcSine(tF32 num)
 {
+#ifndef BQSE_DEBUG
 	if (tF32_Abs(num) > 1.0F) return tF32_SigNaN();
+#else
+	Assertion(tF32_Abs(num) <= 1.0F);
+#endif
 	if (num == 1.0F)  return tF32_HalfPi;
 	if (num == -1.0F) return -tF32_HalfPi;
 	return tF32_ArcTangent(num / tF32_Sqrt(1 - (num * num)));
@@ -338,8 +385,12 @@ tF32 tF32_ArcTangent2(tF32 opp, tF32 adj)
 // Fast inverse sqrt from Quake 3.
 tF32 tF32_InvSqrt_iter(tF32 num, tUSz itr)
 {
+#ifndef BQSE_DEBUG
 	if (num == 0.0F) return tF32_Inf();
 	if (num < 0.0F) return tF32_SigNaN();
+#else
+	Assertion(num > 0.0F);
+#endif
 	static const tF32 threeHalfs = 1.5F;
 	tF32Bits number;
 	number.flt = num;
@@ -362,7 +413,11 @@ tF32 tF32_Sqrt(tF32 num)
 }
 tF32 tF32_Log2_iter(tF32 num, tUSz itr)
 {
+#ifndef BQSE_DEBUG
 	if (num <= 0.0F) return tF32_SigNaN();
+#else
+	Assertion(num > 0.0F);
+#endif
 	tF32Bits numBits;
 	numBits.flt = num;
 	tS16 expVal = ((numBits.raw >> 23U) & tU8_Max) - 127;
@@ -395,12 +450,20 @@ tF32 tF32_Ln(tF32 num)
 }
 tF32 tF32_Log_iter(tF32 num, tF32 base, tUSz itr)
 {
+#ifndef BQSE_DEBUG
 	if (base <= 0.0F || base == 1.0F) return tF32_SigNaN();
+#else
+	Assertion(base > 0.0F && base != 1.0F);
+#endif
 	return tF32_Log2_iter(num, itr) / tF32_Log2_iter(base, itr);
 }
 tF32 tF32_Log(tF32 num, tF32 base)
 {
+#ifndef BQSE_DEBUG
 	if (base <= 0.0F || base == 1.0F) return tF32_SigNaN();
+#else
+	Assertion(base > 0.0F && base != 1.0F);
+#endif
 	return tF32_Log2(num) / tF32_Log2(base);
 }
 tF32 tF32_Lerp(tF32 strt, tF32 stp, tF32 fnsh)
@@ -426,40 +489,69 @@ typedef double tF64;
 #define tF64_DegToRad(dbl) ((dbl) * 0.0174532925199433)
 // TODO: Update all tF64 functions with to reflect tF32 logic.
 tF64 tF64_Inf(tNone);
-tF64 tF64_Abs(tF64 flt);
-tF64 tF64_Neg(tF64 flt);
+tF64 tF64_Abs(tF64 dbl);
+tF64 tF64_Neg(tF64 dbl);
+tBln tF64_IsNeg(tF64 dbl);
 tF64 tF64_NegInf(tNone);
 tF64 tF64_QuiNaN(tNone);
 tF64 tF64_SigNaN(tNone);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_Sine_fast(tF64 ang);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_Cosine_fast(tF64 ang);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_Tangent_fast(tF64 ang);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_Sine_iter(tF64 ang, tUSz itr);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_Cosine_iter(tF64 ang, tUSz itr);
+/*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
 tF64 tF64_Tangent_iter(tF64 ang, tUSz itr);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_Sine(tF64 ang);
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_Cosine(tF64 ang);
+/*TODO: Implement this.*/
+/*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
 tF64 tF64_Tangent(tF64 ang);
+/*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tF64 tF64_ArcSine_iter(tF64 num, tUSz sqrtItr, tUSz trigItr);
+/*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tF64 tF64_ArcSine(tF64 num);
+/*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tF64 tF64_ArcCosine_iter(tF64 num, tUSz sqrtItr, tUSz trigItr);
+/*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tF64 tF64_ArcCosine(tF64 num);
 tF64 tF64_ArcTangent_iter(tF64 num, tUSz itr);
 tF64 tF64_ArcTangent(tF64 num);
 tF64 tF64_ArcTangent2_iter(tF64 opp, tF64 adj, tUSz itr);
 tF64 tF64_ArcTangent2(tF64 opp, tF64 adj);
+/*TODO: Implement this.*/
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_HypSine(tF64 ang);
+/*TODO: Implement this.*/
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_HypCosine(tF64 ang);
+/*TODO: Implement this.*/
+/*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_HypTangent(tF64 ang);
+/*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
 tF64 tF64_InvSqrt_iter(tF64 num, tUSz itr);
+/*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
 tF64 tF64_InvSqrt(tF64 num);
-tF64 tF64_Sqrt(tF64 num);
 tF64 tF64_Sqrt_iter(tF64 num, tUSz itr);
+tF64 tF64_Sqrt(tF64 num);
+/*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF64 tF64_Log2_iter(tF64 num, tUSz itr);
+/*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF64 tF64_Log2(tF64 num);
+/*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF64 tF64_Ln_iter(tF64 num, tUSz itr);
+/*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF64 tF64_Ln(tF64 num);
+/*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF64 tF64_Log_iter(tF64 num, tF64 base, tUSz itr);
+/*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF64 tF64_Log(tF64 num, tF64 base);
 tF64 tF64_Lerp(tF64 strt, tF64 stp, tF64 fnsh);
 tF64 tF64_Unlerp(tF64 strt, tF64 curr, tF64 fnsh);
@@ -485,6 +577,12 @@ tF64 tF64_Abs(tF64 dbl)
 	num.dbl = dbl;
 	num.raw &= 0X7FFFFFFFFFFFFFFFLLU;
 	return num.dbl;
+}
+tBln tF64_IsNeg(tF64 dbl)
+{
+	tF64Bits num;
+	num.dbl = dbl;
+	return (tBln)!!(num.raw & tF64_SignMask);
 }
 tF64 tF64_Neg(tF64 dbl)
 {
@@ -548,8 +646,12 @@ tF64 tF64_Cosine_fast(tF64 ang)
 tF64 tF64_Tangent_fast(tF64 ang)
 {
 	const tF64 cosAng = tF64_Cosine_fast(ang);
+#ifndef BQSE_DEBUG
+	if (cosAng == 0.0) return tF64_IsNeg(cosAng) ? tF64_NegInf() : tF64_Inf();
+#else
+	Assertion(cosAng != 0.0F);
+#endif
 	const tF64 sinAng = tF64_Sine_fast(ang);
-	if (cosAng == 0.0) return (*((tU32 *)&sinAng) & tF64_SignMask) ? tF64_NegInf() : tF64_Inf();
 	return sinAng / cosAng;
 }
 tF64 tF64_Sine_iter(tF64 ang, tUSz itr)
@@ -611,14 +713,22 @@ tF64 tF64_Tangent(tF64 ang)
 }
 tF64 tF64_ArcSine_iter(tF64 num, tUSz sqrtItr, tUSz trigItr)
 {
+#ifndef BQSE_DEBUG
 	if (tF64_Abs(num) > 1.0) return tF64_SigNaN();
+#else
+	Assertion(tF64_Abs(num) <= 1.0);
+#endif
 	if (num == 1.0)  return tF64_HalfPi;
 	if (num == -1.0) return -tF64_HalfPi;
 	return tF64_ArcTangent_iter(num / tF64_Sqrt_iter(1 - (num * num), sqrtItr), trigItr);
 }
 tF64 tF64_ArcSine(tF64 num)
 {
+#ifndef BQSE_DEBUG
 	if (tF64_Abs(num) > 1.0) return tF64_SigNaN();
+#else
+	Assertion(tF64_Abs(num) > 1.0);
+#endif
 	if (num == 1.0)  return tF64_HalfPi;
 	if (num == -1.0) return -tF64_HalfPi;
 	return tF64_ArcTangent(num / tF64_Sqrt(1 - (num * num)));
@@ -672,6 +782,11 @@ tF64 tF64_ArcTangent2(tF64 opp, tF64 adj)
 // Fast inverse sqrt from Quake 3.
 tF64 tF64_InvSqrt_iter(tF64 num, tUSz itr)
 {
+#ifndef BQSE_DEBUG
+	if (num < 0.0F) return tF64_SigNaN();
+#else
+	Assertion(num >= 0.0F);
+#endif
 	static const tF64 threeHalfs = 1.5;
 	tF64Bits number;
 	number.dbl = num;
@@ -694,7 +809,11 @@ tF64 tF64_Sqrt(tF64 num)
 }
 tF64 tF64_Log2_iter(tF64 num, tUSz itr)
 {
+#ifndef BQSE_DEBUG
 	if (num <= 0.0) return tF64_SigNaN();
+#else
+	Assertion(num > 0.0F);
+#endif
 	tF64Bits numBits;
 	numBits.dbl = num;
 	tS32 expVal = (tS32)(((numBits.raw >> 52U) & 0x7FFULL) - 1023ULL);
@@ -727,12 +846,20 @@ tF64 tF64_Ln(tF64 num)
 }
 tF64 tF64_Log_iter(tF64 num, tF64 base, tUSz itr)
 {
+#ifndef BQSE_DEBUG
 	if (base <= 0.0 || base == 1.0) return tF64_SigNaN();
+#else
+	Assertion(base > 0.0F && base != 1.0);
+#endif
 	return tF64_Log2_iter(num, itr) / tF64_Log2_iter(base, itr);
 }
 tF64 tF64_Log(tF64 num, tF64 base)
 {
+#ifndef BQSE_DEBUG
 	if (base <= 0.0 || base == 1.0) return tF64_SigNaN();
+#else
+	Assertion(base > 0.0F && base != 1.0);
+#endif
 	return tF64_Log2(num) / tF64_Log2(base);
 }
 tF64 tF64_Lerp(tF64 strt, tF64 stp, tF64 fnsh)
