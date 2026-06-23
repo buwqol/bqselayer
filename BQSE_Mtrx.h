@@ -19,7 +19,7 @@ tF32M2x2 tF32M2x2_DivFlt(tF32M2x2 mtrx, tF32 mod);
 tBln tF32M2x2_DivFlt_safe(tF32M2x2 *mtrx, tF32 mod);
 tBln tF32M2x2_Eq(tF32M2x2 mtrx1, tF32M2x2 mtrx2);
 tBln tF32M2x2_Nearby(tF32M2x2 mtrx1, tF32M2x2 mtrx2, tF32 eps);
-tF32V2D tF32M2x2_MulVec(tF32M2x2 mtrx, tF32V2D vec);
+tF32V2D tF32M2x2_MulVect(tF32M2x2 mtrx, tF32V2D vect);
 tF32M2x2 tF32M2x2_Transp(tF32M2x2 mtrx);
 tF32 tF32M2x2_Det(tF32M2x2 mtrx);
 tF32M2x2 tF32M2x2_Cofact(tF32M2x2 mtrx);
@@ -135,11 +135,11 @@ tBln tF32M2x2_Nearby(tF32M2x2 mtrx1, tF32M2x2 mtrx2, tF32 eps)
 {
 	return (tF32_Abs(mtrx1.m00 - mtrx2.m00) <= eps) && (tF32_Abs(mtrx1.m01 - mtrx2.m01) <= eps) && (tF32_Abs(mtrx1.m10 - mtrx2.m10) <= eps) && (tF32_Abs(mtrx1.m11 - mtrx2.m11) <= eps);
 }
-tF32V2D tF32M2x2_MulVec(tF32M2x2 mtrx, tF32V2D vec)
+tF32V2D tF32M2x2_MulVect(tF32M2x2 mtrx, tF32V2D vect)
 {
 	tF32V2D res;
-	res.x = mtrx.m00 * vec.x + mtrx.m01 * vec.y;
-	res.y = mtrx.m10 * vec.x + mtrx.m11 * vec.y;
+	res.x = mtrx.m00 * vect.x + mtrx.m01 * vect.y;
+	res.y = mtrx.m10 * vect.x + mtrx.m11 * vect.y;
 	return res;
 }
 tF32M2x2 tF32M2x2_Transp(tF32M2x2 mtrx)
@@ -276,7 +276,7 @@ tF32M3x3 tF32M3x3_DivFlt(tF32M3x3 mtrx, tF32 mod);
 tBln tF32M3x3_DivFlt_safe(tF32M3x3 *mtrx, tF32 mod);
 tBln tF32M3x3_Eq(tF32M3x3 mtrx1, tF32M3x3 mtrx2);
 tBln tF32M3x3_Nearby(tF32M3x3 mtrx1, tF32M3x3 mtrx2, tF32 eps);
-tF32V3D tF32M3x3_MulVec(tF32M3x3 mtrx, tF32V3D vec);
+tF32V3D tF32M3x3_MulVect(tF32M3x3 mtrx, tF32V3D vect);
 tF32M3x3 tF32M3x3_Transp(tF32M3x3 mtrx);
 tF32 tF32M3x3_Det(tF32M3x3 mtrx);
 tF32M3x3 tF32M3x3_Cofact(tF32M3x3 mtrx);
@@ -290,8 +290,8 @@ tF32M3x3 tF32M3x3_Scale(tF32 x, tF32 y);
 /*Note: Parameter `ang` is in radians.*/
 tF32M3x3 tF32M3x3_Rot(tF32 ang);
 tF32 tF32M3x3_Trace(tF32M3x3 mtrx);
-tF32V2D tF32M3x3_TransfPoint(tF32M3x3 mtrx, tF32V2D vec);
-tF32V2D tF32M3x3_TransfDir(tF32M3x3 mtrx, tF32V2D vec);
+tF32V2D tF32M3x3_TransfPoint(tF32M3x3 mtrx, tF32V2D vect);
+tF32V2D tF32M3x3_TransfDir(tF32M3x3 mtrx, tF32V2D vect);
 tNone tF32M3x3_RowSwap(tF32M3x3 *mtrx, tU8 idx1, tU8 idx2);
 tNone tF32M3x3_RowAdd(tF32M3x3 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult);
 tNone tF32M3x3_RowMult(tF32M3x3 *mtrx, tU8 idx, tF32 mult);
@@ -430,12 +430,12 @@ tBln tF32M3x3_Nearby(tF32M3x3 mtrx1, tF32M3x3 mtrx2, tF32 eps)
 {
 	return (tF32_Abs(mtrx1.m00 - mtrx2.m00) <= eps) && (tF32_Abs(mtrx1.m01 - mtrx2.m01) <= eps) && (tF32_Abs(mtrx1.m02 - mtrx2.m02) <= eps) && (tF32_Abs(mtrx1.m10 - mtrx2.m10) <= eps) && (tF32_Abs(mtrx1.m11 - mtrx2.m11) <= eps) && (tF32_Abs(mtrx1.m12 - mtrx2.m12) <= eps) && (tF32_Abs(mtrx1.m20 - mtrx2.m20) <= eps) && (tF32_Abs(mtrx1.m21 - mtrx2.m21) <= eps) && (tF32_Abs(mtrx1.m22 - mtrx2.m22) <= eps);
 }
-tF32V3D tF32M3x3_MulVec(tF32M3x3 mtrx, tF32V3D vec)
+tF32V3D tF32M3x3_MulVect(tF32M3x3 mtrx, tF32V3D vect)
 {
 	tF32V3D res;
-	res.x = (mtrx.m00 * vec.x) + (mtrx.m01 * vec.y) + (mtrx.m02 * vec.z);
-	res.y = (mtrx.m10 * vec.x) + (mtrx.m11 * vec.y) + (mtrx.m12 * vec.z);
-	res.z = (mtrx.m20 * vec.x) + (mtrx.m21 * vec.y) + (mtrx.m22 * vec.z);
+	res.x = (mtrx.m00 * vect.x) + (mtrx.m01 * vect.y) + (mtrx.m02 * vect.z);
+	res.y = (mtrx.m10 * vect.x) + (mtrx.m11 * vect.y) + (mtrx.m12 * vect.z);
+	res.z = (mtrx.m20 * vect.x) + (mtrx.m21 * vect.y) + (mtrx.m22 * vect.z);
 	return res;
 }
 tF32M3x3 tF32M3x3_Transp(tF32M3x3 mtrx)
@@ -516,18 +516,18 @@ tF32 tF32M3x3_Trace(tF32M3x3 mtrx)
 {
 	return mtrx.m00 + mtrx.m11 + mtrx.m22;
 }
-tF32V2D tF32M3x3_TransfPoint(tF32M3x3 mtrx, tF32V2D vec)
+tF32V2D tF32M3x3_TransfPoint(tF32M3x3 mtrx, tF32V2D vect)
 {
 	tF32V2D res;
-	res.x = mtrx.m00 * vec.x + mtrx.m01 * vec.y + mtrx.m02;
-	res.y = mtrx.m10 * vec.x + mtrx.m11 * vec.y + mtrx.m12;
+	res.x = mtrx.m00 * vect.x + mtrx.m01 * vect.y + mtrx.m02;
+	res.y = mtrx.m10 * vect.x + mtrx.m11 * vect.y + mtrx.m12;
 	return res;
 }
-tF32V2D tF32M3x3_TransfDir(tF32M3x3 mtrx, tF32V2D vec)
+tF32V2D tF32M3x3_TransfDir(tF32M3x3 mtrx, tF32V2D vect)
 {
 	tF32V2D res;
-	res.x = mtrx.m00 * vec.x + mtrx.m01 * vec.y;
-	res.y = mtrx.m10 * vec.x + mtrx.m11 * vec.y;
+	res.x = mtrx.m00 * vect.x + mtrx.m01 * vect.y;
+	res.y = mtrx.m10 * vect.x + mtrx.m11 * vect.y;
 	return res;
 }
 tNone tF32M3x3_RowSwap(tF32M3x3 *mtrx, tU8 idx1, tU8 idx2)
@@ -609,7 +609,7 @@ tF32M4x4 tF32M4x4_DivFlt(tF32M4x4 mtrx, tF32 mod);
 tBln tF32M4x4_DivFlt_safe(tF32M4x4 *mtrx, tF32 mod);
 tBln tF32M4x4_Eq(tF32M4x4 mtrx1, tF32M4x4 mtrx2);
 tBln tF32M4x4_Nearby(tF32M4x4 mtrx1, tF32M4x4 mtrx2, tF32 eps);
-tF32V4D tF32M4x4_MulVec(tF32M4x4 mtrx, tF32V4D vec);
+tF32V4D tF32M4x4_MulVect(tF32M4x4 mtrx, tF32V4D vect);
 tF32M4x4 tF32M4x4_Transp(tF32M4x4 mtrx);
 tF32 tF32M4x4_Det(tF32M4x4 mtrx);
 /*Warn: Silently returns `tF32M3x3_Zero` on failure.*/
@@ -637,8 +637,8 @@ tF32 tF32M4x4_Trace(tF32M4x4 mtrx);
 tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mtrx);
 /*Note: Parameter `ang` is in radians.*/
 tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang);
-tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mtrx, tF32V3D vec);
-tF32V3D tF32M4x4_TransfDir(tF32M4x4 mtrx, tF32V3D vec);
+tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mtrx, tF32V3D vect);
+tF32V3D tF32M4x4_TransfDir(tF32M4x4 mtrx, tF32V3D vect);
 tNone tF32M4x4_RowSwap(tF32M4x4 *mtrx, tU8 idx1, tU8 idx2);
 tNone tF32M4x4_RowAdd(tF32M4x4 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult);
 tNone tF32M4x4_RowMult(tF32M4x4 *mtrx, tU8 idx, tF32 mult);
@@ -832,13 +832,13 @@ tBln tF32M4x4_Nearby(tF32M4x4 mtrx1, tF32M4x4 mtrx2, tF32 eps)
 {
 	return (tF32_Abs(mtrx1.m00 - mtrx2.m00) <= eps) && (tF32_Abs(mtrx1.m01 - mtrx2.m01) <= eps) && (tF32_Abs(mtrx1.m02 - mtrx2.m02) <= eps) && (tF32_Abs(mtrx1.m03 - mtrx2.m03) <= eps) && (tF32_Abs(mtrx1.m10 - mtrx2.m10) <= eps) && (tF32_Abs(mtrx1.m11 - mtrx2.m11) <= eps) && (tF32_Abs(mtrx1.m12 - mtrx2.m12) <= eps) && (tF32_Abs(mtrx1.m13 - mtrx2.m13) <= eps) && (tF32_Abs(mtrx1.m20 - mtrx2.m20) <= eps) && (tF32_Abs(mtrx1.m21 - mtrx2.m21) <= eps) && (tF32_Abs(mtrx1.m22 - mtrx2.m22) <= eps) && (tF32_Abs(mtrx1.m23 - mtrx2.m23) <= eps) && (tF32_Abs(mtrx1.m30 - mtrx2.m30) <= eps) && (tF32_Abs(mtrx1.m31 - mtrx2.m31) <= eps) && (tF32_Abs(mtrx1.m32 - mtrx2.m32) <= eps) && (tF32_Abs(mtrx1.m33 - mtrx2.m33) <= eps);
 }
-tF32V4D tF32M4x4_MulVec(tF32M4x4 mtrx, tF32V4D vec)
+tF32V4D tF32M4x4_MulVect(tF32M4x4 mtrx, tF32V4D vect)
 {
 	tF32V4D res;
-	res.x = (mtrx.m00 * vec.x) + (mtrx.m01 * vec.y) + (mtrx.m02 * vec.z) + (mtrx.m03 * vec.w);
-	res.y = (mtrx.m10 * vec.x) + (mtrx.m11 * vec.y) + (mtrx.m12 * vec.z) + (mtrx.m13 * vec.w);
-	res.z = (mtrx.m20 * vec.x) + (mtrx.m21 * vec.y) + (mtrx.m22 * vec.z) + (mtrx.m23 * vec.w);
-	res.w = (mtrx.m30 * vec.x) + (mtrx.m31 * vec.y) + (mtrx.m32 * vec.z) + (mtrx.m33 * vec.w);
+	res.x = (mtrx.m00 * vect.x) + (mtrx.m01 * vect.y) + (mtrx.m02 * vect.z) + (mtrx.m03 * vect.w);
+	res.y = (mtrx.m10 * vect.x) + (mtrx.m11 * vect.y) + (mtrx.m12 * vect.z) + (mtrx.m13 * vect.w);
+	res.z = (mtrx.m20 * vect.x) + (mtrx.m21 * vect.y) + (mtrx.m22 * vect.z) + (mtrx.m23 * vect.w);
+	res.w = (mtrx.m30 * vect.x) + (mtrx.m31 * vect.y) + (mtrx.m32 * vect.z) + (mtrx.m33 * vect.w);
 	return res;
 }
 tF32M4x4 tF32M4x4_Transp(tF32M4x4 mtrx)
@@ -949,7 +949,6 @@ tF32M4x4 tF32M4x4_RotZ(tF32 ang)
 	tF32 tmpS = tF32_Sine(ang);
 	return tF32M4x4_Make(tmpC, -tmpS, 0.0F, 0.0F, tmpS, tmpC, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 }
-tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspect, tF32 near, tF32 far);
 tF32M4x4 tF32M4x4_Ortho(tF32 left, tF32 right, tF32 bot, tF32 top, tF32 near, tF32 far)
 {
 	tF32 tmpX = 1.0F / (right - left);
@@ -961,10 +960,6 @@ tF32 tF32M4x4_Trace(tF32M4x4 mtrx)
 {
 	return mtrx.m00 + mtrx.m11 + mtrx.m22 + mtrx.m33;
 }
-tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mtrx);
-tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang);
-tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mtrx, tF32V3D vec);
-tF32V3D tF32M4x4_TransfDir(tF32M4x4 mtrx, tF32V3D vec);
 tNone tF32M4x4_RowSwap(tF32M4x4 *mtrx, tU8 idx1, tU8 idx2)
 {
 	tF32_Swap(&mtrx->m[idx1][0], &mtrx->m[idx2][0]);
@@ -1031,6 +1026,52 @@ tNone tF32M4x4_RowRedEch(tF32M4x4 *mtrx)
 		if (foundPivot == False) continue;
 		for (tU8 aboveRow = 0U; aboveRow < row; ++aboveRow) tF32M4x4_RowAdd(mtrx, aboveRow, row, tF32_Neg(mtrx->m[aboveRow][pivotCol]));
 	}
+}
+tF32V3D tF32M4x4_TransfPoint(tF32M4x4 mtrx, tF32V3D vect)
+{
+	tF32V4D tmp;
+	tmp.x = vect.x;
+	tmp.y = vect.y;
+	tmp.z = vect.z;
+	tmp.w = 1.0F;
+	tmp = tF32M4x4_MulVect(mtrx, tmp);
+	return tF32V3D_Make(tmp.x, tmp.y, tmp.z);
+}
+tF32V3D tF32M4x4_TransfDir(tF32M4x4 mtrx, tF32V3D vect)
+{
+	tF32V4D tmp;
+	tmp.x = vect.x;
+	tmp.y = vect.y;
+	tmp.z = vect.z;
+	tmp.w = 0.0F;
+	tmp = tF32M4x4_MulVect(mtrx, tmp);
+	return tF32V3D_Make(tmp.x, tmp.y, tmp.z);
+}
+tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang)
+{
+	axis = tF32V3D_Norm(axis);
+	tF32 cosAng = tF32_Cosine(ang);
+	tF32 sinAng = tF32_Sine(ang);
+	tF32 transl = 1.0F - cosAng;
+	tF32M4x4 mat;
+	// TODO: Calculate a lot of this stuff once, rather than repeatedly.
+	mat.m00 = transl * axis.x * axis.x + cosAng;
+	mat.m01 = transl * axis.x * axis.y - sinAng * axis.z;
+	mat.m02 = transl * axis.x * axis.z + sinAng * axis.y;
+	mat.m03 = 0.0F;
+	mat.m10 = transl * axis.x * axis.y + sinAng * axis.z;
+	mat.m11 = transl * axis.y * axis.y + cosAng;
+	mat.m12 = transl * axis.y * axis.z - sinAng * axis.x;
+	mat.m13 = 0.0F;
+	mat.m20 = transl * axis.x * axis.z - sinAng * axis.y;
+	mat.m21 = transl * axis.y * axis.z + sinAng * axis.x;
+	mat.m22 = transl * axis.z * axis.z + cosAng;
+	mat.m23 = 0.0F;
+	mat.m30 = 0.0F;
+	mat.m31 = 0.0F;
+	mat.m32 = 0.0F;
+	mat.m33 = 1.0F;
+	return mat;
 }
 // TODO: tF32M4x4 function implementations.
 #endif
