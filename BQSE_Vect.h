@@ -8,6 +8,9 @@ enum eAxis
 	eAxis_Z,
 	eAxis_W
 };
+// TODO: Make all safe implementations of functions return appropriate values - be it SigNaN, Inf or NegInf.
+// TODO: BQSE_FORCEINLINE all short functions.
+// TODO: Decide whehter to use *_fast or *_iter for functions that use the trigonometric functions.
 typedef union { struct { tS32 x, y; }; tS32 v[2]; } tS32V2D;
 tS32V2D tS32V2D_Make(tS32 x, tS32 y);
 tS32V2D tS32V2D_Zero(tNone);
@@ -260,8 +263,8 @@ tF32 tF32V2D_Lng(tF32V2D vect)
 tF32V2D tF32V2D_Unit(tF32 rot)
 {
 	tF32V2D vect;
-	vect.x = tF32_Cosine(rot);
-	vect.y = tF32_Sine(rot);
+	vect.x = tF32_Cosine_fast(rot);
+	vect.y = tF32_Sine_fast(rot);
 	return vect;
 }
 tF32V2D tF32V2D_Norm(tF32V2D vect)
@@ -423,9 +426,13 @@ tF32 tF32V3D_Lng(tF32V3D vect)
 tF32V3D tF32V3D_Unit(tF32 yaw, tF32 pitch)
 {
 	tF32V3D vect;
-	vect.x = tF32_Cosine(pitch) * tF32_Cosine(yaw);
-	vect.y = tF32_Sine(pitch);
-	vect.z = tF32_Cosine(pitch) * tF32_Sine(yaw);
+	const tF32 cosP = tF32_Cosine_fast(pitch);
+	const tF32 cosY = tF32_Cosine_fast(yaw);
+	const tF32 sinY = tF32_Sine_fast(yaw);
+	const tF32 sinP = tF32_Sine_fast(pitch);
+	vect.x = cosP * cosY;
+	vect.y = sinP;
+	vect.z = cosP * sinY;
 	return vect;
 }
 tF32V3D tF32V3D_Norm(tF32V3D vect)
@@ -750,8 +757,8 @@ tF64 tF64V2D_Lng(tF64V2D vect)
 tF64V2D tF64V2D_Unit(tF64 rot)
 {
 	tF64V2D vect;
-	vect.x = tF64_Cosine(rot);
-	vect.y = tF64_Sine(rot);
+	vect.x = tF64_Cosine_fast(rot);
+	vect.y = tF64_Sine_fast(rot);
 	return vect;
 }
 tF64V2D tF64V2D_Norm(tF64V2D vect)
@@ -913,9 +920,14 @@ tF64 tF64V3D_Lng(tF64V3D vect)
 tF64V3D tF64V3D_Unit(tF64 yaw, tF64 pitch)
 {
 	tF64V3D vect;
-	vect.x = tF64_Cosine(pitch) * tF64_Cosine(yaw);
-	vect.y = tF64_Sine(pitch);
-	vect.z = tF64_Cosine(pitch) * tF64_Sine(yaw);
+	const tF64 cosP = tF64_Cosine_fast(pitch);
+	const tF64 cosY = tF64_Cosine_fast(yaw);
+	const tF64 sinY = tF64_Sine_fast(yaw);
+	const tF64 sinP = tF64_Sine_fast(pitch);
+	vect.x = cosP * cosY;
+	vect.y = sinP;
+	vect.z = cosP * sinY;
+	return vect;
 	return vect;
 }
 tF64V3D tF64V3D_Norm(tF64V3D vect)

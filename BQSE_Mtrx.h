@@ -2,6 +2,9 @@
 #define BQSELAYER_MTRX_H
 #include "BQSE_PrimTypes.h"
 #include "BQSE_Vect.h"
+// TODO: Make all safe implementations of functions return appropriate values - be it SigNaN, Inf or NegInf.
+// TODO: BQSE_FORCEINLINE all short functions.
+// TODO: Decide whehter to use *_fast or *_iter for functions that use the trigonometric functions.
 typedef union { struct { tF32 m00, m01; tF32 m10, m11; }; tF32 m[2][2]; tF32V2D row[2]; } tF32M2x2;
 tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11);
 tF32M2x2 tF32M2x2_Zero(tNone);
