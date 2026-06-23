@@ -2,9 +2,9 @@
 #define BQSELAYER_MTRX_H
 #include "BQSE_PrimTypes.h"
 #include "BQSE_Vect.h"
-// TODO: Make all safe implementations of functions return appropriate values - be it SigNaN, Inf or NegInf.
 // TODO: BQSE_FORCEINLINE all short functions.
-// TODO: Decide whehter to use *_fast or *_iter for functions that use the trigonometric functions.
+// TODO: Decide whether to use *_fast or *_iter for functions that use the trigonometric functions.
+// TODO: Decide whether to use exact equalities or near function for floating point comparisons.
 typedef union { struct { tF32 m00, m01; tF32 m10, m11; }; tF32 m[2][2]; tF32V2D row[2]; } tF32M2x2;
 tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11);
 tF32M2x2 tF32M2x2_Zero(tNone);
@@ -211,8 +211,8 @@ tF32 tF32M2x2_Trace(tF32M2x2 mtrx)
 }
 tNone tF32M2x2_RowSwap(tF32M2x2 *mtrx)
 {
-	tF32_Swap(&mtrx->m[0][0], &mtrx->m[1][0]);
-	tF32_Swap(&mtrx->m[0][1], &mtrx->m[1][1]);
+	tF32_Swap(&mtrx->m00, &mtrx->m10);
+	tF32_Swap(&mtrx->m01, &mtrx->m11);
 }
 tNone tF32M2x2_RowAdd(tF32M2x2 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult)
 {
@@ -264,12 +264,12 @@ tNone tF32M2x2_RowRedEch(tF32M2x2 *mtrx)
 }
 tF32M2x2 tF32M2x2_InvAff(tF32M2x2 mtrx)
 {
-	tF32 invA = 1.0f / mtrx.m00;
+	tF32 invA = 1.0F / mtrx.m00;
 	tF32M2x2 out;
 	out.m00 = invA;
 	out.m01 = -mtrx.m01 * invA;
-	out.m10 = 0.0f;
-	out.m11 = 1.0f;
+	out.m10 = 0.0F;
+	out.m11 = 1.0F;
 	return out;
 }
 #endif
@@ -609,7 +609,7 @@ tNone tF32M3x3_RowRedEch(tF32M3x3 *mtrx)
 tF32M3x3 tF32M3x3_InvAff(tF32M3x3 mtrx)
 {
 	tF32 det = mtrx.m00 * mtrx.m11 - mtrx.m01 * mtrx.m10;
-	tF32 invDet = 1.0f / det;
+	tF32 invDet = 1.0F / det;
 	tF32M3x3 out;
 	out.m00 = mtrx.m11 * invDet;
 	out.m01 = tF32_Neg(mtrx.m01 * invDet);
@@ -617,9 +617,9 @@ tF32M3x3 tF32M3x3_InvAff(tF32M3x3 mtrx)
 	out.m11 = mtrx.m00 * invDet;
 	out.m02 = tF32_Neg(out.m00 * mtrx.m02 + out.m01 * mtrx.m12);
 	out.m12 = tF32_Neg(out.m10 * mtrx.m02 + out.m11 * mtrx.m12);
-	out.m20 = 0.0f;
-	out.m21 = 0.0f;
-	out.m22 = 1.0f;
+	out.m20 = 0.0F;
+	out.m21 = 0.0F;
+	out.m22 = 1.0F;
 	return out;
 }
 #endif
@@ -669,8 +669,7 @@ tNone tF32M4x4_RowAdd(tF32M4x4 *mtrx, tU8 dstRow, tU8 srcRow, tF32 mult);
 tNone tF32M4x4_RowMult(tF32M4x4 *mtrx, tU8 idx, tF32 mult);
 tNone tF32M4x4_RowEch(tF32M4x4 *mtrx);
 tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mtrx);
-// TODO: Do this.
-tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspect, tF32 near, tF32 far);
+tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspRatio, tF32 near, tF32 far, tS8 minZ);
 #ifdef BQSE_IMPL
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33)
 {
@@ -1104,7 +1103,7 @@ tF32M4x4 tF32M4x4_RotAxis(tF32V3D axis, tF32 ang)
 tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mtrx)
 {
 	tF32 det = mtrx.m00 * (mtrx.m11 * mtrx.m22 - mtrx.m12 * mtrx.m21) - mtrx.m01 * (mtrx.m10 * mtrx.m22 - mtrx.m12 * mtrx.m20) + mtrx.m02 * (mtrx.m10 * mtrx.m21 - mtrx.m11 * mtrx.m20);
-	tF32 invDet = 1.0f / det;
+	tF32 invDet = 1.0F / det;
 	tF32M4x4 out;
 	out.m00 = (mtrx.m11 * mtrx.m22 - mtrx.m12 * mtrx.m21) * invDet;
 	out.m01 = tF32_Neg(mtrx.m01 * mtrx.m22 - mtrx.m02 * mtrx.m21) * invDet;
@@ -1118,10 +1117,32 @@ tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mtrx)
 	out.m03 = tF32_Neg(out.m00 * mtrx.m03 + out.m01 * mtrx.m13 + out.m02 * mtrx.m23);
 	out.m13 = tF32_Neg(out.m10 * mtrx.m03 + out.m11 * mtrx.m13 + out.m12 * mtrx.m23);
 	out.m23 = tF32_Neg(out.m20 * mtrx.m03 + out.m21 * mtrx.m13 + out.m22 * mtrx.m23);
-	out.m30 = 0.0f;
-	out.m31 = 0.0f;
-	out.m32 = 0.0f;
-	out.m33 = 1.0f;
+	out.m30 = 0.0F;
+	out.m31 = 0.0F;
+	out.m32 = 0.0F;
+	out.m33 = 1.0F;
+	return out;
+}
+tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspRatio, tF32 near, tF32 far, tS8 minZ)
+{
+	if (minZ != -1 && minZ != 0) return tF32M4x4_Zero();
+	tF32 yScale = 1.0F / tF32_Tangent(fov * 0.5f);
+	tF32 xScale = yScale / aspRatio;
+	tF32 dst = far - near;
+	tF32M4x4 out = tF32M4x4_Zero();
+	out.m00 = xScale;
+	out.m11 = yScale;
+	if (minZ == 0)
+	{
+		out.m22 = far / dst;
+		out.m23 = (far * near) / dst;
+	}
+	else
+	{
+		out.m22 = -(far + near) / dst;
+		out.m23 = -(2.0F * far * near) / dst;
+	}
+	out.m32 = -1.0F;
 	return out;
 }
 // TODO: tF32M4x4 function implementations.

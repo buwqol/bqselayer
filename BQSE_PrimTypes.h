@@ -79,7 +79,7 @@ typedef tU32 tUSz;
 #define BQSE_TRIG_ITER 7U
 #endif
 // TODO: tF16 half precision floating point type.
-// TODO: Make _safe variants of appropriate functions and use assertions on non-_safe.
+// TODO: Decide whether to use exact equalities or near function for floating point comparisons.
 typedef float tF32;
 #define tF32_Pi 3.141592653589793F
 #define tF32_2Pi 6.283185307F

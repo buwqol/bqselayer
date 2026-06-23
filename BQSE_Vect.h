@@ -8,9 +8,9 @@ enum eAxis
 	eAxis_Z,
 	eAxis_W
 };
-// TODO: Make all safe implementations of functions return appropriate values - be it SigNaN, Inf or NegInf.
 // TODO: BQSE_FORCEINLINE all short functions.
-// TODO: Decide whehter to use *_fast or *_iter for functions that use the trigonometric functions.
+// TODO: Decide whether to use *_fast or *_iter for functions that use the trigonometric functions.
+// TODO: Decide whether to use exact equalities or near function for floating point comparisons.
 typedef union { struct { tS32 x, y; }; tS32 v[2]; } tS32V2D;
 tS32V2D tS32V2D_Make(tS32 x, tS32 y);
 tS32V2D tS32V2D_Zero(tNone);
