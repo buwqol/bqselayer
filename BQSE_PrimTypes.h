@@ -84,6 +84,7 @@ typedef float tF32;
 #define tF32_Pi 3.141592653589793F
 #define tF32_2Pi 6.283185307F
 #define tF32_HalfPi 1.570796327F
+#define tF32_Inv2Pi 0.15915494309189535F
 #define tF32_Eps 1.19209290E-7F
 #define tF32_Tol 1E-5F
 #define tF32_EulNum 2.718281828459045F
@@ -156,6 +157,7 @@ tF32 tF32_HypTangent_iter(tF32 num, tUSz itr);
 tF32 tF32_HypSine(tF32 num);
 tF32 tF32_HypCosine(tF32 num);
 tF32 tF32_HypTangent(tF32 num);
+tF32 tF32_Mod(tF32 num, tF32 denom);
 #define tF32_SignMask 0X80000000U
 #define tF32_ExpoMask 0X7F800000U
 #define tF32_FracMask 0X007FFFFFU
@@ -225,8 +227,8 @@ tF32 tF32_Sine_fast(tF32 ang)
 {
 	tBln neg = False;
 	if (ang == 0.0F) return 0.0F;
-	while (ang > tF32_2Pi) ang -= tF32_2Pi;
-	while (ang < 0.0F) ang += tF32_2Pi;
+	ang -= (tF32)((tS32)(ang * tF32_Inv2Pi)) * tF32_2Pi;
+	if (ang < 0.0F) ang += tF32_2Pi;
 	if (ang > tF32_Pi)
 	{
 		ang -= tF32_Pi;
@@ -256,9 +258,8 @@ tF32 tF32_Sine_iter(tF32 ang, tUSz itr)
 {
 	if (itr == 0U) return ang;
 	if (ang == 0.0F) return 0.0F;
-	// TODO: Replace this range reduction with fast modulo.
-	while (ang > tF32_2Pi) ang -= tF32_2Pi;
-	while (ang < 0.0F) ang += tF32_2Pi;
+	ang -= (tF32)((tS32)(ang * tF32_Inv2Pi)) * tF32_2Pi;
+	if (ang < 0.0F) ang += tF32_2Pi;
 	tBln neg = False;
 	if (ang > tF32_Pi)
 	{
@@ -335,23 +336,24 @@ tF32 tF32_ArcCosine(tF32 num)
 tF32 tF32_ArcTangent_iter(tF32 num, tUSz itr)
 {
 	if (itr == 0U) return num;
-	// TODO: Use identity with sqrt thing to get faster convergence.
 	if (num > 1.0F) return tF32_HalfPi - tF32_ArcTangent_iter(1.0F / num, itr);
 	if (num < -1.0F) return -tF32_HalfPi - tF32_ArcTangent_iter(1.0F / num, itr);
-	tF32 numSq = num * num;
-	tBln sub = True;
-	tF32 res = num;
-	tF32 powItr = num;
-	tUSz factItr = 1U;
+	tF32 scale = 1.0F;
+	if (tF32_Abs(num) > 0.5F)
+	{
+		num = num / (1.0F + tF32_Sqrt(1.0F + (num * num)));
+		scale = 2.0F;
+	}
+	const tF32 numSq = num * num;
+	tF32 term = num;
+	tF32 res = term;
 	for (tUSz idx = 0U; idx < itr; ++idx)
 	{
-		factItr += 2U;
-		powItr *= numSq;
-		if (sub) res -= (powItr / (tF32)factItr);
-		else res += (powItr / (tF32)factItr);
-		sub = !sub;
+		tUSz idx2 = idx << 1;
+		term *= -numSq * ((tF32)(idx2 + 1U) / (tF32)(idx2 + 3U));
+		res += term;
 	}
-	return res;
+	return scale * res;
 }
 tF32 tF32_ArcTangent(tF32 num)
 {
@@ -515,11 +517,22 @@ tF32 tF32_HypTangent(tF32 num)
 	const tF32 hypCosine = (expNum + invExpNum) * 0.5F;
 	return hypSine / hypCosine;
 }
+tF32 tF32_Mod(tF32 num, tF32 denom)
+{
+#ifndef BQSE_DEBUG
+	if (denom == 0.0F) return tF32_SigNaN();
+#else
+	Assertion(denom != 0);
+#endif
+	tS32 quot = (tS32)(num / denom);
+	return num - ((tF32)quot * denom);
+}
 #endif/*BQSE_IMPL*/
 typedef double tF64;
 #define tF64_Pi 3.141592653589793
 #define tF64_2Pi 6.283185307
 #define tF64_HalfPi 1.570796327
+#define tF64_Inv2Pi 0.15915494309189535
 #define tF64_Eps 2.2204460492503131E-16
 #define tF64_Tol 1E-5
 #define tF64_EulNum 2.718281828459045
@@ -592,6 +605,7 @@ tF64 tF64_HypTangent_iter(tF64 num, tUSz itr);
 tF64 tF64_HypSine(tF64 num);
 tF64 tF64_HypCosine(tF64 num);
 tF64 tF64_HypTangent(tF64 num);
+tF64 tF64_Mod(tF64 num, tF64 denom);
 #define tF64_SignMask 0X8000000000000000LLU
 #define tF64_ExpoMask 0X7FF0000000000000LLU
 #define tF64_FracMask 0X000FFFFFFFFFFFFFLLU
@@ -662,7 +676,8 @@ tF64 tF64_Sine_fast(tF64 ang)
 	tBln neg = False;
 	if (ang == 0.0) return 0.0;
 	while (ang > tF64_2Pi) ang -= tF64_2Pi;
-	while (ang < 0.0) ang += tF64_2Pi;
+	ang -= (tF64)((tS64)(ang * tF64_Inv2Pi)) * tF64_2Pi;
+	if (ang < 0.0) ang += tF64_2Pi;
 	if (ang > tF64_Pi)
 	{
 		ang -= tF64_Pi;
@@ -692,9 +707,8 @@ tF64 tF64_Sine_iter(tF64 ang, tUSz itr)
 {
 	if (itr == 0U) return ang;
 	if (ang == 0.0) return 0.0;
-	// TODO: Replace this range reduction with fast modulo.
 	while (ang > tF64_2Pi) ang -= tF64_2Pi;
-	while (ang < 0.0) ang += tF64_2Pi;
+	ang -= (tF64)((tS64)(ang * tF64_Inv2Pi)) * tF64_2Pi;
 	tBln neg = False;
 	if (ang > tF64_Pi)
 	{
@@ -771,23 +785,24 @@ tF64 tF64_ArcCosine(tF64 num)
 tF64 tF64_ArcTangent_iter(tF64 num, tUSz itr)
 {
 	if (itr == 0U) return num;
-	// TODO: Use identity with sqrt thing to get faster convergence.
 	if (num > 1.0) return tF64_HalfPi - tF64_ArcTangent_iter(1.0 / num, itr);
 	if (num < -1.0) return -tF64_HalfPi - tF64_ArcTangent_iter(1.0 / num, itr);
-	tF64 numSq = num * num;
-	tBln sub = True;
-	tF64 res = num;
-	tF64 powItr = num;
-	tUSz factItr = 1U;
+	tF64 scale = 1.0;
+	if (tF64_Abs(num) > 0.5)
+	{
+		num = num / (1.0 + tF64_Sqrt(1.0 + (num * num)));
+		scale = 2.0;
+	}
+	const tF64 numSq = num * num;
+	tF64 term = num;
+	tF64 res = term;
 	for (tUSz idx = 0U; idx < itr; ++idx)
 	{
-		factItr += 2U;
-		powItr *= numSq;
-		if (sub) res -= (powItr / (tF64)factItr);
-		else res += (powItr / (tF64)factItr);
-		sub = !sub;
+		tUSz idx2 = idx << 1;
+		term *= -numSq * ((tF64)(idx2 + 1U) / (tF64)(idx2 + 3U));
+		res += term;
 	}
-	return res;
+	return scale * res;
 }
 tF64 tF64_ArcTangent(tF64 num)
 {
@@ -949,6 +964,16 @@ tF64 tF64_HypTangent(tF64 num)
 	const tF64 hypSine = (expNum - invExpNum) * 0.5F;
 	const tF64 hypCosine = (expNum + invExpNum) * 0.5F;
 	return hypSine / hypCosine;
+}
+tF64 tF64_Mod(tF64 num, tF64 denom)
+{
+#ifndef BQSE_DEBUG
+	if (denom == 0.0F) return tF64_SigNaN();
+#else
+	Assertion(denom != 0);
+#endif
+	tS64 quot = (tS64)(num / denom);
+	return num - ((tF64)quot * denom);
 }
 #endif/*BQSE_IMPL*/
 #ifdef BQSE_IMPL
