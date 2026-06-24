@@ -2,7 +2,9 @@
 #define BQSELAYER_DBG_H
 #include "BQSE_CtxCrack.h"
 #include "BQSE_PrimTypes.h"
+LINK_C_Begin
 tNone BQSE_StaticChecks(tNone);
+LINK_C_End
 #ifdef BQSE_IMPL
 tNone BQSE_StaticChecks(tNone)
 {

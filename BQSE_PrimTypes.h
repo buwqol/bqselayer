@@ -41,7 +41,9 @@ typedef int signed tS32;
 typedef int unsigned tU32;
 #define tU32_Max 4294967295U
 #define tU32_Min 0U
+LINK_C_Begin
 tU32 tU32_Fact(tU32 base);
+LINK_C_End
 #ifdef BQSE_IMPL
 tU32 tU32_Fact(tU32 base)
 {
@@ -57,7 +59,9 @@ typedef long long signed tS64;
 typedef long long unsigned tU64;
 #define tU64_Max 18446744073709551615LLU
 #define tU64_Min 0LLU
+LINK_C_Begin
 tU64 tU64_Fact(tU64 base);
+LINK_C_End
 #ifdef BQSE_IMPL
 tU64 tU64_Fact(tU64 base)
 {
@@ -89,6 +93,7 @@ typedef float tF32;
 #define tF32_Log2EulNum 1.44269504089F
 #define tF32_RadToDeg(flt) ((flt) * 57.29577951308233F)
 #define tF32_DegToRad(flt) ((flt) * 0.0174532925199433F)
+LINK_C_Begin
 tF32 tF32_Inf(tNone);
 tF32 tF32_Abs(tF32 flt);
 tF32 tF32_Neg(tF32 flt);
@@ -156,6 +161,7 @@ tF32 tF32_HypSine(tF32 num);
 tF32 tF32_HypCosine(tF32 num);
 tF32 tF32_HypTangent(tF32 num);
 tF32 tF32_Mod(tF32 num, tF32 denom);
+LINK_C_End
 #define tF32_SignMask 0X80000000U
 #define tF32_ExpoMask 0X7F800000U
 #define tF32_FracMask 0X007FFFFFU
@@ -536,6 +542,7 @@ typedef double tF64;
 #define tF64_Log2EulNum 1.44269504089
 #define tF64_RadToDeg(dbl) ((dbl) * 57.29577951308233)
 #define tF64_DegToRad(dbl) ((dbl) * 0.0174532925199433)
+LINK_C_Begin
 tF64 tF64_Inf(tNone);
 tF64 tF64_Abs(tF64 dbl);
 tF64 tF64_Neg(tF64 dbl);
@@ -602,6 +609,7 @@ tF64 tF64_HypSine(tF64 num);
 tF64 tF64_HypCosine(tF64 num);
 tF64 tF64_HypTangent(tF64 num);
 tF64 tF64_Mod(tF64 num, tF64 denom);
+LINK_C_End
 #define tF64_SignMask 0X8000000000000000LLU
 #define tF64_ExpoMask 0X7FF0000000000000LLU
 #define tF64_FracMask 0X000FFFFFFFFFFFFFLLU
@@ -1021,6 +1029,7 @@ BQSE_FORCEINLINE tNone tType##_Swap(tType *Num1, tType *Num2)		    \
 #define PtrFromNum(Num) (tPtr)((tU8 *)0U + (Num))
 #define OffsetOf(tType, Memb) ((tUSz)&(((tType *)0U)->Memb))
 #define MemberSize(tType, Memb) (sizeof(((tType *)0U)->Memb))
+LINK_C_Begin
 BQSE_DECLARE_MINMAXCLAMPSWAP(tSSz);
 BQSE_DECLARE_MINMAXCLAMPSWAP(tUSz);
 BQSE_DECLARE_MINMAXCLAMPSWAP(tS8);
@@ -1033,6 +1042,7 @@ BQSE_DECLARE_MINMAXCLAMPSWAP(tS64);
 BQSE_DECLARE_MINMAXCLAMPSWAP(tU64);
 BQSE_DECLARE_MINMAXCLAMPSWAP(tF32);
 BQSE_DECLARE_MINMAXCLAMPSWAP(tF64);
+LINK_C_End
 #ifdef BQSE_IMPL
 BQSE_DEFINE_MINMAXCLAMPSWAP(tSSz);
 BQSE_DEFINE_MINMAXCLAMPSWAP(tUSz);

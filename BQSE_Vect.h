@@ -9,6 +9,7 @@ enum eAxis
 	eAxis_W
 };
 typedef union { struct { tS32 x, y; }; tS32 v[2]; } tS32V2D;
+LINK_C_Begin
 tS32V2D tS32V2D_Make(tS32 x, tS32 y);
 tS32V2D tS32V2D_Zero(tNone);
 tS32V2D tS32V2D_Add(tS32V2D vect1, tS32V2D vect2);
@@ -20,6 +21,7 @@ tS32V2D tS32V2D_Div(tS32V2D vect, tS32 mod);
 tBln tS32V2D_Div_safe(tS32V2D *vect, tS32 mod);
 tBln tS32V2D_Eq(tS32V2D vect1, tS32V2D vect2);
 tS32 tS32V2D_Dot(tS32V2D vect1, tS32V2D vect2);
+LINK_C_End
 #ifdef BQSE_IMPL
 BQSE_FORCEINLINE tS32V2D tS32V2D_Make(tS32 x, tS32 y)
 {
@@ -88,6 +90,7 @@ BQSE_FORCEINLINE tS32 tS32V2D_Dot(tS32V2D vect1, tS32V2D vect2)
 }
 #endif/*BQSE_IMPL*/
 typedef union { struct { tS64 x, y; }; tS64 v[2]; } tS64V2D;
+LINK_C_Begin
 tS64V2D tS64V2D_Make(tS64 x, tS64 y);
 tS64V2D tS64V2D_Zero(tNone);
 tS64V2D tS64V2D_Add(tS64V2D vect1, tS64V2D vect2);
@@ -99,6 +102,7 @@ tS64V2D tS64V2D_Div(tS64V2D vect, tS64 mod);
 tBln tS64V2D_Div_safe(tS64V2D *vect, tS64 mod);
 tBln tS64V2D_Eq(tS64V2D vect1, tS64V2D vect2);
 tS64 tS64V2D_Dot(tS64V2D vect1, tS64V2D vect2);
+LINK_C_End
 #ifdef BQSE_IMPL
 BQSE_FORCEINLINE tS64V2D tS64V2D_Make(tS64 x, tS64 y)
 {
@@ -167,6 +171,7 @@ BQSE_FORCEINLINE tS64 tS64V2D_Dot(tS64V2D vect1, tS64V2D vect2)
 }
 #endif/*BQSE_IMPL*/
 typedef union { struct { tF32 x, y; }; tF32 v[2]; } tF32V2D;
+LINK_C_Begin
 tF32V2D tF32V2D_Make(tF32 x, tF32 y);
 tF32V2D tF32V2D_Zero(tNone);
 tF32V2D tF32V2D_Add(tF32V2D vect1, tF32V2D vect2);
@@ -194,6 +199,7 @@ tBln tF32V2D_Norm_fast_safe(tF32V2D *vect);
 tF32 tF32V2D_DistSq(tF32V2D vect1, tF32V2D vect2);
 tF32 tF32V2D_Dist(tF32V2D vect1, tF32V2D vect2);
 tF32V2D tF32V2D_Lerp(tF32V2D vect1, tF32V2D vect2, tF32 stp);
+LINK_C_End
 #ifdef BQSE_IMPL
 BQSE_FORCEINLINE tF32V2D tF32V2D_Make(tF32 x, tF32 y)
 {
@@ -322,6 +328,7 @@ BQSE_FORCEINLINE tF32V2D tF32V2D_Lerp(tF32V2D vect1, tF32V2D vect2, tF32 stp)
 }
 #endif/*BQSE_IMPL*/
 typedef union { struct { tF32 x, y, z; }; tF32 v[3]; } tF32V3D;
+LINK_C_Begin
 tF32V3D tF32V3D_Make(tF32 x, tF32 y, tF32 z);
 tF32V3D tF32V3D_Zero(tNone);
 tF32V3D tF32V3D_Add(tF32V3D vect1, tF32V3D vect2);
@@ -350,6 +357,7 @@ tF32 tF32V3D_DistSq(tF32V3D vect1, tF32V3D vect2);
 tF32 tF32V3D_Dist(tF32V3D vect1, tF32V3D vect2);
 tF32V3D tF32V3D_Lerp(tF32V3D vect1, tF32V3D vect2, tF32 stp);
 tF32V3D tF32V3D_Cross(tF32V3D vect1, tF32V3D vect2);
+LINK_C_End
 #ifdef BQSE_IMPL
 BQSE_FORCEINLINE tF32V3D tF32V3D_Make(tF32 x, tF32 y, tF32 z)
 {
@@ -505,6 +513,7 @@ tF32V3D tF32V3D_Cross(tF32V3D vect1, tF32V3D vect2)
 }
 #endif/*BQSE_IMPL*/
 typedef union { struct { tF32 x, y, z, w; }; tF32 v[4]; } tF32V4D;
+LINK_C_Begin
 tF32V4D tF32V4D_Make(tF32 x, tF32 y, tF32 z, tF32 w);
 tF32V4D tF32V4D_Zero(tNone);
 tF32V4D tF32V4D_Add(tF32V4D vect1, tF32V4D vect2);
@@ -530,6 +539,7 @@ tBln tF32V4D_Norm_fast_safe(tF32V4D *vect);
 tF32 tF32V4D_DistSq(tF32V4D vect1, tF32V4D vect2);
 tF32 tF32V4D_Dist(tF32V4D vect1, tF32V4D vect2);
 tF32V4D tF32V4D_Lerp(tF32V4D vect1, tF32V4D vect2, tF32 stp);
+LINK_C_End
 #ifdef BQSE_IMPL
 BQSE_FORCEINLINE tF32V4D tF32V4D_Make(tF32 x, tF32 y, tF32 z, tF32 w)
 {
@@ -674,6 +684,7 @@ tF32V4D tF32V4D_Lerp(tF32V4D vect1, tF32V4D vect2, tF32 stp)
 }
 #endif/*BQSE_IMPL*/
 typedef union { struct { tF64 x, y; }; tF64 v[2]; } tF64V2D;
+LINK_C_Begin
 tF64V2D tF64V2D_Make(tF64 x, tF64 y);
 tF64V2D tF64V2D_Zero(tNone);
 tF64V2D tF64V2D_Add(tF64V2D vect1, tF64V2D vect2);
@@ -701,6 +712,7 @@ tBln tF64V2D_Norm_fast_safe(tF64V2D *vect);
 tF64 tF64V2D_DistSq(tF64V2D vect1, tF64V2D vect2);
 tF64 tF64V2D_Dist(tF64V2D vect1, tF64V2D vect2);
 tF64V2D tF64V2D_Lerp(tF64V2D vect1, tF64V2D vect2, tF64 stp);
+LINK_C_End
 #ifdef BQSE_IMPL
 BQSE_FORCEINLINE tF64V2D tF64V2D_Make(tF64 x, tF64 y)
 {
@@ -829,6 +841,7 @@ BQSE_FORCEINLINE tF64V2D tF64V2D_Lerp(tF64V2D vect1, tF64V2D vect2, tF64 stp)
 }
 #endif/*BQSE_IMPL*/
 typedef union { struct { tF64 x, y, z; }; tF64 v[3]; } tF64V3D;
+LINK_C_Begin
 tF64V3D tF64V3D_Make(tF64 x, tF64 y, tF64 z);
 tF64V3D tF64V3D_Zero(tNone);
 tF64V3D tF64V3D_Add(tF64V3D vect1, tF64V3D vect2);
@@ -857,6 +870,7 @@ tF64 tF64V3D_DistSq(tF64V3D vect1, tF64V3D vect2);
 tF64 tF64V3D_Dist(tF64V3D vect1, tF64V3D vect2);
 tF64V3D tF64V3D_Lerp(tF64V3D vect1, tF64V3D vect2, tF64 stp);
 tF64V3D tF64V3D_Cross(tF64V3D vect1, tF64V3D vect2);
+LINK_C_End
 #ifdef BQSE_IMPL
 BQSE_FORCEINLINE tF64V3D tF64V3D_Make(tF64 x, tF64 y, tF64 z)
 {
@@ -1012,6 +1026,7 @@ tF64V3D tF64V3D_Cross(tF64V3D vect1, tF64V3D vect2)
 }
 #endif/*BQSE_IMPL*/
 typedef union { struct { tF64 x, y, z, w; }; tF64 v[4]; } tF64V4D;
+LINK_C_Begin
 tF64V4D tF64V4D_Make(tF64 x, tF64 y, tF64 z, tF64 w);
 tF64V4D tF64V4D_Zero(tNone);
 tF64V4D tF64V4D_Add(tF64V4D vect1, tF64V4D vect2);
@@ -1037,6 +1052,7 @@ tBln tF64V4D_Norm_fast_safe(tF64V4D *vect);
 tF64 tF64V4D_DistSq(tF64V4D vect1, tF64V4D vect2);
 tF64 tF64V4D_Dist(tF64V4D vect1, tF64V4D vect2);
 tF64V4D tF64V4D_Lerp(tF64V4D vect1, tF64V4D vect2, tF64 stp);
+LINK_C_End
 #ifdef BQSE_IMPL
 BQSE_FORCEINLINE tF64V4D tF64V4D_Make(tF64 x, tF64 y, tF64 z, tF64 w)
 {

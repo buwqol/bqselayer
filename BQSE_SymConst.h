@@ -2,7 +2,9 @@
 #define BQSELAYER_SYMCONST_H
 #include "BQSE_CtxCrack.h"
 #include "BQSE_PrimTypes.h"
+LINK_C_Begin
 const tChr *BQSE_GetCompiler(enum eCompiler comp);
+LINK_C_End
 #ifdef BQSE_IMPL
 const tChr *BQSE_GetCompiler(enum eCompiler comp)
 {
@@ -15,7 +17,9 @@ const tChr *BQSE_GetCompiler(enum eCompiler comp)
 	}
 }
 #endif/*BQSE_IMPL*/
+LINK_C_Begin
 const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os);
+LINK_C_End
 #ifdef BQSE_IMPL
 const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os)
 {
@@ -31,7 +35,9 @@ const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os)
 	}
 }
 #endif/*BQSE_IMPL*/
+LINK_C_Begin
 const tChr *BQSE_GetArchitecture(enum eArchitecture arch);
+LINK_C_End
 #ifdef BQSE_IMPL
 const tChr *BQSE_GetArchitecture(enum eArchitecture arch)
 {
@@ -60,8 +66,10 @@ enum eMonth
 	eMonth_Nov,
 	eMonth_Dec
 };
+LINK_C_Begin
 const tChr *BQSE_GetMonth(enum eMonth mon);
 const tChr *BQSE_GetMonthFull(enum eMonth mon);
+LINK_C_End
 #ifdef BQSE_IMPL
 const tChr *BQSE_GetMonth(enum eMonth mon)
 {
@@ -112,8 +120,10 @@ enum eDay
 	eDay_Fri,
 	eDay_Sat
 };
+LINK_C_Begin
 const tChr *BQSE_GetDay(enum eDay day);
 const tChr *BQSE_GetDayFull(enum eDay day);
+LINK_C_End
 #ifdef BQSE_IMPL
 const tChr *BQSE_GetDay(enum eDay day)
 {
