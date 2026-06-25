@@ -38,6 +38,7 @@ tNone tF32M2x2_RowMult(tF32M2x2 *mtrx, tU8 idx, tF32 mult);
 tNone tF32M2x2_RowEch(tF32M2x2 *mtrx);
 tNone tF32M2x2_RowRedEch(tF32M2x2 *mtrx);
 tF32M2x2 tF32M2x2_InvAff(tF32M2x2 mtrx);
+tBln tF32M2x2_IsAff(tF32M2x2 mtrx);
 LINK_C_End
 #ifdef BQSE_IMPL
 tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11)
@@ -113,7 +114,7 @@ tF32M2x2 tF32M2x2_DivFlt(tF32M2x2 mtrx, tF32 mod)
 	}
 #else
 	Assertion(!tF32_Nearby(mod, 0.0F));
-#endif
+#endif/*BQSE_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
 	mtrx.m10 /= mod;
@@ -180,7 +181,7 @@ tF32M2x2 tF32M2x2_Inv(tF32M2x2 mtrx)
 	if (tF32_Abs(det) <= tF32_Eps) return tF32M2x2_Zero();
 #else
 	Assertion(tF32_Abs(det) > tF32_Eps);
-#endif
+#endif/*BQSE_DEBUG*/
 	return tF32M2x2_DivFlt(tF32M2x2_Adj(mtrx), det);
 }
 tBln tF32M2x2_Inv_safe(tF32M2x2 *mtrx)
@@ -262,7 +263,7 @@ tNone tF32M2x2_RowEch(tF32M2x2 *mtrx)
 			}
 			if (foundPivot == False) continue;
 		}
-		tF32M2x2_RowMult(mtrx, pivotRow, 1.0F / mtrx->m[pivotRow][col]);
+		tF32M2x2_RowMult(mtrx, pivotRow, tF32_Recip(mtrx->m[pivotRow][col]));
 		for (tU8 idx = 1U; idx < 2U - pivotRow; ++idx) tF32M2x2_RowAdd(mtrx, pivotRow + idx, pivotRow, tF32_Neg(mtrx->m[pivotRow + idx][col]));
 		++pivotRow;
 	}
@@ -280,13 +281,18 @@ tNone tF32M2x2_RowRedEch(tF32M2x2 *mtrx)
 }
 tF32M2x2 tF32M2x2_InvAff(tF32M2x2 mtrx)
 {
-	tF32 invA = 1.0F / mtrx.m00;
+	if (!tF32M2x2_IsAff(mtrx)) return tF32M2x2_Zero();
+	tF32 invA = tF32_Recip(mtrx.m00);
 	tF32M2x2 out;
 	out.m00 = invA;
 	out.m01 = -mtrx.m01 * invA;
 	out.m10 = 0.0F;
 	out.m11 = 1.0F;
 	return out;
+}
+FORCEINLINE tBln tF32M2x2_IsAff(tF32M2x2 mtrx)
+{
+	return tF32_Nearby(mtrx.m10, 0.0F) && tF32_Nearby(mtrx.m11, 0.0F);
 }
 #endif/*BQSE_IMPL*/
 typedef union { struct { tF32 m00, m01, m02; tF32 m10, m11, m12; tF32 m20, m21, m22; }; tF32 m[3][3]; tF32V3D row[3]; } tF32M3x3;
@@ -328,6 +334,7 @@ tNone tF32M3x3_RowMult(tF32M3x3 *mtrx, tU8 idx, tF32 mult);
 tNone tF32M3x3_RowEch(tF32M3x3 *mtrx);
 tNone tF32M3x3_RowRedEch(tF32M3x3 *mtrx);
 tF32M3x3 tF32M3x3_InvAff(tF32M3x3 mtrx);
+tBln tF32M3x3_IsAff(tF32M3x3 mtrx);
 LINK_C_End
 #ifdef BQSE_IMPL
 tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22)
@@ -428,7 +435,7 @@ tF32M3x3 tF32M3x3_DivFlt(tF32M3x3 mtrx, tF32 mod)
 	}
 #else
 	Assertion(!tF32_Nearby(mod, 0.0F));
-#endif
+#endif/*BQSE_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
 	mtrx.m02 /= mod;
@@ -512,7 +519,7 @@ tF32M3x3 tF32M3x3_Inv(tF32M3x3 mtrx)
 	if (tF32_Abs(det) <= tF32_Eps) return tF32M3x3_Zero();
 #else
 	Assertion(tF32_Abs(det) > tF32_Eps);
-#endif
+#endif/*BQSE_DEBUG*/
 	return tF32M3x3_DivFlt(tF32M3x3_Adj(mtrx), det);
 }
 tBln tF32M3x3_Inv_safe(tF32M3x3 *mtrx)
@@ -617,7 +624,7 @@ tNone tF32M3x3_RowEch(tF32M3x3 *mtrx)
 			}
 			if (foundPivot == False) continue;
 		}
-		tF32M3x3_RowMult(mtrx, pivotRow, 1.0F / mtrx->m[pivotRow][col]);
+		tF32M3x3_RowMult(mtrx, pivotRow, tF32_Recip(mtrx->m[pivotRow][col]));
 		for (tU8 idx = 1U; idx < 3U - pivotRow; ++idx) tF32M3x3_RowAdd(mtrx, pivotRow + idx, pivotRow, tF32_Neg(mtrx->m[pivotRow + idx][col]));
 		++pivotRow;
 	}
@@ -644,8 +651,9 @@ tNone tF32M3x3_RowRedEch(tF32M3x3 *mtrx)
 }
 tF32M3x3 tF32M3x3_InvAff(tF32M3x3 mtrx)
 {
+	if (!tF32M3x3_IsAff(mtrx)) return tF32M3x3_Zero();
 	tF32 det = mtrx.m00 * mtrx.m11 - mtrx.m01 * mtrx.m10;
-	tF32 invDet = 1.0F / det;
+	tF32 invDet = tF32_Recip(det);
 	tF32M3x3 out;
 	out.m00 = mtrx.m11 * invDet;
 	out.m01 = tF32_Neg(mtrx.m01 * invDet);
@@ -657,6 +665,10 @@ tF32M3x3 tF32M3x3_InvAff(tF32M3x3 mtrx)
 	out.m21 = 0.0F;
 	out.m22 = 1.0F;
 	return out;
+}
+FORCEINLINE tBln tF32M3x3_IsAff(tF32M3x3 mtrx)
+{
+	return tF32_Nearby(mtrx.m20, 0.0F) && tF32_Nearby(mtrx.m21, 0.0F) && tF32_Nearby(mtrx.m22, 0.0F);
 }
 #endif/*BQSE_IMPL*/
 typedef union { struct { tF32 m00, m01, m02, m03; tF32 m10, m11, m12, m13; tF32 m20, m21, m22, m23; tF32 m30, m31, m32, m33; }; tF32 m[4][4]; tF32V4D row[4]; } tF32M4x4;
@@ -870,7 +882,7 @@ tF32M4x4 tF32M4x4_DivFlt(tF32M4x4 mtrx, tF32 mod)
 	}
 #else
 	Assertion(!tF32_Nearby(mod, 0.0F));
-#endif
+#endif/*BQSE_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
 	mtrx.m02 /= mod;
@@ -943,7 +955,7 @@ tF32M3x3 tF32M4x4_Minor(tF32M4x4 mtrx, tU8 row, tU8 col)
 #else
 	Assertion(row < 4U);
 	Assertion(col < 4U);
-#endif
+#endif/*BQSE_DEBUG*/
 	tF32M3x3 minor;
 	tU8 offsetI = 0U;
 	for (tU8 idx = 0U; idx < 3U; ++idx)
@@ -999,7 +1011,7 @@ tF32M4x4 tF32M4x4_Inv(tF32M4x4 mtrx)
 	if (tF32_Abs(det) <= tF32_Eps) return tF32M4x4_Zero();
 #else
 	Assertion(tF32_Abs(det) > tF32_Eps);
-#endif
+#endif/*BQSE_DEBUG*/
 	return tF32M4x4_DivFlt(tF32M4x4_Adj(mtrx), det);
 }
 tBln tF32M4x4_Inv_safe(tF32M4x4 *mtrx)
@@ -1073,9 +1085,9 @@ tF32M4x4 tF32M4x4_RotZ(tF32 ang)
 }
 tF32M4x4 tF32M4x4_Ortho(tF32 left, tF32 right, tF32 bot, tF32 top, tF32 near, tF32 far)
 {
-	tF32 tmpX = 1.0F / (right - left);
-	tF32 tmpY = 1.0F / (top - bot);
-	tF32 tmpZ = 1.0F / (far - near);
+	tF32 tmpX = tF32_Recip(right - left);
+	tF32 tmpY = tF32_Recip(top - bot);
+	tF32 tmpZ = tF32_Recip(far - near);
 	return tF32M4x4_Make(2.0F * tmpX, 0.0F, 0.0F, tF32_Neg(right + left) * tmpX, 0.0F, 2.0F * tmpY, 0.0F, tF32_Neg(top + bot) * tmpY, 0.0F, 0.0F, tmpZ, tF32_Neg(near * tmpZ), 0.0F, 0.0F, 0.0F, 1.0F);
 }
 tF32 tF32M4x4_Trace(tF32M4x4 mtrx)
@@ -1124,7 +1136,7 @@ tNone tF32M4x4_RowEch(tF32M4x4 *mtrx)
 			}
 			if (foundPivot == False) continue;
 		}
-		tF32M4x4_RowMult(mtrx, pivotRow, 1.0F / mtrx->m[pivotRow][col]);
+		tF32M4x4_RowMult(mtrx, pivotRow, tF32_Recip(mtrx->m[pivotRow][col]));
 		for (tU8 idx = 1U; idx < 4U - pivotRow; ++idx) tF32M4x4_RowAdd(mtrx, pivotRow + idx, pivotRow, tF32_Neg(mtrx->m[pivotRow + idx][col]));
 		++pivotRow;
 	}
@@ -1272,7 +1284,7 @@ tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mtrx)
 {
 	if (!tF32M4x4_IsAff(mtrx)) return tF32M4x4_Zero();
 	tF32 det = mtrx.m00 * (mtrx.m11 * mtrx.m22 - mtrx.m12 * mtrx.m21) - mtrx.m01 * (mtrx.m10 * mtrx.m22 - mtrx.m12 * mtrx.m20) + mtrx.m02 * (mtrx.m10 * mtrx.m21 - mtrx.m11 * mtrx.m20);
-	tF32 invDet = 1.0F / det;
+	tF32 invDet = tF32_Recip(det);
 	tF32M4x4 out;
 	out.m00 = (mtrx.m11 * mtrx.m22 - mtrx.m12 * mtrx.m21) * invDet;
 	out.m01 = tF32_Neg(mtrx.m01 * mtrx.m22 - mtrx.m02 * mtrx.m21) * invDet;
@@ -1295,7 +1307,7 @@ tF32M4x4 tF32M4x4_InvAff(tF32M4x4 mtrx)
 tF32M4x4 tF32M4x4_Persp_fast(tF32 fov, tF32 aspRatio, tF32 near, tF32 far, tS8 minZ)
 {
 	if (minZ != -1 && minZ != 0) return tF32M4x4_Zero();
-	tF32 yScale = 1.0F / tF32_Tangent_fast(fov * 0.5F);
+	tF32 yScale = tF32_Recip(tF32_Tangent_fast(fov * 0.5F));
 	tF32 xScale = yScale / aspRatio;
 	tF32 dst = far - near;
 	tF32M4x4 out = tF32M4x4_Zero();
@@ -1317,7 +1329,7 @@ tF32M4x4 tF32M4x4_Persp_fast(tF32 fov, tF32 aspRatio, tF32 near, tF32 far, tS8 m
 tF32M4x4 tF32M4x4_Persp_iter(tF32 fov, tF32 aspRatio, tF32 near, tF32 far, tS8 minZ, tUSz itr)
 {
 	if (minZ != -1 && minZ != 0) return tF32M4x4_Zero();
-	tF32 yScale = 1.0F / tF32_Tangent_iter(fov * 0.5F, itr);
+	tF32 yScale = tF32_Recip(tF32_Tangent_iter(fov * 0.5F, itr));
 	tF32 xScale = yScale / aspRatio;
 	tF32 dst = far - near;
 	tF32M4x4 out = tF32M4x4_Zero();
@@ -1339,7 +1351,7 @@ tF32M4x4 tF32M4x4_Persp_iter(tF32 fov, tF32 aspRatio, tF32 near, tF32 far, tS8 m
 tF32M4x4 tF32M4x4_Persp(tF32 fov, tF32 aspRatio, tF32 near, tF32 far, tS8 minZ)
 {
 	if (minZ != -1 && minZ != 0) return tF32M4x4_Zero();
-	tF32 yScale = 1.0F / tF32_Tangent(fov * 0.5F);
+	tF32 yScale = tF32_Recip(tF32_Tangent(fov * 0.5F));
 	tF32 xScale = yScale / aspRatio;
 	tF32 dst = far - near;
 	tF32M4x4 out = tF32M4x4_Zero();
@@ -1438,6 +1450,7 @@ tNone tF64M2x2_RowMult(tF64M2x2 *mtrx, tU8 idx, tF64 mult);
 tNone tF64M2x2_RowEch(tF64M2x2 *mtrx);
 tNone tF64M2x2_RowRedEch(tF64M2x2 *mtrx);
 tF64M2x2 tF64M2x2_InvAff(tF64M2x2 mtrx);
+tBln tF64M2x2_IsAff(tF64M2x2 mtrx);
 LINK_C_End
 #ifdef BQSE_IMPL
 tF64M2x2 tF64M2x2_Make(tF64 m00, tF64 m01, tF64 m10, tF64 m11)
@@ -1513,7 +1526,7 @@ tF64M2x2 tF64M2x2_DivFlt(tF64M2x2 mtrx, tF64 mod)
 	}
 #else
 	Assertion(!tF64_Nearby(mod, 0.0));
-#endif
+#endif/*BQSE_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
 	mtrx.m10 /= mod;
@@ -1580,7 +1593,7 @@ tF64M2x2 tF64M2x2_Inv(tF64M2x2 mtrx)
 	if (tF64_Abs(det) <= tF64_Eps) return tF64M2x2_Zero();
 #else
 	Assertion(tF64_Abs(det) > tF64_Eps);
-#endif
+#endif/*BQSE_DEBUG*/
 	return tF64M2x2_DivFlt(tF64M2x2_Adj(mtrx), det);
 }
 tBln tF64M2x2_Inv_safe(tF64M2x2 *mtrx)
@@ -1662,7 +1675,7 @@ tNone tF64M2x2_RowEch(tF64M2x2 *mtrx)
 			}
 			if (foundPivot == False) continue;
 		}
-		tF64M2x2_RowMult(mtrx, pivotRow, 1.0 / mtrx->m[pivotRow][col]);
+		tF64M2x2_RowMult(mtrx, pivotRow, tF64_Recip(mtrx->m[pivotRow][col]));
 		for (tU8 idx = 1U; idx < 2U - pivotRow; ++idx) tF64M2x2_RowAdd(mtrx, pivotRow + idx, pivotRow, tF64_Neg(mtrx->m[pivotRow + idx][col]));
 		++pivotRow;
 	}
@@ -1680,13 +1693,18 @@ tNone tF64M2x2_RowRedEch(tF64M2x2 *mtrx)
 }
 tF64M2x2 tF64M2x2_InvAff(tF64M2x2 mtrx)
 {
-	tF64 invA = 1.0 / mtrx.m00;
+	if (!tF64M2x2_IsAff(mtrx)) return tF64M2x2_Zero();
+	tF64 invA = tF64_Recip(mtrx.m00);
 	tF64M2x2 out;
 	out.m00 = invA;
 	out.m01 = -mtrx.m01 * invA;
 	out.m10 = 0.0;
 	out.m11 = 1.0;
 	return out;
+}
+FORCEINLINE tBln tF64M2x2_IsAff(tF64M2x2 mtrx)
+{
+	return tF64_Nearby(mtrx.m10, 0.0) && tF64_Nearby(mtrx.m11, 0.0);
 }
 #endif/*BQSE_IMPL*/
 typedef union { struct { tF64 m00, m01, m02; tF64 m10, m11, m12; tF64 m20, m21, m22; }; tF64 m[3][3]; tF64V3D row[3]; } tF64M3x3;
@@ -1728,6 +1746,7 @@ tNone tF64M3x3_RowMult(tF64M3x3 *mtrx, tU8 idx, tF64 mult);
 tNone tF64M3x3_RowEch(tF64M3x3 *mtrx);
 tNone tF64M3x3_RowRedEch(tF64M3x3 *mtrx);
 tF64M3x3 tF64M3x3_InvAff(tF64M3x3 mtrx);
+tBln tF64M3x3_IsAff(tF64M3x3 mtrx);
 LINK_C_End
 #ifdef BQSE_IMPL
 tF64M3x3 tF64M3x3_Make(tF64 m00, tF64 m01, tF64 m02, tF64 m10, tF64 m11, tF64 m12, tF64 m20, tF64 m21, tF64 m22)
@@ -1828,7 +1847,7 @@ tF64M3x3 tF64M3x3_DivFlt(tF64M3x3 mtrx, tF64 mod)
 	}
 #else
 	Assertion(!tF64_Nearby(mod, 0.0));
-#endif
+#endif/*BQSE_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
 	mtrx.m02 /= mod;
@@ -1912,7 +1931,7 @@ tF64M3x3 tF64M3x3_Inv(tF64M3x3 mtrx)
 	if (tF64_Abs(det) <= tF64_Eps) return tF64M3x3_Zero();
 #else
 	Assertion(tF64_Abs(det) > tF64_Eps);
-#endif
+#endif/*BQSE_DEBUG*/
 	return tF64M3x3_DivFlt(tF64M3x3_Adj(mtrx), det);
 }
 tBln tF64M3x3_Inv_safe(tF64M3x3 *mtrx)
@@ -2017,7 +2036,7 @@ tNone tF64M3x3_RowEch(tF64M3x3 *mtrx)
 			}
 			if (foundPivot == False) continue;
 		}
-		tF64M3x3_RowMult(mtrx, pivotRow, 1.0 / mtrx->m[pivotRow][col]);
+		tF64M3x3_RowMult(mtrx, pivotRow, tF64_Recip(mtrx->m[pivotRow][col]));
 		for (tU8 idx = 1U; idx < 3U - pivotRow; ++idx) tF64M3x3_RowAdd(mtrx, pivotRow + idx, pivotRow, tF64_Neg(mtrx->m[pivotRow + idx][col]));
 		++pivotRow;
 	}
@@ -2044,8 +2063,9 @@ tNone tF64M3x3_RowRedEch(tF64M3x3 *mtrx)
 }
 tF64M3x3 tF64M3x3_InvAff(tF64M3x3 mtrx)
 {
+	if (!tF64M3x3_IsAff(mtrx)) return tF64M3x3_Zero();
 	tF64 det = mtrx.m00 * mtrx.m11 - mtrx.m01 * mtrx.m10;
-	tF64 invDet = 1.0 / det;
+	tF64 invDet = tF64_Recip(det);
 	tF64M3x3 out;
 	out.m00 = mtrx.m11 * invDet;
 	out.m01 = tF64_Neg(mtrx.m01 * invDet);
@@ -2057,6 +2077,10 @@ tF64M3x3 tF64M3x3_InvAff(tF64M3x3 mtrx)
 	out.m21 = 0.0;
 	out.m22 = 1.0;
 	return out;
+}
+FORCEINLINE tBln tF64M3x3_IsAff(tF64M3x3 mtrx)
+{
+	return tF64_Nearby(mtrx.m20, 0.0F) && tF64_Nearby(mtrx.m21, 0.0F) && tF64_Nearby(mtrx.m22, 0.0F);
 }
 #endif/*BQSE_IMPL*/
 typedef union { struct { tF64 m00, m01, m02, m03; tF64 m10, m11, m12, m13; tF64 m20, m21, m22, m23; tF64 m30, m31, m64, m33; }; tF64 m[4][4]; tF64V4D row[4]; } tF64M4x4;
@@ -2270,7 +2294,7 @@ tF64M4x4 tF64M4x4_DivFlt(tF64M4x4 mtrx, tF64 mod)
 	}
 #else
 	Assertion(!tF64_Nearby(mod, 0.0));
-#endif
+#endif/*BQSE_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
 	mtrx.m02 /= mod;
@@ -2343,7 +2367,7 @@ tF64M3x3 tF64M4x4_Minor(tF64M4x4 mtrx, tU8 row, tU8 col)
 #else
 	Assertion(row < 4U);
 	Assertion(col < 4U);
-#endif
+#endif/*BQSE_DEBUG*/
 	tF64M3x3 minor;
 	tU8 offsetI = 0U;
 	for (tU8 idx = 0U; idx < 3U; ++idx)
@@ -2399,7 +2423,7 @@ tF64M4x4 tF64M4x4_Inv(tF64M4x4 mtrx)
 	if (tF64_Abs(det) <= tF64_Eps) return tF64M4x4_Zero();
 #else
 	Assertion(tF64_Abs(det) > tF64_Eps);
-#endif
+#endif/*BQSE_DEBUG*/
 	return tF64M4x4_DivFlt(tF64M4x4_Adj(mtrx), det);
 }
 tBln tF64M4x4_Inv_safe(tF64M4x4 *mtrx)
@@ -2473,9 +2497,9 @@ tF64M4x4 tF64M4x4_RotZ(tF64 ang)
 }
 tF64M4x4 tF64M4x4_Ortho(tF64 left, tF64 right, tF64 bot, tF64 top, tF64 near, tF64 far)
 {
-	tF64 tmpX = 1.0 / (right - left);
-	tF64 tmpY = 1.0 / (top - bot);
-	tF64 tmpZ = 1.0 / (far - near);
+	tF64 tmpX = tF64_Recip(right - left);
+	tF64 tmpY = tF64_Recip(top - bot);
+	tF64 tmpZ = tF64_Recip(far - near);
 	return tF64M4x4_Make(2.0 * tmpX, 0.0, 0.0, tF64_Neg(right + left) * tmpX, 0.0, 2.0 * tmpY, 0.0, tF64_Neg(top + bot) * tmpY, 0.0, 0.0, tmpZ, tF64_Neg(near * tmpZ), 0.0, 0.0, 0.0, 1.0);
 }
 tF64 tF64M4x4_Trace(tF64M4x4 mtrx)
@@ -2524,7 +2548,7 @@ tNone tF64M4x4_RowEch(tF64M4x4 *mtrx)
 			}
 			if (foundPivot == False) continue;
 		}
-		tF64M4x4_RowMult(mtrx, pivotRow, 1.0 / mtrx->m[pivotRow][col]);
+		tF64M4x4_RowMult(mtrx, pivotRow, tF64_Recip(mtrx->m[pivotRow][col]));
 		for (tU8 idx = 1U; idx < 4U - pivotRow; ++idx) tF64M4x4_RowAdd(mtrx, pivotRow + idx, pivotRow, tF64_Neg(mtrx->m[pivotRow + idx][col]));
 		++pivotRow;
 	}
@@ -2672,7 +2696,7 @@ tF64M4x4 tF64M4x4_InvAff(tF64M4x4 mtrx)
 {
 	if (!tF64M4x4_IsAff(mtrx)) return tF64M4x4_Zero();
 	tF64 det = mtrx.m00 * (mtrx.m11 * mtrx.m22 - mtrx.m12 * mtrx.m21) - mtrx.m01 * (mtrx.m10 * mtrx.m22 - mtrx.m12 * mtrx.m20) + mtrx.m02 * (mtrx.m10 * mtrx.m21 - mtrx.m11 * mtrx.m20);
-	tF64 invDet = 1.0 / det;
+	tF64 invDet = tF64_Recip(det);
 	tF64M4x4 out;
 	out.m00 = (mtrx.m11 * mtrx.m22 - mtrx.m12 * mtrx.m21) * invDet;
 	out.m01 = tF64_Neg(mtrx.m01 * mtrx.m22 - mtrx.m02 * mtrx.m21) * invDet;
@@ -2695,7 +2719,7 @@ tF64M4x4 tF64M4x4_InvAff(tF64M4x4 mtrx)
 tF64M4x4 tF64M4x4_Persp_fast(tF64 fov, tF64 aspRatio, tF64 near, tF64 far, tS8 minZ)
 {
 	if (minZ != -1 && minZ != 0) return tF64M4x4_Zero();
-	tF64 yScale = 1.0 / tF64_Tangent_fast(fov * 0.5);
+	tF64 yScale = tF64_Recip(tF64_Tangent_fast(fov * 0.5));
 	tF64 xScale = yScale / aspRatio;
 	tF64 dst = far - near;
 	tF64M4x4 out = tF64M4x4_Zero();
@@ -2717,7 +2741,7 @@ tF64M4x4 tF64M4x4_Persp_fast(tF64 fov, tF64 aspRatio, tF64 near, tF64 far, tS8 m
 tF64M4x4 tF64M4x4_Persp_iter(tF64 fov, tF64 aspRatio, tF64 near, tF64 far, tS8 minZ, tUSz itr)
 {
 	if (minZ != -1 && minZ != 0) return tF64M4x4_Zero();
-	tF64 yScale = 1.0 / tF64_Tangent_iter(fov * 0.5, itr);
+	tF64 yScale = tF64_Recip(tF64_Tangent_iter(fov * 0.5, itr));
 	tF64 xScale = yScale / aspRatio;
 	tF64 dst = far - near;
 	tF64M4x4 out = tF64M4x4_Zero();
@@ -2739,7 +2763,7 @@ tF64M4x4 tF64M4x4_Persp_iter(tF64 fov, tF64 aspRatio, tF64 near, tF64 far, tS8 m
 tF64M4x4 tF64M4x4_Persp(tF64 fov, tF64 aspRatio, tF64 near, tF64 far, tS8 minZ)
 {
 	if (minZ != -1 && minZ != 0) return tF64M4x4_Zero();
-	tF64 yScale = 1.0 / tF64_Tangent(fov * 0.5);
+	tF64 yScale = tF64_Recip(tF64_Tangent(fov * 0.5));
 	tF64 xScale = yScale / aspRatio;
 	tF64 dst = far - near;
 	tF64M4x4 out = tF64M4x4_Zero();

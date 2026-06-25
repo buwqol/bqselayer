@@ -139,19 +139,19 @@ enum eArchitecture
 #endif
 /*Function prefixes*/
 #if defined(COMP_MSC)
-#define BQSE_FORCEINLINE __forceinline
+#define FORCEINLINE __forceinline
 #define BQSE_NOINLINE __declspec(noinline)
 #define BQSE_DLLEXPORT __declspec(dllexport)
 #define BQSE_DLLIMPORT __declspec(dllimport)
 #define BQSE_RESTRICT __restrict
 #elif defined(COMP_GNUC) || defined(COMP_LLVM)
-#define BQSE_FORCEINLINE inline __attribute__((always_inline))
+#define FORCEINLINE inline __attribute__((always_inline))
 #define BQSE_NOINLINE __attribute__((noinline))
 #define BQSE_DLLEXPORT __attribute__((visibility("default")))
 #define BQSE_DLLIMPORT
 #define BQSE_RESTRICT __restrict__
 #else
-#define BQSE_FORCEINLINE inline
+#define FORCEINLINE inline
 #define BQSE_NOINLINE
 #define BQSE_DLLEXPORT
 #define BQSE_DLLIMPORT
