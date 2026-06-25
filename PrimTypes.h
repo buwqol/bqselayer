@@ -177,8 +177,9 @@ typedef union
 }
 tF32Bits;
 #ifdef BQSELAYER_IMPL
-tBln tF32_IsNeg(tF32 flt)
+FORCEINLINE tBln tF32_IsNeg(tF32 flt)
 {
+	if (tF32_Nearby(flt, 0.0F)) return False;
 	tF32Bits num;
 	num.flt = flt;
 	return (tBln)!!(num.raw & tF32_SignMask);
@@ -189,14 +190,14 @@ FORCEINLINE tF32 tF32_Inf(tNone)
 	num.raw = 0X7F800000U;
 	return num.flt;
 }
-tF32 tF32_Abs(tF32 flt)
+FORCEINLINE tF32 tF32_Abs(tF32 flt)
 {
 	tF32Bits num;
 	num.flt = flt;
 	num.raw &= 0X7FFFFFFFU;
 	return num.flt;
 }
-tF32 tF32_Neg(tF32 flt)
+FORCEINLINE tF32 tF32_Neg(tF32 flt)
 {
 	tF32Bits num;
 	num.flt = flt;
@@ -230,7 +231,7 @@ tF32 tF32_Sine_fast(tF32 ang)
 	tBln neg = False;
 	if (tF32_Nearby(ang, 0.0F)) return 0.0F;
 	ang -= (tF32)((tS32)(ang * tF32_Inv2Pi)) * tF32_2Pi;
-	if (ang < 0.0F) ang += tF32_2Pi;
+	if (tF32_IsNeg(ang)) ang += tF32_2Pi;
 	if (ang > tF32_Pi)
 	{
 		ang -= tF32_Pi;
@@ -257,7 +258,7 @@ tF32 tF32_Sine_iter(tF32 ang, tUSz itr)
 	if (tF32_Nearby(ang, 0.0F)) return 0.0F;
 	if (itr == 0U) return ang;
 	ang -= (tF32)((tS32)(ang * tF32_Inv2Pi)) * tF32_2Pi;
-	if (ang < 0.0F) ang += tF32_2Pi;
+	if (tF32_IsNeg(ang)) ang += tF32_2Pi;
 	tBln neg = False;
 	if (ang > tF32_Pi)
 	{
@@ -358,10 +359,10 @@ FORCEINLINE tF32 tF32_ArcTangent(tF32 num)
 tF32 tF32_ArcTangent2_iter(tF32 opp, tF32 adj, tUSz itr)
 {
 	if (adj > 0.0F) return tF32_ArcTangent_iter(opp / adj, itr);
-	if (adj < 0.0F && opp >= 0.0F) return tF32_ArcTangent_iter(opp / adj, itr) + tF32_Pi;
-	if (adj < 0.0F && opp < 0.0F) return tF32_ArcTangent_iter(opp / adj, itr) - tF32_Pi;
+	if (tF32_IsNeg(adj) && !tF32_IsNeg(opp)) return tF32_ArcTangent_iter(opp / adj, itr) + tF32_Pi;
+	if (tF32_IsNeg(adj) && tF32_IsNeg(opp)) return tF32_ArcTangent_iter(opp / adj, itr) - tF32_Pi;
 	if (tF32_Nearby(adj, 0.0F) && opp > 0.0F) return tF32_HalfPi;
-	if (tF32_Nearby(adj, 0.0F) && opp < 0.0F) return -tF32_HalfPi;
+	if (tF32_Nearby(adj, 0.0F) && tF32_IsNeg(opp)) return -tF32_HalfPi;
 	return 0.0F;
 }
 FORCEINLINE tF32 tF32_ArcTangent2(tF32 opp, tF32 adj)
@@ -371,17 +372,16 @@ FORCEINLINE tF32 tF32_ArcTangent2(tF32 opp, tF32 adj)
 tF32 tF32_RecipSqrt_iter(tF32 num, tUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
+	if (tF32_IsNeg(num)) return tF32_SigNaN();
 	if (tF32_Nearby(num, 0.0F)) return tF32_Inf();
-	if (num < 0.0F) return tF32_SigNaN();
 #else
 	Assertion(num > 0.0F);
 #endif/*BQSELAYER_DEBUG*/
-	static const tF32 threeHalfs = 1.5F;
 	tF32Bits number;
 	number.flt = num;
 	tF32 halfNum = number.flt * 0.5F;
 	number.raw = 0X5F3759DFU - (number.raw >> 1U);
-	for (tUSz idx = 0U; idx < itr; ++idx) number.flt = number.flt * (threeHalfs - (halfNum * number.flt * number.flt));
+	for (tUSz idx = 0U; idx < itr; ++idx) number.flt = number.flt * (1.5F - (halfNum * number.flt * number.flt));
 	return number.flt;
 }
 FORCEINLINE tF32 tF32_RecipSqrt(tF32 num)
@@ -390,10 +390,22 @@ FORCEINLINE tF32 tF32_RecipSqrt(tF32 num)
 }
 FORCEINLINE tF32 tF32_Sqrt_iter(tF32 num, tUSz itr)
 {
+#ifndef BQSELAYER_DBG
+	if (tF32_IsNeg(num)) return tF32_SigNaN();
+#else
+	Assertion(!tF32_IsNeg(num));
+#endif/*BQSELAYER_DBG*/
+	if (tF32_Nearby(num, 0.0F)) return 0.0F;
 	return num * tF32_RecipSqrt_iter(num, itr);
 }
 FORCEINLINE tF32 tF32_Sqrt(tF32 num)
 {
+#ifndef BQSELAYER_DBG
+	if (tF32_IsNeg(num)) return tF32_SigNaN();
+#else
+	Assertion(!tF32_IsNeg(num));
+#endif/*BQSELAYER_DBG*/
+	if (tF32_Nearby(num, 0.0F)) return 0.0F;
 	return num * tF32_RecipSqrt(num);
 }
 tF32 tF32_Log2_iter(tF32 num, tUSz itr)
@@ -570,7 +582,7 @@ tF32 tF32_Round(tF32 num)
 {
 	tSSz intPart = (tSSz)num;
 	if (num == (tF32)intPart) return num;
-	if (num < 0.0F) return tF32_Neg(tF32_Round(tF32_Neg(num)));
+	if (tF32_IsNeg(num)) return tF32_Neg(tF32_Round(tF32_Neg(num)));
 	tF32 fracPart = num - (tF32)intPart;
 	if (fracPart < 0.5F) return (tF32)intPart;
 	else return (tF32)intPart + 1.0F;
@@ -605,6 +617,7 @@ tBln tF64_IsNeg(tF64 dbl);
 tF64 tF64_NegInf(tNone);
 tF64 tF64_QuiNaN(tNone);
 tF64 tF64_SigNaN(tNone);
+tBln tF64_Nearby(tF64 dbl, tF64 cmp);
 /*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_Sine_fast(tF64 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
@@ -686,20 +699,21 @@ FORCEINLINE tF64 tF64_Inf(tNone)
 	num.raw = 0X7FF0000000000000LLU;
 	return num.dbl;
 }
-tF64 tF64_Abs(tF64 dbl)
+FORCEINLINE tF64 tF64_Abs(tF64 dbl)
 {
 	tF64Bits num;
 	num.dbl = dbl;
 	num.raw &= 0X7FFFFFFFFFFFFFFFLLU;
 	return num.dbl;
 }
-tBln tF64_IsNeg(tF64 dbl)
+FORCEINLINE tBln tF64_IsNeg(tF64 dbl)
 {
+	if (tF64_Nearby(dbl, 0.0)) return False;
 	tF64Bits num;
 	num.dbl = dbl;
 	return (tBln)!!(num.raw & tF64_SignMask);
 }
-tF64 tF64_Neg(tF64 dbl)
+FORCEINLINE tF64 tF64_Neg(tF64 dbl)
 {
 	tF64Bits num;
 	num.dbl = dbl;
@@ -734,7 +748,7 @@ tF64 tF64_Sine_fast(tF64 ang)
 	if (tF64_Nearby(ang, 0.0)) return 0.0;
 	while (ang > tF64_2Pi) ang -= tF64_2Pi;
 	ang -= (tF64)((tS64)(ang * tF64_Inv2Pi)) * tF64_2Pi;
-	if (ang < 0.0) ang += tF64_2Pi;
+	if (tF64_IsNeg(ang)) ang += tF64_2Pi;
 	if (ang > tF64_Pi)
 	{
 		ang -= tF64_Pi;
@@ -819,7 +833,7 @@ tF64 tF64_ArcSine(tF64 num)
 #ifndef BQSELAYER_DEBUG
 	if (tF64_Abs(num) > 1.0) return tF64_SigNaN();
 #else
-	Assertion(tF64_Abs(num) > 1.0);
+	Assertion(tF64_Abs(num) <= 1.0);
 #endif/*BQSELAYER_DEBUG*/
 	if (tF64_Nearby(num, 1.0))  return tF64_HalfPi;
 	if (tF64_Nearby(num, -1.0)) return -tF64_HalfPi;
@@ -862,10 +876,10 @@ FORCEINLINE tF64 tF64_ArcTangent(tF64 num)
 tF64 tF64_ArcTangent2_iter(tF64 opp, tF64 adj, tUSz itr)
 {
 	if (adj > 0.0) return tF64_ArcTangent_iter(opp / adj, itr);
-	if (adj < 0.0 && opp >= 0.0) return tF64_ArcTangent_iter(opp / adj, itr) + tF64_Pi;
-	if (adj < 0.0 && opp < 0.0) return tF64_ArcTangent_iter(opp / adj, itr) - tF64_Pi;
+	if (tF64_IsNeg(adj) && !tF64_IsNeg(opp)) return tF64_ArcTangent_iter(opp / adj, itr) + tF64_Pi;
+	if (tF64_IsNeg(adj) && tF64_IsNeg(opp)) return tF64_ArcTangent_iter(opp / adj, itr) - tF64_Pi;
 	if (tF64_Nearby(adj, 0.0) && opp > 0.0) return tF64_HalfPi;
-	if (tF64_Nearby(adj, 0.0) && opp < 0.0) return -tF64_HalfPi;
+	if (tF64_Nearby(adj, 0.0) && tF64_IsNeg(opp)) return -tF64_HalfPi;
 	return 0.0;
 }
 FORCEINLINE tF64 tF64_ArcTangent2(tF64 opp, tF64 adj)
@@ -875,16 +889,16 @@ FORCEINLINE tF64 tF64_ArcTangent2(tF64 opp, tF64 adj)
 tF64 tF64_RecipSqrt_iter(tF64 num, tUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
-	if (num < 0.0) return tF64_SigNaN();
+	if (tF64_IsNeg(num)) return tF64_SigNaN();
+	if (tF64_Nearby(num, 0.0)) return tF64_Inf();
 #else
-	Assertion(num >= 0.0);
+	Assertion(num > 0.0);
 #endif/*BQSELAYER_DEBUG*/
-	static const tF64 threeHalfs = 1.5;
 	tF64Bits number;
 	number.dbl = num;
 	tF64 halfNum = number.dbl * 0.5;
 	number.raw = 0X5FE6EC85E7DE30DAULL - (number.raw >> 1U);
-	for (tUSz idx = 0U; idx < itr; ++idx) number.dbl = number.dbl * (threeHalfs - (halfNum * number.dbl * number.dbl));
+	for (tUSz idx = 0U; idx < itr; ++idx) number.dbl = number.dbl * (1.5 - (halfNum * number.dbl * number.dbl));
 	return number.dbl;
 }
 FORCEINLINE tF64 tF64_RecipSqrt(tF64 num)
@@ -893,10 +907,22 @@ FORCEINLINE tF64 tF64_RecipSqrt(tF64 num)
 }
 FORCEINLINE tF64 tF64_Sqrt_iter(tF64 num, tUSz itr)
 {
+#ifndef BQSELAYER_DBG
+	if (tF64_IsNeg(num)) return tF64_SigNaN();
+#else
+	Assertion(!tF64_IsNeg(num));
+#endif/*BQSELAYER_DBG*/
+	if (tF64_Nearby(num, 0.0)) return 0.0;
 	return num * tF64_RecipSqrt_iter(num, itr);
 }
 FORCEINLINE tF64 tF64_Sqrt(tF64 num)
 {
+#ifndef BQSELAYER_DBG
+	if (tF64_IsNeg(num)) return tF64_SigNaN();
+#else
+	Assertion(!tF64_IsNeg(num));
+#endif/*BQSELAYER_DBG*/
+	if (tF64_Nearby(num, 0.0)) return 0.0;
 	return num * tF64_RecipSqrt(num);
 }
 tF64 tF64_Log2_iter(tF64 num, tUSz itr)
@@ -1073,7 +1099,7 @@ tF64 tF64_Round(tF64 num)
 {
 	tSSz intPart = (tSSz)num;
 	if (num == (tF64)intPart) return num;
-	if (num < 0.0) return tF64_Neg(tF64_Round(tF64_Neg(num)));
+	if (tF64_IsNeg(num)) return tF64_Neg(tF64_Round(tF64_Neg(num)));
 	tF64 fracPart = num - (tF64)intPart;
 	if (fracPart < 0.5) return (tF64)intPart;
 	else return (tF64)intPart + 1.0;

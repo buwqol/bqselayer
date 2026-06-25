@@ -12,7 +12,7 @@ const tChr *BQSELAYER_GetCompiler(enum eCompiler comp)
 	{
 	case eCompiler_MSC: return "Microsoft Visual C";
 	case eCompiler_GNUC: return "GNU Compiler";
-	case eCompiler_LLVM: return "Clang/LLVM";
+	case eCompiler_LLVM: return "LLVM/Clang";
 	default: return "Unknown";
 	}
 }
