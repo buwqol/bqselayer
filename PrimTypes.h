@@ -419,7 +419,7 @@ tF32 tF32_Log2_iter(tF32 num, tUSz itr)
 	numBits.flt = num;
 	tS16 expVal = ((numBits.raw >> 23U) & tU8_Max) - 127;
 	tF32Bits mantBits;
-	mantBits.raw = (numBits.raw & 0X7FFFFFU) | (127U << 23);
+	mantBits.raw = (numBits.raw & 0X7FFFFFU) | (127U << 23U);
 	tBln sub = True;
 	const tF32 valX = mantBits.flt - 1.0F;
 	tF32 mantApprox = valX;
@@ -1118,7 +1118,7 @@ FORCEINLINE tF64 tF64_Recip(tF64 num)
 #ifdef BQSELAYER_IMPL
 #undef BQSELAYER_TRIG_ITER
 #endif/*BQSELAYER_IMPL*/
-#define BQSELAYER_DECLARE_COMMON_FUNC(tType)									\
+#define BQSELAYER_DECLARE_COMMON_FUNC(tType)							\
 tType tType##_MinOf(tType Num1, tType Num2);							\
 tType tType##_MaxOf(tType Num1, tType Num2);							\
 tType tType##_Clamp(tType Lo, tType Num, tType Hi);						\
@@ -1128,7 +1128,7 @@ tNone tType##_Swap(tType *Num1, tType *Num2);							\
 tType tType##_Sq(tType Num);											\
 tType tType##_Cb(tType Num);
 #ifdef BQSELAYER_IMPL
-#define BQSELAYER_DEFINE_COMMON_FUNC(tType)									\
+#define BQSELAYER_DEFINE_COMMON_FUNC(tType)								\
 FORCEINLINE tType tType##_MinOf(tType Num1, tType Num2)					\
 {																		\
 	return Num1 < Num2 ? Num1 : Num2;									\
