@@ -1,5 +1,5 @@
 # bqselayer
-Base layer for my (larger) C projects
+Base layer for my (larger) C projects.
 
 ## Features
 
@@ -12,4 +12,6 @@ Base layer for my (larger) C projects
 	- 'Bitness' (i.e. 64bit/32bit)
 - Helper macros
 - Typedefs and related functions
-- Compound types (vectors, matrices)
+- Vectors (2D, 3D, and 4D)
+- Matrices (2x2, 3x3, and 4x4)
+- Complex numbers
