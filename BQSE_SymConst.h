@@ -1,12 +1,12 @@
 #ifndef BQSELAYER_SYMCONST_H
 #define BQSELAYER_SYMCONST_H
-#include "BQSE_CtxCrack.h"
-#include "BQSE_PrimTypes.h"
+#include "BQSELAYER_CtxCrack.h"
+#include "BQSELAYER_PrimTypes.h"
 LINK_C_Begin
-const tChr *BQSE_GetCompiler(enum eCompiler comp);
+const tChr *BQSELAYER_GetCompiler(enum eCompiler comp);
 LINK_C_End
-#ifdef BQSE_IMPL
-const tChr *BQSE_GetCompiler(enum eCompiler comp)
+#ifdef BQSELAYER_IMPL
+const tChr *BQSELAYER_GetCompiler(enum eCompiler comp)
 {
 	switch (comp)
 	{
@@ -16,12 +16,12 @@ const tChr *BQSE_GetCompiler(enum eCompiler comp)
 	default: return "Unknown";
 	}
 }
-#endif/*BQSE_IMPL*/
+#endif/*BQSELAYER_IMPL*/
 LINK_C_Begin
-const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os);
+const tChr *BQSELAYER_GetOperatingSystem(enum eOperatingSystem os);
 LINK_C_End
-#ifdef BQSE_IMPL
-const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os)
+#ifdef BQSELAYER_IMPL
+const tChr *BQSELAYER_GetOperatingSystem(enum eOperatingSystem os)
 {
 	switch (os)
 	{
@@ -34,12 +34,12 @@ const tChr *BQSE_GetOperatingSystem(enum eOperatingSystem os)
 	default: return "Unknown";
 	}
 }
-#endif/*BQSE_IMPL*/
+#endif/*BQSELAYER_IMPL*/
 LINK_C_Begin
-const tChr *BQSE_GetArchitecture(enum eArchitecture arch);
+const tChr *BQSELAYER_GetArchitecture(enum eArchitecture arch);
 LINK_C_End
-#ifdef BQSE_IMPL
-const tChr *BQSE_GetArchitecture(enum eArchitecture arch)
+#ifdef BQSELAYER_IMPL
+const tChr *BQSELAYER_GetArchitecture(enum eArchitecture arch)
 {
 	switch (arch)
 	{
@@ -50,7 +50,7 @@ const tChr *BQSE_GetArchitecture(enum eArchitecture arch)
 	default: return "Unknown";
 	}
 }
-#endif/*BQSE_IMPL*/
+#endif/*BQSELAYER_IMPL*/
 enum eMonth
 {
 	eMonth_Jan,
@@ -67,11 +67,11 @@ enum eMonth
 	eMonth_Dec
 };
 LINK_C_Begin
-const tChr *BQSE_GetMonth(enum eMonth mon);
-const tChr *BQSE_GetMonthFull(enum eMonth mon);
+const tChr *BQSELAYER_GetMonth(enum eMonth mon);
+const tChr *BQSELAYER_GetMonthFull(enum eMonth mon);
 LINK_C_End
-#ifdef BQSE_IMPL
-const tChr *BQSE_GetMonth(enum eMonth mon)
+#ifdef BQSELAYER_IMPL
+const tChr *BQSELAYER_GetMonth(enum eMonth mon)
 {
 	switch (mon)
 	{
@@ -90,7 +90,7 @@ const tChr *BQSE_GetMonth(enum eMonth mon)
 	default: return "Unknown";
 	}
 }
-const tChr *BQSE_GetMonthFull(enum eMonth mon)
+const tChr *BQSELAYER_GetMonthFull(enum eMonth mon)
 {
 	switch (mon)
 	{
@@ -109,7 +109,7 @@ const tChr *BQSE_GetMonthFull(enum eMonth mon)
 	default: return "Unknown";
 	}
 }
-#endif/*BQSE_IMPL*/
+#endif/*BQSELAYER_IMPL*/
 enum eDay
 {
 	eDay_Sun,
@@ -121,11 +121,11 @@ enum eDay
 	eDay_Sat
 };
 LINK_C_Begin
-const tChr *BQSE_GetDay(enum eDay day);
-const tChr *BQSE_GetDayFull(enum eDay day);
+const tChr *BQSELAYER_GetDay(enum eDay day);
+const tChr *BQSELAYER_GetDayFull(enum eDay day);
 LINK_C_End
-#ifdef BQSE_IMPL
-const tChr *BQSE_GetDay(enum eDay day)
+#ifdef BQSELAYER_IMPL
+const tChr *BQSELAYER_GetDay(enum eDay day)
 {
 	switch (day)
 	{
@@ -139,7 +139,7 @@ const tChr *BQSE_GetDay(enum eDay day)
 	default: return "Unknown";
 	}
 }
-const tChr *BQSE_GetDayFull(enum eDay day)
+const tChr *BQSELAYER_GetDayFull(enum eDay day)
 {
 	switch (day)
 	{
@@ -153,5 +153,5 @@ const tChr *BQSE_GetDayFull(enum eDay day)
 	default: return "Unknown";
 	}
 }
-#endif/*BQSE_IMPL*/
+#endif/*BQSELAYER_IMPL*/
 #endif/*BQSELAYER_SYMCONST_H*/

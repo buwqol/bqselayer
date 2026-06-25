@@ -1,6 +1,6 @@
 #ifndef BQSELAYER_CMPLX_H
 #define BQSELAYER_CMPLX_H
-#include "BQSE_PrimTypes.h"
+#include "BQSELAYER_PrimTypes.h"
 typedef tF32 tF32Real;
 typedef tF32 tF32Imag;
 typedef struct { tF32Real real; tF32Imag imag; } tF32Cmplx;
@@ -25,7 +25,7 @@ tF32Cmplx tF32Cmplx_Exp(tF32Cmplx num);
 tF32Cmplx tF32Cmplx_Ln(tF32Cmplx num);
 tF32Cmplx tF32Cmplx_PowI(tF32Cmplx num, tSSz exp);
 tF32Cmplx tF32Cmplx_Pow(tF32Cmplx base, tF32Cmplx exp);
-#ifdef BQSE_IMPL
+#ifdef BQSELAYER_IMPL
 LINK_C_Begin
 FORCEINLINE tF32Cmplx tF32Cmplx_Make(tF32 real, tF32 imag)
 {
@@ -63,7 +63,7 @@ FORCEINLINE tF32Cmplx tF32Cmplx_Mul(tF32Cmplx num1, tF32Cmplx num2)
 tF32Cmplx tF32Cmplx_Div(tF32Cmplx lhs, tF32Cmplx rhs)
 {
 	tF32Cmplx num;
-#ifndef BQSE_DBG
+#ifndef BQSELAYER_DBG
 	if (tF32_Nearby(rhs.real, 0.0F) && tF32_Nearby(rhs.imag, 0.0F))
 	{
 		num.real = tF32_SigNaN();
@@ -72,7 +72,7 @@ tF32Cmplx tF32Cmplx_Div(tF32Cmplx lhs, tF32Cmplx rhs)
 	}
 #else
 	Assertion(!tF32_Nearby(rhs.real, 0.0F) || !tF32_Nearby(rhs.imag, 0.0F));
-#endif/*BQSE_DBG*/
+#endif/*BQSELAYER_DBG*/
 	tF32 commonDenom = tF32_Recip(tF32_Sq(rhs.real) + tF32_Sq(rhs.imag));
 	num.real = ((lhs.real * rhs.real) + (lhs.imag * rhs.imag)) * commonDenom;
 	num.imag = ((lhs.imag * rhs.real) - (lhs.real * rhs.imag)) * commonDenom;
@@ -108,7 +108,7 @@ FORCEINLINE tF32Cmplx tF32Cmplx_MulF(tF32Cmplx num, tF32 flt)
 }
 FORCEINLINE tF32Cmplx tF32Cmplx_DivF(tF32Cmplx num, tF32 flt)
 {
-#ifndef BQSE_DBG
+#ifndef BQSELAYER_DBG
 	if (tF32_Nearby(flt, 0.0F))
 	{
 		num.real = tF32_SigNaN();
@@ -117,7 +117,7 @@ FORCEINLINE tF32Cmplx tF32Cmplx_DivF(tF32Cmplx num, tF32 flt)
 	}
 #else
 	Assertion(!tF32_Nearby(flt, 0.0F));
-#endif/*BQSE_DBG*/
+#endif/*BQSELAYER_DBG*/
 	num.real /= flt;
 	num.imag /= flt;
 	return num;
@@ -131,6 +131,6 @@ tF32 tF32Cmplx_Arg(tF32Cmplx num)
 	return tF32_ArcTangent2(num.imag, num.real);
 }
 LINK_C_End
-#endif/*BQSE_IMPL*/
+#endif/*BQSELAYER_IMPL*/
 // TODO: tF64Cmplx declarations & implementations.
 #endif/*BQSELAYER_CMPLX_H*/

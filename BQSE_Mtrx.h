@@ -1,7 +1,7 @@
 #ifndef BQSELAYER_MTRX_H
 #define BQSELAYER_MTRX_H
-#include "BQSE_PrimTypes.h"
-#include "BQSE_Vect.h"
+#include "BQSELAYER_PrimTypes.h"
+#include "BQSELAYER_Vect.h"
 typedef union { struct { tF32 m00, m01; tF32 m10, m11; }; tF32 m[2][2]; tF32V2D row[2]; } tF32M2x2;
 LINK_C_Begin
 tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11);
@@ -40,7 +40,7 @@ tNone tF32M2x2_RowRedEch(tF32M2x2 *mtrx);
 tF32M2x2 tF32M2x2_InvAff(tF32M2x2 mtrx);
 tBln tF32M2x2_IsAff(tF32M2x2 mtrx);
 LINK_C_End
-#ifdef BQSE_IMPL
+#ifdef BQSELAYER_IMPL
 tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11)
 {
 	tF32M2x2 mtrx;
@@ -103,7 +103,7 @@ tF32M2x2 tF32M2x2_MulFlt(tF32M2x2 mtrx, tF32 mod)
 }
 tF32M2x2 tF32M2x2_DivFlt(tF32M2x2 mtrx, tF32 mod)
 {
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (tF32_Nearby(mod, 0.0F))
 	{
 		mtrx.m00 = tF32_IsNeg(mtrx.m00) ? tF32_NegInf() : tF32_Inf();
@@ -114,7 +114,7 @@ tF32M2x2 tF32M2x2_DivFlt(tF32M2x2 mtrx, tF32 mod)
 	}
 #else
 	Assertion(!tF32_Nearby(mod, 0.0F));
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
 	mtrx.m10 /= mod;
@@ -177,11 +177,11 @@ tF32M2x2 tF32M2x2_Adj(tF32M2x2 mtrx)
 tF32M2x2 tF32M2x2_Inv(tF32M2x2 mtrx)
 {
 	tF32 det = tF32M2x2_Det(mtrx);
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (tF32_Abs(det) <= tF32_Eps) return tF32M2x2_Zero();
 #else
 	Assertion(tF32_Abs(det) > tF32_Eps);
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	return tF32M2x2_DivFlt(tF32M2x2_Adj(mtrx), det);
 }
 tBln tF32M2x2_Inv_safe(tF32M2x2 *mtrx)
@@ -294,7 +294,7 @@ FORCEINLINE tBln tF32M2x2_IsAff(tF32M2x2 mtrx)
 {
 	return tF32_Nearby(mtrx.m10, 0.0F) && tF32_Nearby(mtrx.m11, 0.0F);
 }
-#endif/*BQSE_IMPL*/
+#endif/*BQSELAYER_IMPL*/
 typedef union { struct { tF32 m00, m01, m02; tF32 m10, m11, m12; tF32 m20, m21, m22; }; tF32 m[3][3]; tF32V3D row[3]; } tF32M3x3;
 LINK_C_Begin
 tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22);
@@ -336,7 +336,7 @@ tNone tF32M3x3_RowRedEch(tF32M3x3 *mtrx);
 tF32M3x3 tF32M3x3_InvAff(tF32M3x3 mtrx);
 tBln tF32M3x3_IsAff(tF32M3x3 mtrx);
 LINK_C_End
-#ifdef BQSE_IMPL
+#ifdef BQSELAYER_IMPL
 tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22)
 {
 	tF32M3x3 mtrx;
@@ -419,7 +419,7 @@ tF32M3x3 tF32M3x3_MulFlt(tF32M3x3 mtrx, tF32 mod)
 }
 tF32M3x3 tF32M3x3_DivFlt(tF32M3x3 mtrx, tF32 mod)
 {
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (tF32_Nearby(mod, 0.0F))
 	{
 		mtrx.m00 = tF32_IsNeg(mtrx.m00) ? tF32_NegInf() : tF32_Inf();
@@ -435,7 +435,7 @@ tF32M3x3 tF32M3x3_DivFlt(tF32M3x3 mtrx, tF32 mod)
 	}
 #else
 	Assertion(!tF32_Nearby(mod, 0.0F));
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
 	mtrx.m02 /= mod;
@@ -515,11 +515,11 @@ tF32M3x3 tF32M3x3_Adj(tF32M3x3 mtrx)
 tF32M3x3 tF32M3x3_Inv(tF32M3x3 mtrx)
 {
 	tF32 det = tF32M3x3_Det(mtrx);
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (tF32_Abs(det) <= tF32_Eps) return tF32M3x3_Zero();
 #else
 	Assertion(tF32_Abs(det) > tF32_Eps);
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	return tF32M3x3_DivFlt(tF32M3x3_Adj(mtrx), det);
 }
 tBln tF32M3x3_Inv_safe(tF32M3x3 *mtrx)
@@ -670,7 +670,7 @@ FORCEINLINE tBln tF32M3x3_IsAff(tF32M3x3 mtrx)
 {
 	return tF32_Nearby(mtrx.m20, 0.0F) && tF32_Nearby(mtrx.m21, 0.0F) && tF32_Nearby(mtrx.m22, 0.0F);
 }
-#endif/*BQSE_IMPL*/
+#endif/*BQSELAYER_IMPL*/
 typedef union { struct { tF32 m00, m01, m02, m03; tF32 m10, m11, m12, m13; tF32 m20, m21, m22, m23; tF32 m30, m31, m32, m33; }; tF32 m[4][4]; tF32V4D row[4]; } tF32M4x4;
 LINK_C_Begin
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33);
@@ -741,7 +741,7 @@ tBln tF32M4x4_IsAff(tF32M4x4 mtrx);
 tF32M4x4 tF32M4x4_LookAt(tF32V3D eye, tF32V3D target, tF32V3D up);
 tF32M3x3 tF32M4x4_NormalMtrx(tF32M4x4 mtrx);
 LINK_C_End
-#ifdef BQSE_IMPL
+#ifdef BQSELAYER_IMPL
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33)
 {
 	tF32M4x4 mtrx;
@@ -859,7 +859,7 @@ tF32M4x4 tF32M4x4_MulFlt(tF32M4x4 mtrx, tF32 mod)
 }
 tF32M4x4 tF32M4x4_DivFlt(tF32M4x4 mtrx, tF32 mod)
 {
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (tF32_Nearby(mod, 0.0F))
 	{
 		mtrx.m00 = tF32_IsNeg(mtrx.m00) ? tF32_NegInf() : tF32_Inf();
@@ -882,7 +882,7 @@ tF32M4x4 tF32M4x4_DivFlt(tF32M4x4 mtrx, tF32 mod)
 	}
 #else
 	Assertion(!tF32_Nearby(mod, 0.0F));
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
 	mtrx.m02 /= mod;
@@ -949,13 +949,13 @@ tF32 tF32M4x4_Det(tF32M4x4 mtrx)
 }
 tF32M3x3 tF32M4x4_Minor(tF32M4x4 mtrx, tU8 row, tU8 col)
 {
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (row >= 4U) return tF32M3x3_Zero();
 	if (col >= 4U) return tF32M3x3_Zero();
 #else
 	Assertion(row < 4U);
 	Assertion(col < 4U);
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	tF32M3x3 minor;
 	tU8 offsetI = 0U;
 	for (tU8 idx = 0U; idx < 3U; ++idx)
@@ -1007,11 +1007,11 @@ tF32M4x4 tF32M4x4_Adj(tF32M4x4 mtrx)
 tF32M4x4 tF32M4x4_Inv(tF32M4x4 mtrx)
 {
 	tF32 det = tF32M4x4_Det(mtrx);
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (tF32_Abs(det) <= tF32_Eps) return tF32M4x4_Zero();
 #else
 	Assertion(tF32_Abs(det) > tF32_Eps);
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	return tF32M4x4_DivFlt(tF32M4x4_Adj(mtrx), det);
 }
 tBln tF32M4x4_Inv_safe(tF32M4x4 *mtrx)
@@ -1413,7 +1413,7 @@ tF32M3x3 tF32M4x4_NormalMtrx(tF32M4x4 mtrx)
 	res.m22 = invTrans.m22;
 	return res;
 }
-#endif/*BQSE_IMPL*/
+#endif/*BQSELAYER_IMPL*/
 typedef union { struct { tF64 m00, m01; tF64 m10, m11; }; tF64 m[2][2]; tF64V2D row[2]; } tF64M2x2;
 LINK_C_Begin
 tF64M2x2 tF64M2x2_Make(tF64 m00, tF64 m01, tF64 m10, tF64 m11);
@@ -1452,7 +1452,7 @@ tNone tF64M2x2_RowRedEch(tF64M2x2 *mtrx);
 tF64M2x2 tF64M2x2_InvAff(tF64M2x2 mtrx);
 tBln tF64M2x2_IsAff(tF64M2x2 mtrx);
 LINK_C_End
-#ifdef BQSE_IMPL
+#ifdef BQSELAYER_IMPL
 tF64M2x2 tF64M2x2_Make(tF64 m00, tF64 m01, tF64 m10, tF64 m11)
 {
 	tF64M2x2 mtrx;
@@ -1515,7 +1515,7 @@ tF64M2x2 tF64M2x2_MulFlt(tF64M2x2 mtrx, tF64 mod)
 }
 tF64M2x2 tF64M2x2_DivFlt(tF64M2x2 mtrx, tF64 mod)
 {
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (tF64_Nearby(mod, 0.0))
 	{
 		mtrx.m00 = tF64_IsNeg(mtrx.m00) ? tF64_NegInf() : tF64_Inf();
@@ -1526,7 +1526,7 @@ tF64M2x2 tF64M2x2_DivFlt(tF64M2x2 mtrx, tF64 mod)
 	}
 #else
 	Assertion(!tF64_Nearby(mod, 0.0));
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
 	mtrx.m10 /= mod;
@@ -1589,11 +1589,11 @@ tF64M2x2 tF64M2x2_Adj(tF64M2x2 mtrx)
 tF64M2x2 tF64M2x2_Inv(tF64M2x2 mtrx)
 {
 	tF64 det = tF64M2x2_Det(mtrx);
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (tF64_Abs(det) <= tF64_Eps) return tF64M2x2_Zero();
 #else
 	Assertion(tF64_Abs(det) > tF64_Eps);
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	return tF64M2x2_DivFlt(tF64M2x2_Adj(mtrx), det);
 }
 tBln tF64M2x2_Inv_safe(tF64M2x2 *mtrx)
@@ -1706,7 +1706,7 @@ FORCEINLINE tBln tF64M2x2_IsAff(tF64M2x2 mtrx)
 {
 	return tF64_Nearby(mtrx.m10, 0.0) && tF64_Nearby(mtrx.m11, 0.0);
 }
-#endif/*BQSE_IMPL*/
+#endif/*BQSELAYER_IMPL*/
 typedef union { struct { tF64 m00, m01, m02; tF64 m10, m11, m12; tF64 m20, m21, m22; }; tF64 m[3][3]; tF64V3D row[3]; } tF64M3x3;
 LINK_C_Begin
 tF64M3x3 tF64M3x3_Make(tF64 m00, tF64 m01, tF64 m02, tF64 m10, tF64 m11, tF64 m12, tF64 m20, tF64 m21, tF64 m22);
@@ -1748,7 +1748,7 @@ tNone tF64M3x3_RowRedEch(tF64M3x3 *mtrx);
 tF64M3x3 tF64M3x3_InvAff(tF64M3x3 mtrx);
 tBln tF64M3x3_IsAff(tF64M3x3 mtrx);
 LINK_C_End
-#ifdef BQSE_IMPL
+#ifdef BQSELAYER_IMPL
 tF64M3x3 tF64M3x3_Make(tF64 m00, tF64 m01, tF64 m02, tF64 m10, tF64 m11, tF64 m12, tF64 m20, tF64 m21, tF64 m22)
 {
 	tF64M3x3 mtrx;
@@ -1831,7 +1831,7 @@ tF64M3x3 tF64M3x3_MulFlt(tF64M3x3 mtrx, tF64 mod)
 }
 tF64M3x3 tF64M3x3_DivFlt(tF64M3x3 mtrx, tF64 mod)
 {
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (tF64_Nearby(mod, 0.0))
 	{
 		mtrx.m00 = tF64_IsNeg(mtrx.m00) ? tF64_NegInf() : tF64_Inf();
@@ -1847,7 +1847,7 @@ tF64M3x3 tF64M3x3_DivFlt(tF64M3x3 mtrx, tF64 mod)
 	}
 #else
 	Assertion(!tF64_Nearby(mod, 0.0));
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
 	mtrx.m02 /= mod;
@@ -1927,11 +1927,11 @@ tF64M3x3 tF64M3x3_Adj(tF64M3x3 mtrx)
 tF64M3x3 tF64M3x3_Inv(tF64M3x3 mtrx)
 {
 	tF64 det = tF64M3x3_Det(mtrx);
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (tF64_Abs(det) <= tF64_Eps) return tF64M3x3_Zero();
 #else
 	Assertion(tF64_Abs(det) > tF64_Eps);
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	return tF64M3x3_DivFlt(tF64M3x3_Adj(mtrx), det);
 }
 tBln tF64M3x3_Inv_safe(tF64M3x3 *mtrx)
@@ -2082,7 +2082,7 @@ FORCEINLINE tBln tF64M3x3_IsAff(tF64M3x3 mtrx)
 {
 	return tF64_Nearby(mtrx.m20, 0.0F) && tF64_Nearby(mtrx.m21, 0.0F) && tF64_Nearby(mtrx.m22, 0.0F);
 }
-#endif/*BQSE_IMPL*/
+#endif/*BQSELAYER_IMPL*/
 typedef union { struct { tF64 m00, m01, m02, m03; tF64 m10, m11, m12, m13; tF64 m20, m21, m22, m23; tF64 m30, m31, m64, m33; }; tF64 m[4][4]; tF64V4D row[4]; } tF64M4x4;
 LINK_C_Begin
 tF64M4x4 tF64M4x4_Make(tF64 m00, tF64 m01, tF64 m02, tF64 m03, tF64 m10, tF64 m11, tF64 m12, tF64 m13, tF64 m20, tF64 m21, tF64 m22, tF64 m23, tF64 m30, tF64 m31, tF64 m64, tF64 m33);
@@ -2153,7 +2153,7 @@ tBln tF64M4x4_IsAff(tF64M4x4 mtrx);
 tF64M4x4 tF64M4x4_LookAt(tF64V3D eye, tF64V3D target, tF64V3D up);
 tF64M3x3 tF64M4x4_NormalMtrx(tF64M4x4 mtrx);
 LINK_C_End
-#ifdef BQSE_IMPL
+#ifdef BQSELAYER_IMPL
 tF64M4x4 tF64M4x4_Make(tF64 m00, tF64 m01, tF64 m02, tF64 m03, tF64 m10, tF64 m11, tF64 m12, tF64 m13, tF64 m20, tF64 m21, tF64 m22, tF64 m23, tF64 m30, tF64 m31, tF64 m64, tF64 m33)
 {
 	tF64M4x4 mtrx;
@@ -2271,7 +2271,7 @@ tF64M4x4 tF64M4x4_MulFlt(tF64M4x4 mtrx, tF64 mod)
 }
 tF64M4x4 tF64M4x4_DivFlt(tF64M4x4 mtrx, tF64 mod)
 {
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (tF64_Nearby(mod, 0.0))
 	{
 		mtrx.m00 = tF64_IsNeg(mtrx.m00) ? tF64_NegInf() : tF64_Inf();
@@ -2294,7 +2294,7 @@ tF64M4x4 tF64M4x4_DivFlt(tF64M4x4 mtrx, tF64 mod)
 	}
 #else
 	Assertion(!tF64_Nearby(mod, 0.0));
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
 	mtrx.m02 /= mod;
@@ -2361,13 +2361,13 @@ tF64 tF64M4x4_Det(tF64M4x4 mtrx)
 }
 tF64M3x3 tF64M4x4_Minor(tF64M4x4 mtrx, tU8 row, tU8 col)
 {
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (row >= 4U) return tF64M3x3_Zero();
 	if (col >= 4U) return tF64M3x3_Zero();
 #else
 	Assertion(row < 4U);
 	Assertion(col < 4U);
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	tF64M3x3 minor;
 	tU8 offsetI = 0U;
 	for (tU8 idx = 0U; idx < 3U; ++idx)
@@ -2419,11 +2419,11 @@ tF64M4x4 tF64M4x4_Adj(tF64M4x4 mtrx)
 tF64M4x4 tF64M4x4_Inv(tF64M4x4 mtrx)
 {
 	tF64 det = tF64M4x4_Det(mtrx);
-#ifndef BQSE_DEBUG
+#ifndef BQSELAYER_DEBUG
 	if (tF64_Abs(det) <= tF64_Eps) return tF64M4x4_Zero();
 #else
 	Assertion(tF64_Abs(det) > tF64_Eps);
-#endif/*BQSE_DEBUG*/
+#endif/*BQSELAYER_DEBUG*/
 	return tF64M4x4_DivFlt(tF64M4x4_Adj(mtrx), det);
 }
 tBln tF64M4x4_Inv_safe(tF64M4x4 *mtrx)
@@ -2825,5 +2825,5 @@ tF64M3x3 tF64M4x4_NormalMtrx(tF64M4x4 mtrx)
 	res.m22 = invTrans.m22;
 	return res;
 }
-#endif/*BQSE_IMPL*/
+#endif/*BQSELAYER_IMPL*/
 #endif/*BQSELAYER_MTRX_H*/
