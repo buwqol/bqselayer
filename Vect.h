@@ -1,6 +1,6 @@
 #ifndef BQSELAYER_VECT_H
 #define BQSELAYER_VECT_H
-#include "BQSELAYER_PrimTypes.h"
+#include "PrimTypes.h"
 enum eAxis
 {
 	eAxis_X,

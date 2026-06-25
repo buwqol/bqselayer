@@ -1,10 +1,10 @@
 #ifndef BQSELAYER_H
 #define BQSELAYER_H
-#include "BQSELAYER_CtxCrack.h"
-#include "BQSELAYER_PrimTypes.h"
-#include "BQSELAYER_Vect.h"
-#include "BQSELAYER_Mtrx.h"
-#include "BQSELAYER_Cmplx.h"
-#include "BQSELAYER_SymConst.h"
-#include "BQSELAYER_Dbg.h"
+#include "CtxCrack.h"
+#include "PrimTypes.h"
+#include "Vect.h"
+#include "Mtrx.h"
+#include "Cmplx.h"
+#include "SymConst.h"
+#include "Dbg.h"
 #endif/*BQSELAYER_H*/

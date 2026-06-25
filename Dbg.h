@@ -1,7 +1,7 @@
 #ifndef BQSELAYER_DBG_H
 #define BQSELAYER_DBG_H
-#include "BQSELAYER_CtxCrack.h"
-#include "BQSELAYER_PrimTypes.h"
+#include "CtxCrack.h"
+#include "PrimTypes.h"
 LINK_C_Begin
 tNone BQSELAYER_StaticChecks(tNone);
 LINK_C_End

@@ -1,6 +1,6 @@
 #ifndef BQSELAYER_PRIMTYPES_H
 #define BQSELAYER_PRIMTYPES_H
-#include "BQSELAYER_CtxCrack.h"
+#include "CtxCrack.h"
 /*Primitive types*/
 #if defined(LANG_Cpp)
 typedef bool tBln;

@@ -1,7 +1,7 @@
 #ifndef BQSELAYER_MTRX_H
 #define BQSELAYER_MTRX_H
-#include "BQSELAYER_PrimTypes.h"
-#include "BQSELAYER_Vect.h"
+#include "PrimTypes.h"
+#include "Vect.h"
 typedef union { struct { tF32 m00, m01; tF32 m10, m11; }; tF32 m[2][2]; tF32V2D row[2]; } tF32M2x2;
 LINK_C_Begin
 tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11);

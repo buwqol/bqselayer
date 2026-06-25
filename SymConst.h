@@ -1,7 +1,7 @@
 #ifndef BQSELAYER_SYMCONST_H
 #define BQSELAYER_SYMCONST_H
-#include "BQSELAYER_CtxCrack.h"
-#include "BQSELAYER_PrimTypes.h"
+#include "CtxCrack.h"
+#include "PrimTypes.h"
 LINK_C_Begin
 const tChr *BQSELAYER_GetCompiler(enum eCompiler comp);
 LINK_C_End

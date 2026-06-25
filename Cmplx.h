@@ -1,6 +1,6 @@
 #ifndef BQSELAYER_CMPLX_H
 #define BQSELAYER_CMPLX_H
-#include "BQSELAYER_PrimTypes.h"
+#include "PrimTypes.h"
 typedef tF32 tF32Real;
 typedef tF32 tF32Imag;
 typedef struct { tF32Real real; tF32Imag imag; } tF32Cmplx;
