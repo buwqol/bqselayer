@@ -8,18 +8,18 @@ LINK_C_End
 #ifdef BQSELAYER_DBG_IMPL
 tNone BQSELAYER_StaticChecks(tNone)
 {
-	typedef char BQSELAYER_StaticAssert_tSSz_size[(sizeof(tSSz) == sizeof(tPtr)) ? 1U : -1];
-	typedef char BQSELAYER_StaticAssert_tUSz_size[(sizeof(tUSz) == sizeof(tPtr)) ? 1U : -1];
-	typedef char BQSELAYER_StaticAssert_tS8_size[(sizeof(tS8) == 1U) ? 1U : -1];
-	typedef char BQSELAYER_StaticAssert_tU8_size[(sizeof(tU8) == 1U) ? 1U : -1];
-	typedef char BQSELAYER_StaticAssert_tS16_size[(sizeof(tS16) == 2U) ? 1U : -1];
-	typedef char BQSELAYER_StaticAssert_tU16_size[(sizeof(tU16) == 2U) ? 1U : -1];
-	typedef char BQSELAYER_StaticAssert_tS32_size[(sizeof(tS32) == 4U) ? 1U : -1];
-	typedef char BQSELAYER_StaticAssert_tU32_size[(sizeof(tU32) == 4U) ? 1U : -1];
-	typedef char BQSELAYER_StaticAssert_tS64_size[(sizeof(tS64) == 8U) ? 1U : -1];
-	typedef char BQSELAYER_StaticAssert_tU64_size[(sizeof(tU64) == 8U) ? 1U : -1];
-	typedef char BQSELAYER_StaticAssert_tF32_IEEE754_size[(sizeof(tF32) == 4U) ? 1U : -1];
-	typedef char BQSELAYER_StaticAssert_tF64_IEEE754_size[(sizeof(tF64) == 8U) ? 1U : -1];
+	typedef char BQSELAYER_StaticAssert_tISSz_size[(sizeof(tISSz) == sizeof(tPtr)) ? 1U : -1];
+	typedef char BQSELAYER_StaticAssert_tIUSz_size[(sizeof(tIUSz) == sizeof(tPtr)) ? 1U : -1];
+	typedef char BQSELAYER_StaticAssert_tIS8_size[(sizeof(tIS8) == 1U) ? 1U : -1];
+	typedef char BQSELAYER_StaticAssert_tIU8_size[(sizeof(tIU8) == 1U) ? 1U : -1];
+	typedef char BQSELAYER_StaticAssert_tIS16_size[(sizeof(tIS16) == 2U) ? 1U : -1];
+	typedef char BQSELAYER_StaticAssert_tIU16_size[(sizeof(tIU16) == 2U) ? 1U : -1];
+	typedef char BQSELAYER_StaticAssert_tIS32_size[(sizeof(tIS32) == 4U) ? 1U : -1];
+	typedef char BQSELAYER_StaticAssert_tIU32_size[(sizeof(tIU32) == 4U) ? 1U : -1];
+	typedef char BQSELAYER_StaticAssert_tIS64_size[(sizeof(tIS64) == 8U) ? 1U : -1];
+	typedef char BQSELAYER_StaticAssert_tIU64_size[(sizeof(tIU64) == 8U) ? 1U : -1];
+	typedef char BQSELAYER_StaticAssert_tFP32_IEEE754_size[(sizeof(tFP32) == 4U) ? 1U : -1];
+	typedef char BQSELAYER_StaticAssert_tFP64_IEEE754_size[(sizeof(tFP64) == 8U) ? 1U : -1];
 }
 #endif/*BQSELAYER_DBG_IMPL*/
 #endif/*BQSELAYER_DBG_H*/

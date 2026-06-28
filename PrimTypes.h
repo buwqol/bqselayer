@@ -18,528 +18,528 @@ typedef char unsigned tBln;
 #define tNone void
 #define tGen void
 #define tInt int
-typedef tNone tFnc(tNone);
-typedef tFnc *tFncPtr;
+typedef tNone tFPnc(tNone);
+typedef tFPnc *tFPncPtr;
 typedef tGen *tPtr;
 #define Null ((tPtr)0U)
 typedef char tChr;
-typedef char signed tS8;
-#define tS8_Max 127
-#define tS8_Min (-128)
-typedef char unsigned tU8;
-#define tU8_Max 255
-#define tU8_Min 0
-typedef short signed tS16;
-#define tS16_Max 32767
-#define tS16_Min (-32768)
-typedef short unsigned tU16;
-#define tU16_Max 65535
-#define tU16_Min 0
-typedef int signed tS32;
-#define tS32_Max 2147483647
-#define tS32_Min (-2147483647-1)
-typedef int unsigned tU32;
-#define tU32_Max 4294967295U
-#define tU32_Min 0U
+typedef char signed tIS8;
+#define tIS8_Max 127
+#define tIS8_Min (-128)
+typedef char unsigned tIU8;
+#define tIU8_Max 255
+#define tIU8_Min 0
+typedef short signed tIS16;
+#define tIS16_Max 32767
+#define tIS16_Min (-32768)
+typedef short unsigned tIU16;
+#define tIU16_Max 65535
+#define tIU16_Min 0
+typedef int signed tIS32;
+#define tIS32_Max 2147483647
+#define tIS32_Min (-2147483647-1)
+typedef int unsigned tIU32;
+#define tIU32_Max 4294967295U
+#define tIU32_Min 0U
 LINK_C_Begin
-tU32 tU32_Fact(tU32 base);
+tIU32 tIU32_Fact(tIU32 base);
 LINK_C_End
 #ifdef BQSELAYER_PRIMTYPES_IMPL
-tU32 tU32_Fact(tU32 base)
+tIU32 tIU32_Fact(tIU32 base)
 {
 	if (base == 0U || base == 1U) return 1U;
-	const tU32 itr = base;
-	for (tU32 idx = 2U; idx < itr; ++idx) base *= idx;
+	const tIU32 itr = base;
+	for (tIU32 idx = 2U; idx < itr; ++idx) base *= idx;
 	return base;
 }
 #endif/*BQSELAYER_PRIMTYPES_IMPL*/
-typedef long long signed tS64;
-#define tS64_Max 9223372036854775807LL
-#define tS64_Min (-9223372036854775807LL-1)
-typedef long long unsigned tU64;
-#define tU64_Max 18446744073709551615LLU
-#define tU64_Min 0LLU
+typedef long long signed tIS64;
+#define tIS64_Max 9223372036854775807LL
+#define tIS64_Min (-9223372036854775807LL-1)
+typedef long long unsigned tIU64;
+#define tIU64_Max 18446744073709551615LLU
+#define tIU64_Min 0LLU
 LINK_C_Begin
-tU64 tU64_Fact(tU64 base);
+tIU64 tIU64_Fact(tIU64 base);
 LINK_C_End
 #ifdef BQSELAYER_PRIMTYPES_IMPL
-tU64 tU64_Fact(tU64 base)
+tIU64 tIU64_Fact(tIU64 base)
 {
 	if (base == 0U || base == 1U) return 1U;
-	const tU64 itr = base;
-	for (tU64 idx = 2U; idx < itr; ++idx) base *= idx;
+	const tIU64 itr = base;
+	for (tIU64 idx = 2U; idx < itr; ++idx) base *= idx;
 	return base;
 }
 #endif/*BQSELAYER_PRIMTYPES_IMPL*/
 #if ARCH_Bitness == 64
-typedef tS64 tSSz;
-typedef tU64 tUSz;
+typedef tIS64 tISSz;
+typedef tIU64 tIUSz;
 #else
-typedef tS32 tSSz;
-typedef tU32 tUSz;
+typedef tIS32 tISSz;
+typedef tIU32 tIUSz;
 #endif/*ARCH_Bitness*/
 #ifdef BQSELAYER_PRIMTYPES_IMPL
 #define BQSELAYER_TRIG_ITER 7U
 #endif/*BQSELAYER_PRIMTYPES_IMPL*/
-typedef float tF32;
-#define tF32_Pi 3.141592653589793F
-#define tF32_2Pi 6.283185307F
-#define tF32_HalfPi 1.570796327F
-#define tF32_Inv2Pi 0.15915494309189535F
-#define tF32_Eps 1.19209290E-7F
-#define tF32_Tol 1E-5F
-#define tF32_EulNum 2.718281828459045F
-#define tF32_EulCnst 0.577215664901532F
-#define tF32_Log2EulNum 1.44269504089F
-#define tF32_RadToDeg(flt) ((flt) * 57.29577951308233F)
-#define tF32_DegToRad(flt) ((flt) * 0.0174532925199433F)
+typedef float tFP32;
+#define tFP32_Pi 3.141592653589793F
+#define tFP32_2Pi 6.283185307F
+#define tFP32_HalfPi 1.570796327F
+#define tFP32_Inv2Pi 0.15915494309189535F
+#define tFP32_Eps 1.19209290E-7F
+#define tFP32_Tol 1E-5F
+#define tFP32_EulNum 2.718281828459045F
+#define tFP32_EulCnst 0.577215664901532F
+#define tFP32_Log2EulNum 1.44269504089F
+#define tFP32_RadToDeg(flt) ((flt) * 57.29577951308233F)
+#define tFP32_DegToRad(flt) ((flt) * 0.0174532925199433F)
 LINK_C_Begin
-ForceInline tF32 tF32_Inf(tNone);
-ForceInline tF32 tF32_Abs(tF32 flt);
-ForceInline tF32 tF32_Neg(tF32 flt);
-ForceInline tBln tF32_IsNeg(tF32 flt);
-ForceInline tF32 tF32_NegInf(tNone);
-ForceInline tF32 tF32_QuiNaN(tNone);
-ForceInline tF32 tF32_SigNaN(tNone);
-ForceInline tBln tF32_Nearby(tF32 flt, tF32 cmp);
+ForceInline tFP32 tFP32_Inf(tNone);
+ForceInline tFP32 tFP32_Abs(tFP32 flt);
+ForceInline tFP32 tFP32_Neg(tFP32 flt);
+ForceInline tBln tFP32_IsNeg(tFP32 flt);
+ForceInline tFP32 tFP32_NegInf(tNone);
+ForceInline tFP32 tFP32_QuiNaN(tNone);
+ForceInline tFP32 tFP32_SigNaN(tNone);
+ForceInline tBln tFP32_Nearby(tFP32 flt, tFP32 cmp);
 /*Note: Parameter `ang` is expected to be in radians.*/
-tF32 tF32_Sine_fast(tF32 ang);
+tFP32 tFP32_Sine_fast(tFP32 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
-ForceInline tF32 tF32_Cosine_fast(tF32 ang);
+ForceInline tFP32 tFP32_Cosine_fast(tFP32 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
-tF32 tF32_Tangent_fast(tF32 ang);
+tFP32 tFP32_Tangent_fast(tFP32 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
-tF32 tF32_Sine_iter(tF32 ang, tUSz itr);
+tFP32 tFP32_Sine_iter(tFP32 ang, tIUSz itr);
 /*Note: Parameter `ang` is expected to be in radians.*/
-ForceInline tF32 tF32_Cosine_iter(tF32 ang, tUSz itr);
+ForceInline tFP32 tFP32_Cosine_iter(tFP32 ang, tIUSz itr);
 /*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
-tF32 tF32_Tangent_iter(tF32 ang, tUSz itr);
+tFP32 tFP32_Tangent_iter(tFP32 ang, tIUSz itr);
 /*Note: Parameter `ang` is expected to be in radians.*/
-ForceInline tF32 tF32_Sine(tF32 ang);
+ForceInline tFP32 tFP32_Sine(tFP32 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
-ForceInline tF32 tF32_Cosine(tF32 ang);
+ForceInline tFP32 tFP32_Cosine(tFP32 ang);
 /*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
-ForceInline tF32 tF32_Tangent(tF32 ang);
+ForceInline tFP32 tFP32_Tangent(tFP32 ang);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-tF32 tF32_ArcSine_iter(tF32 num, tUSz sqrtItr, tUSz trigItr);
+tFP32 tFP32_ArcSine_iter(tFP32 num, tIUSz sqrtItr, tIUSz trigItr);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-tF32 tF32_ArcSine(tF32 num);
+tFP32 tFP32_ArcSine(tFP32 num);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-ForceInline tF32 tF32_ArcCosine_iter(tF32 num, tUSz sqrtItr, tUSz trigItr);
+ForceInline tFP32 tFP32_ArcCosine_iter(tFP32 num, tIUSz sqrtItr, tIUSz trigItr);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-ForceInline tF32 tF32_ArcCosine(tF32 num);
-tF32 tF32_ArcTangent_iter(tF32 num, tUSz itr);
-ForceInline tF32 tF32_ArcTangent(tF32 num);
-tF32 tF32_ArcTangent2_iter(tF32 opp, tF32 adj, tUSz itr);
-ForceInline tF32 tF32_ArcTangent2(tF32 opp, tF32 adj);
+ForceInline tFP32 tFP32_ArcCosine(tFP32 num);
+tFP32 tFP32_ArcTangent_iter(tFP32 num, tIUSz itr);
+ForceInline tFP32 tFP32_ArcTangent(tFP32 num);
+tFP32 tFP32_ArcTangent2_iter(tFP32 opp, tFP32 adj, tIUSz itr);
+ForceInline tFP32 tFP32_ArcTangent2(tFP32 opp, tFP32 adj);
 /*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
-tF32 tF32_RecipSqrt_iter(tF32 num, tUSz itr);
+tFP32 tFP32_RecipSqrt_iter(tFP32 num, tIUSz itr);
 /*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
-ForceInline tF32 tF32_RecipSqrt(tF32 num);
-ForceInline tF32 tF32_Sqrt_iter(tF32 num, tUSz itr);
-ForceInline tF32 tF32_Sqrt(tF32 num);
+ForceInline tFP32 tFP32_RecipSqrt(tFP32 num);
+ForceInline tFP32 tFP32_Sqrt_iter(tFP32 num, tIUSz itr);
+ForceInline tFP32 tFP32_Sqrt(tFP32 num);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-tF32 tF32_Log2_iter(tF32 num, tUSz itr);
+tFP32 tFP32_Log2_iter(tFP32 num, tIUSz itr);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-ForceInline tF32 tF32_Log2(tF32 num);
+ForceInline tFP32 tFP32_Log2(tFP32 num);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-ForceInline tF32 tF32_Ln_iter(tF32 num, tUSz itr);
+ForceInline tFP32 tFP32_Ln_iter(tFP32 num, tIUSz itr);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-ForceInline tF32 tF32_Ln(tF32 num);
+ForceInline tFP32 tFP32_Ln(tFP32 num);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-tF32 tF32_Log_iter(tF32 num, tF32 base, tUSz itr);
+tFP32 tFP32_Log_iter(tFP32 num, tFP32 base, tIUSz itr);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-tF32 tF32_Log(tF32 num, tF32 base);
-ForceInline tF32 tF32_Lerp(tF32 strt, tF32 stp, tF32 fnsh);
-ForceInline tF32 tF32_Unlerp(tF32 strt, tF32 curr, tF32 fnsh);
-tF32 tF32_Exp_iter(tF32 pow, tUSz itr);
-ForceInline tF32 tF32_Exp(tF32 pow);
-ForceInline tF32 tF32_HypSine_iter(tF32 num, tUSz itr);
-ForceInline tF32 tF32_HypCosine_iter(tF32 num, tUSz itr);
-tF32 tF32_HypTangent_iter(tF32 num, tUSz itr);
-ForceInline tF32 tF32_HypSine(tF32 num);
-ForceInline tF32 tF32_HypCosine(tF32 num);
-ForceInline tF32 tF32_HypTangent(tF32 num);
-tF32 tF32_Mod(tF32 num, tF32 denom);
-tF32 tF32_PowI(tF32 num, tSSz pow);
-tF32 tF32_Pow_iter(tF32 num, tF32 pow, tUSz itr);
-tF32 tF32_Pow(tF32 num, tF32 pow);
-tF32 tF32_Round(tF32 num);
-ForceInline tF32 tF32_Recip(tF32 num);
+tFP32 tFP32_Log(tFP32 num, tFP32 base);
+ForceInline tFP32 tFP32_Lerp(tFP32 strt, tFP32 stp, tFP32 fnsh);
+ForceInline tFP32 tFP32_Unlerp(tFP32 strt, tFP32 curr, tFP32 fnsh);
+tFP32 tFP32_Exp_iter(tFP32 pow, tIUSz itr);
+ForceInline tFP32 tFP32_Exp(tFP32 pow);
+ForceInline tFP32 tFP32_HypSine_iter(tFP32 num, tIUSz itr);
+ForceInline tFP32 tFP32_HypCosine_iter(tFP32 num, tIUSz itr);
+tFP32 tFP32_HypTangent_iter(tFP32 num, tIUSz itr);
+ForceInline tFP32 tFP32_HypSine(tFP32 num);
+ForceInline tFP32 tFP32_HypCosine(tFP32 num);
+ForceInline tFP32 tFP32_HypTangent(tFP32 num);
+tFP32 tFP32_Mod(tFP32 num, tFP32 denom);
+tFP32 tFP32_PowI(tFP32 num, tISSz pow);
+tFP32 tFP32_Pow_iter(tFP32 num, tFP32 pow, tIUSz itr);
+tFP32 tFP32_Pow(tFP32 num, tFP32 pow);
+tFP32 tFP32_Round(tFP32 num);
+ForceInline tFP32 tFP32_Recip(tFP32 num);
 LINK_C_End
-#define tF32_SignMask 0X80000000U
-#define tF32_ExpoMask 0X7F800000U
-#define tF32_FracMask 0X007FFFFFU
+#define tFP32_SignMask 0X80000000U
+#define tFP32_ExpoMask 0X7F800000U
+#define tFP32_FracMask 0X007FFFFFU
 typedef union
 {
-	tF32 flt;
-	tU32 raw;
+	tFP32 flt;
+	tIU32 raw;
 }
-tF32Bits;
+tFP32Bits;
 #ifdef BQSELAYER_PRIMTYPES_IMPL
-ForceInline tBln tF32_IsNeg(tF32 flt)
+ForceInline tBln tFP32_IsNeg(tFP32 flt)
 {
-	if (tF32_Nearby(flt, 0.0F)) return False;
-	tF32Bits num;
+	if (tFP32_Nearby(flt, 0.0F)) return False;
+	tFP32Bits num;
 	num.flt = flt;
-	return (tBln)!!(num.raw & tF32_SignMask);
+	return (tBln)!!(num.raw & tFP32_SignMask);
 }
-ForceInline tF32 tF32_Inf(tNone)
+ForceInline tFP32 tFP32_Inf(tNone)
 {
-	tF32Bits num;
+	tFP32Bits num;
 	num.raw = 0X7F800000U;
 	return num.flt;
 }
-ForceInline tF32 tF32_Abs(tF32 flt)
+ForceInline tFP32 tFP32_Abs(tFP32 flt)
 {
-	tF32Bits num;
+	tFP32Bits num;
 	num.flt = flt;
 	num.raw &= 0X7FFFFFFFU;
 	return num.flt;
 }
-ForceInline tF32 tF32_Neg(tF32 flt)
+ForceInline tFP32 tFP32_Neg(tFP32 flt)
 {
-	tF32Bits num;
+	tFP32Bits num;
 	num.flt = flt;
 	num.raw ^= 0X80000000U;
 	return num.flt;
 }
-ForceInline tF32 tF32_NegInf(tNone)
+ForceInline tFP32 tFP32_NegInf(tNone)
 {
-	tF32Bits num;
+	tFP32Bits num;
 	num.raw = 0XFF800000U;
 	return num.flt;
 }
-ForceInline tF32 tF32_QuiNaN(tNone)
+ForceInline tFP32 tFP32_QuiNaN(tNone)
 {
-	tF32Bits num;
+	tFP32Bits num;
 	num.raw = 0XFFC00001U;
 	return num.flt;
 }
-ForceInline tF32 tF32_SigNaN(tNone)
+ForceInline tFP32 tFP32_SigNaN(tNone)
 {
-	tF32Bits num;
+	tFP32Bits num;
 	num.raw = 0XFF800001U;
 	return num.flt;
 }
-ForceInline tBln tF32_Nearby(tF32 flt, tF32 cmp)
+ForceInline tBln tFP32_Nearby(tFP32 flt, tFP32 cmp)
 {
-	return tF32_Abs(flt - cmp) <= tF32_Eps;
+	return tFP32_Abs(flt - cmp) <= tFP32_Eps;
 }
-tF32 tF32_Sine_fast(tF32 ang)
+tFP32 tFP32_Sine_fast(tFP32 ang)
 {
 	tBln neg = False;
-	if (tF32_Nearby(ang, 0.0F)) return 0.0F;
-	ang -= (tF32)((tS32)(ang * tF32_Inv2Pi)) * tF32_2Pi;
-	if (tF32_IsNeg(ang)) ang += tF32_2Pi;
-	if (ang > tF32_Pi)
+	if (tFP32_Nearby(ang, 0.0F)) return 0.0F;
+	ang -= (tFP32)((tIS32)(ang * tFP32_Inv2Pi)) * tFP32_2Pi;
+	if (tFP32_IsNeg(ang)) ang += tFP32_2Pi;
+	if (ang > tFP32_Pi)
 	{
-		ang -= tF32_Pi;
+		ang -= tFP32_Pi;
 		neg = True;
 	}
-	const tF32 magicNum = ang * (tF32_Pi - ang);
-	const tF32 res = (4.0F * magicNum) / (12.33700550F - magicNum);
-	if (neg == True) return tF32_Neg(res);
+	const tFP32 magicNum = ang * (tFP32_Pi - ang);
+	const tFP32 res = (4.0F * magicNum) / (12.33700550F - magicNum);
+	if (neg == True) return tFP32_Neg(res);
 	return res;
 }
-ForceInline tF32 tF32_Cosine_fast(tF32 ang)
+ForceInline tFP32 tFP32_Cosine_fast(tFP32 ang)
 {
-	return tF32_Sine_fast(tF32_HalfPi - ang);
+	return tFP32_Sine_fast(tFP32_HalfPi - ang);
 }
-tF32 tF32_Tangent_fast(tF32 ang)
+tFP32 tFP32_Tangent_fast(tFP32 ang)
 {
-	const tF32 cosAng = tF32_Cosine_fast(ang);
-	if (tF32_Nearby(cosAng, 0.0F)) return tF32_IsNeg(cosAng) ? tF32_NegInf() : tF32_Inf();
-	const tF32 sinAng = tF32_Sine_fast(ang);
+	const tFP32 cosAng = tFP32_Cosine_fast(ang);
+	if (tFP32_Nearby(cosAng, 0.0F)) return tFP32_IsNeg(cosAng) ? tFP32_NegInf() : tFP32_Inf();
+	const tFP32 sinAng = tFP32_Sine_fast(ang);
 	return sinAng / cosAng;
 }
-tF32 tF32_Sine_iter(tF32 ang, tUSz itr)
+tFP32 tFP32_Sine_iter(tFP32 ang, tIUSz itr)
 {
-	if (tF32_Nearby(ang, 0.0F)) return 0.0F;
+	if (tFP32_Nearby(ang, 0.0F)) return 0.0F;
 	if (itr == 0U) return ang;
-	ang -= (tF32)((tS32)(ang * tF32_Inv2Pi)) * tF32_2Pi;
-	if (tF32_IsNeg(ang)) ang += tF32_2Pi;
+	ang -= (tFP32)((tIS32)(ang * tFP32_Inv2Pi)) * tFP32_2Pi;
+	if (tFP32_IsNeg(ang)) ang += tFP32_2Pi;
 	tBln neg = False;
-	if (ang > tF32_Pi)
+	if (ang > tFP32_Pi)
 	{
-		ang -= tF32_Pi;
+		ang -= tFP32_Pi;
 		neg = True;
 	}
-	const tF32 angSq = ang * ang;
-	tF32 term = ang;
-	tF32 res = term;
-	for (tUSz idx = 0U; idx < itr; ++idx)
+	const tFP32 angSq = ang * ang;
+	tFP32 term = ang;
+	tFP32 res = term;
+	for (tIUSz idx = 0U; idx < itr; ++idx)
 	{
-		const tF32 denom = (tF32)((2U * idx + 2U) * (2U * idx + 3U));
+		const tFP32 denom = (tFP32)((2U * idx + 2U) * (2U * idx + 3U));
 		term *= -angSq / denom;
 		res += term;
 	}
-	if (neg == True) return tF32_Neg(res);
+	if (neg == True) return tFP32_Neg(res);
 	return res;
 }
-ForceInline tF32 tF32_Cosine_iter(tF32 ang, tUSz itr)
+ForceInline tFP32 tFP32_Cosine_iter(tFP32 ang, tIUSz itr)
 {
-	return tF32_Sine_iter(tF32_HalfPi - ang, itr);
+	return tFP32_Sine_iter(tFP32_HalfPi - ang, itr);
 }
-tF32 tF32_Tangent_iter(tF32 ang, tUSz itr)
+tFP32 tFP32_Tangent_iter(tFP32 ang, tIUSz itr)
 {
-	const tF32 cosAng = tF32_Cosine_iter(ang, itr);
-	const tF32 sinAng = tF32_Sine_iter(ang, itr);
-	if (tF32_Nearby(cosAng, 0.0F)) return tF32_IsNeg(sinAng) ? tF32_NegInf() : tF32_Inf();
+	const tFP32 cosAng = tFP32_Cosine_iter(ang, itr);
+	const tFP32 sinAng = tFP32_Sine_iter(ang, itr);
+	if (tFP32_Nearby(cosAng, 0.0F)) return tFP32_IsNeg(sinAng) ? tFP32_NegInf() : tFP32_Inf();
 	return sinAng / cosAng;
 }
-ForceInline tF32 tF32_Sine(tF32 ang)
+ForceInline tFP32 tFP32_Sine(tFP32 ang)
 {
-	return tF32_Sine_iter(ang, BQSELAYER_TRIG_ITER);
+	return tFP32_Sine_iter(ang, BQSELAYER_TRIG_ITER);
 }
-ForceInline tF32 tF32_Cosine(tF32 ang)
+ForceInline tFP32 tFP32_Cosine(tFP32 ang)
 {
-	return tF32_Cosine_iter(ang, BQSELAYER_TRIG_ITER);
+	return tFP32_Cosine_iter(ang, BQSELAYER_TRIG_ITER);
 }
-ForceInline tF32 tF32_Tangent(tF32 ang)
+ForceInline tFP32 tFP32_Tangent(tFP32 ang)
 {
-	return tF32_Tangent_iter(ang, BQSELAYER_TRIG_ITER);
+	return tFP32_Tangent_iter(ang, BQSELAYER_TRIG_ITER);
 }
-tF32 tF32_ArcSine_iter(tF32 num, tUSz sqrtItr, tUSz trigItr)
-{
-#ifndef BQSELAYER_DEBUG
-	if (tF32_Abs(num) > 1.0F) return tF32_SigNaN();
-#else
-	Assertion(tF32_Abs(num) <= 1.0F);
-#endif/*BQSELAYER_DEBUG*/
-	if (tF32_Nearby(num, 1.0F))  return tF32_HalfPi;
-	if (tF32_Nearby(num, -1.0F)) return -tF32_HalfPi;
-	return tF32_ArcTangent_iter(num / tF32_Sqrt_iter(1 - (num * num), sqrtItr), trigItr);
-}
-tF32 tF32_ArcSine(tF32 num)
+tFP32 tFP32_ArcSine_iter(tFP32 num, tIUSz sqrtItr, tIUSz trigItr)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tF32_Abs(num) > 1.0F) return tF32_SigNaN();
+	if (tFP32_Abs(num) > 1.0F) return tFP32_SigNaN();
 #else
-	Assertion(tF32_Abs(num) <= 1.0F);
+	Assertion(tFP32_Abs(num) <= 1.0F);
 #endif/*BQSELAYER_DEBUG*/
-	if (tF32_Nearby(num, 1.0F))  return tF32_HalfPi;
-	if (tF32_Nearby(num, -1.0F)) return -tF32_HalfPi;
-	return tF32_ArcTangent(num / tF32_Sqrt(1 - (num * num)));
+	if (tFP32_Nearby(num, 1.0F))  return tFP32_HalfPi;
+	if (tFP32_Nearby(num, -1.0F)) return -tFP32_HalfPi;
+	return tFP32_ArcTangent_iter(num / tFP32_Sqrt_iter(1 - (num * num), sqrtItr), trigItr);
 }
-ForceInline tF32 tF32_ArcCosine_iter(tF32 num, tUSz sqrtItr, tUSz trigItr)
+tFP32 tFP32_ArcSine(tFP32 num)
 {
-	return tF32_HalfPi - tF32_ArcSine_iter(num, sqrtItr, trigItr);
+#ifndef BQSELAYER_DEBUG
+	if (tFP32_Abs(num) > 1.0F) return tFP32_SigNaN();
+#else
+	Assertion(tFP32_Abs(num) <= 1.0F);
+#endif/*BQSELAYER_DEBUG*/
+	if (tFP32_Nearby(num, 1.0F))  return tFP32_HalfPi;
+	if (tFP32_Nearby(num, -1.0F)) return -tFP32_HalfPi;
+	return tFP32_ArcTangent(num / tFP32_Sqrt(1 - (num * num)));
 }
-ForceInline tF32 tF32_ArcCosine(tF32 num)
+ForceInline tFP32 tFP32_ArcCosine_iter(tFP32 num, tIUSz sqrtItr, tIUSz trigItr)
 {
-	return tF32_HalfPi - tF32_ArcSine(num);
+	return tFP32_HalfPi - tFP32_ArcSine_iter(num, sqrtItr, trigItr);
 }
-tF32 tF32_ArcTangent_iter(tF32 num, tUSz itr)
+ForceInline tFP32 tFP32_ArcCosine(tFP32 num)
+{
+	return tFP32_HalfPi - tFP32_ArcSine(num);
+}
+tFP32 tFP32_ArcTangent_iter(tFP32 num, tIUSz itr)
 {
 	if (itr == 0U) return num;
-	if (num > 1.0F) return tF32_HalfPi - tF32_ArcTangent_iter(tF32_Recip(num), itr);
-	if (num < -1.0F) return -tF32_HalfPi - tF32_ArcTangent_iter(tF32_Recip(num), itr);
-	tF32 scale = 1.0F;
-	if (tF32_Abs(num) > 0.5F)
+	if (num > 1.0F) return tFP32_HalfPi - tFP32_ArcTangent_iter(tFP32_Recip(num), itr);
+	if (num < -1.0F) return -tFP32_HalfPi - tFP32_ArcTangent_iter(tFP32_Recip(num), itr);
+	tFP32 scale = 1.0F;
+	if (tFP32_Abs(num) > 0.5F)
 	{
-		num = num / (1.0F + tF32_Sqrt(1.0F + (num * num)));
+		num = num / (1.0F + tFP32_Sqrt(1.0F + (num * num)));
 		scale = 2.0F;
 	}
-	const tF32 numSq = num * num;
-	tF32 term = num;
-	tF32 res = term;
-	for (tUSz idx = 0U; idx < itr; ++idx)
+	const tFP32 numSq = num * num;
+	tFP32 term = num;
+	tFP32 res = term;
+	for (tIUSz idx = 0U; idx < itr; ++idx)
 	{
-		tUSz idx2 = idx << 1;
-		term *= -numSq * ((tF32)(idx2 + 1U) / (tF32)(idx2 + 3U));
+		tIUSz idx2 = idx << 1;
+		term *= -numSq * ((tFP32)(idx2 + 1U) / (tFP32)(idx2 + 3U));
 		res += term;
 	}
 	return scale * res;
 }
-ForceInline tF32 tF32_ArcTangent(tF32 num)
+ForceInline tFP32 tFP32_ArcTangent(tFP32 num)
 {
-	return tF32_ArcTangent_iter(num, BQSELAYER_TRIG_ITER);
+	return tFP32_ArcTangent_iter(num, BQSELAYER_TRIG_ITER);
 }
-tF32 tF32_ArcTangent2_iter(tF32 opp, tF32 adj, tUSz itr)
+tFP32 tFP32_ArcTangent2_iter(tFP32 opp, tFP32 adj, tIUSz itr)
 {
-	if (adj > 0.0F) return tF32_ArcTangent_iter(opp / adj, itr);
-	if (tF32_IsNeg(adj) && !tF32_IsNeg(opp)) return tF32_ArcTangent_iter(opp / adj, itr) + tF32_Pi;
-	if (tF32_IsNeg(adj) && tF32_IsNeg(opp)) return tF32_ArcTangent_iter(opp / adj, itr) - tF32_Pi;
-	if (tF32_Nearby(adj, 0.0F) && opp > 0.0F) return tF32_HalfPi;
-	if (tF32_Nearby(adj, 0.0F) && tF32_IsNeg(opp)) return -tF32_HalfPi;
+	if (adj > 0.0F) return tFP32_ArcTangent_iter(opp / adj, itr);
+	if (tFP32_IsNeg(adj) && !tFP32_IsNeg(opp)) return tFP32_ArcTangent_iter(opp / adj, itr) + tFP32_Pi;
+	if (tFP32_IsNeg(adj) && tFP32_IsNeg(opp)) return tFP32_ArcTangent_iter(opp / adj, itr) - tFP32_Pi;
+	if (tFP32_Nearby(adj, 0.0F) && opp > 0.0F) return tFP32_HalfPi;
+	if (tFP32_Nearby(adj, 0.0F) && tFP32_IsNeg(opp)) return -tFP32_HalfPi;
 	return 0.0F;
 }
-ForceInline tF32 tF32_ArcTangent2(tF32 opp, tF32 adj)
+ForceInline tFP32 tFP32_ArcTangent2(tFP32 opp, tFP32 adj)
 {
-	return tF32_ArcTangent2_iter(opp, adj, BQSELAYER_TRIG_ITER);
+	return tFP32_ArcTangent2_iter(opp, adj, BQSELAYER_TRIG_ITER);
 }
-tF32 tF32_RecipSqrt_iter(tF32 num, tUSz itr)
+tFP32 tFP32_RecipSqrt_iter(tFP32 num, tIUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tF32_IsNeg(num)) return tF32_SigNaN();
-	if (tF32_Nearby(num, 0.0F)) return tF32_Inf();
+	if (tFP32_IsNeg(num)) return tFP32_SigNaN();
+	if (tFP32_Nearby(num, 0.0F)) return tFP32_Inf();
 #else
 	Assertion(num > 0.0F);
 #endif/*BQSELAYER_DEBUG*/
-	tF32Bits number;
+	tFP32Bits number;
 	number.flt = num;
-	tF32 halfNum = number.flt * 0.5F;
+	tFP32 halfNum = number.flt * 0.5F;
 	number.raw = 0X5F3759DFU - (number.raw >> 1U);
-	for (tUSz idx = 0U; idx < itr; ++idx) number.flt = number.flt * (1.5F - (halfNum * number.flt * number.flt));
+	for (tIUSz idx = 0U; idx < itr; ++idx) number.flt = number.flt * (1.5F - (halfNum * number.flt * number.flt));
 	return number.flt;
 }
-ForceInline tF32 tF32_RecipSqrt(tF32 num)
+ForceInline tFP32 tFP32_RecipSqrt(tFP32 num)
 {
-	return tF32_RecipSqrt_iter(num, 1U);
+	return tFP32_RecipSqrt_iter(num, 1U);
 }
-ForceInline tF32 tF32_Sqrt_iter(tF32 num, tUSz itr)
-{
-#ifndef BQSELAYER_DBG
-	if (tF32_IsNeg(num)) return tF32_SigNaN();
-#else
-	Assertion(!tF32_IsNeg(num));
-#endif/*BQSELAYER_DBG*/
-	if (tF32_Nearby(num, 0.0F)) return 0.0F;
-	return num * tF32_RecipSqrt_iter(num, itr);
-}
-ForceInline tF32 tF32_Sqrt(tF32 num)
+ForceInline tFP32 tFP32_Sqrt_iter(tFP32 num, tIUSz itr)
 {
 #ifndef BQSELAYER_DBG
-	if (tF32_IsNeg(num)) return tF32_SigNaN();
+	if (tFP32_IsNeg(num)) return tFP32_SigNaN();
 #else
-	Assertion(!tF32_IsNeg(num));
+	Assertion(!tFP32_IsNeg(num));
 #endif/*BQSELAYER_DBG*/
-	if (tF32_Nearby(num, 0.0F)) return 0.0F;
-	return num * tF32_RecipSqrt(num);
+	if (tFP32_Nearby(num, 0.0F)) return 0.0F;
+	return num * tFP32_RecipSqrt_iter(num, itr);
 }
-tF32 tF32_Log2_iter(tF32 num, tUSz itr)
+ForceInline tFP32 tFP32_Sqrt(tFP32 num)
+{
+#ifndef BQSELAYER_DBG
+	if (tFP32_IsNeg(num)) return tFP32_SigNaN();
+#else
+	Assertion(!tFP32_IsNeg(num));
+#endif/*BQSELAYER_DBG*/
+	if (tFP32_Nearby(num, 0.0F)) return 0.0F;
+	return num * tFP32_RecipSqrt(num);
+}
+tFP32 tFP32_Log2_iter(tFP32 num, tIUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
-	if (num <= 0.0F) return tF32_SigNaN();
+	if (num <= 0.0F) return tFP32_SigNaN();
 #else
 	Assertion(num > 0.0F);
 #endif/*BQSELAYER_DEBUG*/
-	tF32Bits numBits;
+	tFP32Bits numBits;
 	numBits.flt = num;
-	tS16 expVal = ((numBits.raw >> 23U) & tU8_Max) - 127;
-	tF32Bits mantBits;
+	tIS16 expVal = ((numBits.raw >> 23U) & tIU8_Max) - 127;
+	tFP32Bits mantBits;
 	mantBits.raw = (numBits.raw & 0X7FFFFFU) | (127U << 23U);
 	tBln sub = True;
-	const tF32 valX = mantBits.flt - 1.0F;
-	tF32 mantApprox = valX;
-	tF32 powVal = mantApprox;
-	for (tUSz idx = 2U; idx < itr + 2U; ++idx)
+	const tFP32 valX = mantBits.flt - 1.0F;
+	tFP32 mantApprox = valX;
+	tFP32 powVal = mantApprox;
+	for (tIUSz idx = 2U; idx < itr + 2U; ++idx)
 	{
 		powVal *= valX;
-		if (sub) mantApprox -= powVal / (tF32)idx;
-		else mantApprox += powVal / (tF32)idx;
+		if (sub) mantApprox -= powVal / (tFP32)idx;
+		else mantApprox += powVal / (tFP32)idx;
 		sub = !sub;
 	}
-	return (tF32)expVal + (mantApprox * tF32_Log2EulNum);
+	return (tFP32)expVal + (mantApprox * tFP32_Log2EulNum);
 }
-ForceInline tF32 tF32_Log2(tF32 num)
+ForceInline tFP32 tFP32_Log2(tFP32 num)
 {
-	return tF32_Log2_iter(num, 4U);
+	return tFP32_Log2_iter(num, 4U);
 }
-ForceInline tF32 tF32_Ln_iter(tF32 num, tUSz itr)
+ForceInline tFP32 tFP32_Ln_iter(tFP32 num, tIUSz itr)
 {
-	return tF32_Log2_iter(num, itr) / tF32_Log2EulNum;
+	return tFP32_Log2_iter(num, itr) / tFP32_Log2EulNum;
 }
-ForceInline tF32 tF32_Ln(tF32 num)
+ForceInline tFP32 tFP32_Ln(tFP32 num)
 {
-	return tF32_Log2(num) / tF32_Log2EulNum;
+	return tFP32_Log2(num) / tFP32_Log2EulNum;
 }
-tF32 tF32_Log_iter(tF32 num, tF32 base, tUSz itr)
-{
-#ifndef BQSELAYER_DEBUG
-	if (base <= 0.0F || tF32_Nearby(base, 1.0F)) return tF32_SigNaN();
-#else
-	Assertion(base > 0.0F && !tF32_Nearby(base, 1.0F));
-#endif/*BQSELAYER_DEBUG*/
-	return tF32_Log2_iter(num, itr) / tF32_Log2_iter(base, itr);
-}
-tF32 tF32_Log(tF32 num, tF32 base)
+tFP32 tFP32_Log_iter(tFP32 num, tFP32 base, tIUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
-	if (base <= 0.0F || tF32_Nearby(base, 1.0F)) return tF32_SigNaN();
+	if (base <= 0.0F || tFP32_Nearby(base, 1.0F)) return tFP32_SigNaN();
 #else
-	Assertion(base > 0.0F && !tF32_Nearby(base, 1.0F));
+	Assertion(base > 0.0F && !tFP32_Nearby(base, 1.0F));
 #endif/*BQSELAYER_DEBUG*/
-	return tF32_Log2(num) / tF32_Log2(base);
+	return tFP32_Log2_iter(num, itr) / tFP32_Log2_iter(base, itr);
 }
-ForceInline tF32 tF32_Lerp(tF32 strt, tF32 stp, tF32 fnsh)
+tFP32 tFP32_Log(tFP32 num, tFP32 base)
+{
+#ifndef BQSELAYER_DEBUG
+	if (base <= 0.0F || tFP32_Nearby(base, 1.0F)) return tFP32_SigNaN();
+#else
+	Assertion(base > 0.0F && !tFP32_Nearby(base, 1.0F));
+#endif/*BQSELAYER_DEBUG*/
+	return tFP32_Log2(num) / tFP32_Log2(base);
+}
+ForceInline tFP32 tFP32_Lerp(tFP32 strt, tFP32 stp, tFP32 fnsh)
 {
 	return strt + ((fnsh - strt) * stp);
 }
-ForceInline tF32 tF32_Unlerp(tF32 strt, tF32 curr, tF32 fnsh)
+ForceInline tFP32 tFP32_Unlerp(tFP32 strt, tFP32 curr, tFP32 fnsh)
 {
-	if (tF32_Nearby(strt, fnsh)) return 0.0F;
+	if (tFP32_Nearby(strt, fnsh)) return 0.0F;
 	return (curr - strt) / (fnsh - strt);
 }
-tF32 tF32_Exp_iter(tF32 pow, tUSz itr)
+tFP32 tFP32_Exp_iter(tFP32 pow, tIUSz itr)
 {
-	if (tF32_Nearby(pow, 0.0F)) return 1.0F;
-	if (tF32_Nearby(pow, 1.0F)) return tF32_EulNum;
-	tF32 res = 1.0F;
-	tF32 term = 1.0F;
-	for (tUSz idx = 1U; idx <= itr; ++idx)
+	if (tFP32_Nearby(pow, 0.0F)) return 1.0F;
+	if (tFP32_Nearby(pow, 1.0F)) return tFP32_EulNum;
+	tFP32 res = 1.0F;
+	tFP32 term = 1.0F;
+	for (tIUSz idx = 1U; idx <= itr; ++idx)
 	{
-		term *= pow / (tF32)idx;
+		term *= pow / (tFP32)idx;
 		res += term;
 	}
 	return res;
 }
-ForceInline tF32 tF32_Exp(tF32 pow)
+ForceInline tFP32 tFP32_Exp(tFP32 pow)
 {
-	return tF32_Exp_iter(pow, 10U);
+	return tFP32_Exp_iter(pow, 10U);
 }
-ForceInline tF32 tF32_HypSine_iter(tF32 num, tUSz itr)
+ForceInline tFP32 tFP32_HypSine_iter(tFP32 num, tIUSz itr)
 {
-	tF32 expNum = tF32_Exp_iter(num, itr);
-	return (expNum - tF32_Recip(expNum)) * 0.5F;
+	tFP32 expNum = tFP32_Exp_iter(num, itr);
+	return (expNum - tFP32_Recip(expNum)) * 0.5F;
 }
-ForceInline tF32 tF32_HypCosine_iter(tF32 num, tUSz itr)
+ForceInline tFP32 tFP32_HypCosine_iter(tFP32 num, tIUSz itr)
 {
-	tF32 expNum = tF32_Exp_iter(num, itr);
-	return (expNum + tF32_Recip(expNum)) * 0.5F;
+	tFP32 expNum = tFP32_Exp_iter(num, itr);
+	return (expNum + tFP32_Recip(expNum)) * 0.5F;
 }
-tF32 tF32_HypTangent_iter(tF32 num, tUSz itr)
+tFP32 tFP32_HypTangent_iter(tFP32 num, tIUSz itr)
 {
-	tF32 expNum = tF32_Exp_iter(num, itr);
-	tF32 invExpNum = tF32_Recip(expNum);
-	const tF32 hypSine = (expNum - invExpNum) * 0.5F;
-	const tF32 hypCosine = (expNum + invExpNum) * 0.5F;
+	tFP32 expNum = tFP32_Exp_iter(num, itr);
+	tFP32 invExpNum = tFP32_Recip(expNum);
+	const tFP32 hypSine = (expNum - invExpNum) * 0.5F;
+	const tFP32 hypCosine = (expNum + invExpNum) * 0.5F;
 	return hypSine / hypCosine;
 }
-ForceInline tF32 tF32_HypSine(tF32 num)
+ForceInline tFP32 tFP32_HypSine(tFP32 num)
 {
-	tF32 expNum = tF32_Exp(num);
-	return (expNum - tF32_Recip(expNum)) * 0.5F;
+	tFP32 expNum = tFP32_Exp(num);
+	return (expNum - tFP32_Recip(expNum)) * 0.5F;
 }
-ForceInline tF32 tF32_HypCosine(tF32 num)
+ForceInline tFP32 tFP32_HypCosine(tFP32 num)
 {
-	tF32 expNum = tF32_Exp(num);
-	return (expNum + tF32_Recip(expNum)) * 0.5F;
+	tFP32 expNum = tFP32_Exp(num);
+	return (expNum + tFP32_Recip(expNum)) * 0.5F;
 }
-tF32 tF32_HypTangent(tF32 num)
+tFP32 tFP32_HypTangent(tFP32 num)
 {
-	tF32 expNum = tF32_Exp(num);
-	tF32 invExpNum = tF32_Recip(expNum);
-	const tF32 hypSine = (expNum - invExpNum) * 0.5F;
-	const tF32 hypCosine = (expNum + invExpNum) * 0.5F;
+	tFP32 expNum = tFP32_Exp(num);
+	tFP32 invExpNum = tFP32_Recip(expNum);
+	const tFP32 hypSine = (expNum - invExpNum) * 0.5F;
+	const tFP32 hypCosine = (expNum + invExpNum) * 0.5F;
 	return hypSine / hypCosine;
 }
-tF32 tF32_Mod(tF32 num, tF32 denom)
+tFP32 tFP32_Mod(tFP32 num, tFP32 denom)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tF32_Nearby(denom, 0.0F)) return tF32_SigNaN();
+	if (tFP32_Nearby(denom, 0.0F)) return tFP32_SigNaN();
 #else
-	Assertion(!tF32_Nearby(denom, 0.0F));
+	Assertion(!tFP32_Nearby(denom, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
-	tS32 quot = (tS32)(num / denom);
-	return num - ((tF32)quot * denom);
+	tIS32 quot = (tIS32)(num / denom);
+	return num - ((tFP32)quot * denom);
 }
-tF32 tF32_PowI(tF32 base, tSSz exp)
+tFP32 tFP32_PowI(tFP32 base, tISSz exp)
 {
 	if (exp == 0) return 1.0F;
-	if (exp < 0) return tF32_Recip(tF32_PowI(base, -exp));
-	tF32 result = 1.0F;
+	if (exp < 0) return tFP32_Recip(tFP32_PowI(base, -exp));
+	tFP32 result = 1.0F;
 	while (exp != 0)
 	{
 		if (exp & 1) result *= base;
@@ -548,515 +548,515 @@ tF32 tF32_PowI(tF32 base, tSSz exp)
 	}
 	return result;
 }
-tF32 tF32_Pow_iter(tF32 base, tF32 exp, tUSz itr)
+tFP32 tFP32_Pow_iter(tFP32 base, tFP32 exp, tIUSz itr)
 {
-	tSSz intPart = (tSSz)exp;
-	tF32 whole = tF32_PowI(base, intPart);
-	if ((tF32)intPart == exp) return whole;
-	tF32 fracPart = exp - (tF32)intPart;
-	if (tF32_Nearby(fracPart, 0.5F)) return whole * tF32_Sqrt_iter(base, itr);
-	if (tF32_Nearby(fracPart, -0.5F)) return whole * tF32_RecipSqrt_iter(base, itr);
+	tISSz intPart = (tISSz)exp;
+	tFP32 whole = tFP32_PowI(base, intPart);
+	if ((tFP32)intPart == exp) return whole;
+	tFP32 fracPart = exp - (tFP32)intPart;
+	if (tFP32_Nearby(fracPart, 0.5F)) return whole * tFP32_Sqrt_iter(base, itr);
+	if (tFP32_Nearby(fracPart, -0.5F)) return whole * tFP32_RecipSqrt_iter(base, itr);
 #ifndef BQSELAYER_DEBUG
-	if (base <= 0.0F) return tF32_SigNaN();
+	if (base <= 0.0F) return tFP32_SigNaN();
 #else
 	Assertion(base > 0.0F);
 #endif/*BQSELAYER_DEBUG*/
-	return whole * tF32_Exp_iter(fracPart * tF32_Ln_iter(base, itr), itr);
+	return whole * tFP32_Exp_iter(fracPart * tFP32_Ln_iter(base, itr), itr);
 }
-tF32 tF32_Pow(tF32 base, tF32 exp)
+tFP32 tFP32_Pow(tFP32 base, tFP32 exp)
 {
-	tSSz intPart = (tSSz)exp;
-	tF32 whole = tF32_PowI(base, intPart);
-	if ((tF32)intPart == exp) return whole;
-	tF32 fracPart = exp - (tF32)intPart;
-	if (tF32_Nearby(fracPart, 0.5F)) return whole * tF32_Sqrt(base);
-	if (tF32_Nearby(fracPart, -0.5F)) return whole * tF32_RecipSqrt(base);
+	tISSz intPart = (tISSz)exp;
+	tFP32 whole = tFP32_PowI(base, intPart);
+	if ((tFP32)intPart == exp) return whole;
+	tFP32 fracPart = exp - (tFP32)intPart;
+	if (tFP32_Nearby(fracPart, 0.5F)) return whole * tFP32_Sqrt(base);
+	if (tFP32_Nearby(fracPart, -0.5F)) return whole * tFP32_RecipSqrt(base);
 #ifndef BQSELAYER_DEBUG
-	if (base <= 0.0F) return tF32_SigNaN();
+	if (base <= 0.0F) return tFP32_SigNaN();
 #else
 	Assertion(base > 0.0F);
 #endif/*BQSELAYER_DEBUG*/
-	return whole * tF32_Exp(fracPart * tF32_Ln(base));
+	return whole * tFP32_Exp(fracPart * tFP32_Ln(base));
 }
-tF32 tF32_Round(tF32 num)
+tFP32 tFP32_Round(tFP32 num)
 {
-	tSSz intPart = (tSSz)num;
-	if (num == (tF32)intPart) return num;
-	if (tF32_IsNeg(num)) return tF32_Neg(tF32_Round(tF32_Neg(num)));
-	tF32 fracPart = num - (tF32)intPart;
-	if (fracPart < 0.5F) return (tF32)intPart;
-	else return (tF32)intPart + 1.0F;
+	tISSz intPart = (tISSz)num;
+	if (num == (tFP32)intPart) return num;
+	if (tFP32_IsNeg(num)) return tFP32_Neg(tFP32_Round(tFP32_Neg(num)));
+	tFP32 fracPart = num - (tFP32)intPart;
+	if (fracPart < 0.5F) return (tFP32)intPart;
+	else return (tFP32)intPart + 1.0F;
 }
-ForceInline tF32 tF32_Recip(tF32 num)
+ForceInline tFP32 tFP32_Recip(tFP32 num)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tF32_Nearby(num, 0.0F)) return tF32_IsNeg(num) ? tF32_Inf() : tF32_NegInf();
+	if (tFP32_Nearby(num, 0.0F)) return tFP32_IsNeg(num) ? tFP32_Inf() : tFP32_NegInf();
 #else
-	Assertion(!tF32_Nearby(num, 0.0F));
+	Assertion(!tFP32_Nearby(num, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	return 1.0F / num;
 }
 #endif/*BQSELAYER_PRIMTYPES_IMPL*/
-typedef double tF64;
-#define tF64_Pi 3.141592653589793
-#define tF64_2Pi 6.283185307
-#define tF64_HalfPi 1.570796327
-#define tF64_Inv2Pi 0.15915494309189535
-#define tF64_Eps 2.2204460492503131E-16
-#define tF64_Tol 1E-5
-#define tF64_EulNum 2.718281828459045
-#define tF64_EulCnst 0.577215664901532
-#define tF64_Log2EulNum 1.44269504089
-#define tF64_RadToDeg(dbl) ((dbl) * 57.29577951308233)
-#define tF64_DegToRad(dbl) ((dbl) * 0.0174532925199433)
+typedef double tFP64;
+#define tFP64_Pi 3.141592653589793
+#define tFP64_2Pi 6.283185307
+#define tFP64_HalfPi 1.570796327
+#define tFP64_Inv2Pi 0.15915494309189535
+#define tFP64_Eps 2.2204460492503131E-16
+#define tFP64_Tol 1E-5
+#define tFP64_EulNum 2.718281828459045
+#define tFP64_EulCnst 0.577215664901532
+#define tFP64_Log2EulNum 1.44269504089
+#define tFP64_RadToDeg(dbl) ((dbl) * 57.29577951308233)
+#define tFP64_DegToRad(dbl) ((dbl) * 0.0174532925199433)
 LINK_C_Begin
-ForceInline tF64 tF64_Inf(tNone);
-ForceInline tF64 tF64_Abs(tF64 dbl);
-ForceInline tF64 tF64_Neg(tF64 dbl);
-ForceInline tBln tF64_IsNeg(tF64 dbl);
-ForceInline tF64 tF64_NegInf(tNone);
-ForceInline tF64 tF64_QuiNaN(tNone);
-ForceInline tF64 tF64_SigNaN(tNone);
-ForceInline tBln tF64_Nearby(tF64 dbl, tF64 cmp);
+ForceInline tFP64 tFP64_Inf(tNone);
+ForceInline tFP64 tFP64_Abs(tFP64 dbl);
+ForceInline tFP64 tFP64_Neg(tFP64 dbl);
+ForceInline tBln tFP64_IsNeg(tFP64 dbl);
+ForceInline tFP64 tFP64_NegInf(tNone);
+ForceInline tFP64 tFP64_QuiNaN(tNone);
+ForceInline tFP64 tFP64_SigNaN(tNone);
+ForceInline tBln tFP64_Nearby(tFP64 dbl, tFP64 cmp);
 /*Note: Parameter `ang` is expected to be in radians.*/
-tF64 tF64_Sine_fast(tF64 ang);
+tFP64 tFP64_Sine_fast(tFP64 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
-ForceInline tF64 tF64_Cosine_fast(tF64 ang);
+ForceInline tFP64 tFP64_Cosine_fast(tFP64 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
-tF64 tF64_Tangent_fast(tF64 ang);
+tFP64 tFP64_Tangent_fast(tFP64 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
-tF64 tF64_Sine_iter(tF64 ang, tUSz itr);
+tFP64 tFP64_Sine_iter(tFP64 ang, tIUSz itr);
 /*Note: Parameter `ang` is expected to be in radians.*/
-ForceInline tF64 tF64_Cosine_iter(tF64 ang, tUSz itr);
+ForceInline tFP64 tFP64_Cosine_iter(tFP64 ang, tIUSz itr);
 /*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
-tF64 tF64_Tangent_iter(tF64 ang, tUSz itr);
+tFP64 tFP64_Tangent_iter(tFP64 ang, tIUSz itr);
 /*Note: Parameter `ang` is expected to be in radians.*/
-ForceInline tF64 tF64_Sine(tF64 ang);
+ForceInline tFP64 tFP64_Sine(tFP64 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
-ForceInline tF64 tF64_Cosine(tF64 ang);
+ForceInline tFP64 tFP64_Cosine(tFP64 ang);
 /*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
-ForceInline tF64 tF64_Tangent(tF64 ang);
+ForceInline tFP64 tFP64_Tangent(tFP64 ang);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-tF64 tF64_ArcSine_iter(tF64 num, tUSz sqrtItr, tUSz trigItr);
+tFP64 tFP64_ArcSine_iter(tFP64 num, tIUSz sqrtItr, tIUSz trigItr);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-tF64 tF64_ArcSine(tF64 num);
+tFP64 tFP64_ArcSine(tFP64 num);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-ForceInline tF64 tF64_ArcCosine_iter(tF64 num, tUSz sqrtItr, tUSz trigItr);
+ForceInline tFP64 tFP64_ArcCosine_iter(tFP64 num, tIUSz sqrtItr, tIUSz trigItr);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-ForceInline tF64 tF64_ArcCosine(tF64 num);
-tF64 tF64_ArcTangent_iter(tF64 num, tUSz itr);
-ForceInline tF64 tF64_ArcTangent(tF64 num);
-tF64 tF64_ArcTangent2_iter(tF64 opp, tF64 adj, tUSz itr);
-ForceInline tF64 tF64_ArcTangent2(tF64 opp, tF64 adj);
+ForceInline tFP64 tFP64_ArcCosine(tFP64 num);
+tFP64 tFP64_ArcTangent_iter(tFP64 num, tIUSz itr);
+ForceInline tFP64 tFP64_ArcTangent(tFP64 num);
+tFP64 tFP64_ArcTangent2_iter(tFP64 opp, tFP64 adj, tIUSz itr);
+ForceInline tFP64 tFP64_ArcTangent2(tFP64 opp, tFP64 adj);
 /*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
-tF64 tF64_RecipSqrt_iter(tF64 num, tUSz itr);
+tFP64 tFP64_RecipSqrt_iter(tFP64 num, tIUSz itr);
 /*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
-ForceInline tF64 tF64_RecipSqrt(tF64 num);
-ForceInline tF64 tF64_Sqrt_iter(tF64 num, tUSz itr);
-ForceInline tF64 tF64_Sqrt(tF64 num);
+ForceInline tFP64 tFP64_RecipSqrt(tFP64 num);
+ForceInline tFP64 tFP64_Sqrt_iter(tFP64 num, tIUSz itr);
+ForceInline tFP64 tFP64_Sqrt(tFP64 num);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-tF64 tF64_Log2_iter(tF64 num, tUSz itr);
+tFP64 tFP64_Log2_iter(tFP64 num, tIUSz itr);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-ForceInline tF64 tF64_Log2(tF64 num);
+ForceInline tFP64 tFP64_Log2(tFP64 num);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-ForceInline tF64 tF64_Ln_iter(tF64 num, tUSz itr);
+ForceInline tFP64 tFP64_Ln_iter(tFP64 num, tIUSz itr);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-ForceInline tF64 tF64_Ln(tF64 num);
+ForceInline tFP64 tFP64_Ln(tFP64 num);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-tF64 tF64_Log_iter(tF64 num, tF64 base, tUSz itr);
+tFP64 tFP64_Log_iter(tFP64 num, tFP64 base, tIUSz itr);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-tF64 tF64_Log(tF64 num, tF64 base);
-ForceInline tF64 tF64_Lerp(tF64 strt, tF64 stp, tF64 fnsh);
-ForceInline tF64 tF64_Unlerp(tF64 strt, tF64 curr, tF64 fnsh);
-tF64 tF64_Exp_iter(tF64 pow, tUSz itr);
-ForceInline tF64 tF64_Exp(tF64 pow);
-ForceInline tF64 tF64_HypSine_iter(tF64 num, tUSz itr);
-ForceInline tF64 tF64_HypCosine_iter(tF64 num, tUSz itr);
-tF64 tF64_HypTangent_iter(tF64 num, tUSz itr);
-ForceInline tF64 tF64_HypSine(tF64 num);
-ForceInline tF64 tF64_HypCosine(tF64 num);
-ForceInline tF64 tF64_HypTangent(tF64 num);
-tF64 tF64_Mod(tF64 num, tF64 denom);
-tF64 tF64_PowI(tF64 num, tSSz pow);
-tF64 tF64_Pow_iter(tF64 num, tF64 pow, tUSz itr);
-tF64 tF64_Pow(tF64 num, tF64 pow);
-tF64 tF64_Round(tF64 num);
-ForceInline tF64 tF64_Recip(tF64 num);
+tFP64 tFP64_Log(tFP64 num, tFP64 base);
+ForceInline tFP64 tFP64_Lerp(tFP64 strt, tFP64 stp, tFP64 fnsh);
+ForceInline tFP64 tFP64_Unlerp(tFP64 strt, tFP64 curr, tFP64 fnsh);
+tFP64 tFP64_Exp_iter(tFP64 pow, tIUSz itr);
+ForceInline tFP64 tFP64_Exp(tFP64 pow);
+ForceInline tFP64 tFP64_HypSine_iter(tFP64 num, tIUSz itr);
+ForceInline tFP64 tFP64_HypCosine_iter(tFP64 num, tIUSz itr);
+tFP64 tFP64_HypTangent_iter(tFP64 num, tIUSz itr);
+ForceInline tFP64 tFP64_HypSine(tFP64 num);
+ForceInline tFP64 tFP64_HypCosine(tFP64 num);
+ForceInline tFP64 tFP64_HypTangent(tFP64 num);
+tFP64 tFP64_Mod(tFP64 num, tFP64 denom);
+tFP64 tFP64_PowI(tFP64 num, tISSz pow);
+tFP64 tFP64_Pow_iter(tFP64 num, tFP64 pow, tIUSz itr);
+tFP64 tFP64_Pow(tFP64 num, tFP64 pow);
+tFP64 tFP64_Round(tFP64 num);
+ForceInline tFP64 tFP64_Recip(tFP64 num);
 LINK_C_End
-#define tF64_SignMask 0X8000000000000000LLU
-#define tF64_ExpoMask 0X7FF0000000000000LLU
-#define tF64_FracMask 0X000FFFFFFFFFFFFFLLU
+#define tFP64_SignMask 0X8000000000000000LLU
+#define tFP64_ExpoMask 0X7FF0000000000000LLU
+#define tFP64_FracMask 0X000FFFFFFFFFFFFFLLU
 typedef union
 {
-	tF64 dbl;
-	tU64 raw;
+	tFP64 dbl;
+	tIU64 raw;
 }
-tF64Bits;
+tFP64Bits;
 #ifdef BQSELAYER_PRIMTYPES_IMPL
-ForceInline tF64 tF64_Inf(tNone)
+ForceInline tFP64 tFP64_Inf(tNone)
 {
-	tF64Bits num;
+	tFP64Bits num;
 	num.raw = 0X7FF0000000000000LLU;
 	return num.dbl;
 }
-ForceInline tF64 tF64_Abs(tF64 dbl)
+ForceInline tFP64 tFP64_Abs(tFP64 dbl)
 {
-	tF64Bits num;
+	tFP64Bits num;
 	num.dbl = dbl;
 	num.raw &= 0X7FFFFFFFFFFFFFFFLLU;
 	return num.dbl;
 }
-ForceInline tBln tF64_IsNeg(tF64 dbl)
+ForceInline tBln tFP64_IsNeg(tFP64 dbl)
 {
-	if (tF64_Nearby(dbl, 0.0)) return False;
-	tF64Bits num;
+	if (tFP64_Nearby(dbl, 0.0)) return False;
+	tFP64Bits num;
 	num.dbl = dbl;
-	return (tBln)!!(num.raw & tF64_SignMask);
+	return (tBln)!!(num.raw & tFP64_SignMask);
 }
-ForceInline tF64 tF64_Neg(tF64 dbl)
+ForceInline tFP64 tFP64_Neg(tFP64 dbl)
 {
-	tF64Bits num;
+	tFP64Bits num;
 	num.dbl = dbl;
 	num.raw ^= 0X8000000000000000LLU;
 	return num.dbl;
 }
-ForceInline tF64 tF64_NegInf(tNone)
+ForceInline tFP64 tFP64_NegInf(tNone)
 {
-	tF64Bits num;
+	tFP64Bits num;
 	num.raw = 0XFFF0000000000000LLU;
 	return num.dbl;
 }
-ForceInline tF64 tF64_QuiNaN(tNone)
+ForceInline tFP64 tFP64_QuiNaN(tNone)
 {
-	tF64Bits num;
+	tFP64Bits num;
 	num.raw = 0XFFF8000000000001LLU;
 	return num.dbl;
 }
-ForceInline tF64 tF64_SigNaN(tNone)
+ForceInline tFP64 tFP64_SigNaN(tNone)
 {
-	tF64Bits num;
+	tFP64Bits num;
 	num.raw = 0XFFF0000000000001LLU;
 	return num.dbl;
 }
-ForceInline tBln tF64_Nearby(tF64 dbl, tF64 cmp)
+ForceInline tBln tFP64_Nearby(tFP64 dbl, tFP64 cmp)
 {
-	return tF64_Abs(dbl - cmp) <= tF64_Eps;
+	return tFP64_Abs(dbl - cmp) <= tFP64_Eps;
 }
-tF64 tF64_Sine_fast(tF64 ang)
+tFP64 tFP64_Sine_fast(tFP64 ang)
 {
 	tBln neg = False;
-	if (tF64_Nearby(ang, 0.0)) return 0.0;
-	while (ang > tF64_2Pi) ang -= tF64_2Pi;
-	ang -= (tF64)((tS64)(ang * tF64_Inv2Pi)) * tF64_2Pi;
-	if (tF64_IsNeg(ang)) ang += tF64_2Pi;
-	if (ang > tF64_Pi)
+	if (tFP64_Nearby(ang, 0.0)) return 0.0;
+	while (ang > tFP64_2Pi) ang -= tFP64_2Pi;
+	ang -= (tFP64)((tIS64)(ang * tFP64_Inv2Pi)) * tFP64_2Pi;
+	if (tFP64_IsNeg(ang)) ang += tFP64_2Pi;
+	if (ang > tFP64_Pi)
 	{
-		ang -= tF64_Pi;
+		ang -= tFP64_Pi;
 		neg = True;
 	}
-	const tF64 magicNum = ang * (tF64_Pi - ang);
-	const tF64 res = (4.0 * magicNum) / (12.33700550 - magicNum);
-	if (neg == True) return tF64_Neg(res);
+	const tFP64 magicNum = ang * (tFP64_Pi - ang);
+	const tFP64 res = (4.0 * magicNum) / (12.33700550 - magicNum);
+	if (neg == True) return tFP64_Neg(res);
 	return res;
 }
-ForceInline tF64 tF64_Cosine_fast(tF64 ang)
+ForceInline tFP64 tFP64_Cosine_fast(tFP64 ang)
 {
-	return tF64_Sine_fast(tF64_HalfPi - ang);
+	return tFP64_Sine_fast(tFP64_HalfPi - ang);
 }
-tF64 tF64_Tangent_fast(tF64 ang)
+tFP64 tFP64_Tangent_fast(tFP64 ang)
 {
-	const tF64 cosAng = tF64_Cosine_fast(ang);
-	if (tF64_Nearby(cosAng, 0.0)) return tF64_IsNeg(cosAng) ? tF64_NegInf() : tF64_Inf();
-	const tF64 sinAng = tF64_Sine_fast(ang);
+	const tFP64 cosAng = tFP64_Cosine_fast(ang);
+	if (tFP64_Nearby(cosAng, 0.0)) return tFP64_IsNeg(cosAng) ? tFP64_NegInf() : tFP64_Inf();
+	const tFP64 sinAng = tFP64_Sine_fast(ang);
 	return sinAng / cosAng;
 }
-tF64 tF64_Sine_iter(tF64 ang, tUSz itr)
+tFP64 tFP64_Sine_iter(tFP64 ang, tIUSz itr)
 {
-	if (tF64_Nearby(ang, 0.0)) return 0.0;
+	if (tFP64_Nearby(ang, 0.0)) return 0.0;
 	if (itr == 0U) return ang;
-	while (ang > tF64_2Pi) ang -= tF64_2Pi;
-	ang -= (tF64)((tS64)(ang * tF64_Inv2Pi)) * tF64_2Pi;
+	while (ang > tFP64_2Pi) ang -= tFP64_2Pi;
+	ang -= (tFP64)((tIS64)(ang * tFP64_Inv2Pi)) * tFP64_2Pi;
 	tBln neg = False;
-	if (ang > tF64_Pi)
+	if (ang > tFP64_Pi)
 	{
-		ang -= tF64_Pi;
+		ang -= tFP64_Pi;
 		neg = True;
 	}
-	const tF64 angSq = ang * ang;
-	tF64 term = ang;
-	tF64 res = term;
-	for (tUSz idx = 0U; idx < itr; ++idx)
+	const tFP64 angSq = ang * ang;
+	tFP64 term = ang;
+	tFP64 res = term;
+	for (tIUSz idx = 0U; idx < itr; ++idx)
 	{
-		const tF64 denom = (tF64)((2U * idx + 2U) * (2U * idx + 3U));
+		const tFP64 denom = (tFP64)((2U * idx + 2U) * (2U * idx + 3U));
 		term *= -angSq / denom;
 		res += term;
 	}
-	if (neg == True) return tF64_Neg(res);
+	if (neg == True) return tFP64_Neg(res);
 	return res;
 }
-ForceInline tF64 tF64_Cosine_iter(tF64 ang, tUSz itr)
+ForceInline tFP64 tFP64_Cosine_iter(tFP64 ang, tIUSz itr)
 {
-	return tF64_Sine_iter(tF64_HalfPi - ang, itr);
+	return tFP64_Sine_iter(tFP64_HalfPi - ang, itr);
 }
-tF64 tF64_Tangent_iter(tF64 ang, tUSz itr)
+tFP64 tFP64_Tangent_iter(tFP64 ang, tIUSz itr)
 {
-	const tF64 cosAng = tF64_Cosine_iter(ang, itr);
-	const tF64 sinAng = tF64_Sine_iter(ang, itr);
-	if (tF64_Nearby(cosAng, 0.0)) return tF64_IsNeg(sinAng) ? tF64_NegInf() : tF64_Inf();
+	const tFP64 cosAng = tFP64_Cosine_iter(ang, itr);
+	const tFP64 sinAng = tFP64_Sine_iter(ang, itr);
+	if (tFP64_Nearby(cosAng, 0.0)) return tFP64_IsNeg(sinAng) ? tFP64_NegInf() : tFP64_Inf();
 	return sinAng / cosAng;
 }
-ForceInline tF64 tF64_Sine(tF64 ang)
+ForceInline tFP64 tFP64_Sine(tFP64 ang)
 {
-	return tF64_Sine_iter(ang, BQSELAYER_TRIG_ITER);
+	return tFP64_Sine_iter(ang, BQSELAYER_TRIG_ITER);
 }
-ForceInline tF64 tF64_Cosine(tF64 ang)
+ForceInline tFP64 tFP64_Cosine(tFP64 ang)
 {
-	return tF64_Cosine_iter(ang, BQSELAYER_TRIG_ITER);
+	return tFP64_Cosine_iter(ang, BQSELAYER_TRIG_ITER);
 }
-ForceInline tF64 tF64_Tangent(tF64 ang)
+ForceInline tFP64 tFP64_Tangent(tFP64 ang)
 {
-	return tF64_Tangent_iter(ang, BQSELAYER_TRIG_ITER);
+	return tFP64_Tangent_iter(ang, BQSELAYER_TRIG_ITER);
 }
-tF64 tF64_ArcSine_iter(tF64 num, tUSz sqrtItr, tUSz trigItr)
-{
-#ifndef BQSELAYER_DEBUG
-	if (tF64_Abs(num) > 1.0) return tF64_SigNaN();
-#else
-	Assertion(tF64_Abs(num) <= 1.0);
-#endif/*BQSELAYER_DEBUG*/
-	if (tF64_Nearby(num, 1.0))  return tF64_HalfPi;
-	if (tF64_Nearby(num, -1.0)) return -tF64_HalfPi;
-	return tF64_ArcTangent_iter(num / tF64_Sqrt_iter(1 - (num * num), sqrtItr), trigItr);
-}
-tF64 tF64_ArcSine(tF64 num)
+tFP64 tFP64_ArcSine_iter(tFP64 num, tIUSz sqrtItr, tIUSz trigItr)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tF64_Abs(num) > 1.0) return tF64_SigNaN();
+	if (tFP64_Abs(num) > 1.0) return tFP64_SigNaN();
 #else
-	Assertion(tF64_Abs(num) <= 1.0);
+	Assertion(tFP64_Abs(num) <= 1.0);
 #endif/*BQSELAYER_DEBUG*/
-	if (tF64_Nearby(num, 1.0))  return tF64_HalfPi;
-	if (tF64_Nearby(num, -1.0)) return -tF64_HalfPi;
-	return tF64_ArcTangent(num / tF64_Sqrt(1 - (num * num)));
+	if (tFP64_Nearby(num, 1.0))  return tFP64_HalfPi;
+	if (tFP64_Nearby(num, -1.0)) return -tFP64_HalfPi;
+	return tFP64_ArcTangent_iter(num / tFP64_Sqrt_iter(1 - (num * num), sqrtItr), trigItr);
 }
-ForceInline tF64 tF64_ArcCosine_iter(tF64 num, tUSz sqrtItr, tUSz trigItr)
+tFP64 tFP64_ArcSine(tFP64 num)
 {
-	return tF64_HalfPi - tF64_ArcSine_iter(num, sqrtItr, trigItr);
+#ifndef BQSELAYER_DEBUG
+	if (tFP64_Abs(num) > 1.0) return tFP64_SigNaN();
+#else
+	Assertion(tFP64_Abs(num) <= 1.0);
+#endif/*BQSELAYER_DEBUG*/
+	if (tFP64_Nearby(num, 1.0))  return tFP64_HalfPi;
+	if (tFP64_Nearby(num, -1.0)) return -tFP64_HalfPi;
+	return tFP64_ArcTangent(num / tFP64_Sqrt(1 - (num * num)));
 }
-ForceInline tF64 tF64_ArcCosine(tF64 num)
+ForceInline tFP64 tFP64_ArcCosine_iter(tFP64 num, tIUSz sqrtItr, tIUSz trigItr)
 {
-	return tF64_HalfPi - tF64_ArcSine(num);
+	return tFP64_HalfPi - tFP64_ArcSine_iter(num, sqrtItr, trigItr);
 }
-tF64 tF64_ArcTangent_iter(tF64 num, tUSz itr)
+ForceInline tFP64 tFP64_ArcCosine(tFP64 num)
+{
+	return tFP64_HalfPi - tFP64_ArcSine(num);
+}
+tFP64 tFP64_ArcTangent_iter(tFP64 num, tIUSz itr)
 {
 	if (itr == 0U) return num;
-	if (num > 1.0) return tF64_HalfPi - tF64_ArcTangent_iter(tF64_Recip(num), itr);
-	if (num < -1.0) return -tF64_HalfPi - tF64_ArcTangent_iter(tF64_Recip(num), itr);
-	tF64 scale = 1.0;
-	if (tF64_Abs(num) > 0.5)
+	if (num > 1.0) return tFP64_HalfPi - tFP64_ArcTangent_iter(tFP64_Recip(num), itr);
+	if (num < -1.0) return -tFP64_HalfPi - tFP64_ArcTangent_iter(tFP64_Recip(num), itr);
+	tFP64 scale = 1.0;
+	if (tFP64_Abs(num) > 0.5)
 	{
-		num = num / (1.0 + tF64_Sqrt(1.0 + (num * num)));
+		num = num / (1.0 + tFP64_Sqrt(1.0 + (num * num)));
 		scale = 2.0;
 	}
-	const tF64 numSq = num * num;
-	tF64 term = num;
-	tF64 res = term;
-	for (tUSz idx = 0U; idx < itr; ++idx)
+	const tFP64 numSq = num * num;
+	tFP64 term = num;
+	tFP64 res = term;
+	for (tIUSz idx = 0U; idx < itr; ++idx)
 	{
-		tUSz idx2 = idx << 1;
-		term *= -numSq * ((tF64)(idx2 + 1U) / (tF64)(idx2 + 3U));
+		tIUSz idx2 = idx << 1;
+		term *= -numSq * ((tFP64)(idx2 + 1U) / (tFP64)(idx2 + 3U));
 		res += term;
 	}
 	return scale * res;
 }
-ForceInline tF64 tF64_ArcTangent(tF64 num)
+ForceInline tFP64 tFP64_ArcTangent(tFP64 num)
 {
-	return tF64_ArcTangent_iter(num, BQSELAYER_TRIG_ITER);
+	return tFP64_ArcTangent_iter(num, BQSELAYER_TRIG_ITER);
 }
-tF64 tF64_ArcTangent2_iter(tF64 opp, tF64 adj, tUSz itr)
+tFP64 tFP64_ArcTangent2_iter(tFP64 opp, tFP64 adj, tIUSz itr)
 {
-	if (adj > 0.0) return tF64_ArcTangent_iter(opp / adj, itr);
-	if (tF64_IsNeg(adj) && !tF64_IsNeg(opp)) return tF64_ArcTangent_iter(opp / adj, itr) + tF64_Pi;
-	if (tF64_IsNeg(adj) && tF64_IsNeg(opp)) return tF64_ArcTangent_iter(opp / adj, itr) - tF64_Pi;
-	if (tF64_Nearby(adj, 0.0) && opp > 0.0) return tF64_HalfPi;
-	if (tF64_Nearby(adj, 0.0) && tF64_IsNeg(opp)) return -tF64_HalfPi;
+	if (adj > 0.0) return tFP64_ArcTangent_iter(opp / adj, itr);
+	if (tFP64_IsNeg(adj) && !tFP64_IsNeg(opp)) return tFP64_ArcTangent_iter(opp / adj, itr) + tFP64_Pi;
+	if (tFP64_IsNeg(adj) && tFP64_IsNeg(opp)) return tFP64_ArcTangent_iter(opp / adj, itr) - tFP64_Pi;
+	if (tFP64_Nearby(adj, 0.0) && opp > 0.0) return tFP64_HalfPi;
+	if (tFP64_Nearby(adj, 0.0) && tFP64_IsNeg(opp)) return -tFP64_HalfPi;
 	return 0.0;
 }
-ForceInline tF64 tF64_ArcTangent2(tF64 opp, tF64 adj)
+ForceInline tFP64 tFP64_ArcTangent2(tFP64 opp, tFP64 adj)
 {
-	return tF64_ArcTangent2_iter(opp, adj, BQSELAYER_TRIG_ITER);
+	return tFP64_ArcTangent2_iter(opp, adj, BQSELAYER_TRIG_ITER);
 }
-tF64 tF64_RecipSqrt_iter(tF64 num, tUSz itr)
+tFP64 tFP64_RecipSqrt_iter(tFP64 num, tIUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tF64_IsNeg(num)) return tF64_SigNaN();
-	if (tF64_Nearby(num, 0.0)) return tF64_Inf();
+	if (tFP64_IsNeg(num)) return tFP64_SigNaN();
+	if (tFP64_Nearby(num, 0.0)) return tFP64_Inf();
 #else
 	Assertion(num > 0.0);
 #endif/*BQSELAYER_DEBUG*/
-	tF64Bits number;
+	tFP64Bits number;
 	number.dbl = num;
-	tF64 halfNum = number.dbl * 0.5;
+	tFP64 halfNum = number.dbl * 0.5;
 	number.raw = 0X5FE6EC85E7DE30DAULL - (number.raw >> 1U);
-	for (tUSz idx = 0U; idx < itr; ++idx) number.dbl = number.dbl * (1.5 - (halfNum * number.dbl * number.dbl));
+	for (tIUSz idx = 0U; idx < itr; ++idx) number.dbl = number.dbl * (1.5 - (halfNum * number.dbl * number.dbl));
 	return number.dbl;
 }
-ForceInline tF64 tF64_RecipSqrt(tF64 num)
+ForceInline tFP64 tFP64_RecipSqrt(tFP64 num)
 {
-	return tF64_RecipSqrt_iter(num, 1U);
+	return tFP64_RecipSqrt_iter(num, 1U);
 }
-ForceInline tF64 tF64_Sqrt_iter(tF64 num, tUSz itr)
-{
-#ifndef BQSELAYER_DBG
-	if (tF64_IsNeg(num)) return tF64_SigNaN();
-#else
-	Assertion(!tF64_IsNeg(num));
-#endif/*BQSELAYER_DBG*/
-	if (tF64_Nearby(num, 0.0)) return 0.0;
-	return num * tF64_RecipSqrt_iter(num, itr);
-}
-ForceInline tF64 tF64_Sqrt(tF64 num)
+ForceInline tFP64 tFP64_Sqrt_iter(tFP64 num, tIUSz itr)
 {
 #ifndef BQSELAYER_DBG
-	if (tF64_IsNeg(num)) return tF64_SigNaN();
+	if (tFP64_IsNeg(num)) return tFP64_SigNaN();
 #else
-	Assertion(!tF64_IsNeg(num));
+	Assertion(!tFP64_IsNeg(num));
 #endif/*BQSELAYER_DBG*/
-	if (tF64_Nearby(num, 0.0)) return 0.0;
-	return num * tF64_RecipSqrt(num);
+	if (tFP64_Nearby(num, 0.0)) return 0.0;
+	return num * tFP64_RecipSqrt_iter(num, itr);
 }
-tF64 tF64_Log2_iter(tF64 num, tUSz itr)
+ForceInline tFP64 tFP64_Sqrt(tFP64 num)
+{
+#ifndef BQSELAYER_DBG
+	if (tFP64_IsNeg(num)) return tFP64_SigNaN();
+#else
+	Assertion(!tFP64_IsNeg(num));
+#endif/*BQSELAYER_DBG*/
+	if (tFP64_Nearby(num, 0.0)) return 0.0;
+	return num * tFP64_RecipSqrt(num);
+}
+tFP64 tFP64_Log2_iter(tFP64 num, tIUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
-	if (num <= 0.0) return tF64_SigNaN();
+	if (num <= 0.0) return tFP64_SigNaN();
 #else
 	Assertion(num > 0.0F);
 #endif/*BQSELAYER_DEBUG*/
-	tF64Bits numBits;
+	tFP64Bits numBits;
 	numBits.dbl = num;
-	tS32 expVal = (tS32)(((numBits.raw >> 52U) & 0x7FFULL) - 1023ULL);
-	tF64Bits mantBits;
+	tIS32 expVal = (tIS32)(((numBits.raw >> 52U) & 0x7FFULL) - 1023ULL);
+	tFP64Bits mantBits;
 	mantBits.raw = (numBits.raw & 0xFFFFFFFFFFFFFULL) | (1023ULL << 52U);
 	tBln sub = True;
-	const tF64 valX = mantBits.dbl - 1.0;
-	tF64 mantApprox = valX;
-	tF64 powVal = mantApprox;
-	for (tUSz idx = 2U; idx < itr + 2U; ++idx)
+	const tFP64 valX = mantBits.dbl - 1.0;
+	tFP64 mantApprox = valX;
+	tFP64 powVal = mantApprox;
+	for (tIUSz idx = 2U; idx < itr + 2U; ++idx)
 	{
 		powVal *= valX;
-		if (sub) mantApprox -= powVal / (tF64)idx;
-		else mantApprox += powVal / (tF64)idx;
+		if (sub) mantApprox -= powVal / (tFP64)idx;
+		else mantApprox += powVal / (tFP64)idx;
 		sub = !sub;
 	}
-	return (tF64)expVal + (mantApprox * tF64_Log2EulNum);
+	return (tFP64)expVal + (mantApprox * tFP64_Log2EulNum);
 }
-ForceInline tF64 tF64_Log2(tF64 num)
+ForceInline tFP64 tFP64_Log2(tFP64 num)
 {
-	return tF64_Log2_iter(num, 4U);
+	return tFP64_Log2_iter(num, 4U);
 }
-ForceInline tF64 tF64_Ln_iter(tF64 num, tUSz itr)
+ForceInline tFP64 tFP64_Ln_iter(tFP64 num, tIUSz itr)
 {
-	return tF64_Log2_iter(num, itr) / tF64_Log2EulNum;
+	return tFP64_Log2_iter(num, itr) / tFP64_Log2EulNum;
 }
-ForceInline tF64 tF64_Ln(tF64 num)
+ForceInline tFP64 tFP64_Ln(tFP64 num)
 {
-	return tF64_Log2(num) / tF64_Log2EulNum;
+	return tFP64_Log2(num) / tFP64_Log2EulNum;
 }
-tF64 tF64_Log_iter(tF64 num, tF64 base, tUSz itr)
-{
-#ifndef BQSELAYER_DEBUG
-	if (base <= 0.0 || tF64_Nearby(base, 1.0)) return tF64_SigNaN();
-#else
-	Assertion(base > 0.0F && !tF64_Nearby(base, 1.0));
-#endif/*BQSELAYER_DEBUG*/
-	return tF64_Log2_iter(num, itr) / tF64_Log2_iter(base, itr);
-}
-tF64 tF64_Log(tF64 num, tF64 base)
+tFP64 tFP64_Log_iter(tFP64 num, tFP64 base, tIUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
-	if (base <= 0.0 || tF64_Nearby(base, 1.0)) return tF64_SigNaN();
+	if (base <= 0.0 || tFP64_Nearby(base, 1.0)) return tFP64_SigNaN();
 #else
-	Assertion(base > 0.0F && !tF64_Nearby(base, 1.0));
+	Assertion(base > 0.0F && !tFP64_Nearby(base, 1.0));
 #endif/*BQSELAYER_DEBUG*/
-	return tF64_Log2(num) / tF64_Log2(base);
+	return tFP64_Log2_iter(num, itr) / tFP64_Log2_iter(base, itr);
 }
-ForceInline tF64 tF64_Lerp(tF64 strt, tF64 stp, tF64 fnsh)
+tFP64 tFP64_Log(tFP64 num, tFP64 base)
+{
+#ifndef BQSELAYER_DEBUG
+	if (base <= 0.0 || tFP64_Nearby(base, 1.0)) return tFP64_SigNaN();
+#else
+	Assertion(base > 0.0F && !tFP64_Nearby(base, 1.0));
+#endif/*BQSELAYER_DEBUG*/
+	return tFP64_Log2(num) / tFP64_Log2(base);
+}
+ForceInline tFP64 tFP64_Lerp(tFP64 strt, tFP64 stp, tFP64 fnsh)
 {
 	return strt + ((fnsh - strt) * stp);
 }
-ForceInline tF64 tF64_Unlerp(tF64 strt, tF64 curr, tF64 fnsh)
+ForceInline tFP64 tFP64_Unlerp(tFP64 strt, tFP64 curr, tFP64 fnsh)
 {
-	if (tF64_Nearby(strt, fnsh)) return 0.0;
+	if (tFP64_Nearby(strt, fnsh)) return 0.0;
 	return (curr - strt) / (fnsh - strt);
 }
-tF64 tF64_Exp_iter(tF64 pow, tUSz itr)
+tFP64 tFP64_Exp_iter(tFP64 pow, tIUSz itr)
 {
-	if (tF64_Nearby(pow, 0.0)) return 1.0;
-	if (tF64_Nearby(pow, 1.0)) return tF64_EulNum;
-	tF64 res = 1.0;
-	tF64 term = 1.0;
-	for (tUSz idx = 1U; idx <= itr; ++idx)
+	if (tFP64_Nearby(pow, 0.0)) return 1.0;
+	if (tFP64_Nearby(pow, 1.0)) return tFP64_EulNum;
+	tFP64 res = 1.0;
+	tFP64 term = 1.0;
+	for (tIUSz idx = 1U; idx <= itr; ++idx)
 	{
-		term *= pow / (tF64)idx;
+		term *= pow / (tFP64)idx;
 		res += term;
 	}
 	return res;
 }
-ForceInline tF64 tF64_Exp(tF64 pow)
+ForceInline tFP64 tFP64_Exp(tFP64 pow)
 {
-	return tF64_Exp_iter(pow, 10U);
+	return tFP64_Exp_iter(pow, 10U);
 }
-ForceInline tF64 tF64_HypSine_iter(tF64 num, tUSz itr)
+ForceInline tFP64 tFP64_HypSine_iter(tFP64 num, tIUSz itr)
 {
-	tF64 expNum = tF64_Exp_iter(num, itr);
-	return (expNum - tF64_Recip(expNum)) * 0.5;
+	tFP64 expNum = tFP64_Exp_iter(num, itr);
+	return (expNum - tFP64_Recip(expNum)) * 0.5;
 }
-ForceInline tF64 tF64_HypCosine_iter(tF64 num, tUSz itr)
+ForceInline tFP64 tFP64_HypCosine_iter(tFP64 num, tIUSz itr)
 {
-	tF64 expNum = tF64_Exp_iter(num, itr);
-	return (expNum + tF64_Recip(expNum)) * 0.5;
+	tFP64 expNum = tFP64_Exp_iter(num, itr);
+	return (expNum + tFP64_Recip(expNum)) * 0.5;
 }
-tF64 tF64_HypTangent_iter(tF64 num, tUSz itr)
+tFP64 tFP64_HypTangent_iter(tFP64 num, tIUSz itr)
 {
-	tF64 expNum = tF64_Exp_iter(num, itr);
-	tF64 invExpNum = tF64_Recip(expNum);
-	const tF64 hypSine = (expNum - invExpNum) * 0.5;
-	const tF64 hypCosine = (expNum + invExpNum) * 0.5;
+	tFP64 expNum = tFP64_Exp_iter(num, itr);
+	tFP64 invExpNum = tFP64_Recip(expNum);
+	const tFP64 hypSine = (expNum - invExpNum) * 0.5;
+	const tFP64 hypCosine = (expNum + invExpNum) * 0.5;
 	return hypSine / hypCosine;
 }
-ForceInline tF64 tF64_HypSine(tF64 num)
+ForceInline tFP64 tFP64_HypSine(tFP64 num)
 {
-	tF64 expNum = tF64_Exp(num);
-	return (expNum - tF64_Recip(expNum)) * 0.5;
+	tFP64 expNum = tFP64_Exp(num);
+	return (expNum - tFP64_Recip(expNum)) * 0.5;
 }
-ForceInline tF64 tF64_HypCosine(tF64 num)
+ForceInline tFP64 tFP64_HypCosine(tFP64 num)
 {
-	tF64 expNum = tF64_Exp(num);
-	return (expNum + tF64_Recip(expNum)) * 0.5;
+	tFP64 expNum = tFP64_Exp(num);
+	return (expNum + tFP64_Recip(expNum)) * 0.5;
 }
-ForceInline tF64 tF64_HypTangent(tF64 num)
+ForceInline tFP64 tFP64_HypTangent(tFP64 num)
 {
-	tF64 expNum = tF64_Exp(num);
-	tF64 invExpNum = tF64_Recip(expNum);
-	const tF64 hypSine = (expNum - invExpNum) * 0.5;
-	const tF64 hypCosine = (expNum + invExpNum) * 0.5;
+	tFP64 expNum = tFP64_Exp(num);
+	tFP64 invExpNum = tFP64_Recip(expNum);
+	const tFP64 hypSine = (expNum - invExpNum) * 0.5;
+	const tFP64 hypCosine = (expNum + invExpNum) * 0.5;
 	return hypSine / hypCosine;
 }
-tF64 tF64_Mod(tF64 num, tF64 denom)
+tFP64 tFP64_Mod(tFP64 num, tFP64 denom)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tF64_Nearby(denom, 0.0)) return tF64_SigNaN();
+	if (tFP64_Nearby(denom, 0.0)) return tFP64_SigNaN();
 #else
-	Assertion(!tF64_Nearby(denom, 0.0));
+	Assertion(!tFP64_Nearby(denom, 0.0));
 #endif/*BQSELAYER_DEBUG*/
-	tS64 quot = (tS64)(num / denom);
-	return num - ((tF64)quot * denom);
+	tIS64 quot = (tIS64)(num / denom);
+	return num - ((tFP64)quot * denom);
 }
-tF64 tF64_PowI(tF64 base, tSSz exp)
+tFP64 tFP64_PowI(tFP64 base, tISSz exp)
 {
 	if (exp == 0) return 1.0;
-	if (exp < 0) return tF64_Recip(tF64_PowI(base, -exp));
-	tF64 result = 1.0;
+	if (exp < 0) return tFP64_Recip(tFP64_PowI(base, -exp));
+	tFP64 result = 1.0;
 	while (exp != 0)
 	{
 		if (exp & 1) result *= base;
@@ -1065,51 +1065,51 @@ tF64 tF64_PowI(tF64 base, tSSz exp)
 	}
 	return result;
 }
-tF64 tF64_Pow_iter(tF64 base, tF64 exp, tUSz itr)
+tFP64 tFP64_Pow_iter(tFP64 base, tFP64 exp, tIUSz itr)
 {
-	tSSz intPart = (tSSz)exp;
-	tF64 whole = tF64_PowI(base, intPart);
-	if ((tF64)intPart == exp) return whole;
-	tF64 fracPart = exp - (tF64)intPart;
-	if (tF64_Nearby(fracPart, 0.5)) return whole * tF64_Sqrt_iter(base, itr);
-	if (tF64_Nearby(fracPart, -0.5)) return whole * tF64_RecipSqrt_iter(base, itr);
+	tISSz intPart = (tISSz)exp;
+	tFP64 whole = tFP64_PowI(base, intPart);
+	if ((tFP64)intPart == exp) return whole;
+	tFP64 fracPart = exp - (tFP64)intPart;
+	if (tFP64_Nearby(fracPart, 0.5)) return whole * tFP64_Sqrt_iter(base, itr);
+	if (tFP64_Nearby(fracPart, -0.5)) return whole * tFP64_RecipSqrt_iter(base, itr);
 #ifndef BQSELAYER_DEBUG
-	if (base <= 0.0) return tF64_SigNaN();
+	if (base <= 0.0) return tFP64_SigNaN();
 #else
 	Assertion(base > 0.0);
 #endif/*BQSELAYER_DEBUG*/
-	return whole * tF64_Exp_iter(fracPart * tF64_Ln_iter(base, itr), itr);
+	return whole * tFP64_Exp_iter(fracPart * tFP64_Ln_iter(base, itr), itr);
 }
-tF64 tF64_Pow(tF64 base, tF64 exp)
+tFP64 tFP64_Pow(tFP64 base, tFP64 exp)
 {
-	tSSz intPart = (tSSz)exp;
-	tF64 whole = tF64_PowI(base, intPart);
-	if ((tF64)intPart == exp) return whole;
-	tF64 fracPart = exp - (tF64)intPart;
-	if (tF64_Nearby(fracPart, 0.5)) return whole * tF64_Sqrt(base);
-	if (tF64_Nearby(fracPart, -0.5)) return whole * tF64_RecipSqrt(base);
+	tISSz intPart = (tISSz)exp;
+	tFP64 whole = tFP64_PowI(base, intPart);
+	if ((tFP64)intPart == exp) return whole;
+	tFP64 fracPart = exp - (tFP64)intPart;
+	if (tFP64_Nearby(fracPart, 0.5)) return whole * tFP64_Sqrt(base);
+	if (tFP64_Nearby(fracPart, -0.5)) return whole * tFP64_RecipSqrt(base);
 #ifndef BQSELAYER_DEBUG
-	if (base <= 0.0) return tF64_SigNaN();
+	if (base <= 0.0) return tFP64_SigNaN();
 #else
 	Assertion(base > 0.0);
 #endif/*BQSELAYER_DEBUG*/
-	return whole * tF64_Exp(fracPart * tF64_Ln(base));
+	return whole * tFP64_Exp(fracPart * tFP64_Ln(base));
 }
-tF64 tF64_Round(tF64 num)
+tFP64 tFP64_Round(tFP64 num)
 {
-	tSSz intPart = (tSSz)num;
-	if (num == (tF64)intPart) return num;
-	if (tF64_IsNeg(num)) return tF64_Neg(tF64_Round(tF64_Neg(num)));
-	tF64 fracPart = num - (tF64)intPart;
-	if (fracPart < 0.5) return (tF64)intPart;
-	else return (tF64)intPart + 1.0;
+	tISSz intPart = (tISSz)num;
+	if (num == (tFP64)intPart) return num;
+	if (tFP64_IsNeg(num)) return tFP64_Neg(tFP64_Round(tFP64_Neg(num)));
+	tFP64 fracPart = num - (tFP64)intPart;
+	if (fracPart < 0.5) return (tFP64)intPart;
+	else return (tFP64)intPart + 1.0;
 }
-ForceInline tF64 tF64_Recip(tF64 num)
+ForceInline tFP64 tFP64_Recip(tFP64 num)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tF64_Nearby(num, 0.0)) return tF64_IsNeg(num) ? tF64_Inf() : tF64_NegInf();
+	if (tFP64_Nearby(num, 0.0)) return tFP64_IsNeg(num) ? tFP64_Inf() : tFP64_NegInf();
 #else
-	Assertion(!tF64_Nearby(num, 0.0));
+	Assertion(!tFP64_Nearby(num, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	// TODO: Assembly optimizations here.
 	return 1.0 / num;
@@ -1165,50 +1165,50 @@ ForceInline tType tType##_Cb(tType Num)									\
 }
 #endif/*BQSELAYER_PRIMTYPES_IMPL*/
 #define WrapStatement(Stmnt) do{Stmnt}while(0U)
-#define ForceDump() (*(voltaile tUSz *)0U = 0U)
+#define ForceDump() (*(voltaile tIUSz *)0U = 0U)
 #define Assertion(Cnd) WrapStatement(if(!(Cnd)){ForceDump();})
 #define Stringify_inner(Str) #Str
 #define Stringify(Str) Stringify_inner(Str)
 #define Glueify_inner(StrA, StrB) StrA##StrB
 #define Glueify(StrA, StrB) Glueify_inner(StrA, StrB)
 #define ArrLng(Arr) (sizeof(Arr)/sizeof(Arr[0]))
-#define NumFromPtr(Ptr) (tUSz)((tU8 *)Ptr - (tU8 *)0U)
-#define PtrFromNum(Num) (tPtr)((tU8 *)0U + (Num))
-#define OffsetOf(tType, Memb) ((tUSz)&(((tType *)0U)->Memb))
+#define NumFromPtr(Ptr) (tIUSz)((tIU8 *)Ptr - (tIU8 *)0U)
+#define PtrFromNum(Num) (tPtr)((tIU8 *)0U + (Num))
+#define OffsetOf(tType, Memb) ((tIUSz)&(((tType *)0U)->Memb))
 #define MemberSize(tType, Memb) (sizeof(((tType *)0U)->Memb))
 LINK_C_Begin
-BQSELAYER_DECLARE_COMMON_FUNC(tSSz);
-BQSELAYER_DECLARE_COMMON_FUNC(tUSz);
-BQSELAYER_DECLARE_COMMON_FUNC(tS8);
-BQSELAYER_DECLARE_COMMON_FUNC(tU8);
-BQSELAYER_DECLARE_COMMON_FUNC(tS16);
-BQSELAYER_DECLARE_COMMON_FUNC(tU16);
-BQSELAYER_DECLARE_COMMON_FUNC(tS32);
-BQSELAYER_DECLARE_COMMON_FUNC(tU32);
-BQSELAYER_DECLARE_COMMON_FUNC(tS64);
-BQSELAYER_DECLARE_COMMON_FUNC(tU64);
-BQSELAYER_DECLARE_COMMON_FUNC(tF32);
-BQSELAYER_DECLARE_COMMON_FUNC(tF64);
+BQSELAYER_DECLARE_COMMON_FUNC(tISSz);
+BQSELAYER_DECLARE_COMMON_FUNC(tIUSz);
+BQSELAYER_DECLARE_COMMON_FUNC(tIS8);
+BQSELAYER_DECLARE_COMMON_FUNC(tIU8);
+BQSELAYER_DECLARE_COMMON_FUNC(tIS16);
+BQSELAYER_DECLARE_COMMON_FUNC(tIU16);
+BQSELAYER_DECLARE_COMMON_FUNC(tIS32);
+BQSELAYER_DECLARE_COMMON_FUNC(tIU32);
+BQSELAYER_DECLARE_COMMON_FUNC(tIS64);
+BQSELAYER_DECLARE_COMMON_FUNC(tIU64);
+BQSELAYER_DECLARE_COMMON_FUNC(tFP32);
+BQSELAYER_DECLARE_COMMON_FUNC(tFP64);
 LINK_C_End
 #ifdef BQSELAYER_PRIMTYPES_IMPL
-BQSELAYER_DEFINE_COMMON_FUNC(tSSz);
-BQSELAYER_DEFINE_COMMON_FUNC(tUSz);
-BQSELAYER_DEFINE_COMMON_FUNC(tS8);
-BQSELAYER_DEFINE_COMMON_FUNC(tU8);
-BQSELAYER_DEFINE_COMMON_FUNC(tS16);
-BQSELAYER_DEFINE_COMMON_FUNC(tU16);
-BQSELAYER_DEFINE_COMMON_FUNC(tS32);
-BQSELAYER_DEFINE_COMMON_FUNC(tU32);
-BQSELAYER_DEFINE_COMMON_FUNC(tS64);
-BQSELAYER_DEFINE_COMMON_FUNC(tU64);
-BQSELAYER_DEFINE_COMMON_FUNC(tF32);
-BQSELAYER_DEFINE_COMMON_FUNC(tF64);
+BQSELAYER_DEFINE_COMMON_FUNC(tISSz);
+BQSELAYER_DEFINE_COMMON_FUNC(tIUSz);
+BQSELAYER_DEFINE_COMMON_FUNC(tIS8);
+BQSELAYER_DEFINE_COMMON_FUNC(tIU8);
+BQSELAYER_DEFINE_COMMON_FUNC(tIS16);
+BQSELAYER_DEFINE_COMMON_FUNC(tIU16);
+BQSELAYER_DEFINE_COMMON_FUNC(tIS32);
+BQSELAYER_DEFINE_COMMON_FUNC(tIU32);
+BQSELAYER_DEFINE_COMMON_FUNC(tIS64);
+BQSELAYER_DEFINE_COMMON_FUNC(tIU64);
+BQSELAYER_DEFINE_COMMON_FUNC(tFP32);
+BQSELAYER_DEFINE_COMMON_FUNC(tFP64);
 #undef BQSELAYER_DEFINE_COMMON_FUNC
 #endif/*BQSELAYER_PRIMTYPES_IMPL*/
 #undef BQSELAYER_DECLARE_COMMON_FUNC
 #if ARCH_Bitness == 64
-typedef tF64 tFSz;
+typedef tFP64 tFPSz;
 #else
-typedef tF32 tFSz;
+typedef tFP32 tFPSz;
 #endif/*ARCH_Bitness*/
 #endif/*BQSELAYER_PRIMTYPES_H*/
