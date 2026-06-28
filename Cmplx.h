@@ -14,10 +14,10 @@ ForceInline tFP32Cmplx tFP32Cmplx_Conj(tFP32Cmplx num);
 ForceInline tFP32 tFP32Cmplx_MagSq(tFP32Cmplx num);
 ForceInline tFP32 tFP32Cmplx_Mag_iter(tFP32Cmplx num, tIUSz itr);
 ForceInline tFP32 tFP32Cmplx_Mag(tFP32Cmplx num);
-ForceInline tFP32Cmplx tFP32Cmplx_AddF(tFP32Cmplx num, tFP32 flt);
-ForceInline tFP32Cmplx tFP32Cmplx_SubF(tFP32Cmplx num, tFP32 flt);
-ForceInline tFP32Cmplx tFP32Cmplx_MulF(tFP32Cmplx num, tFP32 flt);
-ForceInline tFP32Cmplx tFP32Cmplx_DivF(tFP32Cmplx num, tFP32 flt);
+ForceInline tFP32Cmplx tFP32Cmplx_AddFlt(tFP32Cmplx num, tFP32 flt);
+ForceInline tFP32Cmplx tFP32Cmplx_SubFlt(tFP32Cmplx num, tFP32 flt);
+ForceInline tFP32Cmplx tFP32Cmplx_MulFlt(tFP32Cmplx num, tFP32 flt);
+ForceInline tFP32Cmplx tFP32Cmplx_DivFlt(tFP32Cmplx num, tFP32 flt);
 ForceInline tFP32 tFP32Cmplx_Arg_iter(tFP32Cmplx num, tIUSz itr);
 ForceInline tFP32 tFP32Cmplx_Arg(tFP32Cmplx num);
 tFP32Cmplx tFP32Cmplx_FromPolar_fast(tFP32 mag, tFP32 ang);
@@ -108,23 +108,23 @@ ForceInline tFP32 tFP32Cmplx_Mag(tFP32Cmplx num)
 {
 	return tFP32_Sqrt(tFP32Cmplx_MagSq(num));
 }
-ForceInline tFP32Cmplx tFP32Cmplx_AddF(tFP32Cmplx num, tFP32 flt)
+ForceInline tFP32Cmplx tFP32Cmplx_AddFlt(tFP32Cmplx num, tFP32 flt)
 {
 	num.real += flt;
 	return num;
 }
-ForceInline tFP32Cmplx tFP32Cmplx_SubF(tFP32Cmplx num, tFP32 flt)
+ForceInline tFP32Cmplx tFP32Cmplx_SubFlt(tFP32Cmplx num, tFP32 flt)
 {
 	num.real -= flt;
 	return num;
 }
-ForceInline tFP32Cmplx tFP32Cmplx_MulF(tFP32Cmplx num, tFP32 flt)
+ForceInline tFP32Cmplx tFP32Cmplx_MulFlt(tFP32Cmplx num, tFP32 flt)
 {
 	num.real *= flt;
 	num.imag *= flt;
 	return num;
 }
-ForceInline tFP32Cmplx tFP32Cmplx_DivF(tFP32Cmplx num, tFP32 flt)
+ForceInline tFP32Cmplx tFP32Cmplx_DivFlt(tFP32Cmplx num, tFP32 flt)
 {
 #ifndef BQSELAYER_DBG
 	if (tFP32_Nearby(flt, 0.0F))
@@ -175,7 +175,8 @@ tFP32Cmplx tFP32Cmplx_Sqrt_iter(tFP32Cmplx num, tIUSz itr)
 #define BQSELAYER_RECIPSQRT2 0.707106781187F
 	tBln neg = tFP32_IsNeg(num.imag);
 	num.imag = tFP32_Sqrt_iter(mag - num.real, itr) * BQSELAYER_RECIPSQRT2;
-	num.real = tFP32_Sqrt_iter(mag + num.real, itr) * BQSELAYER_RECIPSQRT2;
+	if (tFP32_Nearby(mag + num.real, 0.0F)) num.real = 0.0F;
+	else num.real = tFP32_Sqrt_iter(mag + num.real, itr) * BQSELAYER_RECIPSQRT2;
 #undef BQSELAYER_RECIPSQRT2
 	if (neg) num.imag = tFP32_Neg(num.imag);
 	return num;
@@ -186,7 +187,8 @@ tFP32Cmplx tFP32Cmplx_Sqrt(tFP32Cmplx num)
 #define BQSELAYER_RECIPSQRT2 0.707106781187F
 	tBln neg = tFP32_IsNeg(num.imag);
 	num.imag = tFP32_Sqrt(mag - num.real) * BQSELAYER_RECIPSQRT2;
-	num.real = tFP32_Sqrt(mag + num.real) * BQSELAYER_RECIPSQRT2;
+	if (tFP32_Nearby(mag + num.real, 0.0F)) num.real = 0.0F;
+	else num.real = tFP32_Sqrt(mag + num.real) * BQSELAYER_RECIPSQRT2;
 #undef BQSELAYER_RECIPSQRT2
 	if (neg) num.imag = tFP32_Neg(num.imag);
 	return num;
@@ -280,7 +282,7 @@ ForceInline tFP32Cmplx tFP32Cmplx_I(void)
 }
 tFP32Cmplx tFP32Cmplx_Recip(tFP32Cmplx num)
 {
-	return tFP32Cmplx_DivF(tFP32Cmplx_Conj(num), tFP32Cmplx_MagSq(num));
+	return tFP32Cmplx_DivFlt(tFP32Cmplx_Conj(num), tFP32Cmplx_MagSq(num));
 }
 LINK_C_End
 #endif/*BQSELAYER_CMPLX_IMPL*/
@@ -297,10 +299,10 @@ ForceInline tFP64Cmplx tFP64Cmplx_Conj(tFP64Cmplx num);
 ForceInline tFP64 tFP64Cmplx_MagSq(tFP64Cmplx num);
 ForceInline tFP64 tFP64Cmplx_Mag_iter(tFP64Cmplx num, tIUSz itr);
 ForceInline tFP64 tFP64Cmplx_Mag(tFP64Cmplx num);
-ForceInline tFP64Cmplx tFP64Cmplx_AddF(tFP64Cmplx num, tFP64 dbl);
-ForceInline tFP64Cmplx tFP64Cmplx_SubF(tFP64Cmplx num, tFP64 dbl);
-ForceInline tFP64Cmplx tFP64Cmplx_MulF(tFP64Cmplx num, tFP64 dbl);
-ForceInline tFP64Cmplx tFP64Cmplx_DivF(tFP64Cmplx num, tFP64 dbl);
+ForceInline tFP64Cmplx tFP64Cmplx_AddDbl(tFP64Cmplx num, tFP64 dbl);
+ForceInline tFP64Cmplx tFP64Cmplx_SubDbl(tFP64Cmplx num, tFP64 dbl);
+ForceInline tFP64Cmplx tFP64Cmplx_MulDbl(tFP64Cmplx num, tFP64 dbl);
+ForceInline tFP64Cmplx tFP64Cmplx_DivDbl(tFP64Cmplx num, tFP64 dbl);
 ForceInline tFP64 tFP64Cmplx_Arg_iter(tFP64Cmplx num, tIUSz itr);
 ForceInline tFP64 tFP64Cmplx_Arg(tFP64Cmplx num);
 tFP64Cmplx tFP64Cmplx_FromPolar_fast(tFP64 mag, tFP64 ang);
@@ -391,23 +393,23 @@ ForceInline tFP64 tFP64Cmplx_Mag(tFP64Cmplx num)
 {
 	return tFP64_Sqrt(tFP64Cmplx_MagSq(num));
 }
-ForceInline tFP64Cmplx tFP64Cmplx_AddF(tFP64Cmplx num, tFP64 dbl)
+ForceInline tFP64Cmplx tFP64Cmplx_AddDbl(tFP64Cmplx num, tFP64 dbl)
 {
 	num.real += dbl;
 	return num;
 }
-ForceInline tFP64Cmplx tFP64Cmplx_SubF(tFP64Cmplx num, tFP64 dbl)
+ForceInline tFP64Cmplx tFP64Cmplx_SubDbl(tFP64Cmplx num, tFP64 dbl)
 {
 	num.real -= dbl;
 	return num;
 }
-ForceInline tFP64Cmplx tFP64Cmplx_MulF(tFP64Cmplx num, tFP64 dbl)
+ForceInline tFP64Cmplx tFP64Cmplx_MulDbl(tFP64Cmplx num, tFP64 dbl)
 {
 	num.real *= dbl;
 	num.imag *= dbl;
 	return num;
 }
-ForceInline tFP64Cmplx tFP64Cmplx_DivF(tFP64Cmplx num, tFP64 dbl)
+ForceInline tFP64Cmplx tFP64Cmplx_DivDbl(tFP64Cmplx num, tFP64 dbl)
 {
 #ifndef BQSELAYER_DBG
 	if (tFP64_Nearby(dbl, 0.0))
@@ -458,7 +460,8 @@ tFP64Cmplx tFP64Cmplx_Sqrt_iter(tFP64Cmplx num, tIUSz itr)
 #define BQSELAYER_RECIPSQRT2 0.707106781187
 	tBln neg = tFP64_IsNeg(num.imag);
 	num.imag = tFP64_Sqrt_iter(mag - num.real, itr) * BQSELAYER_RECIPSQRT2;
-	num.real = tFP64_Sqrt_iter(mag + num.real, itr) * BQSELAYER_RECIPSQRT2;
+	if (tFP64_Nearby(mag + num.real, 0.0)) num.real = 0.0;
+	else num.real = tFP64_Sqrt_iter(mag + num.real, itr) * BQSELAYER_RECIPSQRT2;
 #undef BQSELAYER_RECIPSQRT2
 	if (neg) num.imag = tFP64_Neg(num.imag);
 	return num;
@@ -469,7 +472,8 @@ tFP64Cmplx tFP64Cmplx_Sqrt(tFP64Cmplx num)
 #define BQSELAYER_RECIPSQRT2 0.707106781187
 	tBln neg = tFP64_IsNeg(num.imag);
 	num.imag = tFP64_Sqrt(mag - num.real) * BQSELAYER_RECIPSQRT2;
-	num.real = tFP64_Sqrt(mag + num.real) * BQSELAYER_RECIPSQRT2;
+	if (tFP64_Nearby(mag + num.real, 0.0)) num.real = 0.0;
+	else num.real = tFP64_Sqrt(mag + num.real) * BQSELAYER_RECIPSQRT2;
 #undef BQSELAYER_RECIPSQRT2
 	if (neg) num.imag = tFP64_Neg(num.imag);
 	return num;
@@ -563,7 +567,7 @@ ForceInline tFP64Cmplx tFP64Cmplx_I(void)
 }
 tFP64Cmplx tFP64Cmplx_Recip(tFP64Cmplx num)
 {
-	return tFP64Cmplx_DivF(tFP64Cmplx_Conj(num), tFP64Cmplx_MagSq(num));
+	return tFP64Cmplx_DivDbl(tFP64Cmplx_Conj(num), tFP64Cmplx_MagSq(num));
 }
 LINK_C_End
 #endif/*BQSELAYER_CMPLX_IMPL*/

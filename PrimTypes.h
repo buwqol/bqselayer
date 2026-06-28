@@ -121,11 +121,11 @@ ForceInline tFP32 tFP32_Cosine(tFP32 ang);
 /*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
 ForceInline tFP32 tFP32_Tangent(tFP32 ang);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-tFP32 tFP32_ArcSine_iter(tFP32 num, tIUSz sqrtItr, tIUSz trigItr);
+tFP32 tFP32_ArcSine_iter(tFP32 num, tIUSz itr);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tFP32 tFP32_ArcSine(tFP32 num);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-ForceInline tFP32 tFP32_ArcCosine_iter(tFP32 num, tIUSz sqrtItr, tIUSz trigItr);
+ForceInline tFP32 tFP32_ArcCosine_iter(tFP32 num, tIUSz itr);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
 ForceInline tFP32 tFP32_ArcCosine(tFP32 num);
 tFP32 tFP32_ArcTangent_iter(tFP32 num, tIUSz itr);
@@ -179,7 +179,7 @@ tFP32Bits;
 #ifdef BQSELAYER_PRIMTYPES_IMPL
 ForceInline tBln tFP32_IsNeg(tFP32 flt)
 {
-	if (tFP32_Nearby(flt, 0.0F)) return False;
+	if (flt == 0.0F) return False;
 	tFP32Bits num;
 	num.flt = flt;
 	return (tBln)!!(num.raw & tFP32_SignMask);
@@ -300,7 +300,7 @@ ForceInline tFP32 tFP32_Tangent(tFP32 ang)
 {
 	return tFP32_Tangent_iter(ang, BQSELAYER_TRIG_ITER);
 }
-tFP32 tFP32_ArcSine_iter(tFP32 num, tIUSz sqrtItr, tIUSz trigItr)
+tFP32 tFP32_ArcSine_iter(tFP32 num, tIUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
 	if (tFP32_Abs(num) > 1.0F) return tFP32_SigNaN();
@@ -309,7 +309,7 @@ tFP32 tFP32_ArcSine_iter(tFP32 num, tIUSz sqrtItr, tIUSz trigItr)
 #endif/*BQSELAYER_DEBUG*/
 	if (tFP32_Nearby(num, 1.0F))  return tFP32_HalfPi;
 	if (tFP32_Nearby(num, -1.0F)) return -tFP32_HalfPi;
-	return tFP32_ArcTangent_iter(num / tFP32_Sqrt_iter(1 - (num * num), sqrtItr), trigItr);
+	return tFP32_ArcTangent_iter(num / tFP32_Sqrt_iter(1.0F - tFP32_Sq(num), itr), itr);
 }
 tFP32 tFP32_ArcSine(tFP32 num)
 {
@@ -320,11 +320,11 @@ tFP32 tFP32_ArcSine(tFP32 num)
 #endif/*BQSELAYER_DEBUG*/
 	if (tFP32_Nearby(num, 1.0F))  return tFP32_HalfPi;
 	if (tFP32_Nearby(num, -1.0F)) return -tFP32_HalfPi;
-	return tFP32_ArcTangent(num / tFP32_Sqrt(1 - (num * num)));
+	return tFP32_ArcTangent(num / tFP32_Sqrt(1.0F - tFP32_Sq(num)));
 }
-ForceInline tFP32 tFP32_ArcCosine_iter(tFP32 num, tIUSz sqrtItr, tIUSz trigItr)
+ForceInline tFP32 tFP32_ArcCosine_iter(tFP32 num, tIUSz itr)
 {
-	return tFP32_HalfPi - tFP32_ArcSine_iter(num, sqrtItr, trigItr);
+	return tFP32_HalfPi - tFP32_ArcSine_iter(num, itr);
 }
 ForceInline tFP32 tFP32_ArcCosine(tFP32 num)
 {
@@ -338,7 +338,7 @@ tFP32 tFP32_ArcTangent_iter(tFP32 num, tIUSz itr)
 	tFP32 scale = 1.0F;
 	if (tFP32_Abs(num) > 0.5F)
 	{
-		num = num / (1.0F + tFP32_Sqrt(1.0F + (num * num)));
+		num = num / (1.0F + tFP32_Sqrt(1.0F + tFP32_Sq(num)));
 		scale = 2.0F;
 	}
 	const tFP32 numSq = num * num;
@@ -637,11 +637,11 @@ ForceInline tFP64 tFP64_Cosine(tFP64 ang);
 /*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
 ForceInline tFP64 tFP64_Tangent(tFP64 ang);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-tFP64 tFP64_ArcSine_iter(tFP64 num, tIUSz sqrtItr, tIUSz trigItr);
+tFP64 tFP64_ArcSine_iter(tFP64 num, tIUSz itr);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tFP64 tFP64_ArcSine(tFP64 num);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-ForceInline tFP64 tFP64_ArcCosine_iter(tFP64 num, tIUSz sqrtItr, tIUSz trigItr);
+ForceInline tFP64 tFP64_ArcCosine_iter(tFP64 num, tIUSz itr);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
 ForceInline tFP64 tFP64_ArcCosine(tFP64 num);
 tFP64 tFP64_ArcTangent_iter(tFP64 num, tIUSz itr);
@@ -708,7 +708,7 @@ ForceInline tFP64 tFP64_Abs(tFP64 dbl)
 }
 ForceInline tBln tFP64_IsNeg(tFP64 dbl)
 {
-	if (tFP64_Nearby(dbl, 0.0)) return False;
+	if (dbl == 0.0) return False;
 	tFP64Bits num;
 	num.dbl = dbl;
 	return (tBln)!!(num.raw & tFP64_SignMask);
@@ -817,7 +817,7 @@ ForceInline tFP64 tFP64_Tangent(tFP64 ang)
 {
 	return tFP64_Tangent_iter(ang, BQSELAYER_TRIG_ITER);
 }
-tFP64 tFP64_ArcSine_iter(tFP64 num, tIUSz sqrtItr, tIUSz trigItr)
+tFP64 tFP64_ArcSine_iter(tFP64 num, tIUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
 	if (tFP64_Abs(num) > 1.0) return tFP64_SigNaN();
@@ -826,7 +826,7 @@ tFP64 tFP64_ArcSine_iter(tFP64 num, tIUSz sqrtItr, tIUSz trigItr)
 #endif/*BQSELAYER_DEBUG*/
 	if (tFP64_Nearby(num, 1.0))  return tFP64_HalfPi;
 	if (tFP64_Nearby(num, -1.0)) return -tFP64_HalfPi;
-	return tFP64_ArcTangent_iter(num / tFP64_Sqrt_iter(1 - (num * num), sqrtItr), trigItr);
+	return tFP64_ArcTangent_iter(num / tFP64_Sqrt_iter(1.0 - tFP64_Sq(num), itr), itr);
 }
 tFP64 tFP64_ArcSine(tFP64 num)
 {
@@ -837,11 +837,11 @@ tFP64 tFP64_ArcSine(tFP64 num)
 #endif/*BQSELAYER_DEBUG*/
 	if (tFP64_Nearby(num, 1.0))  return tFP64_HalfPi;
 	if (tFP64_Nearby(num, -1.0)) return -tFP64_HalfPi;
-	return tFP64_ArcTangent(num / tFP64_Sqrt(1 - (num * num)));
+	return tFP64_ArcTangent(num / tFP64_Sqrt(1.0 - tFP64_Sq(num)));
 }
-ForceInline tFP64 tFP64_ArcCosine_iter(tFP64 num, tIUSz sqrtItr, tIUSz trigItr)
+ForceInline tFP64 tFP64_ArcCosine_iter(tFP64 num, tIUSz itr)
 {
-	return tFP64_HalfPi - tFP64_ArcSine_iter(num, sqrtItr, trigItr);
+	return tFP64_HalfPi - tFP64_ArcSine_iter(num, itr);
 }
 ForceInline tFP64 tFP64_ArcCosine(tFP64 num)
 {
@@ -855,7 +855,7 @@ tFP64 tFP64_ArcTangent_iter(tFP64 num, tIUSz itr)
 	tFP64 scale = 1.0;
 	if (tFP64_Abs(num) > 0.5)
 	{
-		num = num / (1.0 + tFP64_Sqrt(1.0 + (num * num)));
+		num = num / (1.0 + tFP64_Sqrt(1.0 + tFP64_Sq(num)));
 		scale = 2.0;
 	}
 	const tFP64 numSq = num * num;
