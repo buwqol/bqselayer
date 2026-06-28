@@ -139,29 +139,29 @@ enum eArchitecture
 #endif
 /*Function prefixes*/
 #if defined(COMP_MSC)
-#define FORCEINLINE __forceinline
-#define NOINLINE __declspec(noinline)
-#define DLLEXPORT __declspec(dllexport)
-#define DLLIMPORT __declspec(dllimport)
-#define RESTRICT __restrict
+#define ForceInline __forceinline
+#define NoInline __declspec(noinline)
+#define DllExport __declspec(dllexport)
+#define DllImport __declspec(dllimport)
+#define Restrict __restrict
 #elif defined(COMP_GNUC) || defined(COMP_LLVM)
-#define FORCEINLINE inline __attribute__((always_inline))
-#define NOINLINE __attribute__((noinline))
-#define DLLEXPORT __attribute__((visibility("default")))
-#define DLLIMPORT
-#define RESTRICT __restrict__
+#define ForceInline inline __attribute__((always_inline))
+#define NoInline __attribute__((noinline))
+#define DllExport __attribute__((visibility("default")))
+#define DllImport
+#define Restrict __restrict__
 #else
-#define FORCEINLINE inline
-#define NOINLINE
-#define DLLEXPORT
-#define DLLIMPORT
-#define RESTRICT
+#define ForceInline inline
+#define NoInline
+#define DllExport
+#define DllImport
+#define Restrict
 #endif
 #if defined(COMP_GNUC) || defined(COMP_LLVM)
-#define LIKELY(Cnd)   __builtin_expect(!!(Cnd), 1)
-#define UNLIKELY(Cnd) __builtin_expect(!!(Cnd), 0)
+#define Likely(Cnd)   __builtin_expect(!!(Cnd), 1)
+#define Unlikely(Cnd) __builtin_expect(!!(Cnd), 0)
 #else
-#define LIKELY(Cnd)   (Cnd)
-#define UNLIKELY(Cnd) (Cnd)
+#define Likely(Cnd)   (Cnd)
+#define Unlikely(Cnd) (Cnd)
 #endif
 #endif/*BQSELAYER_CTXCRACK_H*/

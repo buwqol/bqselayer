@@ -94,78 +94,78 @@ typedef float tF32;
 #define tF32_RadToDeg(flt) ((flt) * 57.29577951308233F)
 #define tF32_DegToRad(flt) ((flt) * 0.0174532925199433F)
 LINK_C_Begin
-FORCEINLINE tF32 tF32_Inf(tNone);
-FORCEINLINE tF32 tF32_Abs(tF32 flt);
-FORCEINLINE tF32 tF32_Neg(tF32 flt);
-FORCEINLINE tBln tF32_IsNeg(tF32 flt);
-FORCEINLINE tF32 tF32_NegInf(tNone);
-FORCEINLINE tF32 tF32_QuiNaN(tNone);
-FORCEINLINE tF32 tF32_SigNaN(tNone);
-FORCEINLINE tBln tF32_Nearby(tF32 flt, tF32 cmp);
+ForceInline tF32 tF32_Inf(tNone);
+ForceInline tF32 tF32_Abs(tF32 flt);
+ForceInline tF32 tF32_Neg(tF32 flt);
+ForceInline tBln tF32_IsNeg(tF32 flt);
+ForceInline tF32 tF32_NegInf(tNone);
+ForceInline tF32 tF32_QuiNaN(tNone);
+ForceInline tF32 tF32_SigNaN(tNone);
+ForceInline tBln tF32_Nearby(tF32 flt, tF32 cmp);
 /*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_Sine_fast(tF32 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
-FORCEINLINE tF32 tF32_Cosine_fast(tF32 ang);
+ForceInline tF32 tF32_Cosine_fast(tF32 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_Tangent_fast(tF32 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
 tF32 tF32_Sine_iter(tF32 ang, tUSz itr);
 /*Note: Parameter `ang` is expected to be in radians.*/
-FORCEINLINE tF32 tF32_Cosine_iter(tF32 ang, tUSz itr);
+ForceInline tF32 tF32_Cosine_iter(tF32 ang, tUSz itr);
 /*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
 tF32 tF32_Tangent_iter(tF32 ang, tUSz itr);
 /*Note: Parameter `ang` is expected to be in radians.*/
-FORCEINLINE tF32 tF32_Sine(tF32 ang);
+ForceInline tF32 tF32_Sine(tF32 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
-FORCEINLINE tF32 tF32_Cosine(tF32 ang);
+ForceInline tF32 tF32_Cosine(tF32 ang);
 /*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
-FORCEINLINE tF32 tF32_Tangent(tF32 ang);
+ForceInline tF32 tF32_Tangent(tF32 ang);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tF32 tF32_ArcSine_iter(tF32 num, tUSz sqrtItr, tUSz trigItr);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tF32 tF32_ArcSine(tF32 num);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-FORCEINLINE tF32 tF32_ArcCosine_iter(tF32 num, tUSz sqrtItr, tUSz trigItr);
+ForceInline tF32 tF32_ArcCosine_iter(tF32 num, tUSz sqrtItr, tUSz trigItr);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-FORCEINLINE tF32 tF32_ArcCosine(tF32 num);
+ForceInline tF32 tF32_ArcCosine(tF32 num);
 tF32 tF32_ArcTangent_iter(tF32 num, tUSz itr);
-FORCEINLINE tF32 tF32_ArcTangent(tF32 num);
+ForceInline tF32 tF32_ArcTangent(tF32 num);
 tF32 tF32_ArcTangent2_iter(tF32 opp, tF32 adj, tUSz itr);
-FORCEINLINE tF32 tF32_ArcTangent2(tF32 opp, tF32 adj);
+ForceInline tF32 tF32_ArcTangent2(tF32 opp, tF32 adj);
 /*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
 tF32 tF32_RecipSqrt_iter(tF32 num, tUSz itr);
 /*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
-FORCEINLINE tF32 tF32_RecipSqrt(tF32 num);
-FORCEINLINE tF32 tF32_Sqrt_iter(tF32 num, tUSz itr);
-FORCEINLINE tF32 tF32_Sqrt(tF32 num);
+ForceInline tF32 tF32_RecipSqrt(tF32 num);
+ForceInline tF32 tF32_Sqrt_iter(tF32 num, tUSz itr);
+ForceInline tF32 tF32_Sqrt(tF32 num);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF32 tF32_Log2_iter(tF32 num, tUSz itr);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-FORCEINLINE tF32 tF32_Log2(tF32 num);
+ForceInline tF32 tF32_Log2(tF32 num);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-FORCEINLINE tF32 tF32_Ln_iter(tF32 num, tUSz itr);
+ForceInline tF32 tF32_Ln_iter(tF32 num, tUSz itr);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-FORCEINLINE tF32 tF32_Ln(tF32 num);
+ForceInline tF32 tF32_Ln(tF32 num);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF32 tF32_Log_iter(tF32 num, tF32 base, tUSz itr);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF32 tF32_Log(tF32 num, tF32 base);
-FORCEINLINE tF32 tF32_Lerp(tF32 strt, tF32 stp, tF32 fnsh);
-FORCEINLINE tF32 tF32_Unlerp(tF32 strt, tF32 curr, tF32 fnsh);
+ForceInline tF32 tF32_Lerp(tF32 strt, tF32 stp, tF32 fnsh);
+ForceInline tF32 tF32_Unlerp(tF32 strt, tF32 curr, tF32 fnsh);
 tF32 tF32_Exp_iter(tF32 pow, tUSz itr);
-FORCEINLINE tF32 tF32_Exp(tF32 pow);
-FORCEINLINE tF32 tF32_HypSine_iter(tF32 num, tUSz itr);
-FORCEINLINE tF32 tF32_HypCosine_iter(tF32 num, tUSz itr);
+ForceInline tF32 tF32_Exp(tF32 pow);
+ForceInline tF32 tF32_HypSine_iter(tF32 num, tUSz itr);
+ForceInline tF32 tF32_HypCosine_iter(tF32 num, tUSz itr);
 tF32 tF32_HypTangent_iter(tF32 num, tUSz itr);
-FORCEINLINE tF32 tF32_HypSine(tF32 num);
-FORCEINLINE tF32 tF32_HypCosine(tF32 num);
-FORCEINLINE tF32 tF32_HypTangent(tF32 num);
+ForceInline tF32 tF32_HypSine(tF32 num);
+ForceInline tF32 tF32_HypCosine(tF32 num);
+ForceInline tF32 tF32_HypTangent(tF32 num);
 tF32 tF32_Mod(tF32 num, tF32 denom);
 tF32 tF32_PowI(tF32 num, tSSz pow);
 tF32 tF32_Pow_iter(tF32 num, tF32 pow, tUSz itr);
 tF32 tF32_Pow(tF32 num, tF32 pow);
 tF32 tF32_Round(tF32 num);
-FORCEINLINE tF32 tF32_Recip(tF32 num);
+ForceInline tF32 tF32_Recip(tF32 num);
 LINK_C_End
 #define tF32_SignMask 0X80000000U
 #define tF32_ExpoMask 0X7F800000U
@@ -177,52 +177,52 @@ typedef union
 }
 tF32Bits;
 #ifdef BQSELAYER_PRIMTYPES_IMPL
-FORCEINLINE tBln tF32_IsNeg(tF32 flt)
+ForceInline tBln tF32_IsNeg(tF32 flt)
 {
 	if (tF32_Nearby(flt, 0.0F)) return False;
 	tF32Bits num;
 	num.flt = flt;
 	return (tBln)!!(num.raw & tF32_SignMask);
 }
-FORCEINLINE tF32 tF32_Inf(tNone)
+ForceInline tF32 tF32_Inf(tNone)
 {
 	tF32Bits num;
 	num.raw = 0X7F800000U;
 	return num.flt;
 }
-FORCEINLINE tF32 tF32_Abs(tF32 flt)
+ForceInline tF32 tF32_Abs(tF32 flt)
 {
 	tF32Bits num;
 	num.flt = flt;
 	num.raw &= 0X7FFFFFFFU;
 	return num.flt;
 }
-FORCEINLINE tF32 tF32_Neg(tF32 flt)
+ForceInline tF32 tF32_Neg(tF32 flt)
 {
 	tF32Bits num;
 	num.flt = flt;
 	num.raw ^= 0X80000000U;
 	return num.flt;
 }
-FORCEINLINE tF32 tF32_NegInf(tNone)
+ForceInline tF32 tF32_NegInf(tNone)
 {
 	tF32Bits num;
 	num.raw = 0XFF800000U;
 	return num.flt;
 }
-FORCEINLINE tF32 tF32_QuiNaN(tNone)
+ForceInline tF32 tF32_QuiNaN(tNone)
 {
 	tF32Bits num;
 	num.raw = 0XFFC00001U;
 	return num.flt;
 }
-FORCEINLINE tF32 tF32_SigNaN(tNone)
+ForceInline tF32 tF32_SigNaN(tNone)
 {
 	tF32Bits num;
 	num.raw = 0XFF800001U;
 	return num.flt;
 }
-FORCEINLINE tBln tF32_Nearby(tF32 flt, tF32 cmp)
+ForceInline tBln tF32_Nearby(tF32 flt, tF32 cmp)
 {
 	return tF32_Abs(flt - cmp) <= tF32_Eps;
 }
@@ -242,7 +242,7 @@ tF32 tF32_Sine_fast(tF32 ang)
 	if (neg == True) return tF32_Neg(res);
 	return res;
 }
-FORCEINLINE tF32 tF32_Cosine_fast(tF32 ang)
+ForceInline tF32 tF32_Cosine_fast(tF32 ang)
 {
 	return tF32_Sine_fast(tF32_HalfPi - ang);
 }
@@ -277,7 +277,7 @@ tF32 tF32_Sine_iter(tF32 ang, tUSz itr)
 	if (neg == True) return tF32_Neg(res);
 	return res;
 }
-FORCEINLINE tF32 tF32_Cosine_iter(tF32 ang, tUSz itr)
+ForceInline tF32 tF32_Cosine_iter(tF32 ang, tUSz itr)
 {
 	return tF32_Sine_iter(tF32_HalfPi - ang, itr);
 }
@@ -288,15 +288,15 @@ tF32 tF32_Tangent_iter(tF32 ang, tUSz itr)
 	if (tF32_Nearby(cosAng, 0.0F)) return tF32_IsNeg(sinAng) ? tF32_NegInf() : tF32_Inf();
 	return sinAng / cosAng;
 }
-FORCEINLINE tF32 tF32_Sine(tF32 ang)
+ForceInline tF32 tF32_Sine(tF32 ang)
 {
 	return tF32_Sine_iter(ang, BQSELAYER_TRIG_ITER);
 }
-FORCEINLINE tF32 tF32_Cosine(tF32 ang)
+ForceInline tF32 tF32_Cosine(tF32 ang)
 {
 	return tF32_Cosine_iter(ang, BQSELAYER_TRIG_ITER);
 }
-FORCEINLINE tF32 tF32_Tangent(tF32 ang)
+ForceInline tF32 tF32_Tangent(tF32 ang)
 {
 	return tF32_Tangent_iter(ang, BQSELAYER_TRIG_ITER);
 }
@@ -322,11 +322,11 @@ tF32 tF32_ArcSine(tF32 num)
 	if (tF32_Nearby(num, -1.0F)) return -tF32_HalfPi;
 	return tF32_ArcTangent(num / tF32_Sqrt(1 - (num * num)));
 }
-FORCEINLINE tF32 tF32_ArcCosine_iter(tF32 num, tUSz sqrtItr, tUSz trigItr)
+ForceInline tF32 tF32_ArcCosine_iter(tF32 num, tUSz sqrtItr, tUSz trigItr)
 {
 	return tF32_HalfPi - tF32_ArcSine_iter(num, sqrtItr, trigItr);
 }
-FORCEINLINE tF32 tF32_ArcCosine(tF32 num)
+ForceInline tF32 tF32_ArcCosine(tF32 num)
 {
 	return tF32_HalfPi - tF32_ArcSine(num);
 }
@@ -352,7 +352,7 @@ tF32 tF32_ArcTangent_iter(tF32 num, tUSz itr)
 	}
 	return scale * res;
 }
-FORCEINLINE tF32 tF32_ArcTangent(tF32 num)
+ForceInline tF32 tF32_ArcTangent(tF32 num)
 {
 	return tF32_ArcTangent_iter(num, BQSELAYER_TRIG_ITER);
 }
@@ -365,7 +365,7 @@ tF32 tF32_ArcTangent2_iter(tF32 opp, tF32 adj, tUSz itr)
 	if (tF32_Nearby(adj, 0.0F) && tF32_IsNeg(opp)) return -tF32_HalfPi;
 	return 0.0F;
 }
-FORCEINLINE tF32 tF32_ArcTangent2(tF32 opp, tF32 adj)
+ForceInline tF32 tF32_ArcTangent2(tF32 opp, tF32 adj)
 {
 	return tF32_ArcTangent2_iter(opp, adj, BQSELAYER_TRIG_ITER);
 }
@@ -384,11 +384,11 @@ tF32 tF32_RecipSqrt_iter(tF32 num, tUSz itr)
 	for (tUSz idx = 0U; idx < itr; ++idx) number.flt = number.flt * (1.5F - (halfNum * number.flt * number.flt));
 	return number.flt;
 }
-FORCEINLINE tF32 tF32_RecipSqrt(tF32 num)
+ForceInline tF32 tF32_RecipSqrt(tF32 num)
 {
 	return tF32_RecipSqrt_iter(num, 1U);
 }
-FORCEINLINE tF32 tF32_Sqrt_iter(tF32 num, tUSz itr)
+ForceInline tF32 tF32_Sqrt_iter(tF32 num, tUSz itr)
 {
 #ifndef BQSELAYER_DBG
 	if (tF32_IsNeg(num)) return tF32_SigNaN();
@@ -398,7 +398,7 @@ FORCEINLINE tF32 tF32_Sqrt_iter(tF32 num, tUSz itr)
 	if (tF32_Nearby(num, 0.0F)) return 0.0F;
 	return num * tF32_RecipSqrt_iter(num, itr);
 }
-FORCEINLINE tF32 tF32_Sqrt(tF32 num)
+ForceInline tF32 tF32_Sqrt(tF32 num)
 {
 #ifndef BQSELAYER_DBG
 	if (tF32_IsNeg(num)) return tF32_SigNaN();
@@ -433,15 +433,15 @@ tF32 tF32_Log2_iter(tF32 num, tUSz itr)
 	}
 	return (tF32)expVal + (mantApprox * tF32_Log2EulNum);
 }
-FORCEINLINE tF32 tF32_Log2(tF32 num)
+ForceInline tF32 tF32_Log2(tF32 num)
 {
 	return tF32_Log2_iter(num, 4U);
 }
-FORCEINLINE tF32 tF32_Ln_iter(tF32 num, tUSz itr)
+ForceInline tF32 tF32_Ln_iter(tF32 num, tUSz itr)
 {
 	return tF32_Log2_iter(num, itr) / tF32_Log2EulNum;
 }
-FORCEINLINE tF32 tF32_Ln(tF32 num)
+ForceInline tF32 tF32_Ln(tF32 num)
 {
 	return tF32_Log2(num) / tF32_Log2EulNum;
 }
@@ -463,11 +463,11 @@ tF32 tF32_Log(tF32 num, tF32 base)
 #endif/*BQSELAYER_DEBUG*/
 	return tF32_Log2(num) / tF32_Log2(base);
 }
-FORCEINLINE tF32 tF32_Lerp(tF32 strt, tF32 stp, tF32 fnsh)
+ForceInline tF32 tF32_Lerp(tF32 strt, tF32 stp, tF32 fnsh)
 {
 	return strt + ((fnsh - strt) * stp);
 }
-FORCEINLINE tF32 tF32_Unlerp(tF32 strt, tF32 curr, tF32 fnsh)
+ForceInline tF32 tF32_Unlerp(tF32 strt, tF32 curr, tF32 fnsh)
 {
 	if (tF32_Nearby(strt, fnsh)) return 0.0F;
 	return (curr - strt) / (fnsh - strt);
@@ -485,16 +485,16 @@ tF32 tF32_Exp_iter(tF32 pow, tUSz itr)
 	}
 	return res;
 }
-FORCEINLINE tF32 tF32_Exp(tF32 pow)
+ForceInline tF32 tF32_Exp(tF32 pow)
 {
 	return tF32_Exp_iter(pow, 10U);
 }
-FORCEINLINE tF32 tF32_HypSine_iter(tF32 num, tUSz itr)
+ForceInline tF32 tF32_HypSine_iter(tF32 num, tUSz itr)
 {
 	tF32 expNum = tF32_Exp_iter(num, itr);
 	return (expNum - tF32_Recip(expNum)) * 0.5F;
 }
-FORCEINLINE tF32 tF32_HypCosine_iter(tF32 num, tUSz itr)
+ForceInline tF32 tF32_HypCosine_iter(tF32 num, tUSz itr)
 {
 	tF32 expNum = tF32_Exp_iter(num, itr);
 	return (expNum + tF32_Recip(expNum)) * 0.5F;
@@ -507,12 +507,12 @@ tF32 tF32_HypTangent_iter(tF32 num, tUSz itr)
 	const tF32 hypCosine = (expNum + invExpNum) * 0.5F;
 	return hypSine / hypCosine;
 }
-FORCEINLINE tF32 tF32_HypSine(tF32 num)
+ForceInline tF32 tF32_HypSine(tF32 num)
 {
 	tF32 expNum = tF32_Exp(num);
 	return (expNum - tF32_Recip(expNum)) * 0.5F;
 }
-FORCEINLINE tF32 tF32_HypCosine(tF32 num)
+ForceInline tF32 tF32_HypCosine(tF32 num)
 {
 	tF32 expNum = tF32_Exp(num);
 	return (expNum + tF32_Recip(expNum)) * 0.5F;
@@ -587,7 +587,7 @@ tF32 tF32_Round(tF32 num)
 	if (fracPart < 0.5F) return (tF32)intPart;
 	else return (tF32)intPart + 1.0F;
 }
-FORCEINLINE tF32 tF32_Recip(tF32 num)
+ForceInline tF32 tF32_Recip(tF32 num)
 {
 #ifndef BQSELAYER_DEBUG
 	if (tF32_Nearby(num, 0.0F)) return tF32_IsNeg(num) ? tF32_Inf() : tF32_NegInf();
@@ -610,78 +610,78 @@ typedef double tF64;
 #define tF64_RadToDeg(dbl) ((dbl) * 57.29577951308233)
 #define tF64_DegToRad(dbl) ((dbl) * 0.0174532925199433)
 LINK_C_Begin
-FORCEINLINE tF64 tF64_Inf(tNone);
-FORCEINLINE tF64 tF64_Abs(tF64 dbl);
-FORCEINLINE tF64 tF64_Neg(tF64 dbl);
-FORCEINLINE tBln tF64_IsNeg(tF64 dbl);
-FORCEINLINE tF64 tF64_NegInf(tNone);
-FORCEINLINE tF64 tF64_QuiNaN(tNone);
-FORCEINLINE tF64 tF64_SigNaN(tNone);
-FORCEINLINE tBln tF64_Nearby(tF64 dbl, tF64 cmp);
+ForceInline tF64 tF64_Inf(tNone);
+ForceInline tF64 tF64_Abs(tF64 dbl);
+ForceInline tF64 tF64_Neg(tF64 dbl);
+ForceInline tBln tF64_IsNeg(tF64 dbl);
+ForceInline tF64 tF64_NegInf(tNone);
+ForceInline tF64 tF64_QuiNaN(tNone);
+ForceInline tF64 tF64_SigNaN(tNone);
+ForceInline tBln tF64_Nearby(tF64 dbl, tF64 cmp);
 /*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_Sine_fast(tF64 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
-FORCEINLINE tF64 tF64_Cosine_fast(tF64 ang);
+ForceInline tF64 tF64_Cosine_fast(tF64 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_Tangent_fast(tF64 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
 tF64 tF64_Sine_iter(tF64 ang, tUSz itr);
 /*Note: Parameter `ang` is expected to be in radians.*/
-FORCEINLINE tF64 tF64_Cosine_iter(tF64 ang, tUSz itr);
+ForceInline tF64 tF64_Cosine_iter(tF64 ang, tUSz itr);
 /*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
 tF64 tF64_Tangent_iter(tF64 ang, tUSz itr);
 /*Note: Parameter `ang` is expected to be in radians.*/
-FORCEINLINE tF64 tF64_Sine(tF64 ang);
+ForceInline tF64 tF64_Sine(tF64 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
-FORCEINLINE tF64 tF64_Cosine(tF64 ang);
+ForceInline tF64 tF64_Cosine(tF64 ang);
 /*Note: Parameter `ang` is expected to be in radians. Returns SigNan when `ang` is equal to integer multiples of Pi/2.*/
-FORCEINLINE tF64 tF64_Tangent(tF64 ang);
+ForceInline tF64 tF64_Tangent(tF64 ang);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tF64 tF64_ArcSine_iter(tF64 num, tUSz sqrtItr, tUSz trigItr);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
 tF64 tF64_ArcSine(tF64 num);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-FORCEINLINE tF64 tF64_ArcCosine_iter(tF64 num, tUSz sqrtItr, tUSz trigItr);
+ForceInline tF64 tF64_ArcCosine_iter(tF64 num, tUSz sqrtItr, tUSz trigItr);
 /*Note: Returns SigNaN when |`num`| is greater than 1.*/
-FORCEINLINE tF64 tF64_ArcCosine(tF64 num);
+ForceInline tF64 tF64_ArcCosine(tF64 num);
 tF64 tF64_ArcTangent_iter(tF64 num, tUSz itr);
-FORCEINLINE tF64 tF64_ArcTangent(tF64 num);
+ForceInline tF64 tF64_ArcTangent(tF64 num);
 tF64 tF64_ArcTangent2_iter(tF64 opp, tF64 adj, tUSz itr);
-FORCEINLINE tF64 tF64_ArcTangent2(tF64 opp, tF64 adj);
+ForceInline tF64 tF64_ArcTangent2(tF64 opp, tF64 adj);
 /*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
 tF64 tF64_RecipSqrt_iter(tF64 num, tUSz itr);
 /*Note: Returns SigNaN when `num` is less than 0, and Inf when `num` is equal to 0.*/
-FORCEINLINE tF64 tF64_RecipSqrt(tF64 num);
-FORCEINLINE tF64 tF64_Sqrt_iter(tF64 num, tUSz itr);
-FORCEINLINE tF64 tF64_Sqrt(tF64 num);
+ForceInline tF64 tF64_RecipSqrt(tF64 num);
+ForceInline tF64 tF64_Sqrt_iter(tF64 num, tUSz itr);
+ForceInline tF64 tF64_Sqrt(tF64 num);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF64 tF64_Log2_iter(tF64 num, tUSz itr);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-FORCEINLINE tF64 tF64_Log2(tF64 num);
+ForceInline tF64 tF64_Log2(tF64 num);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-FORCEINLINE tF64 tF64_Ln_iter(tF64 num, tUSz itr);
+ForceInline tF64 tF64_Ln_iter(tF64 num, tUSz itr);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
-FORCEINLINE tF64 tF64_Ln(tF64 num);
+ForceInline tF64 tF64_Ln(tF64 num);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF64 tF64_Log_iter(tF64 num, tF64 base, tUSz itr);
 /*Note: Returns SigNaN when `num` is less than or equal to 0.*/
 tF64 tF64_Log(tF64 num, tF64 base);
-FORCEINLINE tF64 tF64_Lerp(tF64 strt, tF64 stp, tF64 fnsh);
-FORCEINLINE tF64 tF64_Unlerp(tF64 strt, tF64 curr, tF64 fnsh);
+ForceInline tF64 tF64_Lerp(tF64 strt, tF64 stp, tF64 fnsh);
+ForceInline tF64 tF64_Unlerp(tF64 strt, tF64 curr, tF64 fnsh);
 tF64 tF64_Exp_iter(tF64 pow, tUSz itr);
-FORCEINLINE tF64 tF64_Exp(tF64 pow);
-FORCEINLINE tF64 tF64_HypSine_iter(tF64 num, tUSz itr);
-FORCEINLINE tF64 tF64_HypCosine_iter(tF64 num, tUSz itr);
+ForceInline tF64 tF64_Exp(tF64 pow);
+ForceInline tF64 tF64_HypSine_iter(tF64 num, tUSz itr);
+ForceInline tF64 tF64_HypCosine_iter(tF64 num, tUSz itr);
 tF64 tF64_HypTangent_iter(tF64 num, tUSz itr);
-FORCEINLINE tF64 tF64_HypSine(tF64 num);
-FORCEINLINE tF64 tF64_HypCosine(tF64 num);
-FORCEINLINE tF64 tF64_HypTangent(tF64 num);
+ForceInline tF64 tF64_HypSine(tF64 num);
+ForceInline tF64 tF64_HypCosine(tF64 num);
+ForceInline tF64 tF64_HypTangent(tF64 num);
 tF64 tF64_Mod(tF64 num, tF64 denom);
 tF64 tF64_PowI(tF64 num, tSSz pow);
 tF64 tF64_Pow_iter(tF64 num, tF64 pow, tUSz itr);
 tF64 tF64_Pow(tF64 num, tF64 pow);
 tF64 tF64_Round(tF64 num);
-FORCEINLINE tF64 tF64_Recip(tF64 num);
+ForceInline tF64 tF64_Recip(tF64 num);
 LINK_C_End
 #define tF64_SignMask 0X8000000000000000LLU
 #define tF64_ExpoMask 0X7FF0000000000000LLU
@@ -693,52 +693,52 @@ typedef union
 }
 tF64Bits;
 #ifdef BQSELAYER_PRIMTYPES_IMPL
-FORCEINLINE tF64 tF64_Inf(tNone)
+ForceInline tF64 tF64_Inf(tNone)
 {
 	tF64Bits num;
 	num.raw = 0X7FF0000000000000LLU;
 	return num.dbl;
 }
-FORCEINLINE tF64 tF64_Abs(tF64 dbl)
+ForceInline tF64 tF64_Abs(tF64 dbl)
 {
 	tF64Bits num;
 	num.dbl = dbl;
 	num.raw &= 0X7FFFFFFFFFFFFFFFLLU;
 	return num.dbl;
 }
-FORCEINLINE tBln tF64_IsNeg(tF64 dbl)
+ForceInline tBln tF64_IsNeg(tF64 dbl)
 {
 	if (tF64_Nearby(dbl, 0.0)) return False;
 	tF64Bits num;
 	num.dbl = dbl;
 	return (tBln)!!(num.raw & tF64_SignMask);
 }
-FORCEINLINE tF64 tF64_Neg(tF64 dbl)
+ForceInline tF64 tF64_Neg(tF64 dbl)
 {
 	tF64Bits num;
 	num.dbl = dbl;
 	num.raw ^= 0X8000000000000000LLU;
 	return num.dbl;
 }
-FORCEINLINE tF64 tF64_NegInf(tNone)
+ForceInline tF64 tF64_NegInf(tNone)
 {
 	tF64Bits num;
 	num.raw = 0XFFF0000000000000LLU;
 	return num.dbl;
 }
-FORCEINLINE tF64 tF64_QuiNaN(tNone)
+ForceInline tF64 tF64_QuiNaN(tNone)
 {
 	tF64Bits num;
 	num.raw = 0XFFF8000000000001LLU;
 	return num.dbl;
 }
-FORCEINLINE tF64 tF64_SigNaN(tNone)
+ForceInline tF64 tF64_SigNaN(tNone)
 {
 	tF64Bits num;
 	num.raw = 0XFFF0000000000001LLU;
 	return num.dbl;
 }
-FORCEINLINE tBln tF64_Nearby(tF64 dbl, tF64 cmp)
+ForceInline tBln tF64_Nearby(tF64 dbl, tF64 cmp)
 {
 	return tF64_Abs(dbl - cmp) <= tF64_Eps;
 }
@@ -759,7 +759,7 @@ tF64 tF64_Sine_fast(tF64 ang)
 	if (neg == True) return tF64_Neg(res);
 	return res;
 }
-FORCEINLINE tF64 tF64_Cosine_fast(tF64 ang)
+ForceInline tF64 tF64_Cosine_fast(tF64 ang)
 {
 	return tF64_Sine_fast(tF64_HalfPi - ang);
 }
@@ -794,7 +794,7 @@ tF64 tF64_Sine_iter(tF64 ang, tUSz itr)
 	if (neg == True) return tF64_Neg(res);
 	return res;
 }
-FORCEINLINE tF64 tF64_Cosine_iter(tF64 ang, tUSz itr)
+ForceInline tF64 tF64_Cosine_iter(tF64 ang, tUSz itr)
 {
 	return tF64_Sine_iter(tF64_HalfPi - ang, itr);
 }
@@ -805,15 +805,15 @@ tF64 tF64_Tangent_iter(tF64 ang, tUSz itr)
 	if (tF64_Nearby(cosAng, 0.0)) return tF64_IsNeg(sinAng) ? tF64_NegInf() : tF64_Inf();
 	return sinAng / cosAng;
 }
-FORCEINLINE tF64 tF64_Sine(tF64 ang)
+ForceInline tF64 tF64_Sine(tF64 ang)
 {
 	return tF64_Sine_iter(ang, BQSELAYER_TRIG_ITER);
 }
-FORCEINLINE tF64 tF64_Cosine(tF64 ang)
+ForceInline tF64 tF64_Cosine(tF64 ang)
 {
 	return tF64_Cosine_iter(ang, BQSELAYER_TRIG_ITER);
 }
-FORCEINLINE tF64 tF64_Tangent(tF64 ang)
+ForceInline tF64 tF64_Tangent(tF64 ang)
 {
 	return tF64_Tangent_iter(ang, BQSELAYER_TRIG_ITER);
 }
@@ -839,11 +839,11 @@ tF64 tF64_ArcSine(tF64 num)
 	if (tF64_Nearby(num, -1.0)) return -tF64_HalfPi;
 	return tF64_ArcTangent(num / tF64_Sqrt(1 - (num * num)));
 }
-FORCEINLINE tF64 tF64_ArcCosine_iter(tF64 num, tUSz sqrtItr, tUSz trigItr)
+ForceInline tF64 tF64_ArcCosine_iter(tF64 num, tUSz sqrtItr, tUSz trigItr)
 {
 	return tF64_HalfPi - tF64_ArcSine_iter(num, sqrtItr, trigItr);
 }
-FORCEINLINE tF64 tF64_ArcCosine(tF64 num)
+ForceInline tF64 tF64_ArcCosine(tF64 num)
 {
 	return tF64_HalfPi - tF64_ArcSine(num);
 }
@@ -869,7 +869,7 @@ tF64 tF64_ArcTangent_iter(tF64 num, tUSz itr)
 	}
 	return scale * res;
 }
-FORCEINLINE tF64 tF64_ArcTangent(tF64 num)
+ForceInline tF64 tF64_ArcTangent(tF64 num)
 {
 	return tF64_ArcTangent_iter(num, BQSELAYER_TRIG_ITER);
 }
@@ -882,7 +882,7 @@ tF64 tF64_ArcTangent2_iter(tF64 opp, tF64 adj, tUSz itr)
 	if (tF64_Nearby(adj, 0.0) && tF64_IsNeg(opp)) return -tF64_HalfPi;
 	return 0.0;
 }
-FORCEINLINE tF64 tF64_ArcTangent2(tF64 opp, tF64 adj)
+ForceInline tF64 tF64_ArcTangent2(tF64 opp, tF64 adj)
 {
 	return tF64_ArcTangent2_iter(opp, adj, BQSELAYER_TRIG_ITER);
 }
@@ -901,11 +901,11 @@ tF64 tF64_RecipSqrt_iter(tF64 num, tUSz itr)
 	for (tUSz idx = 0U; idx < itr; ++idx) number.dbl = number.dbl * (1.5 - (halfNum * number.dbl * number.dbl));
 	return number.dbl;
 }
-FORCEINLINE tF64 tF64_RecipSqrt(tF64 num)
+ForceInline tF64 tF64_RecipSqrt(tF64 num)
 {
 	return tF64_RecipSqrt_iter(num, 1U);
 }
-FORCEINLINE tF64 tF64_Sqrt_iter(tF64 num, tUSz itr)
+ForceInline tF64 tF64_Sqrt_iter(tF64 num, tUSz itr)
 {
 #ifndef BQSELAYER_DBG
 	if (tF64_IsNeg(num)) return tF64_SigNaN();
@@ -915,7 +915,7 @@ FORCEINLINE tF64 tF64_Sqrt_iter(tF64 num, tUSz itr)
 	if (tF64_Nearby(num, 0.0)) return 0.0;
 	return num * tF64_RecipSqrt_iter(num, itr);
 }
-FORCEINLINE tF64 tF64_Sqrt(tF64 num)
+ForceInline tF64 tF64_Sqrt(tF64 num)
 {
 #ifndef BQSELAYER_DBG
 	if (tF64_IsNeg(num)) return tF64_SigNaN();
@@ -950,15 +950,15 @@ tF64 tF64_Log2_iter(tF64 num, tUSz itr)
 	}
 	return (tF64)expVal + (mantApprox * tF64_Log2EulNum);
 }
-FORCEINLINE tF64 tF64_Log2(tF64 num)
+ForceInline tF64 tF64_Log2(tF64 num)
 {
 	return tF64_Log2_iter(num, 4U);
 }
-FORCEINLINE tF64 tF64_Ln_iter(tF64 num, tUSz itr)
+ForceInline tF64 tF64_Ln_iter(tF64 num, tUSz itr)
 {
 	return tF64_Log2_iter(num, itr) / tF64_Log2EulNum;
 }
-FORCEINLINE tF64 tF64_Ln(tF64 num)
+ForceInline tF64 tF64_Ln(tF64 num)
 {
 	return tF64_Log2(num) / tF64_Log2EulNum;
 }
@@ -980,11 +980,11 @@ tF64 tF64_Log(tF64 num, tF64 base)
 #endif/*BQSELAYER_DEBUG*/
 	return tF64_Log2(num) / tF64_Log2(base);
 }
-FORCEINLINE tF64 tF64_Lerp(tF64 strt, tF64 stp, tF64 fnsh)
+ForceInline tF64 tF64_Lerp(tF64 strt, tF64 stp, tF64 fnsh)
 {
 	return strt + ((fnsh - strt) * stp);
 }
-FORCEINLINE tF64 tF64_Unlerp(tF64 strt, tF64 curr, tF64 fnsh)
+ForceInline tF64 tF64_Unlerp(tF64 strt, tF64 curr, tF64 fnsh)
 {
 	if (tF64_Nearby(strt, fnsh)) return 0.0;
 	return (curr - strt) / (fnsh - strt);
@@ -1002,16 +1002,16 @@ tF64 tF64_Exp_iter(tF64 pow, tUSz itr)
 	}
 	return res;
 }
-FORCEINLINE tF64 tF64_Exp(tF64 pow)
+ForceInline tF64 tF64_Exp(tF64 pow)
 {
 	return tF64_Exp_iter(pow, 10U);
 }
-FORCEINLINE tF64 tF64_HypSine_iter(tF64 num, tUSz itr)
+ForceInline tF64 tF64_HypSine_iter(tF64 num, tUSz itr)
 {
 	tF64 expNum = tF64_Exp_iter(num, itr);
 	return (expNum - tF64_Recip(expNum)) * 0.5;
 }
-FORCEINLINE tF64 tF64_HypCosine_iter(tF64 num, tUSz itr)
+ForceInline tF64 tF64_HypCosine_iter(tF64 num, tUSz itr)
 {
 	tF64 expNum = tF64_Exp_iter(num, itr);
 	return (expNum + tF64_Recip(expNum)) * 0.5;
@@ -1024,17 +1024,17 @@ tF64 tF64_HypTangent_iter(tF64 num, tUSz itr)
 	const tF64 hypCosine = (expNum + invExpNum) * 0.5;
 	return hypSine / hypCosine;
 }
-FORCEINLINE tF64 tF64_HypSine(tF64 num)
+ForceInline tF64 tF64_HypSine(tF64 num)
 {
 	tF64 expNum = tF64_Exp(num);
 	return (expNum - tF64_Recip(expNum)) * 0.5;
 }
-FORCEINLINE tF64 tF64_HypCosine(tF64 num)
+ForceInline tF64 tF64_HypCosine(tF64 num)
 {
 	tF64 expNum = tF64_Exp(num);
 	return (expNum + tF64_Recip(expNum)) * 0.5;
 }
-FORCEINLINE tF64 tF64_HypTangent(tF64 num)
+ForceInline tF64 tF64_HypTangent(tF64 num)
 {
 	tF64 expNum = tF64_Exp(num);
 	tF64 invExpNum = tF64_Recip(expNum);
@@ -1104,7 +1104,7 @@ tF64 tF64_Round(tF64 num)
 	if (fracPart < 0.5) return (tF64)intPart;
 	else return (tF64)intPart + 1.0;
 }
-FORCEINLINE tF64 tF64_Recip(tF64 num)
+ForceInline tF64 tF64_Recip(tF64 num)
 {
 #ifndef BQSELAYER_DEBUG
 	if (tF64_Nearby(num, 0.0)) return tF64_IsNeg(num) ? tF64_Inf() : tF64_NegInf();
@@ -1119,47 +1119,47 @@ FORCEINLINE tF64 tF64_Recip(tF64 num)
 #undef BQSELAYER_TRIG_ITER
 #endif/*BQSELAYER_PRIMTYPES_IMPL*/
 #define BQSELAYER_DECLARE_COMMON_FUNC(tType)							\
-FORCEINLINE tType tType##_MinOf(tType Num1, tType Num2);				\
-FORCEINLINE tType tType##_MaxOf(tType Num1, tType Num2);				\
-FORCEINLINE tType tType##_Clamp(tType Lo, tType Num, tType Hi);			\
-FORCEINLINE tType tType##_ClampTop(tType Num1, tType Num2);				\
-FORCEINLINE tType tType##_ClampBot(tType Num1, tType Num2);				\
-FORCEINLINE tNone tType##_Swap(tType *Num1, tType *Num2);				\
-FORCEINLINE tType tType##_Sq(tType Num);								\
-FORCEINLINE tType tType##_Cb(tType Num);
+ForceInline tType tType##_MinOf(tType Num1, tType Num2);				\
+ForceInline tType tType##_MaxOf(tType Num1, tType Num2);				\
+ForceInline tType tType##_Clamp(tType Lo, tType Num, tType Hi);			\
+ForceInline tType tType##_ClampTop(tType Num1, tType Num2);				\
+ForceInline tType tType##_ClampBot(tType Num1, tType Num2);				\
+ForceInline tNone tType##_Swap(tType *Num1, tType *Num2);				\
+ForceInline tType tType##_Sq(tType Num);								\
+ForceInline tType tType##_Cb(tType Num);
 #ifdef BQSELAYER_PRIMTYPES_IMPL
 #define BQSELAYER_DEFINE_COMMON_FUNC(tType)								\
-FORCEINLINE tType tType##_MinOf(tType Num1, tType Num2)					\
+ForceInline tType tType##_MinOf(tType Num1, tType Num2)					\
 {																		\
 	return Num1 < Num2 ? Num1 : Num2;									\
 }																		\
-FORCEINLINE tType tType##_MaxOf(tType Num1, tType Num2)					\
+ForceInline tType tType##_MaxOf(tType Num1, tType Num2)					\
 {																		\
 	return Num1 > Num2 ? Num1 : Num2;									\
 }																		\
-FORCEINLINE tType tType##_Clamp(tType Lo, tType Num, tType Hi)			\
+ForceInline tType tType##_Clamp(tType Lo, tType Num, tType Hi)			\
 {																		\
 	return (Num < Lo) ? Lo : (Hi < Num) ? Hi : Num; 					\
 }																		\
-FORCEINLINE tType tType##_ClampTop(tType Num1, tType Num2)				\
+ForceInline tType tType##_ClampTop(tType Num1, tType Num2)				\
 {																		\
 	return Num1 < Num2 ? Num1 : Num2;									\
 }																		\
-FORCEINLINE tType tType##_ClampBot(tType Num1, tType Num2)				\
+ForceInline tType tType##_ClampBot(tType Num1, tType Num2)				\
 {																		\
 	return Num1 > Num2 ? Num1 : Num2;									\
 }																		\
-FORCEINLINE tNone tType##_Swap(tType *Num1, tType *Num2)		    	\
+ForceInline tNone tType##_Swap(tType *Num1, tType *Num2)		    	\
 {																		\
 	tType tmp = *Num1;													\
 	*Num1 = *Num2;												 	    \
 	*Num2 = tmp;														\
 }																		\
-FORCEINLINE tType tType##_Sq(tType Num)									\
+ForceInline tType tType##_Sq(tType Num)									\
 {																		\
 	return Num * Num;													\
 }																		\
-FORCEINLINE tType tType##_Cb(tType Num)									\
+ForceInline tType tType##_Cb(tType Num)									\
 {																		\
 	return Num * Num * Num;												\
 }

@@ -16,145 +16,145 @@ typedef struct { tF64 h; tF64 s; tF64 v; } tF64HSV;
 typedef struct { tF32 h; tF32 s; tF32 l; } tF32HSL;
 typedef struct { tF64 h; tF64 s; tF64 l; } tF64HSL;
 LINK_C_Begin
-FORCEINLINE tU8RGB tU8RGB_Make(tU8 r, tU8 g, tU8 b);
-FORCEINLINE tU8RGBA tU8RGBA_Make(tU8 r, tU8 g, tU8 b, tU8 a);
-FORCEINLINE tF32RGB tF32RGB_Make(tF32 r, tF32 g, tF32 b);
-FORCEINLINE tF32RGBA tF32RGBA_Make(tF32 r, tF32 g, tF32 b, tF32 a);
-FORCEINLINE tF64RGB tF64RGB_Make(tF64 r, tF64 g, tF64 b);
-FORCEINLINE tF64RGBA tF64RGBA_Make(tF64 r, tF64 g, tF64 b, tF64 a);
-FORCEINLINE tU32ARGB tU32ARGB_Make(tU8 a, tU8 r, tU8 g, tU8 b);
-FORCEINLINE tU32RGBA tU32RGBA_Make(tU8 r, tU8 g, tU8 b, tU8 a);
-FORCEINLINE tU32BGRA tU32BGRA_Make(tU8 b, tU8 g, tU8 r, tU8 a);
-FORCEINLINE tU32ABGR tU32ABGR_Make(tU8 a, tU8 b, tU8 g, tU8 r);
-FORCEINLINE tF32HSV tF32HSV_Make(tF32 h, tF32 s, tF32 v);
-FORCEINLINE tF64HSV tF64HSV_Make(tF64 h, tF64 s, tF64 v);
-FORCEINLINE tF32HSL tF32HSL_Make(tF32 h, tF32 s, tF32 l);
-FORCEINLINE tF64HSL tF64HSL_Make(tF64 h, tF64 s, tF64 l);
-FORCEINLINE tBln tU8RGB_Eq(tU8RGB colour1, tU8RGB colour2);
-FORCEINLINE tBln tU8RGBA_Eq(tU8RGBA colour1, tU8RGBA colour2);
-FORCEINLINE tBln tF32RGB_Eq(tF32RGB colour1, tF32RGB colour2);
-FORCEINLINE tBln tF32RGBA_Eq(tF32RGBA colour1, tF32RGBA colour2);
-FORCEINLINE tBln tF64RGB_Eq(tF64RGB colour1, tF64RGB colour2);
-FORCEINLINE tBln tF64RGBA_Eq(tF64RGBA colour1, tF64RGBA colour2);
-FORCEINLINE tBln tU32ARGB_Eq(tU32ARGB colour1, tU32ARGB colour2);
-FORCEINLINE tBln tU32RGBA_Eq(tU32RGBA colour1, tU32RGBA colour2);
-FORCEINLINE tBln tU32BGRA_Eq(tU32BGRA colour1, tU32BGRA colour2);
-FORCEINLINE tBln tU32ABGR_Eq(tU32ABGR colour1, tU32ABGR colour2);
-FORCEINLINE tBln tF32HSV_Eq(tF32HSV colour1, tF32HSV colour2);
-FORCEINLINE tBln tF64HSV_Eq(tF64HSV colour1, tF64HSV colour2);
-FORCEINLINE tBln tF32HSL_Eq(tF32HSL colour1, tF32HSL colour2);
-FORCEINLINE tBln tF64HSL_Eq(tF64HSL colour1, tF64HSL colour2);
-FORCEINLINE tBln tF32RGB_Nearby(tF32RGB colour1, tF32RGB colour2);
-FORCEINLINE tBln tF32RGBA_Nearby(tF32RGBA colour1, tF32RGBA colour2);
-FORCEINLINE tBln tF64RGB_Nearby(tF64RGB colour1, tF64RGB colour2);
-FORCEINLINE tBln tF64RGBA_Nearby(tF64RGBA colour1, tF64RGBA colour2);
-FORCEINLINE tBln tF32HSV_Nearby(tF32HSV colour1, tF32HSV colour2);
-FORCEINLINE tBln tF64HSV_Nearby(tF64HSV colour1, tF64HSV colour2);
-FORCEINLINE tBln tF32HSL_Nearby(tF32HSL colour1, tF32HSL colour2);
-FORCEINLINE tBln tF64HSL_Nearby(tF64HSL colour1, tF64HSL colour2);
-FORCEINLINE tU32ARGB tU32ARGB_From_tRGBA(tU8RGBA colour);
-FORCEINLINE tU32RGBA tU32RGBA_From_tRGBA(tU8RGBA colour);
-FORCEINLINE tU32BGRA tU32BGRA_From_tRGBA(tU8RGBA colour);
-FORCEINLINE tU32ABGR tU32ABGR_From_tRGBA(tU8RGBA colour);
-FORCEINLINE tU8RGBA tU8RGBA_From_tU32ARGB(tU32ARGB colour);
-FORCEINLINE tU8RGBA tU8RGBA_From_tU32RGBA(tU32RGBA colour);
-FORCEINLINE tU8RGBA tU8RGBA_From_tU32BGRA(tU32BGRA colour);
-FORCEINLINE tU8RGBA tU8RGBA_From_tU32ABGR(tU32ABGR colour);
-FORCEINLINE tF32HSV tF32RGB_ToHSV(tF32RGB colour);
-FORCEINLINE tF32RGB tF32HSV_ToRGB(tF32HSV colour);
-FORCEINLINE tF32HSL tF32RGB_ToHSL(tF32RGB colour);
-FORCEINLINE tF32RGB tF32HSL_ToRGB(tF32HSL colour);
-FORCEINLINE tF64HSV tF64RGB_ToHSV(tF64RGB colour);
-FORCEINLINE tF64RGB tF64HSV_ToRGB(tF64HSV colour);
-FORCEINLINE tF64HSL tF64RGB_ToHSL(tF64RGB colour);
-FORCEINLINE tF64RGB tF64HSL_ToRGB(tF64HSL colour);
-FORCEINLINE tF32RGB tF32RGB_From_tU8RGB(tU8RGB colour);
-FORCEINLINE tF32RGBA tF32RGBA_From_tU8RGBA(tU8RGBA colour);
-FORCEINLINE tU8RGB tU8RGB_From_tF32RGB(tF32RGB colour);
-FORCEINLINE tU8RGBA tU8RGBA_From_tF32RGBA(tF32RGBA colour);
-FORCEINLINE tF64RGB tF64RGB_From_tU8RGB(tU8RGB colour);
-FORCEINLINE tF64RGBA tF64RGBA_From_tU8RGBA(tU8RGBA colour);
-FORCEINLINE tU8RGB tU8RGB_From_tF64RGB(tF64RGB colour);
-FORCEINLINE tU8RGBA tU8RGBA_From_tF64RGBA(tF64RGBA colour);
-FORCEINLINE tF64RGB tF64RGB_From_tF32RGB(tF32RGB colour);
-FORCEINLINE tF64RGBA tF64RGBA_From_tF32RGBA(tF32RGBA colour);
-FORCEINLINE tF32RGB tF32RGB_From_tF64RGB(tF64RGB colour);
-FORCEINLINE tF32RGBA tF32RGBA_From_tF64RGBA(tF64RGBA colour);
-FORCEINLINE tF32RGB tF32RGB_Lerp(tF32RGB strt, tF32RGB stp, tF32 fnsh);
-FORCEINLINE tF32RGBA tF32RGBA_Lerp(tF32RGBA strt, tF32RGBA stp, tF32 fnsh);
-FORCEINLINE tF64RGB tF64RGB_Lerp(tF64RGB strt, tF64RGB stp, tF64 fnsh);
-FORCEINLINE tF64RGBA tF64RGBA_Lerp(tF64RGBA strt, tF64RGBA stp, tF64 fnsh);
-FORCEINLINE tU8RGB tU8RGB_Add(tU8RGB colour1, tU8RGB colour2);
-FORCEINLINE tU8RGB tU8RGB_Sub(tU8RGB colour1, tU8RGB colour2);
-FORCEINLINE tU8RGB tU8RGB_Mul(tU8RGB colour1, tU8RGB colour2);
-FORCEINLINE tU8RGB tU8RGB_Div(tU8RGB colour1, tU8RGB colour2);
-FORCEINLINE tF32RGB tF32RGB_Add(tF32RGB colour1, tF32RGB colour2);
-FORCEINLINE tF32RGB tF32RGB_Sub(tF32RGB colour1, tF32RGB colour2);
-FORCEINLINE tF32RGB tF32RGB_Mul(tF32RGB colour1, tF32RGB colour2);
-FORCEINLINE tF32RGB tF32RGB_Div(tF32RGB colour1, tF32RGB colour2);
-FORCEINLINE tF64RGB tF64RGB_Add(tF64RGB colour1, tF64RGB colour2);
-FORCEINLINE tF64RGB tF64RGB_Sub(tF64RGB colour1, tF64RGB colour2);
-FORCEINLINE tF64RGB tF64RGB_Mul(tF64RGB colour1, tF64RGB colour2);
-FORCEINLINE tF64RGB tF64RGB_Div(tF64RGB colour1, tF64RGB colour2);
-FORCEINLINE tF32RGBA tF32RGBA_Add(tF32RGBA colour1, tF32RGBA colour2);
-FORCEINLINE tF32RGBA tF32RGBA_Sub(tF32RGBA colour1, tF32RGBA colour2);
-FORCEINLINE tF32RGBA tF32RGBA_Mul(tF32RGBA colour1, tF32RGBA colour2);
-FORCEINLINE tF32RGBA tF32RGBA_Div(tF32RGBA colour1, tF32RGBA colour2);
-FORCEINLINE tU8RGBA tU8RGBA_Add(tU8RGBA colour1, tU8RGBA colour2);
-FORCEINLINE tU8RGBA tU8RGBA_Sub(tU8RGBA colour1, tU8RGBA colour2);
-FORCEINLINE tU8RGBA tU8RGBA_Mul(tU8RGBA colour1, tU8RGBA colour2);
-FORCEINLINE tU8RGBA tU8RGBA_Div(tU8RGBA colour1, tU8RGBA colour2);
-FORCEINLINE tF64RGBA tF64RGBA_Add(tF64RGBA colour1, tF64RGBA colour2);
-FORCEINLINE tF64RGBA tF64RGBA_Sub(tF64RGBA colour1, tF64RGBA colour2);
-FORCEINLINE tF64RGBA tF64RGBA_Mul(tF64RGBA colour1, tF64RGBA colour2);
-FORCEINLINE tF64RGBA tF64RGBA_Div(tF64RGBA colour1, tF64RGBA colour2);
-FORCEINLINE tU32ARGB tU32ARGB_Add(tU32ARGB colour1, tU32ARGB colour2);
-FORCEINLINE tU32ARGB tU32ARGB_Sub(tU32ARGB colour1, tU32ARGB colour2);
-FORCEINLINE tU32ARGB tU32ARGB_Mul(tU32ARGB colour1, tU32ARGB colour2);
-FORCEINLINE tU32ARGB tU32ARGB_Div(tU32ARGB colour1, tU32ARGB colour2);
-FORCEINLINE tU32RGBA tU32RGBA_Add(tU32RGBA colour1, tU32RGBA colour2);
-FORCEINLINE tU32RGBA tU32RGBA_Sub(tU32RGBA colour1, tU32RGBA colour2);
-FORCEINLINE tU32RGBA tU32RGBA_Mul(tU32RGBA colour1, tU32RGBA colour2);
-FORCEINLINE tU32RGBA tU32RGBA_Div(tU32RGBA colour1, tU32RGBA colour2);
-FORCEINLINE tU32BGRA tU32BGRA_Add(tU32BGRA colour1, tU32BGRA colour2);
-FORCEINLINE tU32BGRA tU32BGRA_Sub(tU32BGRA colour1, tU32BGRA colour2);
-FORCEINLINE tU32BGRA tU32BGRA_Mul(tU32BGRA colour1, tU32BGRA colour2);
-FORCEINLINE tU32BGRA tU32BGRA_Div(tU32BGRA colour1, tU32BGRA colour2);
-FORCEINLINE tU32ABGR tU32ABGR_Add(tU32ABGR colour1, tU32ABGR colour2);
-FORCEINLINE tU32ABGR tU32ABGR_Sub(tU32ABGR colour1, tU32ABGR colour2);
-FORCEINLINE tU32ABGR tU32ABGR_Mul(tU32ABGR colour1, tU32ABGR colour2);
-FORCEINLINE tU32ABGR tU32ABGR_Div(tU32ABGR colour1, tU32ABGR colour2);
-FORCEINLINE tF32RGB tF32RGB_AddFlt(tF32RGB colour, tF32 flt);
-FORCEINLINE tF32RGB tF32RGB_SubFlt(tF32RGB colour, tF32 flt);
-FORCEINLINE tF32RGB tF32RGB_MulFlt(tF32RGB colour, tF32 flt);
-FORCEINLINE tF32RGB tF32RGB_DivFlt(tF32RGB colour, tF32 flt);
-FORCEINLINE tF32RGBA tF32RGBA_AddFlt(tF32RGBA colour, tF32 flt);
-FORCEINLINE tF32RGBA tF32RGBA_SubFlt(tF32RGBA colour, tF32 flt);
-FORCEINLINE tF32RGBA tF32RGBA_MulFlt(tF32RGBA colour, tF32 flt);
-FORCEINLINE tF32RGBA tF32RGBA_DivFlt(tF32RGBA colour, tF32 flt);
-FORCEINLINE tF64RGB tF64RGB_AddDbl(tF64RGB colour, tF64 dbl);
-FORCEINLINE tF64RGB tF64RGB_SubDbl(tF64RGB colour, tF64 dbl);
-FORCEINLINE tF64RGB tF64RGB_MulDbl(tF64RGB colour, tF64 dbl);
-FORCEINLINE tF64RGB tF64RGB_DivDbl(tF64RGB colour, tF64 dbl);
-FORCEINLINE tF64RGBA tF64RGBA_AddDbl(tF64RGBA colour, tF64 dbl);
-FORCEINLINE tF64RGBA tF64RGBA_SubDbl(tF64RGBA colour, tF64 dbl);
-FORCEINLINE tF64RGBA tF64RGBA_MulDbl(tF64RGBA colour, tF64 dbl);
-FORCEINLINE tF64RGBA tF64RGBA_DivDbl(tF64RGBA colour, tF64 dbl);
-FORCEINLINE tF32RGB tF32RGB_Clamp(tF32RGB colour);
-FORCEINLINE tF32RGBA tF32RGBA_Clamp(tF32RGBA colour);
-FORCEINLINE tF32RGB tF32RGB_Saturate(tF32RGB colour);
-FORCEINLINE tF32RGBA tF32RGBA_Saturate(tF32RGBA colour);
-FORCEINLINE tF32RGB tF32RGB_Blend(tF32RGB colour1, tF32RGB colour2, tF32 stp);
-FORCEINLINE tF32RGBA tF32RGBA_Blend(tF32RGBA colour1, tF32RGBA colour2, tF32 stp);
-FORCEINLINE tF64RGB tF64RGB_Clamp(tF64RGB colour);
-FORCEINLINE tF64RGBA tF64RGBA_Clamp(tF64RGBA colour);
-FORCEINLINE tF64RGB tF64RGB_Saturate(tF64RGB colour);
-FORCEINLINE tF64RGBA tF64RGBA_Saturate(tF64RGBA colour);
-FORCEINLINE tF64RGB tF64RGB_Blend(tF64RGB colour1, tF64RGB colour2, tF64 stp);
-FORCEINLINE tF64RGBA tF64RGBA_Blend(tF64RGBA colour1, tF64RGBA colour2, tF64 stp);
+ForceInline tU8RGB tU8RGB_Make(tU8 r, tU8 g, tU8 b);
+ForceInline tU8RGBA tU8RGBA_Make(tU8 r, tU8 g, tU8 b, tU8 a);
+ForceInline tF32RGB tF32RGB_Make(tF32 r, tF32 g, tF32 b);
+ForceInline tF32RGBA tF32RGBA_Make(tF32 r, tF32 g, tF32 b, tF32 a);
+ForceInline tF64RGB tF64RGB_Make(tF64 r, tF64 g, tF64 b);
+ForceInline tF64RGBA tF64RGBA_Make(tF64 r, tF64 g, tF64 b, tF64 a);
+ForceInline tU32ARGB tU32ARGB_Make(tU8 a, tU8 r, tU8 g, tU8 b);
+ForceInline tU32RGBA tU32RGBA_Make(tU8 r, tU8 g, tU8 b, tU8 a);
+ForceInline tU32BGRA tU32BGRA_Make(tU8 b, tU8 g, tU8 r, tU8 a);
+ForceInline tU32ABGR tU32ABGR_Make(tU8 a, tU8 b, tU8 g, tU8 r);
+ForceInline tF32HSV tF32HSV_Make(tF32 h, tF32 s, tF32 v);
+ForceInline tF64HSV tF64HSV_Make(tF64 h, tF64 s, tF64 v);
+ForceInline tF32HSL tF32HSL_Make(tF32 h, tF32 s, tF32 l);
+ForceInline tF64HSL tF64HSL_Make(tF64 h, tF64 s, tF64 l);
+ForceInline tBln tU8RGB_Eq(tU8RGB colour1, tU8RGB colour2);
+ForceInline tBln tU8RGBA_Eq(tU8RGBA colour1, tU8RGBA colour2);
+ForceInline tBln tF32RGB_Eq(tF32RGB colour1, tF32RGB colour2);
+ForceInline tBln tF32RGBA_Eq(tF32RGBA colour1, tF32RGBA colour2);
+ForceInline tBln tF64RGB_Eq(tF64RGB colour1, tF64RGB colour2);
+ForceInline tBln tF64RGBA_Eq(tF64RGBA colour1, tF64RGBA colour2);
+ForceInline tBln tU32ARGB_Eq(tU32ARGB colour1, tU32ARGB colour2);
+ForceInline tBln tU32RGBA_Eq(tU32RGBA colour1, tU32RGBA colour2);
+ForceInline tBln tU32BGRA_Eq(tU32BGRA colour1, tU32BGRA colour2);
+ForceInline tBln tU32ABGR_Eq(tU32ABGR colour1, tU32ABGR colour2);
+ForceInline tBln tF32HSV_Eq(tF32HSV colour1, tF32HSV colour2);
+ForceInline tBln tF64HSV_Eq(tF64HSV colour1, tF64HSV colour2);
+ForceInline tBln tF32HSL_Eq(tF32HSL colour1, tF32HSL colour2);
+ForceInline tBln tF64HSL_Eq(tF64HSL colour1, tF64HSL colour2);
+ForceInline tBln tF32RGB_Nearby(tF32RGB colour1, tF32RGB colour2);
+ForceInline tBln tF32RGBA_Nearby(tF32RGBA colour1, tF32RGBA colour2);
+ForceInline tBln tF64RGB_Nearby(tF64RGB colour1, tF64RGB colour2);
+ForceInline tBln tF64RGBA_Nearby(tF64RGBA colour1, tF64RGBA colour2);
+ForceInline tBln tF32HSV_Nearby(tF32HSV colour1, tF32HSV colour2);
+ForceInline tBln tF64HSV_Nearby(tF64HSV colour1, tF64HSV colour2);
+ForceInline tBln tF32HSL_Nearby(tF32HSL colour1, tF32HSL colour2);
+ForceInline tBln tF64HSL_Nearby(tF64HSL colour1, tF64HSL colour2);
+ForceInline tU32ARGB tU32ARGB_From_tRGBA(tU8RGBA colour);
+ForceInline tU32RGBA tU32RGBA_From_tRGBA(tU8RGBA colour);
+ForceInline tU32BGRA tU32BGRA_From_tRGBA(tU8RGBA colour);
+ForceInline tU32ABGR tU32ABGR_From_tRGBA(tU8RGBA colour);
+ForceInline tU8RGBA tU8RGBA_From_tU32ARGB(tU32ARGB colour);
+ForceInline tU8RGBA tU8RGBA_From_tU32RGBA(tU32RGBA colour);
+ForceInline tU8RGBA tU8RGBA_From_tU32BGRA(tU32BGRA colour);
+ForceInline tU8RGBA tU8RGBA_From_tU32ABGR(tU32ABGR colour);
+ForceInline tF32HSV tF32RGB_ToHSV(tF32RGB colour);
+ForceInline tF32RGB tF32HSV_ToRGB(tF32HSV colour);
+ForceInline tF32HSL tF32RGB_ToHSL(tF32RGB colour);
+ForceInline tF32RGB tF32HSL_ToRGB(tF32HSL colour);
+ForceInline tF64HSV tF64RGB_ToHSV(tF64RGB colour);
+ForceInline tF64RGB tF64HSV_ToRGB(tF64HSV colour);
+ForceInline tF64HSL tF64RGB_ToHSL(tF64RGB colour);
+ForceInline tF64RGB tF64HSL_ToRGB(tF64HSL colour);
+ForceInline tF32RGB tF32RGB_From_tU8RGB(tU8RGB colour);
+ForceInline tF32RGBA tF32RGBA_From_tU8RGBA(tU8RGBA colour);
+ForceInline tU8RGB tU8RGB_From_tF32RGB(tF32RGB colour);
+ForceInline tU8RGBA tU8RGBA_From_tF32RGBA(tF32RGBA colour);
+ForceInline tF64RGB tF64RGB_From_tU8RGB(tU8RGB colour);
+ForceInline tF64RGBA tF64RGBA_From_tU8RGBA(tU8RGBA colour);
+ForceInline tU8RGB tU8RGB_From_tF64RGB(tF64RGB colour);
+ForceInline tU8RGBA tU8RGBA_From_tF64RGBA(tF64RGBA colour);
+ForceInline tF64RGB tF64RGB_From_tF32RGB(tF32RGB colour);
+ForceInline tF64RGBA tF64RGBA_From_tF32RGBA(tF32RGBA colour);
+ForceInline tF32RGB tF32RGB_From_tF64RGB(tF64RGB colour);
+ForceInline tF32RGBA tF32RGBA_From_tF64RGBA(tF64RGBA colour);
+ForceInline tF32RGB tF32RGB_Lerp(tF32RGB strt, tF32RGB stp, tF32 fnsh);
+ForceInline tF32RGBA tF32RGBA_Lerp(tF32RGBA strt, tF32RGBA stp, tF32 fnsh);
+ForceInline tF64RGB tF64RGB_Lerp(tF64RGB strt, tF64RGB stp, tF64 fnsh);
+ForceInline tF64RGBA tF64RGBA_Lerp(tF64RGBA strt, tF64RGBA stp, tF64 fnsh);
+ForceInline tU8RGB tU8RGB_Add(tU8RGB colour1, tU8RGB colour2);
+ForceInline tU8RGB tU8RGB_Sub(tU8RGB colour1, tU8RGB colour2);
+ForceInline tU8RGB tU8RGB_Mul(tU8RGB colour1, tU8RGB colour2);
+ForceInline tU8RGB tU8RGB_Div(tU8RGB colour1, tU8RGB colour2);
+ForceInline tF32RGB tF32RGB_Add(tF32RGB colour1, tF32RGB colour2);
+ForceInline tF32RGB tF32RGB_Sub(tF32RGB colour1, tF32RGB colour2);
+ForceInline tF32RGB tF32RGB_Mul(tF32RGB colour1, tF32RGB colour2);
+ForceInline tF32RGB tF32RGB_Div(tF32RGB colour1, tF32RGB colour2);
+ForceInline tF64RGB tF64RGB_Add(tF64RGB colour1, tF64RGB colour2);
+ForceInline tF64RGB tF64RGB_Sub(tF64RGB colour1, tF64RGB colour2);
+ForceInline tF64RGB tF64RGB_Mul(tF64RGB colour1, tF64RGB colour2);
+ForceInline tF64RGB tF64RGB_Div(tF64RGB colour1, tF64RGB colour2);
+ForceInline tF32RGBA tF32RGBA_Add(tF32RGBA colour1, tF32RGBA colour2);
+ForceInline tF32RGBA tF32RGBA_Sub(tF32RGBA colour1, tF32RGBA colour2);
+ForceInline tF32RGBA tF32RGBA_Mul(tF32RGBA colour1, tF32RGBA colour2);
+ForceInline tF32RGBA tF32RGBA_Div(tF32RGBA colour1, tF32RGBA colour2);
+ForceInline tU8RGBA tU8RGBA_Add(tU8RGBA colour1, tU8RGBA colour2);
+ForceInline tU8RGBA tU8RGBA_Sub(tU8RGBA colour1, tU8RGBA colour2);
+ForceInline tU8RGBA tU8RGBA_Mul(tU8RGBA colour1, tU8RGBA colour2);
+ForceInline tU8RGBA tU8RGBA_Div(tU8RGBA colour1, tU8RGBA colour2);
+ForceInline tF64RGBA tF64RGBA_Add(tF64RGBA colour1, tF64RGBA colour2);
+ForceInline tF64RGBA tF64RGBA_Sub(tF64RGBA colour1, tF64RGBA colour2);
+ForceInline tF64RGBA tF64RGBA_Mul(tF64RGBA colour1, tF64RGBA colour2);
+ForceInline tF64RGBA tF64RGBA_Div(tF64RGBA colour1, tF64RGBA colour2);
+ForceInline tU32ARGB tU32ARGB_Add(tU32ARGB colour1, tU32ARGB colour2);
+ForceInline tU32ARGB tU32ARGB_Sub(tU32ARGB colour1, tU32ARGB colour2);
+ForceInline tU32ARGB tU32ARGB_Mul(tU32ARGB colour1, tU32ARGB colour2);
+ForceInline tU32ARGB tU32ARGB_Div(tU32ARGB colour1, tU32ARGB colour2);
+ForceInline tU32RGBA tU32RGBA_Add(tU32RGBA colour1, tU32RGBA colour2);
+ForceInline tU32RGBA tU32RGBA_Sub(tU32RGBA colour1, tU32RGBA colour2);
+ForceInline tU32RGBA tU32RGBA_Mul(tU32RGBA colour1, tU32RGBA colour2);
+ForceInline tU32RGBA tU32RGBA_Div(tU32RGBA colour1, tU32RGBA colour2);
+ForceInline tU32BGRA tU32BGRA_Add(tU32BGRA colour1, tU32BGRA colour2);
+ForceInline tU32BGRA tU32BGRA_Sub(tU32BGRA colour1, tU32BGRA colour2);
+ForceInline tU32BGRA tU32BGRA_Mul(tU32BGRA colour1, tU32BGRA colour2);
+ForceInline tU32BGRA tU32BGRA_Div(tU32BGRA colour1, tU32BGRA colour2);
+ForceInline tU32ABGR tU32ABGR_Add(tU32ABGR colour1, tU32ABGR colour2);
+ForceInline tU32ABGR tU32ABGR_Sub(tU32ABGR colour1, tU32ABGR colour2);
+ForceInline tU32ABGR tU32ABGR_Mul(tU32ABGR colour1, tU32ABGR colour2);
+ForceInline tU32ABGR tU32ABGR_Div(tU32ABGR colour1, tU32ABGR colour2);
+ForceInline tF32RGB tF32RGB_AddFlt(tF32RGB colour, tF32 flt);
+ForceInline tF32RGB tF32RGB_SubFlt(tF32RGB colour, tF32 flt);
+ForceInline tF32RGB tF32RGB_MulFlt(tF32RGB colour, tF32 flt);
+ForceInline tF32RGB tF32RGB_DivFlt(tF32RGB colour, tF32 flt);
+ForceInline tF32RGBA tF32RGBA_AddFlt(tF32RGBA colour, tF32 flt);
+ForceInline tF32RGBA tF32RGBA_SubFlt(tF32RGBA colour, tF32 flt);
+ForceInline tF32RGBA tF32RGBA_MulFlt(tF32RGBA colour, tF32 flt);
+ForceInline tF32RGBA tF32RGBA_DivFlt(tF32RGBA colour, tF32 flt);
+ForceInline tF64RGB tF64RGB_AddDbl(tF64RGB colour, tF64 dbl);
+ForceInline tF64RGB tF64RGB_SubDbl(tF64RGB colour, tF64 dbl);
+ForceInline tF64RGB tF64RGB_MulDbl(tF64RGB colour, tF64 dbl);
+ForceInline tF64RGB tF64RGB_DivDbl(tF64RGB colour, tF64 dbl);
+ForceInline tF64RGBA tF64RGBA_AddDbl(tF64RGBA colour, tF64 dbl);
+ForceInline tF64RGBA tF64RGBA_SubDbl(tF64RGBA colour, tF64 dbl);
+ForceInline tF64RGBA tF64RGBA_MulDbl(tF64RGBA colour, tF64 dbl);
+ForceInline tF64RGBA tF64RGBA_DivDbl(tF64RGBA colour, tF64 dbl);
+ForceInline tF32RGB tF32RGB_Clamp(tF32RGB colour);
+ForceInline tF32RGBA tF32RGBA_Clamp(tF32RGBA colour);
+ForceInline tF32RGB tF32RGB_Saturate(tF32RGB colour);
+ForceInline tF32RGBA tF32RGBA_Saturate(tF32RGBA colour);
+ForceInline tF32RGB tF32RGB_Blend(tF32RGB colour1, tF32RGB colour2, tF32 stp);
+ForceInline tF32RGBA tF32RGBA_Blend(tF32RGBA colour1, tF32RGBA colour2, tF32 stp);
+ForceInline tF64RGB tF64RGB_Clamp(tF64RGB colour);
+ForceInline tF64RGBA tF64RGBA_Clamp(tF64RGBA colour);
+ForceInline tF64RGB tF64RGB_Saturate(tF64RGB colour);
+ForceInline tF64RGBA tF64RGBA_Saturate(tF64RGBA colour);
+ForceInline tF64RGB tF64RGB_Blend(tF64RGB colour1, tF64RGB colour2, tF64 stp);
+ForceInline tF64RGBA tF64RGBA_Blend(tF64RGBA colour1, tF64RGBA colour2, tF64 stp);
 LINK_C_End
 #ifdef BQSELAYER_COLOUR_IMPL
-FORCEINLINE tU8RGB tU8RGB_Make(tU8 r, tU8 g, tU8 b)
+ForceInline tU8RGB tU8RGB_Make(tU8 r, tU8 g, tU8 b)
 {
 	tU8RGB colour;
 	colour.r = r;
@@ -162,7 +162,7 @@ FORCEINLINE tU8RGB tU8RGB_Make(tU8 r, tU8 g, tU8 b)
 	colour.b = b;
 	return colour;
 }
-FORCEINLINE tU8RGBA tU8RGBA_Make(tU8 r, tU8 g, tU8 b, tU8 a)
+ForceInline tU8RGBA tU8RGBA_Make(tU8 r, tU8 g, tU8 b, tU8 a)
 {
 	tU8RGBA colour;
 	colour.r = r;
@@ -171,7 +171,7 @@ FORCEINLINE tU8RGBA tU8RGBA_Make(tU8 r, tU8 g, tU8 b, tU8 a)
 	colour.a = a;
 	return colour;
 }
-FORCEINLINE tF32RGB tF32RGB_Make(tF32 r, tF32 g, tF32 b)
+ForceInline tF32RGB tF32RGB_Make(tF32 r, tF32 g, tF32 b)
 {
 	tF32RGB colour;
 	colour.r = tF32_Clamp(0.0F, r, 1.0F);
@@ -179,7 +179,7 @@ FORCEINLINE tF32RGB tF32RGB_Make(tF32 r, tF32 g, tF32 b)
 	colour.b = tF32_Clamp(0.0F, b, 1.0F);
 	return colour;
 }
-FORCEINLINE tF32RGBA tF32RGBA_Make(tF32 r, tF32 g, tF32 b, tF32 a)
+ForceInline tF32RGBA tF32RGBA_Make(tF32 r, tF32 g, tF32 b, tF32 a)
 {
 	tF32RGBA colour;
 	colour.r = tF32_Clamp(0.0F, r, 1.0F);
@@ -188,7 +188,7 @@ FORCEINLINE tF32RGBA tF32RGBA_Make(tF32 r, tF32 g, tF32 b, tF32 a)
 	colour.a = tF32_Clamp(0.0F, a, 1.0F);
 	return colour;
 }
-FORCEINLINE tF64RGB tF64RGB_Make(tF64 r, tF64 g, tF64 b)
+ForceInline tF64RGB tF64RGB_Make(tF64 r, tF64 g, tF64 b)
 {
 	tF64RGB colour;
 	colour.r = tF64_Clamp(0.0, r, 1.0);
@@ -196,7 +196,7 @@ FORCEINLINE tF64RGB tF64RGB_Make(tF64 r, tF64 g, tF64 b)
 	colour.b = tF64_Clamp(0.0, b, 1.0);
 	return colour;
 }
-FORCEINLINE tF64RGBA tF64RGBA_Make(tF64 r, tF64 g, tF64 b, tF64 a)
+ForceInline tF64RGBA tF64RGBA_Make(tF64 r, tF64 g, tF64 b, tF64 a)
 {
 	tF64RGBA colour;
 	colour.r = tF64_Clamp(0.0, r, 1.0);
@@ -205,31 +205,31 @@ FORCEINLINE tF64RGBA tF64RGBA_Make(tF64 r, tF64 g, tF64 b, tF64 a)
 	colour.a = tF64_Clamp(0.0, a, 1.0);
 	return colour;
 }
-FORCEINLINE tU32ARGB tU32ARGB_Make(tU8 a, tU8 r, tU8 g, tU8 b)
+ForceInline tU32ARGB tU32ARGB_Make(tU8 a, tU8 r, tU8 g, tU8 b)
 {
 	tU32ARGB colour;
 	colour = ((tU32)a << 24U) | ((tU32)r << 16U) | ((tU32)g << 8U) | (tU32)b;
 	return colour;
 }
-FORCEINLINE tU32RGBA tU32RGBA_Make(tU8 r, tU8 g, tU8 b, tU8 a)
+ForceInline tU32RGBA tU32RGBA_Make(tU8 r, tU8 g, tU8 b, tU8 a)
 {
 	tU32RGBA colour;
 	colour = ((tU32)r << 24U) | ((tU32)g << 16U) | ((tU32)b << 8U) | (tU32)a;
 	return colour;
 }
-FORCEINLINE tU32BGRA tU32BGRA_Make(tU8 b, tU8 g, tU8 r, tU8 a)
+ForceInline tU32BGRA tU32BGRA_Make(tU8 b, tU8 g, tU8 r, tU8 a)
 {
 	tU32BGRA colour;
 	colour = ((tU32)b << 24U) | ((tU32)g << 16U) | ((tU32)r << 8U) | (tU32)a;
 	return colour;
 }
-FORCEINLINE tU32ABGR tU32ABGR_Make(tU8 a, tU8 b, tU8 g, tU8 r)
+ForceInline tU32ABGR tU32ABGR_Make(tU8 a, tU8 b, tU8 g, tU8 r)
 {
 	tU32ABGR colour;
 	colour = ((tU32)a << 24U) | ((tU32)b << 16U) | ((tU32)g << 8U) | (tU32)r;
 	return colour;
 }
-FORCEINLINE tF32HSV tF32HSV_Make(tF32 h, tF32 s, tF32 v)
+ForceInline tF32HSV tF32HSV_Make(tF32 h, tF32 s, tF32 v)
 {
 	tF32HSV colour;
 	colour.h = tF32_Clamp(0.0F, h, 360.0F);
@@ -238,7 +238,7 @@ FORCEINLINE tF32HSV tF32HSV_Make(tF32 h, tF32 s, tF32 v)
 	colour.v = tF32_Clamp(0.0F, v, 1.0F);
 	return colour;
 }
-FORCEINLINE tF64HSV tF64HSV_Make(tF64 h, tF64 s, tF64 v)
+ForceInline tF64HSV tF64HSV_Make(tF64 h, tF64 s, tF64 v)
 {
 	tF64HSV colour;
 	colour.h = tF64_Clamp(0.0, h, 360.0);
@@ -247,7 +247,7 @@ FORCEINLINE tF64HSV tF64HSV_Make(tF64 h, tF64 s, tF64 v)
 	colour.v = tF64_Clamp(0.0, v, 1.0);
 	return colour;
 }
-FORCEINLINE tF32HSL tF32HSL_Make(tF32 h, tF32 s, tF32 l)
+ForceInline tF32HSL tF32HSL_Make(tF32 h, tF32 s, tF32 l)
 {
 	tF32HSL colour;
 	colour.h = tF32_Clamp(0.0F, h, 360.0F);
@@ -256,7 +256,7 @@ FORCEINLINE tF32HSL tF32HSL_Make(tF32 h, tF32 s, tF32 l)
 	colour.l = tF32_Clamp(0.0F, l, 1.0F);
 	return colour;
 }
-FORCEINLINE tF64HSL tF64HSL_Make(tF64 h, tF64 s, tF64 l)
+ForceInline tF64HSL tF64HSL_Make(tF64 h, tF64 s, tF64 l)
 {
 	tF64HSL colour;
 	colour.h = tF64_Clamp(0.0, h, 360.0);
@@ -265,111 +265,111 @@ FORCEINLINE tF64HSL tF64HSL_Make(tF64 h, tF64 s, tF64 l)
 	colour.l = tF64_Clamp(0.0, l, 1.0);
 	return colour;
 }
-FORCEINLINE tBln tU8RGB_Eq(tU8RGB colour1, tU8RGB colour2)
+ForceInline tBln tU8RGB_Eq(tU8RGB colour1, tU8RGB colour2)
 {
 	return colour1.r == colour2.r && colour1.g == colour2.g && colour1.b == colour2.b;
 }
-FORCEINLINE tBln tU8RGBA_Eq(tU8RGBA colour1, tU8RGBA colour2)
+ForceInline tBln tU8RGBA_Eq(tU8RGBA colour1, tU8RGBA colour2)
 {
 	return colour1.r == colour2.r && colour1.g == colour2.g && colour1.b == colour2.b && colour1.a == colour2.a;
 }
-FORCEINLINE tBln tF32RGB_Eq(tF32RGB colour1, tF32RGB colour2)
+ForceInline tBln tF32RGB_Eq(tF32RGB colour1, tF32RGB colour2)
 {
 	return colour1.r == colour2.r && colour1.g == colour2.g && colour1.b == colour2.b;
 }
-FORCEINLINE tBln tF32RGBA_Eq(tF32RGBA colour1, tF32RGBA colour2)
+ForceInline tBln tF32RGBA_Eq(tF32RGBA colour1, tF32RGBA colour2)
 {
 	return colour1.r == colour2.r && colour1.g == colour2.g && colour1.b == colour2.b && colour1.a == colour2.a;
 }
-FORCEINLINE tBln tF64RGB_Eq(tF64RGB colour1, tF64RGB colour2)
+ForceInline tBln tF64RGB_Eq(tF64RGB colour1, tF64RGB colour2)
 {
 	return colour1.r == colour2.r && colour1.g == colour2.g && colour1.b == colour2.b;
 }
-FORCEINLINE tBln tF64RGBA_Eq(tF64RGBA colour1, tF64RGBA colour2)
+ForceInline tBln tF64RGBA_Eq(tF64RGBA colour1, tF64RGBA colour2)
 {
 	return colour1.r == colour2.r && colour1.g == colour2.g && colour1.b == colour2.b && colour1.a == colour2.a;
 }
-FORCEINLINE tBln tU32ARGB_Eq(tU32ARGB colour1, tU32ARGB colour2)
+ForceInline tBln tU32ARGB_Eq(tU32ARGB colour1, tU32ARGB colour2)
 {
 	return colour1 == colour2;
 }
-FORCEINLINE tBln tU32RGBA_Eq(tU32RGBA colour1, tU32RGBA colour2)
+ForceInline tBln tU32RGBA_Eq(tU32RGBA colour1, tU32RGBA colour2)
 {
 	return colour1 == colour2;
 }
-FORCEINLINE tBln tU32BGRA_Eq(tU32BGRA colour1, tU32BGRA colour2)
+ForceInline tBln tU32BGRA_Eq(tU32BGRA colour1, tU32BGRA colour2)
 {
 	return colour1 == colour2;
 }
-FORCEINLINE tBln tU32ABGR_Eq(tU32ABGR colour1, tU32ABGR colour2)
+ForceInline tBln tU32ABGR_Eq(tU32ABGR colour1, tU32ABGR colour2)
 {
 	return colour1 == colour2;
 }
-FORCEINLINE tBln tF32HSV_Eq(tF32HSV colour1, tF32HSV colour2)
+ForceInline tBln tF32HSV_Eq(tF32HSV colour1, tF32HSV colour2)
 {
 	return colour1.h == colour2.h && colour1.s == colour2.s && colour1.v == colour2.v;
 }
-FORCEINLINE tBln tF64HSV_Eq(tF64HSV colour1, tF64HSV colour2)
+ForceInline tBln tF64HSV_Eq(tF64HSV colour1, tF64HSV colour2)
 {
 	return colour1.h == colour2.h && colour1.s == colour2.s && colour1.v == colour2.v;
 }
-FORCEINLINE tBln tF32HSL_Eq(tF32HSL colour1, tF32HSL colour2)
+ForceInline tBln tF32HSL_Eq(tF32HSL colour1, tF32HSL colour2)
 {
 	return colour1.h == colour2.h && colour1.s == colour2.s && colour1.l == colour2.l;
 }
-FORCEINLINE tBln tF64HSL_Eq(tF64HSL colour1, tF64HSL colour2)
+ForceInline tBln tF64HSL_Eq(tF64HSL colour1, tF64HSL colour2)
 {
 	return colour1.h == colour2.h && colour1.s == colour2.s && colour1.l == colour2.l;
 }
-FORCEINLINE tBln tF32RGB_Nearby(tF32RGB colour1, tF32RGB colour2)
+ForceInline tBln tF32RGB_Nearby(tF32RGB colour1, tF32RGB colour2)
 {
 	return tF32_Nearby(colour1.r, colour2.r) && tF32_Nearby(colour1.g, colour2.g) && tF32_Nearby(colour1.b, colour2.b);
 }
-FORCEINLINE tBln tF32RGBA_Nearby(tF32RGBA colour1, tF32RGBA colour2)
+ForceInline tBln tF32RGBA_Nearby(tF32RGBA colour1, tF32RGBA colour2)
 {
 	return tF32_Nearby(colour1.r, colour2.r) && tF32_Nearby(colour1.g, colour2.g) && tF32_Nearby(colour1.b, colour2.b) && tF32_Nearby(colour1.a, colour2.a);
 }
-FORCEINLINE tBln tF64RGB_Nearby(tF64RGB colour1, tF64RGB colour2)
+ForceInline tBln tF64RGB_Nearby(tF64RGB colour1, tF64RGB colour2)
 {
 	return tF64_Nearby(colour1.r, colour2.r) && tF64_Nearby(colour1.g, colour2.g) && tF64_Nearby(colour1.b, colour2.b);
 }
-FORCEINLINE tBln tF64RGBA_Nearby(tF64RGBA colour1, tF64RGBA colour2)
+ForceInline tBln tF64RGBA_Nearby(tF64RGBA colour1, tF64RGBA colour2)
 {
 	return tF64_Nearby(colour1.r, colour2.r) && tF64_Nearby(colour1.g, colour2.g) && tF64_Nearby(colour1.b, colour2.b) && tF64_Nearby(colour1.a, colour2.a);
 }
-FORCEINLINE tBln tF32HSV_Nearby(tF32HSV colour1, tF32HSV colour2)
+ForceInline tBln tF32HSV_Nearby(tF32HSV colour1, tF32HSV colour2)
 {
 	return tF32_Nearby(colour1.h, colour2.h) && tF32_Nearby(colour1.s, colour2.s) && tF32_Nearby(colour1.v, colour2.v);
 }
-FORCEINLINE tBln tF64HSV_Nearby(tF64HSV colour1, tF64HSV colour2)
+ForceInline tBln tF64HSV_Nearby(tF64HSV colour1, tF64HSV colour2)
 {
 	return tF64_Nearby(colour1.h, colour2.h) && tF64_Nearby(colour1.s, colour2.s) && tF64_Nearby(colour1.v, colour2.v);
 }
-FORCEINLINE tBln tF32HSL_Nearby(tF32HSL colour1, tF32HSL colour2)
+ForceInline tBln tF32HSL_Nearby(tF32HSL colour1, tF32HSL colour2)
 {
 	return tF32_Nearby(colour1.h, colour2.h) && tF32_Nearby(colour1.s, colour2.s) && tF32_Nearby(colour1.l, colour2.l);
 }
-FORCEINLINE tBln tF64HSL_Nearby(tF64HSL colour1, tF64HSL colour2)
+ForceInline tBln tF64HSL_Nearby(tF64HSL colour1, tF64HSL colour2)
 {
 	return tF64_Nearby(colour1.h, colour2.h) && tF64_Nearby(colour1.s, colour2.s) && tF64_Nearby(colour1.l, colour2.l);
 }
-FORCEINLINE tU32ARGB tU32ARGB_From_tRGBA(tU8RGBA colour)
+ForceInline tU32ARGB tU32ARGB_From_tRGBA(tU8RGBA colour)
 {
 	return ((tU32)colour.a << 24U) | ((tU32)colour.r << 16U) | ((tU32)colour.g << 8U) | (tU32)colour.b;
 }
-FORCEINLINE tU32RGBA tU32RGBA_From_tRGBA(tU8RGBA colour)
+ForceInline tU32RGBA tU32RGBA_From_tRGBA(tU8RGBA colour)
 {
 	return ((tU32)colour.r << 24U) | ((tU32)colour.g << 16U) | ((tU32)colour.b << 8U) | (tU32)colour.a;
 }
-FORCEINLINE tU32BGRA tU32BGRA_From_tRGBA(tU8RGBA colour)
+ForceInline tU32BGRA tU32BGRA_From_tRGBA(tU8RGBA colour)
 {
 	return ((tU32)colour.b << 24U) | ((tU32)colour.g << 16U) | ((tU32)colour.r << 8U) | (tU32)colour.a;
 }
-FORCEINLINE tU32ABGR tU32ABGR_From_tRGBA(tU8RGBA colour)
+ForceInline tU32ABGR tU32ABGR_From_tRGBA(tU8RGBA colour)
 {
 	return ((tU32)colour.a << 24U) | ((tU32)colour.b << 16U) | ((tU32)colour.g << 8U) | (tU32)colour.r;
 }
-FORCEINLINE tU8RGBA tU8RGBA_From_tU32ARGB(tU32ARGB colour)
+ForceInline tU8RGBA tU8RGBA_From_tU32ARGB(tU32ARGB colour)
 {
 	tU8RGBA ret;
 	ret.a = (tU8)(colour >> 24U);
@@ -378,7 +378,7 @@ FORCEINLINE tU8RGBA tU8RGBA_From_tU32ARGB(tU32ARGB colour)
 	ret.b = (tU8)colour;
 	return ret;
 }
-FORCEINLINE tU8RGBA tU8RGBA_From_tU32RGBA(tU32RGBA colour)
+ForceInline tU8RGBA tU8RGBA_From_tU32RGBA(tU32RGBA colour)
 {
 	tU8RGBA ret;
 	ret.r = (tU8)(colour >> 24U);
@@ -387,7 +387,7 @@ FORCEINLINE tU8RGBA tU8RGBA_From_tU32RGBA(tU32RGBA colour)
 	ret.a = (tU8)colour;
 	return ret;
 }
-FORCEINLINE tU8RGBA tU8RGBA_From_tU32BGRA(tU32BGRA colour)
+ForceInline tU8RGBA tU8RGBA_From_tU32BGRA(tU32BGRA colour)
 {
 	tU8RGBA ret;
 	ret.b = (tU8)(colour >> 24U);
@@ -396,7 +396,7 @@ FORCEINLINE tU8RGBA tU8RGBA_From_tU32BGRA(tU32BGRA colour)
 	ret.a = (tU8)colour;
 	return ret;
 }
-FORCEINLINE tU8RGBA tU8RGBA_From_tU32ABGR(tU32ABGR colour)
+ForceInline tU8RGBA tU8RGBA_From_tU32ABGR(tU32ABGR colour)
 {
 	tU8RGBA ret;
 	ret.a = (tU8)(colour >> 24U);
@@ -405,7 +405,7 @@ FORCEINLINE tU8RGBA tU8RGBA_From_tU32ABGR(tU32ABGR colour)
 	ret.r = (tU8)colour;
 	return ret;
 }
-FORCEINLINE tF32HSV tF32RGB_ToHSV(tF32RGB colour)
+ForceInline tF32HSV tF32RGB_ToHSV(tF32RGB colour)
 {
 	tF32 r = colour.r;
 	tF32 g = colour.g;
@@ -441,7 +441,7 @@ FORCEINLINE tF32HSV tF32RGB_ToHSV(tF32RGB colour)
 	if (hsv.h < 0.0F) hsv.h += 360.0F;
 	return hsv;
 }
-FORCEINLINE tF32RGB tF32HSV_ToRGB(tF32HSV colour)
+ForceInline tF32RGB tF32HSV_ToRGB(tF32HSV colour)
 {
 	tF32 h = colour.h;
 	tF32 s = colour.s;
@@ -480,7 +480,7 @@ FORCEINLINE tF32RGB tF32HSV_ToRGB(tF32HSV colour)
 	out.b = b + m;
 	return out;
 }
-FORCEINLINE tF32HSL tF32RGB_ToHSL(tF32RGB colour)
+ForceInline tF32HSL tF32RGB_ToHSL(tF32RGB colour)
 {
 	tF32 r = colour.r;
 	tF32 g = colour.g;
@@ -523,7 +523,7 @@ FORCEINLINE tF32HSL tF32RGB_ToHSL(tF32RGB colour)
 	if (hsl.h < 0.0F) hsl.h += 360.0F;
 	return hsl;
 }
-FORCEINLINE tF32RGB tF32HSL_ToRGB(tF32HSL colour)
+ForceInline tF32RGB tF32HSL_ToRGB(tF32HSL colour)
 {
 	tF32 h = colour.h;
 	tF32 s = colour.s;
@@ -562,7 +562,7 @@ FORCEINLINE tF32RGB tF32HSL_ToRGB(tF32HSL colour)
 	out.b = b + m;
 	return out;
 }
-FORCEINLINE tF64HSV tF64RGB_ToHSV(tF64RGB colour)
+ForceInline tF64HSV tF64RGB_ToHSV(tF64RGB colour)
 {
 	tF64 r = colour.r;
 	tF64 g = colour.g;
@@ -598,7 +598,7 @@ FORCEINLINE tF64HSV tF64RGB_ToHSV(tF64RGB colour)
 	if (hsv.h < 0.0) hsv.h += 360.0;
 	return hsv;
 }
-FORCEINLINE tF64RGB tF64HSV_ToRGB(tF64HSV colour)
+ForceInline tF64RGB tF64HSV_ToRGB(tF64HSV colour)
 {
 	tF64 h = colour.h;
 	tF64 s = colour.s;
@@ -637,7 +637,7 @@ FORCEINLINE tF64RGB tF64HSV_ToRGB(tF64HSV colour)
 	out.b = b + m;
 	return out;
 }
-FORCEINLINE tF64HSL tF64RGB_ToHSL(tF64RGB colour)
+ForceInline tF64HSL tF64RGB_ToHSL(tF64RGB colour)
 {
 	tF64 r = colour.r;
 	tF64 g = colour.g;
@@ -680,7 +680,7 @@ FORCEINLINE tF64HSL tF64RGB_ToHSL(tF64RGB colour)
 	if (hsl.h < 0.0) hsl.h += 360.0;
 	return hsl;
 }
-FORCEINLINE tF64RGB tF64HSL_ToRGB(tF64HSL colour)
+ForceInline tF64RGB tF64HSL_ToRGB(tF64HSL colour)
 {
 	tF64 h = colour.h;
 	tF64 s = colour.s;
@@ -719,7 +719,7 @@ FORCEINLINE tF64RGB tF64HSL_ToRGB(tF64HSL colour)
 	out.b = b + m;
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_From_tU8RGB(tU8RGB colour)
+ForceInline tF32RGB tF32RGB_From_tU8RGB(tU8RGB colour)
 {
 	tF32RGB out;
 	out.r = (tF32)colour.r / 255.0F;
@@ -727,7 +727,7 @@ FORCEINLINE tF32RGB tF32RGB_From_tU8RGB(tU8RGB colour)
 	out.b = (tF32)colour.b / 255.0F;
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_From_tU8RGBA(tU8RGBA colour)
+ForceInline tF32RGBA tF32RGBA_From_tU8RGBA(tU8RGBA colour)
 {
 	tF32RGBA out;
 	out.r = (tF32)colour.r / 255.0F;
@@ -736,7 +736,7 @@ FORCEINLINE tF32RGBA tF32RGBA_From_tU8RGBA(tU8RGBA colour)
 	out.a = (tF32)colour.a / 255.0F;
 	return out;
 }
-FORCEINLINE tU8RGB tU8RGB_From_tF32RGB(tF32RGB colour)
+ForceInline tU8RGB tU8RGB_From_tF32RGB(tF32RGB colour)
 {
 	tU8RGB out;
 	out.r = (tU8)tF32_Clamp(0.0F, colour.r, 1.0F) * 255U;
@@ -744,7 +744,7 @@ FORCEINLINE tU8RGB tU8RGB_From_tF32RGB(tF32RGB colour)
 	out.b = (tU8)tF32_Clamp(0.0F, colour.b, 1.0F) * 255U;
 	return out;
 }
-FORCEINLINE tU8RGBA tU8RGBA_From_tF32RGBA(tF32RGBA colour)
+ForceInline tU8RGBA tU8RGBA_From_tF32RGBA(tF32RGBA colour)
 {
 	tU8RGBA out;
 	out.r = (tU8)tF32_Clamp(0.0F, colour.r, 1.0F) * 255U;
@@ -753,7 +753,7 @@ FORCEINLINE tU8RGBA tU8RGBA_From_tF32RGBA(tF32RGBA colour)
 	out.a = (tU8)tF32_Clamp(0.0F, colour.a, 1.0F) * 255U;
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_From_tU8RGB(tU8RGB colour)
+ForceInline tF64RGB tF64RGB_From_tU8RGB(tU8RGB colour)
 {
 	tF64RGB out;
 	out.r = (tF64)colour.r / 255.0;
@@ -761,7 +761,7 @@ FORCEINLINE tF64RGB tF64RGB_From_tU8RGB(tU8RGB colour)
 	out.b = (tF64)colour.b / 255.0;
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_From_tU8RGBA(tU8RGBA colour)
+ForceInline tF64RGBA tF64RGBA_From_tU8RGBA(tU8RGBA colour)
 {
 	tF64RGBA out;
 	out.r = (tF64)colour.r / 255.0;
@@ -770,7 +770,7 @@ FORCEINLINE tF64RGBA tF64RGBA_From_tU8RGBA(tU8RGBA colour)
 	out.a = (tF64)colour.a / 255.0;
 	return out;
 }
-FORCEINLINE tU8RGB tU8RGB_From_tF64RGB(tF64RGB colour)
+ForceInline tU8RGB tU8RGB_From_tF64RGB(tF64RGB colour)
 {
 	tU8RGB out;
 	out.r = (tU8)tF64_Clamp(0.0, colour.r, 1.0) * 255U;
@@ -778,7 +778,7 @@ FORCEINLINE tU8RGB tU8RGB_From_tF64RGB(tF64RGB colour)
 	out.b = (tU8)tF64_Clamp(0.0, colour.b, 1.0) * 255U;
 	return out;
 }
-FORCEINLINE tU8RGBA tU8RGBA_From_tF64RGBA(tF64RGBA colour)
+ForceInline tU8RGBA tU8RGBA_From_tF64RGBA(tF64RGBA colour)
 {
 	tU8RGBA out;
 	out.r = (tU8)tF64_Clamp(0.0, colour.r, 1.0) * 255U;
@@ -787,7 +787,7 @@ FORCEINLINE tU8RGBA tU8RGBA_From_tF64RGBA(tF64RGBA colour)
 	out.a = (tU8)tF64_Clamp(0.0, colour.a, 1.0) * 255U;
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_From_tF32RGB(tF32RGB colour)
+ForceInline tF64RGB tF64RGB_From_tF32RGB(tF32RGB colour)
 {
 	tF64RGB out;
 	out.r = (tF64)colour.r;
@@ -795,7 +795,7 @@ FORCEINLINE tF64RGB tF64RGB_From_tF32RGB(tF32RGB colour)
 	out.b = (tF64)colour.b;
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_From_tF32RGBA(tF32RGBA colour)
+ForceInline tF64RGBA tF64RGBA_From_tF32RGBA(tF32RGBA colour)
 {
 	tF64RGBA out;
 	out.r = (tF64)colour.r;
@@ -804,7 +804,7 @@ FORCEINLINE tF64RGBA tF64RGBA_From_tF32RGBA(tF32RGBA colour)
 	out.a = (tF64)colour.a;
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_From_tF64RGB(tF64RGB colour)
+ForceInline tF32RGB tF32RGB_From_tF64RGB(tF64RGB colour)
 {
 	tF32RGB out;
 	out.r = (tF32)colour.r;
@@ -812,7 +812,7 @@ FORCEINLINE tF32RGB tF32RGB_From_tF64RGB(tF64RGB colour)
 	out.b = (tF32)colour.b;
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_From_tF64RGBA(tF64RGBA colour)
+ForceInline tF32RGBA tF32RGBA_From_tF64RGBA(tF64RGBA colour)
 {
 	tF32RGBA out;
 	out.r = (tF32)colour.r;
@@ -821,7 +821,7 @@ FORCEINLINE tF32RGBA tF32RGBA_From_tF64RGBA(tF64RGBA colour)
 	out.a = (tF32)colour.a;
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_Lerp(tF32RGB strt, tF32RGB stp, tF32 fnsh)
+ForceInline tF32RGB tF32RGB_Lerp(tF32RGB strt, tF32RGB stp, tF32 fnsh)
 {
 	tF32RGB out;
 	out.r = tF32_Lerp(strt.r, stp.r, fnsh);
@@ -829,7 +829,7 @@ FORCEINLINE tF32RGB tF32RGB_Lerp(tF32RGB strt, tF32RGB stp, tF32 fnsh)
 	out.b = tF32_Lerp(strt.b, stp.b, fnsh);
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_Lerp(tF32RGBA strt, tF32RGBA stp, tF32 fnsh)
+ForceInline tF32RGBA tF32RGBA_Lerp(tF32RGBA strt, tF32RGBA stp, tF32 fnsh)
 {
 	tF32RGBA out;
 	out.r = tF32_Lerp(strt.r, stp.r, fnsh);
@@ -838,7 +838,7 @@ FORCEINLINE tF32RGBA tF32RGBA_Lerp(tF32RGBA strt, tF32RGBA stp, tF32 fnsh)
 	out.a = tF32_Lerp(strt.a, stp.a, fnsh);
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_Lerp(tF64RGB strt, tF64RGB stp, tF64 fnsh)
+ForceInline tF64RGB tF64RGB_Lerp(tF64RGB strt, tF64RGB stp, tF64 fnsh)
 {
 	tF64RGB out;
 	out.r = tF64_Lerp(strt.r, stp.r, fnsh);
@@ -846,7 +846,7 @@ FORCEINLINE tF64RGB tF64RGB_Lerp(tF64RGB strt, tF64RGB stp, tF64 fnsh)
 	out.b = tF64_Lerp(strt.b, stp.b, fnsh);
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_Lerp(tF64RGBA strt, tF64RGBA stp, tF64 fnsh)
+ForceInline tF64RGBA tF64RGBA_Lerp(tF64RGBA strt, tF64RGBA stp, tF64 fnsh)
 {
 	tF64RGBA out;
 	out.r = tF64_Lerp(strt.r, stp.r, fnsh);
@@ -855,7 +855,7 @@ FORCEINLINE tF64RGBA tF64RGBA_Lerp(tF64RGBA strt, tF64RGBA stp, tF64 fnsh)
 	out.a = tF64_Lerp(strt.a, stp.a, fnsh);
 	return out;
 }
-FORCEINLINE tU8RGB tU8RGB_Add(tU8RGB colour1, tU8RGB colour2)
+ForceInline tU8RGB tU8RGB_Add(tU8RGB colour1, tU8RGB colour2)
 {
 	tU8RGB out;
 	out.r = colour1.r + colour2.r;
@@ -863,7 +863,7 @@ FORCEINLINE tU8RGB tU8RGB_Add(tU8RGB colour1, tU8RGB colour2)
 	out.b = colour1.b + colour2.b;
 	return out;
 }
-FORCEINLINE tU8RGB tU8RGB_Sub(tU8RGB colour1, tU8RGB colour2)
+ForceInline tU8RGB tU8RGB_Sub(tU8RGB colour1, tU8RGB colour2)
 {
 	tU8RGB out;
 	out.r = colour1.r - colour2.r;
@@ -871,7 +871,7 @@ FORCEINLINE tU8RGB tU8RGB_Sub(tU8RGB colour1, tU8RGB colour2)
 	out.b = colour1.b - colour2.b;
 	return out;
 }
-FORCEINLINE tU8RGB tU8RGB_Mul(tU8RGB colour1, tU8RGB colour2)
+ForceInline tU8RGB tU8RGB_Mul(tU8RGB colour1, tU8RGB colour2)
 {
 	tU8RGB out;
 	out.r = (tU8)(((tU16)colour1.r * (tU16)colour2.r) / 255U);
@@ -879,7 +879,7 @@ FORCEINLINE tU8RGB tU8RGB_Mul(tU8RGB colour1, tU8RGB colour2)
 	out.b = (tU8)(((tU16)colour1.b * (tU16)colour2.b) / 255U);
 	return out;
 }
-FORCEINLINE tU8RGB tU8RGB_Div(tU8RGB colour1, tU8RGB colour2)
+ForceInline tU8RGB tU8RGB_Div(tU8RGB colour1, tU8RGB colour2)
 {
 	tU8RGB out;
 	out.r = (colour2.r == 0U) ? 0U : (tU8)(((tU16)colour1.r * 255U) / colour2.r);
@@ -887,7 +887,7 @@ FORCEINLINE tU8RGB tU8RGB_Div(tU8RGB colour1, tU8RGB colour2)
 	out.b = (colour2.b == 0U) ? 0U : (tU8)(((tU16)colour1.b * 255U) / colour2.b);
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_Add(tF32RGB colour1, tF32RGB colour2)
+ForceInline tF32RGB tF32RGB_Add(tF32RGB colour1, tF32RGB colour2)
 {
 	tF32RGB out;
 	out.r = colour1.r + colour2.r;
@@ -895,7 +895,7 @@ FORCEINLINE tF32RGB tF32RGB_Add(tF32RGB colour1, tF32RGB colour2)
 	out.b = colour1.b + colour2.b;
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_Sub(tF32RGB colour1, tF32RGB colour2)
+ForceInline tF32RGB tF32RGB_Sub(tF32RGB colour1, tF32RGB colour2)
 {
 	tF32RGB out;
 	out.r = colour1.r - colour2.r;
@@ -903,7 +903,7 @@ FORCEINLINE tF32RGB tF32RGB_Sub(tF32RGB colour1, tF32RGB colour2)
 	out.b = colour1.b - colour2.b;
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_Mul(tF32RGB colour1, tF32RGB colour2)
+ForceInline tF32RGB tF32RGB_Mul(tF32RGB colour1, tF32RGB colour2)
 {
 	tF32RGB out;
 	out.r = colour1.r * colour2.r;
@@ -911,7 +911,7 @@ FORCEINLINE tF32RGB tF32RGB_Mul(tF32RGB colour1, tF32RGB colour2)
 	out.b = colour1.b * colour2.b;
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_Div(tF32RGB colour1, tF32RGB colour2)
+ForceInline tF32RGB tF32RGB_Div(tF32RGB colour1, tF32RGB colour2)
 {
 	tF32RGB out;
 	out.r = colour2.r == 0.0F ? 0.0F : (colour1.r / colour2.r);
@@ -919,7 +919,7 @@ FORCEINLINE tF32RGB tF32RGB_Div(tF32RGB colour1, tF32RGB colour2)
 	out.b = colour2.b == 0.0F ? 0.0F : (colour1.b / colour2.b);
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_Add(tF64RGB colour1, tF64RGB colour2)
+ForceInline tF64RGB tF64RGB_Add(tF64RGB colour1, tF64RGB colour2)
 {
 	tF64RGB out;
 	out.r = colour1.r + colour2.r;
@@ -927,7 +927,7 @@ FORCEINLINE tF64RGB tF64RGB_Add(tF64RGB colour1, tF64RGB colour2)
 	out.b = colour1.b + colour2.b;
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_Sub(tF64RGB colour1, tF64RGB colour2)
+ForceInline tF64RGB tF64RGB_Sub(tF64RGB colour1, tF64RGB colour2)
 {
 	tF64RGB out;
 	out.r = colour1.r - colour2.r;
@@ -935,7 +935,7 @@ FORCEINLINE tF64RGB tF64RGB_Sub(tF64RGB colour1, tF64RGB colour2)
 	out.b = colour1.b - colour2.b;
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_Mul(tF64RGB colour1, tF64RGB colour2)
+ForceInline tF64RGB tF64RGB_Mul(tF64RGB colour1, tF64RGB colour2)
 {
 	tF64RGB out;
 	out.r = colour1.r * colour2.r;
@@ -943,7 +943,7 @@ FORCEINLINE tF64RGB tF64RGB_Mul(tF64RGB colour1, tF64RGB colour2)
 	out.b = colour1.b * colour2.b;
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_Div(tF64RGB colour1, tF64RGB colour2)
+ForceInline tF64RGB tF64RGB_Div(tF64RGB colour1, tF64RGB colour2)
 {
 	tF64RGB out;
 	out.r = colour2.r == 0.0 ? 0.0 : (colour1.r / colour2.r);
@@ -951,7 +951,7 @@ FORCEINLINE tF64RGB tF64RGB_Div(tF64RGB colour1, tF64RGB colour2)
 	out.b = colour2.b == 0.0 ? 0.0 : (colour1.b / colour2.b);
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_Add(tF32RGBA colour1, tF32RGBA colour2)
+ForceInline tF32RGBA tF32RGBA_Add(tF32RGBA colour1, tF32RGBA colour2)
 {
 	tF32RGBA out;
 	out.r = colour1.r + colour2.r;
@@ -960,7 +960,7 @@ FORCEINLINE tF32RGBA tF32RGBA_Add(tF32RGBA colour1, tF32RGBA colour2)
 	out.a = colour1.a + colour2.a;
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_Sub(tF32RGBA colour1, tF32RGBA colour2)
+ForceInline tF32RGBA tF32RGBA_Sub(tF32RGBA colour1, tF32RGBA colour2)
 {
 	tF32RGBA out;
 	out.r = colour1.r - colour2.r;
@@ -969,7 +969,7 @@ FORCEINLINE tF32RGBA tF32RGBA_Sub(tF32RGBA colour1, tF32RGBA colour2)
 	out.a = colour1.a - colour2.a;
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_Mul(tF32RGBA colour1, tF32RGBA colour2)
+ForceInline tF32RGBA tF32RGBA_Mul(tF32RGBA colour1, tF32RGBA colour2)
 {
 	tF32RGBA out;
 	out.r = colour1.r * colour2.r;
@@ -978,7 +978,7 @@ FORCEINLINE tF32RGBA tF32RGBA_Mul(tF32RGBA colour1, tF32RGBA colour2)
 	out.a = colour1.a * colour2.a;
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_Div(tF32RGBA colour1, tF32RGBA colour2)
+ForceInline tF32RGBA tF32RGBA_Div(tF32RGBA colour1, tF32RGBA colour2)
 {
 	tF32RGBA out;
 	out.r = colour2.r == 0.0F ? 0.0F : (colour1.r / colour2.r);
@@ -987,7 +987,7 @@ FORCEINLINE tF32RGBA tF32RGBA_Div(tF32RGBA colour1, tF32RGBA colour2)
 	out.a = colour2.a == 0.0F ? 0.0F : (colour1.a / colour2.a);
 	return out;
 }
-FORCEINLINE tU8RGBA tU8RGBA_Add(tU8RGBA colour1, tU8RGBA colour2)
+ForceInline tU8RGBA tU8RGBA_Add(tU8RGBA colour1, tU8RGBA colour2)
 {
 	tU8RGBA out;
 	out.r = colour1.r + colour2.r;
@@ -996,7 +996,7 @@ FORCEINLINE tU8RGBA tU8RGBA_Add(tU8RGBA colour1, tU8RGBA colour2)
 	out.a = colour1.a + colour2.a;
 	return out;
 }
-FORCEINLINE tU8RGBA tU8RGBA_Sub(tU8RGBA colour1, tU8RGBA colour2)
+ForceInline tU8RGBA tU8RGBA_Sub(tU8RGBA colour1, tU8RGBA colour2)
 {
 	tU8RGBA out;
 	out.r = colour1.r - colour2.r;
@@ -1005,7 +1005,7 @@ FORCEINLINE tU8RGBA tU8RGBA_Sub(tU8RGBA colour1, tU8RGBA colour2)
 	out.a = colour1.a - colour2.a;
 	return out;
 }
-FORCEINLINE tU8RGBA tU8RGBA_Mul(tU8RGBA colour1, tU8RGBA colour2)
+ForceInline tU8RGBA tU8RGBA_Mul(tU8RGBA colour1, tU8RGBA colour2)
 {
 	tU8RGBA out;
 	out.r = (tU8)(((tU16)colour1.r * (tU16)colour2.r) / 255U);
@@ -1014,7 +1014,7 @@ FORCEINLINE tU8RGBA tU8RGBA_Mul(tU8RGBA colour1, tU8RGBA colour2)
 	out.a = (tU8)(((tU16)colour1.a * (tU16)colour2.a) / 255U);
 	return out;
 }
-FORCEINLINE tU8RGBA tU8RGBA_Div(tU8RGBA colour1, tU8RGBA colour2)
+ForceInline tU8RGBA tU8RGBA_Div(tU8RGBA colour1, tU8RGBA colour2)
 {
 	tU8RGBA out;
 	out.r = colour2.r == 0U ? 0U : (tU8)(((tU16)colour1.r * 255U) / colour2.r);
@@ -1023,7 +1023,7 @@ FORCEINLINE tU8RGBA tU8RGBA_Div(tU8RGBA colour1, tU8RGBA colour2)
 	out.a = colour2.a == 0U ? 0U : (tU8)(((tU16)colour1.a * 255U) / colour2.a);
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_Add(tF64RGBA colour1, tF64RGBA colour2)
+ForceInline tF64RGBA tF64RGBA_Add(tF64RGBA colour1, tF64RGBA colour2)
 {
 	tF64RGBA out;
 	out.r = colour1.r + colour2.r;
@@ -1032,7 +1032,7 @@ FORCEINLINE tF64RGBA tF64RGBA_Add(tF64RGBA colour1, tF64RGBA colour2)
 	out.a = colour1.a + colour2.a;
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_Sub(tF64RGBA colour1, tF64RGBA colour2)
+ForceInline tF64RGBA tF64RGBA_Sub(tF64RGBA colour1, tF64RGBA colour2)
 {
 	tF64RGBA out;
 	out.r = colour1.r - colour2.r;
@@ -1041,7 +1041,7 @@ FORCEINLINE tF64RGBA tF64RGBA_Sub(tF64RGBA colour1, tF64RGBA colour2)
 	out.a = colour1.a - colour2.a;
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_Mul(tF64RGBA colour1, tF64RGBA colour2)
+ForceInline tF64RGBA tF64RGBA_Mul(tF64RGBA colour1, tF64RGBA colour2)
 {
 	tF64RGBA out;
 	out.r = colour1.r * colour2.r;
@@ -1050,7 +1050,7 @@ FORCEINLINE tF64RGBA tF64RGBA_Mul(tF64RGBA colour1, tF64RGBA colour2)
 	out.a = colour1.a * colour2.a;
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_Div(tF64RGBA colour1, tF64RGBA colour2)
+ForceInline tF64RGBA tF64RGBA_Div(tF64RGBA colour1, tF64RGBA colour2)
 {
 	tF64RGBA out;
 	out.r = colour2.r == 0.0 ? 0.0 : (colour1.r / colour2.r);
@@ -1059,103 +1059,103 @@ FORCEINLINE tF64RGBA tF64RGBA_Div(tF64RGBA colour1, tF64RGBA colour2)
 	out.a = colour2.a == 0.0 ? 0.0 : (colour1.a / colour2.a);
 	return out;
 }
-FORCEINLINE tU32ARGB tU32ARGB_Add(tU32ARGB colour1, tU32ARGB colour2)
+ForceInline tU32ARGB tU32ARGB_Add(tU32ARGB colour1, tU32ARGB colour2)
 {
 	tU32ARGB out;
 	out = colour1 | colour2;
 	return out;
 }
-FORCEINLINE tU32ARGB tU32ARGB_Sub(tU32ARGB colour1, tU32ARGB colour2)
+ForceInline tU32ARGB tU32ARGB_Sub(tU32ARGB colour1, tU32ARGB colour2)
 {
 	tU32ARGB out;
 	out = colour1 & ~colour2;
 	return out;
 }
-FORCEINLINE tU32ARGB tU32ARGB_Mul(tU32ARGB colour1, tU32ARGB colour2)
+ForceInline tU32ARGB tU32ARGB_Mul(tU32ARGB colour1, tU32ARGB colour2)
 {
 	tU32ARGB out;
 	out = colour1 & colour2;
 	return out;
 }
-FORCEINLINE tU32ARGB tU32ARGB_Div(tU32ARGB colour1, tU32ARGB colour2)
+ForceInline tU32ARGB tU32ARGB_Div(tU32ARGB colour1, tU32ARGB colour2)
 {
 	tU32ARGB out;
 	out = colour2 == 0U ? 0U : colour1;
 	return out;
 }
-FORCEINLINE tU32RGBA tU32RGBA_Add(tU32RGBA colour1, tU32RGBA colour2)
+ForceInline tU32RGBA tU32RGBA_Add(tU32RGBA colour1, tU32RGBA colour2)
 {
 	tU32RGBA out;
 	out = colour1 | colour2;
 	return out;
 }
-FORCEINLINE tU32RGBA tU32RGBA_Sub(tU32RGBA colour1, tU32RGBA colour2)
+ForceInline tU32RGBA tU32RGBA_Sub(tU32RGBA colour1, tU32RGBA colour2)
 {
 	tU32RGBA out;
 	out = colour1 & ~colour2;
 	return out;
 }
-FORCEINLINE tU32RGBA tU32RGBA_Mul(tU32RGBA colour1, tU32RGBA colour2)
+ForceInline tU32RGBA tU32RGBA_Mul(tU32RGBA colour1, tU32RGBA colour2)
 {
 	tU32RGBA out;
 	out = colour1 & colour2;
 	return out;
 }
-FORCEINLINE tU32RGBA tU32RGBA_Div(tU32RGBA colour1, tU32RGBA colour2)
+ForceInline tU32RGBA tU32RGBA_Div(tU32RGBA colour1, tU32RGBA colour2)
 {
 	tU32RGBA out;
 	out = colour2 == 0U ? 0U : colour1;
 	return out;
 }
-FORCEINLINE tU32BGRA tU32BGRA_Add(tU32BGRA colour1, tU32BGRA colour2)
+ForceInline tU32BGRA tU32BGRA_Add(tU32BGRA colour1, tU32BGRA colour2)
 {
 	tU32BGRA out;
 	out = colour1 | colour2;
 	return out;
 }
-FORCEINLINE tU32BGRA tU32BGRA_Sub(tU32BGRA colour1, tU32BGRA colour2)
+ForceInline tU32BGRA tU32BGRA_Sub(tU32BGRA colour1, tU32BGRA colour2)
 {
 	tU32BGRA out;
 	out = colour1 & ~colour2;
 	return out;
 }
-FORCEINLINE tU32BGRA tU32BGRA_Mul(tU32BGRA colour1, tU32BGRA colour2)
+ForceInline tU32BGRA tU32BGRA_Mul(tU32BGRA colour1, tU32BGRA colour2)
 {
 	tU32BGRA out;
 	out = colour1 & colour2;
 	return out;
 }
-FORCEINLINE tU32BGRA tU32BGRA_Div(tU32BGRA colour1, tU32BGRA colour2)
+ForceInline tU32BGRA tU32BGRA_Div(tU32BGRA colour1, tU32BGRA colour2)
 {
 	tU32BGRA out;
 	out = colour2 == 0U ? 0U : colour1;
 	return out;
 }
-FORCEINLINE tU32ABGR tU32ABGR_Add(tU32ABGR colour1, tU32ABGR colour2)
+ForceInline tU32ABGR tU32ABGR_Add(tU32ABGR colour1, tU32ABGR colour2)
 {
 	tU32ABGR out;
 	out = colour1 | colour2;
 	return out;
 }
-FORCEINLINE tU32ABGR tU32ABGR_Sub(tU32ABGR colour1, tU32ABGR colour2)
+ForceInline tU32ABGR tU32ABGR_Sub(tU32ABGR colour1, tU32ABGR colour2)
 {
 	tU32ABGR out;
 	out = colour1 & ~colour2;
 	return out;
 }
-FORCEINLINE tU32ABGR tU32ABGR_Mul(tU32ABGR colour1, tU32ABGR colour2)
+ForceInline tU32ABGR tU32ABGR_Mul(tU32ABGR colour1, tU32ABGR colour2)
 {
 	tU32ABGR out;
 	out = colour1 & colour2;
 	return out;
 }
-FORCEINLINE tU32ABGR tU32ABGR_Div(tU32ABGR colour1, tU32ABGR colour2)
+ForceInline tU32ABGR tU32ABGR_Div(tU32ABGR colour1, tU32ABGR colour2)
 {
 	tU32ABGR out;
 	out = colour2 == 0U ? 0U : colour1;
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_AddFlt(tF32RGB colour, tF32 flt)
+ForceInline tF32RGB tF32RGB_AddFlt(tF32RGB colour, tF32 flt)
 {
 	tF32RGB out;
 	out.r = colour.r + flt;
@@ -1163,7 +1163,7 @@ FORCEINLINE tF32RGB tF32RGB_AddFlt(tF32RGB colour, tF32 flt)
 	out.b = colour.b + flt;
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_SubFlt(tF32RGB colour, tF32 flt)
+ForceInline tF32RGB tF32RGB_SubFlt(tF32RGB colour, tF32 flt)
 {
 	tF32RGB out;
 	out.r = colour.r - flt;
@@ -1171,7 +1171,7 @@ FORCEINLINE tF32RGB tF32RGB_SubFlt(tF32RGB colour, tF32 flt)
 	out.b = colour.b - flt;
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_MulFlt(tF32RGB colour, tF32 flt)
+ForceInline tF32RGB tF32RGB_MulFlt(tF32RGB colour, tF32 flt)
 {
 	tF32RGB out;
 	out.r = colour.r * flt;
@@ -1179,7 +1179,7 @@ FORCEINLINE tF32RGB tF32RGB_MulFlt(tF32RGB colour, tF32 flt)
 	out.b = colour.b * flt;
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_DivFlt(tF32RGB colour, tF32 flt)
+ForceInline tF32RGB tF32RGB_DivFlt(tF32RGB colour, tF32 flt)
 {
 	tF32RGB out;
 	out.r = flt == 0.0F ? 0.0F : (colour.r / flt);
@@ -1187,7 +1187,7 @@ FORCEINLINE tF32RGB tF32RGB_DivFlt(tF32RGB colour, tF32 flt)
 	out.b = flt == 0.0F ? 0.0F : (colour.b / flt);
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_AddFlt(tF32RGBA colour, tF32 flt)
+ForceInline tF32RGBA tF32RGBA_AddFlt(tF32RGBA colour, tF32 flt)
 {
 	tF32RGBA out;
 	out.r = colour.r + flt;
@@ -1196,7 +1196,7 @@ FORCEINLINE tF32RGBA tF32RGBA_AddFlt(tF32RGBA colour, tF32 flt)
 	out.a = colour.a + flt;
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_SubFlt(tF32RGBA colour, tF32 flt)
+ForceInline tF32RGBA tF32RGBA_SubFlt(tF32RGBA colour, tF32 flt)
 {
 	tF32RGBA out;
 	out.r = colour.r - flt;
@@ -1205,7 +1205,7 @@ FORCEINLINE tF32RGBA tF32RGBA_SubFlt(tF32RGBA colour, tF32 flt)
 	out.a = colour.a - flt;
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_MulFlt(tF32RGBA colour, tF32 flt)
+ForceInline tF32RGBA tF32RGBA_MulFlt(tF32RGBA colour, tF32 flt)
 {
 	tF32RGBA out;
 	out.r = colour.r * flt;
@@ -1214,7 +1214,7 @@ FORCEINLINE tF32RGBA tF32RGBA_MulFlt(tF32RGBA colour, tF32 flt)
 	out.a = colour.a * flt;
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_DivFlt(tF32RGBA colour, tF32 flt)
+ForceInline tF32RGBA tF32RGBA_DivFlt(tF32RGBA colour, tF32 flt)
 {
 	tF32RGBA out;
 	out.r = flt == 0.0F ? 0.0F : (colour.r / flt);
@@ -1223,7 +1223,7 @@ FORCEINLINE tF32RGBA tF32RGBA_DivFlt(tF32RGBA colour, tF32 flt)
 	out.a = flt == 0.0F ? 0.0F : (colour.a / flt);
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_AddDbl(tF64RGB colour, tF64 dbl)
+ForceInline tF64RGB tF64RGB_AddDbl(tF64RGB colour, tF64 dbl)
 {
 	tF64RGB out;
 	out.r = colour.r + dbl;
@@ -1231,7 +1231,7 @@ FORCEINLINE tF64RGB tF64RGB_AddDbl(tF64RGB colour, tF64 dbl)
 	out.b = colour.b + dbl;
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_SubDbl(tF64RGB colour, tF64 dbl)
+ForceInline tF64RGB tF64RGB_SubDbl(tF64RGB colour, tF64 dbl)
 {
 	tF64RGB out;
 	out.r = colour.r - dbl;
@@ -1239,7 +1239,7 @@ FORCEINLINE tF64RGB tF64RGB_SubDbl(tF64RGB colour, tF64 dbl)
 	out.b = colour.b - dbl;
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_MulDbl(tF64RGB colour, tF64 dbl)
+ForceInline tF64RGB tF64RGB_MulDbl(tF64RGB colour, tF64 dbl)
 {
 	tF64RGB out;
 	out.r = colour.r * dbl;
@@ -1247,7 +1247,7 @@ FORCEINLINE tF64RGB tF64RGB_MulDbl(tF64RGB colour, tF64 dbl)
 	out.b = colour.b * dbl;
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_DivDbl(tF64RGB colour, tF64 dbl)
+ForceInline tF64RGB tF64RGB_DivDbl(tF64RGB colour, tF64 dbl)
 {
 	tF64RGB out;
 	out.r = dbl == 0.0 ? 0.0 : (colour.r / dbl);
@@ -1255,7 +1255,7 @@ FORCEINLINE tF64RGB tF64RGB_DivDbl(tF64RGB colour, tF64 dbl)
 	out.b = dbl == 0.0 ? 0.0 : (colour.b / dbl);
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_AddDbl(tF64RGBA colour, tF64 dbl)
+ForceInline tF64RGBA tF64RGBA_AddDbl(tF64RGBA colour, tF64 dbl)
 {
 	tF64RGBA out;
 	out.r = colour.r + dbl;
@@ -1264,7 +1264,7 @@ FORCEINLINE tF64RGBA tF64RGBA_AddDbl(tF64RGBA colour, tF64 dbl)
 	out.a = colour.a + dbl;
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_SubDbl(tF64RGBA colour, tF64 dbl)
+ForceInline tF64RGBA tF64RGBA_SubDbl(tF64RGBA colour, tF64 dbl)
 {
 	tF64RGBA out;
 	out.r = colour.r - dbl;
@@ -1273,7 +1273,7 @@ FORCEINLINE tF64RGBA tF64RGBA_SubDbl(tF64RGBA colour, tF64 dbl)
 	out.a = colour.a - dbl;
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_MulDbl(tF64RGBA colour, tF64 dbl)
+ForceInline tF64RGBA tF64RGBA_MulDbl(tF64RGBA colour, tF64 dbl)
 {
 	tF64RGBA out;
 	out.r = colour.r * dbl;
@@ -1282,7 +1282,7 @@ FORCEINLINE tF64RGBA tF64RGBA_MulDbl(tF64RGBA colour, tF64 dbl)
 	out.a = colour.a * dbl;
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_DivDbl(tF64RGBA colour, tF64 dbl)
+ForceInline tF64RGBA tF64RGBA_DivDbl(tF64RGBA colour, tF64 dbl)
 {
 	tF64RGBA out;
 	out.r = dbl == 0.0 ? 0.0 : (colour.r / dbl);
@@ -1291,7 +1291,7 @@ FORCEINLINE tF64RGBA tF64RGBA_DivDbl(tF64RGBA colour, tF64 dbl)
 	out.a = dbl == 0.0 ? 0.0 : (colour.a / dbl);
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_Clamp(tF32RGB colour)
+ForceInline tF32RGB tF32RGB_Clamp(tF32RGB colour)
 {
 	tF32RGB out;
 	out.r = tF32_Clamp(0.0F, colour.r, 1.0F);
@@ -1299,7 +1299,7 @@ FORCEINLINE tF32RGB tF32RGB_Clamp(tF32RGB colour)
 	out.b = tF32_Clamp(0.0F, colour.b, 1.0F);
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_Clamp(tF32RGBA colour)
+ForceInline tF32RGBA tF32RGBA_Clamp(tF32RGBA colour)
 {
 	tF32RGBA out;
 	out.r = tF32_Clamp(0.0F, colour.r, 1.0F);
@@ -1308,15 +1308,15 @@ FORCEINLINE tF32RGBA tF32RGBA_Clamp(tF32RGBA colour)
 	out.a = tF32_Clamp(0.0F, colour.a, 1.0F);
 	return out;
 }
-FORCEINLINE tF32RGB tF32RGB_Saturate(tF32RGB colour)
+ForceInline tF32RGB tF32RGB_Saturate(tF32RGB colour)
 {
 	return tF32RGB_Clamp(colour);
 }
-FORCEINLINE tF32RGBA tF32RGBA_Saturate(tF32RGBA colour)
+ForceInline tF32RGBA tF32RGBA_Saturate(tF32RGBA colour)
 {
 	return tF32RGBA_Clamp(colour);
 }
-FORCEINLINE tF32RGB tF32RGB_Blend(tF32RGB colour1, tF32RGB colour2, tF32 stp)
+ForceInline tF32RGB tF32RGB_Blend(tF32RGB colour1, tF32RGB colour2, tF32 stp)
 {
 	tF32RGB out;
 	out.r = tF32_Lerp(colour1.r, colour2.r, stp);
@@ -1324,7 +1324,7 @@ FORCEINLINE tF32RGB tF32RGB_Blend(tF32RGB colour1, tF32RGB colour2, tF32 stp)
 	out.b = tF32_Lerp(colour1.b, colour2.b, stp);
 	return out;
 }
-FORCEINLINE tF32RGBA tF32RGBA_Blend(tF32RGBA colour1, tF32RGBA colour2, tF32 stp)
+ForceInline tF32RGBA tF32RGBA_Blend(tF32RGBA colour1, tF32RGBA colour2, tF32 stp)
 {
 	tF32RGBA out;
 	out.r = tF32_Lerp(colour1.r, colour2.r, stp);
@@ -1333,7 +1333,7 @@ FORCEINLINE tF32RGBA tF32RGBA_Blend(tF32RGBA colour1, tF32RGBA colour2, tF32 stp
 	out.a = tF32_Lerp(colour1.a, colour2.a, stp);
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_Clamp(tF64RGB colour)
+ForceInline tF64RGB tF64RGB_Clamp(tF64RGB colour)
 {
 	tF64RGB out;
 	out.r = tF64_Clamp(0.0, colour.r, 1.0);
@@ -1341,7 +1341,7 @@ FORCEINLINE tF64RGB tF64RGB_Clamp(tF64RGB colour)
 	out.b = tF64_Clamp(0.0, colour.b, 1.0);
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_Clamp(tF64RGBA colour)
+ForceInline tF64RGBA tF64RGBA_Clamp(tF64RGBA colour)
 {
 	tF64RGBA out;
 	out.r = tF64_Clamp(0.0, colour.r, 1.0);
@@ -1350,15 +1350,15 @@ FORCEINLINE tF64RGBA tF64RGBA_Clamp(tF64RGBA colour)
 	out.a = tF64_Clamp(0.0, colour.a, 1.0);
 	return out;
 }
-FORCEINLINE tF64RGB tF64RGB_Saturate(tF64RGB colour)
+ForceInline tF64RGB tF64RGB_Saturate(tF64RGB colour)
 {
 	return tF64RGB_Clamp(colour);
 }
-FORCEINLINE tF64RGBA tF64RGBA_Saturate(tF64RGBA colour)
+ForceInline tF64RGBA tF64RGBA_Saturate(tF64RGBA colour)
 {
 	return tF64RGBA_Clamp(colour);
 }
-FORCEINLINE tF64RGB tF64RGB_Blend(tF64RGB colour1, tF64RGB colour2, tF64 stp)
+ForceInline tF64RGB tF64RGB_Blend(tF64RGB colour1, tF64RGB colour2, tF64 stp)
 {
 	tF64RGB out;
 	out.r = tF64_Lerp(colour1.r, colour2.r, stp);
@@ -1366,7 +1366,7 @@ FORCEINLINE tF64RGB tF64RGB_Blend(tF64RGB colour1, tF64RGB colour2, tF64 stp)
 	out.b = tF64_Lerp(colour1.b, colour2.b, stp);
 	return out;
 }
-FORCEINLINE tF64RGBA tF64RGBA_Blend(tF64RGBA colour1, tF64RGBA colour2, tF64 stp)
+ForceInline tF64RGBA tF64RGBA_Blend(tF64RGBA colour1, tF64RGBA colour2, tF64 stp)
 {
 	tF64RGBA out;
 	out.r = tF64_Lerp(colour1.r, colour2.r, stp);

@@ -38,7 +38,7 @@ tNone tF32M2x2_RowMult(tF32M2x2 *mtrx, tU8 idx, tF32 mult);
 tNone tF32M2x2_RowEch(tF32M2x2 *mtrx);
 tNone tF32M2x2_RowRedEch(tF32M2x2 *mtrx);
 tF32M2x2 tF32M2x2_InvAff(tF32M2x2 mtrx);
-FORCEINLINE tBln tF32M2x2_IsAff(tF32M2x2 mtrx);
+ForceInline tBln tF32M2x2_IsAff(tF32M2x2 mtrx);
 LINK_C_End
 #ifdef BQSELAYER_MTRX_IMPL
 tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11)
@@ -290,7 +290,7 @@ tF32M2x2 tF32M2x2_InvAff(tF32M2x2 mtrx)
 	out.m11 = 1.0F;
 	return out;
 }
-FORCEINLINE tBln tF32M2x2_IsAff(tF32M2x2 mtrx)
+ForceInline tBln tF32M2x2_IsAff(tF32M2x2 mtrx)
 {
 	return tF32_Nearby(mtrx.m10, 0.0F) && tF32_Nearby(mtrx.m11, 0.0F);
 }
@@ -334,7 +334,7 @@ tNone tF32M3x3_RowMult(tF32M3x3 *mtrx, tU8 idx, tF32 mult);
 tNone tF32M3x3_RowEch(tF32M3x3 *mtrx);
 tNone tF32M3x3_RowRedEch(tF32M3x3 *mtrx);
 tF32M3x3 tF32M3x3_InvAff(tF32M3x3 mtrx);
-FORCEINLINE tBln tF32M3x3_IsAff(tF32M3x3 mtrx);
+ForceInline tBln tF32M3x3_IsAff(tF32M3x3 mtrx);
 LINK_C_End
 #ifdef BQSELAYER_MTRX_IMPL
 tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22)
@@ -666,7 +666,7 @@ tF32M3x3 tF32M3x3_InvAff(tF32M3x3 mtrx)
 	out.m22 = 1.0F;
 	return out;
 }
-FORCEINLINE tBln tF32M3x3_IsAff(tF32M3x3 mtrx)
+ForceInline tBln tF32M3x3_IsAff(tF32M3x3 mtrx)
 {
 	return tF32_Nearby(mtrx.m20, 0.0F) && tF32_Nearby(mtrx.m21, 0.0F) && tF32_Nearby(mtrx.m22, 0.0F);
 }
@@ -1450,7 +1450,7 @@ tNone tF64M2x2_RowMult(tF64M2x2 *mtrx, tU8 idx, tF64 mult);
 tNone tF64M2x2_RowEch(tF64M2x2 *mtrx);
 tNone tF64M2x2_RowRedEch(tF64M2x2 *mtrx);
 tF64M2x2 tF64M2x2_InvAff(tF64M2x2 mtrx);
-FORCEINLINE tBln tF64M2x2_IsAff(tF64M2x2 mtrx);
+ForceInline tBln tF64M2x2_IsAff(tF64M2x2 mtrx);
 LINK_C_End
 #ifdef BQSELAYER_MTRX_IMPL
 tF64M2x2 tF64M2x2_Make(tF64 m00, tF64 m01, tF64 m10, tF64 m11)
@@ -1702,7 +1702,7 @@ tF64M2x2 tF64M2x2_InvAff(tF64M2x2 mtrx)
 	out.m11 = 1.0;
 	return out;
 }
-FORCEINLINE tBln tF64M2x2_IsAff(tF64M2x2 mtrx)
+ForceInline tBln tF64M2x2_IsAff(tF64M2x2 mtrx)
 {
 	return tF64_Nearby(mtrx.m10, 0.0) && tF64_Nearby(mtrx.m11, 0.0);
 }
@@ -1746,7 +1746,7 @@ tNone tF64M3x3_RowMult(tF64M3x3 *mtrx, tU8 idx, tF64 mult);
 tNone tF64M3x3_RowEch(tF64M3x3 *mtrx);
 tNone tF64M3x3_RowRedEch(tF64M3x3 *mtrx);
 tF64M3x3 tF64M3x3_InvAff(tF64M3x3 mtrx);
-FORCEINLINE tBln tF64M3x3_IsAff(tF64M3x3 mtrx);
+ForceInline tBln tF64M3x3_IsAff(tF64M3x3 mtrx);
 LINK_C_End
 #ifdef BQSELAYER_MTRX_IMPL
 tF64M3x3 tF64M3x3_Make(tF64 m00, tF64 m01, tF64 m02, tF64 m10, tF64 m11, tF64 m12, tF64 m20, tF64 m21, tF64 m22)
@@ -2078,7 +2078,7 @@ tF64M3x3 tF64M3x3_InvAff(tF64M3x3 mtrx)
 	out.m22 = 1.0;
 	return out;
 }
-FORCEINLINE tBln tF64M3x3_IsAff(tF64M3x3 mtrx)
+ForceInline tBln tF64M3x3_IsAff(tF64M3x3 mtrx)
 {
 	return tF64_Nearby(mtrx.m20, 0.0F) && tF64_Nearby(mtrx.m21, 0.0F) && tF64_Nearby(mtrx.m22, 0.0F);
 }
