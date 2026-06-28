@@ -101,7 +101,7 @@ ForceInline tBln tFP32_IsNeg(tFP32 flt);
 ForceInline tFP32 tFP32_NegInf(tNone);
 ForceInline tFP32 tFP32_QuiNaN(tNone);
 ForceInline tFP32 tFP32_SigNaN(tNone);
-ForceInline tBln tFP32_Nearby(tFP32 flt, tFP32 cmp);
+ForceInline tBln tFP32_IsNearby(tFP32 flt, tFP32 cmp);
 /*Note: Parameter `ang` is expected to be in radians.*/
 tFP32 tFP32_Sine_fast(tFP32 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
@@ -222,14 +222,14 @@ ForceInline tFP32 tFP32_SigNaN(tNone)
 	num.raw = 0XFF800001U;
 	return num.flt;
 }
-ForceInline tBln tFP32_Nearby(tFP32 flt, tFP32 cmp)
+ForceInline tBln tFP32_IsNearby(tFP32 flt, tFP32 cmp)
 {
 	return tFP32_Abs(flt - cmp) <= tFP32_Eps;
 }
 tFP32 tFP32_Sine_fast(tFP32 ang)
 {
 	tBln neg = False;
-	if (tFP32_Nearby(ang, 0.0F)) return 0.0F;
+	if (tFP32_IsNearby(ang, 0.0F)) return 0.0F;
 	ang -= (tFP32)((tIS32)(ang * tFP32_Inv2Pi)) * tFP32_2Pi;
 	if (tFP32_IsNeg(ang)) ang += tFP32_2Pi;
 	if (ang > tFP32_Pi)
@@ -249,13 +249,13 @@ ForceInline tFP32 tFP32_Cosine_fast(tFP32 ang)
 tFP32 tFP32_Tangent_fast(tFP32 ang)
 {
 	const tFP32 cosAng = tFP32_Cosine_fast(ang);
-	if (tFP32_Nearby(cosAng, 0.0F)) return tFP32_IsNeg(cosAng) ? tFP32_NegInf() : tFP32_Inf();
+	if (tFP32_IsNearby(cosAng, 0.0F)) return tFP32_IsNeg(cosAng) ? tFP32_NegInf() : tFP32_Inf();
 	const tFP32 sinAng = tFP32_Sine_fast(ang);
 	return sinAng / cosAng;
 }
 tFP32 tFP32_Sine_iter(tFP32 ang, tIUSz itr)
 {
-	if (tFP32_Nearby(ang, 0.0F)) return 0.0F;
+	if (tFP32_IsNearby(ang, 0.0F)) return 0.0F;
 	if (itr == 0U) return ang;
 	ang -= (tFP32)((tIS32)(ang * tFP32_Inv2Pi)) * tFP32_2Pi;
 	if (tFP32_IsNeg(ang)) ang += tFP32_2Pi;
@@ -285,7 +285,7 @@ tFP32 tFP32_Tangent_iter(tFP32 ang, tIUSz itr)
 {
 	const tFP32 cosAng = tFP32_Cosine_iter(ang, itr);
 	const tFP32 sinAng = tFP32_Sine_iter(ang, itr);
-	if (tFP32_Nearby(cosAng, 0.0F)) return tFP32_IsNeg(sinAng) ? tFP32_NegInf() : tFP32_Inf();
+	if (tFP32_IsNearby(cosAng, 0.0F)) return tFP32_IsNeg(sinAng) ? tFP32_NegInf() : tFP32_Inf();
 	return sinAng / cosAng;
 }
 ForceInline tFP32 tFP32_Sine(tFP32 ang)
@@ -307,8 +307,8 @@ tFP32 tFP32_ArcSine_iter(tFP32 num, tIUSz itr)
 #else
 	Assertion(tFP32_Abs(num) <= 1.0F);
 #endif/*BQSELAYER_DEBUG*/
-	if (tFP32_Nearby(num, 1.0F))  return tFP32_HalfPi;
-	if (tFP32_Nearby(num, -1.0F)) return -tFP32_HalfPi;
+	if (tFP32_IsNearby(num, 1.0F))  return tFP32_HalfPi;
+	if (tFP32_IsNearby(num, -1.0F)) return -tFP32_HalfPi;
 	return tFP32_ArcTangent_iter(num / tFP32_Sqrt_iter(1.0F - tFP32_Sq(num), itr), itr);
 }
 tFP32 tFP32_ArcSine(tFP32 num)
@@ -318,8 +318,8 @@ tFP32 tFP32_ArcSine(tFP32 num)
 #else
 	Assertion(tFP32_Abs(num) <= 1.0F);
 #endif/*BQSELAYER_DEBUG*/
-	if (tFP32_Nearby(num, 1.0F))  return tFP32_HalfPi;
-	if (tFP32_Nearby(num, -1.0F)) return -tFP32_HalfPi;
+	if (tFP32_IsNearby(num, 1.0F))  return tFP32_HalfPi;
+	if (tFP32_IsNearby(num, -1.0F)) return -tFP32_HalfPi;
 	return tFP32_ArcTangent(num / tFP32_Sqrt(1.0F - tFP32_Sq(num)));
 }
 ForceInline tFP32 tFP32_ArcCosine_iter(tFP32 num, tIUSz itr)
@@ -361,8 +361,8 @@ tFP32 tFP32_ArcTangent2_iter(tFP32 opp, tFP32 adj, tIUSz itr)
 	if (adj > 0.0F) return tFP32_ArcTangent_iter(opp / adj, itr);
 	if (tFP32_IsNeg(adj) && !tFP32_IsNeg(opp)) return tFP32_ArcTangent_iter(opp / adj, itr) + tFP32_Pi;
 	if (tFP32_IsNeg(adj) && tFP32_IsNeg(opp)) return tFP32_ArcTangent_iter(opp / adj, itr) - tFP32_Pi;
-	if (tFP32_Nearby(adj, 0.0F) && opp > 0.0F) return tFP32_HalfPi;
-	if (tFP32_Nearby(adj, 0.0F) && tFP32_IsNeg(opp)) return -tFP32_HalfPi;
+	if (tFP32_IsNearby(adj, 0.0F) && opp > 0.0F) return tFP32_HalfPi;
+	if (tFP32_IsNearby(adj, 0.0F) && tFP32_IsNeg(opp)) return -tFP32_HalfPi;
 	return 0.0F;
 }
 ForceInline tFP32 tFP32_ArcTangent2(tFP32 opp, tFP32 adj)
@@ -373,7 +373,7 @@ tFP32 tFP32_RecipSqrt_iter(tFP32 num, tIUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
 	if (tFP32_IsNeg(num)) return tFP32_SigNaN();
-	if (tFP32_Nearby(num, 0.0F)) return tFP32_Inf();
+	if (tFP32_IsNearby(num, 0.0F)) return tFP32_Inf();
 #else
 	Assertion(num > 0.0F);
 #endif/*BQSELAYER_DEBUG*/
@@ -395,7 +395,7 @@ ForceInline tFP32 tFP32_Sqrt_iter(tFP32 num, tIUSz itr)
 #else
 	Assertion(!tFP32_IsNeg(num));
 #endif/*BQSELAYER_DBG*/
-	if (tFP32_Nearby(num, 0.0F)) return 0.0F;
+	if (tFP32_IsNearby(num, 0.0F)) return 0.0F;
 	return num * tFP32_RecipSqrt_iter(num, itr);
 }
 ForceInline tFP32 tFP32_Sqrt(tFP32 num)
@@ -405,7 +405,7 @@ ForceInline tFP32 tFP32_Sqrt(tFP32 num)
 #else
 	Assertion(!tFP32_IsNeg(num));
 #endif/*BQSELAYER_DBG*/
-	if (tFP32_Nearby(num, 0.0F)) return 0.0F;
+	if (tFP32_IsNearby(num, 0.0F)) return 0.0F;
 	return num * tFP32_RecipSqrt(num);
 }
 tFP32 tFP32_Log2_iter(tFP32 num, tIUSz itr)
@@ -448,18 +448,18 @@ ForceInline tFP32 tFP32_Ln(tFP32 num)
 tFP32 tFP32_Log_iter(tFP32 num, tFP32 base, tIUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
-	if (base <= 0.0F || tFP32_Nearby(base, 1.0F)) return tFP32_SigNaN();
+	if (base <= 0.0F || tFP32_IsNearby(base, 1.0F)) return tFP32_SigNaN();
 #else
-	Assertion(base > 0.0F && !tFP32_Nearby(base, 1.0F));
+	Assertion(base > 0.0F && !tFP32_IsNearby(base, 1.0F));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP32_Log2_iter(num, itr) / tFP32_Log2_iter(base, itr);
 }
 tFP32 tFP32_Log(tFP32 num, tFP32 base)
 {
 #ifndef BQSELAYER_DEBUG
-	if (base <= 0.0F || tFP32_Nearby(base, 1.0F)) return tFP32_SigNaN();
+	if (base <= 0.0F || tFP32_IsNearby(base, 1.0F)) return tFP32_SigNaN();
 #else
-	Assertion(base > 0.0F && !tFP32_Nearby(base, 1.0F));
+	Assertion(base > 0.0F && !tFP32_IsNearby(base, 1.0F));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP32_Log2(num) / tFP32_Log2(base);
 }
@@ -469,13 +469,13 @@ ForceInline tFP32 tFP32_Lerp(tFP32 strt, tFP32 stp, tFP32 fnsh)
 }
 ForceInline tFP32 tFP32_Unlerp(tFP32 strt, tFP32 curr, tFP32 fnsh)
 {
-	if (tFP32_Nearby(strt, fnsh)) return 0.0F;
+	if (tFP32_IsNearby(strt, fnsh)) return 0.0F;
 	return (curr - strt) / (fnsh - strt);
 }
 tFP32 tFP32_Exp_iter(tFP32 pow, tIUSz itr)
 {
-	if (tFP32_Nearby(pow, 0.0F)) return 1.0F;
-	if (tFP32_Nearby(pow, 1.0F)) return tFP32_EulNum;
+	if (tFP32_IsNearby(pow, 0.0F)) return 1.0F;
+	if (tFP32_IsNearby(pow, 1.0F)) return tFP32_EulNum;
 	tFP32 res = 1.0F;
 	tFP32 term = 1.0F;
 	for (tIUSz idx = 1U; idx <= itr; ++idx)
@@ -528,9 +528,9 @@ tFP32 tFP32_HypTangent(tFP32 num)
 tFP32 tFP32_Mod(tFP32 num, tFP32 denom)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(denom, 0.0F)) return tFP32_SigNaN();
+	if (tFP32_IsNearby(denom, 0.0F)) return tFP32_SigNaN();
 #else
-	Assertion(!tFP32_Nearby(denom, 0.0F));
+	Assertion(!tFP32_IsNearby(denom, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	tIS32 quot = (tIS32)(num / denom);
 	return num - ((tFP32)quot * denom);
@@ -554,8 +554,8 @@ tFP32 tFP32_Pow_iter(tFP32 base, tFP32 exp, tIUSz itr)
 	tFP32 whole = tFP32_PowI(base, intPart);
 	if ((tFP32)intPart == exp) return whole;
 	tFP32 fracPart = exp - (tFP32)intPart;
-	if (tFP32_Nearby(fracPart, 0.5F)) return whole * tFP32_Sqrt_iter(base, itr);
-	if (tFP32_Nearby(fracPart, -0.5F)) return whole * tFP32_RecipSqrt_iter(base, itr);
+	if (tFP32_IsNearby(fracPart, 0.5F)) return whole * tFP32_Sqrt_iter(base, itr);
+	if (tFP32_IsNearby(fracPart, -0.5F)) return whole * tFP32_RecipSqrt_iter(base, itr);
 #ifndef BQSELAYER_DEBUG
 	if (base <= 0.0F) return tFP32_SigNaN();
 #else
@@ -569,8 +569,8 @@ tFP32 tFP32_Pow(tFP32 base, tFP32 exp)
 	tFP32 whole = tFP32_PowI(base, intPart);
 	if ((tFP32)intPart == exp) return whole;
 	tFP32 fracPart = exp - (tFP32)intPart;
-	if (tFP32_Nearby(fracPart, 0.5F)) return whole * tFP32_Sqrt(base);
-	if (tFP32_Nearby(fracPart, -0.5F)) return whole * tFP32_RecipSqrt(base);
+	if (tFP32_IsNearby(fracPart, 0.5F)) return whole * tFP32_Sqrt(base);
+	if (tFP32_IsNearby(fracPart, -0.5F)) return whole * tFP32_RecipSqrt(base);
 #ifndef BQSELAYER_DEBUG
 	if (base <= 0.0F) return tFP32_SigNaN();
 #else
@@ -590,9 +590,9 @@ tFP32 tFP32_Round(tFP32 num)
 ForceInline tFP32 tFP32_Recip(tFP32 num)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(num, 0.0F)) return tFP32_IsNeg(num) ? tFP32_Inf() : tFP32_NegInf();
+	if (tFP32_IsNearby(num, 0.0F)) return tFP32_IsNeg(num) ? tFP32_Inf() : tFP32_NegInf();
 #else
-	Assertion(!tFP32_Nearby(num, 0.0F));
+	Assertion(!tFP32_IsNearby(num, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	return 1.0F / num;
 }
@@ -617,7 +617,7 @@ ForceInline tBln tFP64_IsNeg(tFP64 dbl);
 ForceInline tFP64 tFP64_NegInf(tNone);
 ForceInline tFP64 tFP64_QuiNaN(tNone);
 ForceInline tFP64 tFP64_SigNaN(tNone);
-ForceInline tBln tFP64_Nearby(tFP64 dbl, tFP64 cmp);
+ForceInline tBln tFP64_IsNearby(tFP64 dbl, tFP64 cmp);
 /*Note: Parameter `ang` is expected to be in radians.*/
 tFP64 tFP64_Sine_fast(tFP64 ang);
 /*Note: Parameter `ang` is expected to be in radians.*/
@@ -738,14 +738,14 @@ ForceInline tFP64 tFP64_SigNaN(tNone)
 	num.raw = 0XFFF0000000000001LLU;
 	return num.dbl;
 }
-ForceInline tBln tFP64_Nearby(tFP64 dbl, tFP64 cmp)
+ForceInline tBln tFP64_IsNearby(tFP64 dbl, tFP64 cmp)
 {
 	return tFP64_Abs(dbl - cmp) <= tFP64_Eps;
 }
 tFP64 tFP64_Sine_fast(tFP64 ang)
 {
 	tBln neg = False;
-	if (tFP64_Nearby(ang, 0.0)) return 0.0;
+	if (tFP64_IsNearby(ang, 0.0)) return 0.0;
 	while (ang > tFP64_2Pi) ang -= tFP64_2Pi;
 	ang -= (tFP64)((tIS64)(ang * tFP64_Inv2Pi)) * tFP64_2Pi;
 	if (tFP64_IsNeg(ang)) ang += tFP64_2Pi;
@@ -766,13 +766,13 @@ ForceInline tFP64 tFP64_Cosine_fast(tFP64 ang)
 tFP64 tFP64_Tangent_fast(tFP64 ang)
 {
 	const tFP64 cosAng = tFP64_Cosine_fast(ang);
-	if (tFP64_Nearby(cosAng, 0.0)) return tFP64_IsNeg(cosAng) ? tFP64_NegInf() : tFP64_Inf();
+	if (tFP64_IsNearby(cosAng, 0.0)) return tFP64_IsNeg(cosAng) ? tFP64_NegInf() : tFP64_Inf();
 	const tFP64 sinAng = tFP64_Sine_fast(ang);
 	return sinAng / cosAng;
 }
 tFP64 tFP64_Sine_iter(tFP64 ang, tIUSz itr)
 {
-	if (tFP64_Nearby(ang, 0.0)) return 0.0;
+	if (tFP64_IsNearby(ang, 0.0)) return 0.0;
 	if (itr == 0U) return ang;
 	while (ang > tFP64_2Pi) ang -= tFP64_2Pi;
 	ang -= (tFP64)((tIS64)(ang * tFP64_Inv2Pi)) * tFP64_2Pi;
@@ -802,7 +802,7 @@ tFP64 tFP64_Tangent_iter(tFP64 ang, tIUSz itr)
 {
 	const tFP64 cosAng = tFP64_Cosine_iter(ang, itr);
 	const tFP64 sinAng = tFP64_Sine_iter(ang, itr);
-	if (tFP64_Nearby(cosAng, 0.0)) return tFP64_IsNeg(sinAng) ? tFP64_NegInf() : tFP64_Inf();
+	if (tFP64_IsNearby(cosAng, 0.0)) return tFP64_IsNeg(sinAng) ? tFP64_NegInf() : tFP64_Inf();
 	return sinAng / cosAng;
 }
 ForceInline tFP64 tFP64_Sine(tFP64 ang)
@@ -824,8 +824,8 @@ tFP64 tFP64_ArcSine_iter(tFP64 num, tIUSz itr)
 #else
 	Assertion(tFP64_Abs(num) <= 1.0);
 #endif/*BQSELAYER_DEBUG*/
-	if (tFP64_Nearby(num, 1.0))  return tFP64_HalfPi;
-	if (tFP64_Nearby(num, -1.0)) return -tFP64_HalfPi;
+	if (tFP64_IsNearby(num, 1.0))  return tFP64_HalfPi;
+	if (tFP64_IsNearby(num, -1.0)) return -tFP64_HalfPi;
 	return tFP64_ArcTangent_iter(num / tFP64_Sqrt_iter(1.0 - tFP64_Sq(num), itr), itr);
 }
 tFP64 tFP64_ArcSine(tFP64 num)
@@ -835,8 +835,8 @@ tFP64 tFP64_ArcSine(tFP64 num)
 #else
 	Assertion(tFP64_Abs(num) <= 1.0);
 #endif/*BQSELAYER_DEBUG*/
-	if (tFP64_Nearby(num, 1.0))  return tFP64_HalfPi;
-	if (tFP64_Nearby(num, -1.0)) return -tFP64_HalfPi;
+	if (tFP64_IsNearby(num, 1.0))  return tFP64_HalfPi;
+	if (tFP64_IsNearby(num, -1.0)) return -tFP64_HalfPi;
 	return tFP64_ArcTangent(num / tFP64_Sqrt(1.0 - tFP64_Sq(num)));
 }
 ForceInline tFP64 tFP64_ArcCosine_iter(tFP64 num, tIUSz itr)
@@ -878,8 +878,8 @@ tFP64 tFP64_ArcTangent2_iter(tFP64 opp, tFP64 adj, tIUSz itr)
 	if (adj > 0.0) return tFP64_ArcTangent_iter(opp / adj, itr);
 	if (tFP64_IsNeg(adj) && !tFP64_IsNeg(opp)) return tFP64_ArcTangent_iter(opp / adj, itr) + tFP64_Pi;
 	if (tFP64_IsNeg(adj) && tFP64_IsNeg(opp)) return tFP64_ArcTangent_iter(opp / adj, itr) - tFP64_Pi;
-	if (tFP64_Nearby(adj, 0.0) && opp > 0.0) return tFP64_HalfPi;
-	if (tFP64_Nearby(adj, 0.0) && tFP64_IsNeg(opp)) return -tFP64_HalfPi;
+	if (tFP64_IsNearby(adj, 0.0) && opp > 0.0) return tFP64_HalfPi;
+	if (tFP64_IsNearby(adj, 0.0) && tFP64_IsNeg(opp)) return -tFP64_HalfPi;
 	return 0.0;
 }
 ForceInline tFP64 tFP64_ArcTangent2(tFP64 opp, tFP64 adj)
@@ -890,7 +890,7 @@ tFP64 tFP64_RecipSqrt_iter(tFP64 num, tIUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
 	if (tFP64_IsNeg(num)) return tFP64_SigNaN();
-	if (tFP64_Nearby(num, 0.0)) return tFP64_Inf();
+	if (tFP64_IsNearby(num, 0.0)) return tFP64_Inf();
 #else
 	Assertion(num > 0.0);
 #endif/*BQSELAYER_DEBUG*/
@@ -912,7 +912,7 @@ ForceInline tFP64 tFP64_Sqrt_iter(tFP64 num, tIUSz itr)
 #else
 	Assertion(!tFP64_IsNeg(num));
 #endif/*BQSELAYER_DBG*/
-	if (tFP64_Nearby(num, 0.0)) return 0.0;
+	if (tFP64_IsNearby(num, 0.0)) return 0.0;
 	return num * tFP64_RecipSqrt_iter(num, itr);
 }
 ForceInline tFP64 tFP64_Sqrt(tFP64 num)
@@ -922,7 +922,7 @@ ForceInline tFP64 tFP64_Sqrt(tFP64 num)
 #else
 	Assertion(!tFP64_IsNeg(num));
 #endif/*BQSELAYER_DBG*/
-	if (tFP64_Nearby(num, 0.0)) return 0.0;
+	if (tFP64_IsNearby(num, 0.0)) return 0.0;
 	return num * tFP64_RecipSqrt(num);
 }
 tFP64 tFP64_Log2_iter(tFP64 num, tIUSz itr)
@@ -965,18 +965,18 @@ ForceInline tFP64 tFP64_Ln(tFP64 num)
 tFP64 tFP64_Log_iter(tFP64 num, tFP64 base, tIUSz itr)
 {
 #ifndef BQSELAYER_DEBUG
-	if (base <= 0.0 || tFP64_Nearby(base, 1.0)) return tFP64_SigNaN();
+	if (base <= 0.0 || tFP64_IsNearby(base, 1.0)) return tFP64_SigNaN();
 #else
-	Assertion(base > 0.0F && !tFP64_Nearby(base, 1.0));
+	Assertion(base > 0.0F && !tFP64_IsNearby(base, 1.0));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP64_Log2_iter(num, itr) / tFP64_Log2_iter(base, itr);
 }
 tFP64 tFP64_Log(tFP64 num, tFP64 base)
 {
 #ifndef BQSELAYER_DEBUG
-	if (base <= 0.0 || tFP64_Nearby(base, 1.0)) return tFP64_SigNaN();
+	if (base <= 0.0 || tFP64_IsNearby(base, 1.0)) return tFP64_SigNaN();
 #else
-	Assertion(base > 0.0F && !tFP64_Nearby(base, 1.0));
+	Assertion(base > 0.0F && !tFP64_IsNearby(base, 1.0));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP64_Log2(num) / tFP64_Log2(base);
 }
@@ -986,13 +986,13 @@ ForceInline tFP64 tFP64_Lerp(tFP64 strt, tFP64 stp, tFP64 fnsh)
 }
 ForceInline tFP64 tFP64_Unlerp(tFP64 strt, tFP64 curr, tFP64 fnsh)
 {
-	if (tFP64_Nearby(strt, fnsh)) return 0.0;
+	if (tFP64_IsNearby(strt, fnsh)) return 0.0;
 	return (curr - strt) / (fnsh - strt);
 }
 tFP64 tFP64_Exp_iter(tFP64 pow, tIUSz itr)
 {
-	if (tFP64_Nearby(pow, 0.0)) return 1.0;
-	if (tFP64_Nearby(pow, 1.0)) return tFP64_EulNum;
+	if (tFP64_IsNearby(pow, 0.0)) return 1.0;
+	if (tFP64_IsNearby(pow, 1.0)) return tFP64_EulNum;
 	tFP64 res = 1.0;
 	tFP64 term = 1.0;
 	for (tIUSz idx = 1U; idx <= itr; ++idx)
@@ -1045,9 +1045,9 @@ ForceInline tFP64 tFP64_HypTangent(tFP64 num)
 tFP64 tFP64_Mod(tFP64 num, tFP64 denom)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(denom, 0.0)) return tFP64_SigNaN();
+	if (tFP64_IsNearby(denom, 0.0)) return tFP64_SigNaN();
 #else
-	Assertion(!tFP64_Nearby(denom, 0.0));
+	Assertion(!tFP64_IsNearby(denom, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	tIS64 quot = (tIS64)(num / denom);
 	return num - ((tFP64)quot * denom);
@@ -1071,8 +1071,8 @@ tFP64 tFP64_Pow_iter(tFP64 base, tFP64 exp, tIUSz itr)
 	tFP64 whole = tFP64_PowI(base, intPart);
 	if ((tFP64)intPart == exp) return whole;
 	tFP64 fracPart = exp - (tFP64)intPart;
-	if (tFP64_Nearby(fracPart, 0.5)) return whole * tFP64_Sqrt_iter(base, itr);
-	if (tFP64_Nearby(fracPart, -0.5)) return whole * tFP64_RecipSqrt_iter(base, itr);
+	if (tFP64_IsNearby(fracPart, 0.5)) return whole * tFP64_Sqrt_iter(base, itr);
+	if (tFP64_IsNearby(fracPart, -0.5)) return whole * tFP64_RecipSqrt_iter(base, itr);
 #ifndef BQSELAYER_DEBUG
 	if (base <= 0.0) return tFP64_SigNaN();
 #else
@@ -1086,8 +1086,8 @@ tFP64 tFP64_Pow(tFP64 base, tFP64 exp)
 	tFP64 whole = tFP64_PowI(base, intPart);
 	if ((tFP64)intPart == exp) return whole;
 	tFP64 fracPart = exp - (tFP64)intPart;
-	if (tFP64_Nearby(fracPart, 0.5)) return whole * tFP64_Sqrt(base);
-	if (tFP64_Nearby(fracPart, -0.5)) return whole * tFP64_RecipSqrt(base);
+	if (tFP64_IsNearby(fracPart, 0.5)) return whole * tFP64_Sqrt(base);
+	if (tFP64_IsNearby(fracPart, -0.5)) return whole * tFP64_RecipSqrt(base);
 #ifndef BQSELAYER_DEBUG
 	if (base <= 0.0) return tFP64_SigNaN();
 #else
@@ -1107,9 +1107,9 @@ tFP64 tFP64_Round(tFP64 num)
 ForceInline tFP64 tFP64_Recip(tFP64 num)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(num, 0.0)) return tFP64_IsNeg(num) ? tFP64_Inf() : tFP64_NegInf();
+	if (tFP64_IsNearby(num, 0.0)) return tFP64_IsNeg(num) ? tFP64_Inf() : tFP64_NegInf();
 #else
-	Assertion(!tFP64_Nearby(num, 0.0));
+	Assertion(!tFP64_IsNearby(num, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	// TODO: Assembly optimizations here.
 	return 1.0 / num;

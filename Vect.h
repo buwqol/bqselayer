@@ -19,7 +19,7 @@ ForceInline tIS32V2D tIS32V2D_Mul(tIS32V2D vect, tIS32 mod);
 tIS32V2D tIS32V2D_Div(tIS32V2D vect, tIS32 mod);
 /*Note: Returns `False` on success.*/
 ForceInline tBln tIS32V2D_Div_safe(tIS32V2D *vect, tIS32 mod);
-ForceInline tBln tIS32V2D_Eq(tIS32V2D vect1, tIS32V2D vect2);
+ForceInline tBln tIS32V2D_IsEq(tIS32V2D vect1, tIS32V2D vect2);
 ForceInline tIS32 tIS32V2D_Dot(tIS32V2D vect1, tIS32V2D vect2);
 LINK_C_End
 #ifdef BQSELAYER_VECT_IMPL
@@ -80,7 +80,7 @@ ForceInline tBln tIS32V2D_Div_safe(tIS32V2D *vect, tIS32 mod)
 	vect->y /= mod;
 	return False;
 }
-ForceInline tBln tIS32V2D_Eq(tIS32V2D vect1, tIS32V2D vect2)
+ForceInline tBln tIS32V2D_IsEq(tIS32V2D vect1, tIS32V2D vect2)
 {
 	return (vect1.x == vect2.x) && (vect1.y == vect2.y);
 }
@@ -100,7 +100,7 @@ ForceInline tIS64V2D tIS64V2D_Mul(tIS64V2D vect, tIS64 mod);
 tIS64V2D tIS64V2D_Div(tIS64V2D vect, tIS64 mod);
 /*Note: Returns `False` on success.*/
 ForceInline tBln tIS64V2D_Div_safe(tIS64V2D *vect, tIS64 mod);
-ForceInline tBln tIS64V2D_Eq(tIS64V2D vect1, tIS64V2D vect2);
+ForceInline tBln tIS64V2D_IsEq(tIS64V2D vect1, tIS64V2D vect2);
 ForceInline tIS64 tIS64V2D_Dot(tIS64V2D vect1, tIS64V2D vect2);
 LINK_C_End
 #ifdef BQSELAYER_VECT_IMPL
@@ -161,7 +161,7 @@ ForceInline tBln tIS64V2D_Div_safe(tIS64V2D *vect, tIS64 mod)
 	vect->y /= mod;
 	return False;
 }
-ForceInline tBln tIS64V2D_Eq(tIS64V2D vect1, tIS64V2D vect2)
+ForceInline tBln tIS64V2D_IsEq(tIS64V2D vect1, tIS64V2D vect2)
 {
 	return (vect1.x == vect2.x) && (vect1.y == vect2.y);
 }
@@ -182,8 +182,8 @@ tFP32V2D tFP32V2D_Div(tFP32V2D vect, tFP32 mod);
 /*Note: Returns `False` on success.*/
 ForceInline tBln tFP32V2D_Div_safe(tFP32V2D *vect, tFP32 mod);
 tFP32 tFP32V2D_Dot(tFP32V2D vect1, tFP32V2D vect2);
-ForceInline tBln tFP32V2D_Eq(tFP32V2D vect1, tFP32V2D vect2);
-ForceInline tBln tFP32V2D_Nearby(tFP32V2D vect1, tFP32V2D vect2, tFP32 eps);
+ForceInline tBln tFP32V2D_IsEq(tFP32V2D vect1, tFP32V2D vect2);
+ForceInline tBln tFP32V2D_IsNearby(tFP32V2D vect1, tFP32V2D vect2, tFP32 eps);
 ForceInline tFP32 tFP32V2D_LngSq(tFP32V2D vect);
 ForceInline tFP32 tFP32V2D_Lng(tFP32V2D vect);
 /*Note: `rot` is in radians. A value of 0 will produce a unit vector along the positive X-axis.*/
@@ -238,14 +238,14 @@ ForceInline tFP32V2D tFP32V2D_Mul(tFP32V2D vect, tFP32 mod)
 tFP32V2D tFP32V2D_Div(tFP32V2D vect, tFP32 mod)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(mod, 0.0F))
+	if (tFP32_IsNearby(mod, 0.0F))
 	{
 		vect.x = tFP32_IsNeg(vect.x) ? tFP32_NegInf() : tFP32_Inf();
 		vect.y = tFP32_IsNeg(vect.y) ? tFP32_NegInf() : tFP32_Inf();
 		return vect;
 	}
 #else
-	Assertion(!tFP32_Nearby(mod, 0.0F));
+	Assertion(!tFP32_IsNearby(mod, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	vect.x /= mod;
 	vect.y /= mod;
@@ -253,7 +253,7 @@ tFP32V2D tFP32V2D_Div(tFP32V2D vect, tFP32 mod)
 }
 ForceInline tBln tFP32V2D_Div_safe(tFP32V2D *vect, tFP32 mod)
 {
-	if (tFP32_Nearby(mod, 0.0F)) return True;
+	if (tFP32_IsNearby(mod, 0.0F)) return True;
 	vect->x /= mod;
 	vect->y /= mod;
 	return False;
@@ -262,11 +262,11 @@ tFP32 tFP32V2D_Dot(tFP32V2D vect1, tFP32V2D vect2)
 {
 	return vect1.x * vect2.x + vect1.y * vect2.y;
 }
-ForceInline tBln tFP32V2D_Eq(tFP32V2D vect1, tFP32V2D vect2)
+ForceInline tBln tFP32V2D_IsEq(tFP32V2D vect1, tFP32V2D vect2)
 {
-	return tFP32_Nearby(vect1.x, vect2.x) && tFP32_Nearby(vect1.y, vect2.y);
+	return tFP32_IsNearby(vect1.x, vect2.x) && tFP32_IsNearby(vect1.y, vect2.y);
 }
-ForceInline tBln tFP32V2D_Nearby(tFP32V2D vect1, tFP32V2D vect2, tFP32 eps)
+ForceInline tBln tFP32V2D_IsNearby(tFP32V2D vect1, tFP32V2D vect2, tFP32 eps)
 {
 	return (tFP32_Abs(vect1.x - vect2.x) <= eps) && (tFP32_Abs(vect1.y - vect2.y) <= eps);
 }
@@ -298,16 +298,16 @@ ForceInline tFP32V2D tFP32V2D_Norm_fast(tFP32V2D vect)
 {
 	tFP32 lngSq = tFP32V2D_LngSq(vect);
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(lngSq, 0.0F)) return tFP32V2D_Zero();
+	if (tFP32_IsNearby(lngSq, 0.0F)) return tFP32V2D_Zero();
 #else
-	Assertion(!tFP32_Nearby(lngSq, 0.0F));
+	Assertion(!tFP32_IsNearby(lngSq, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP32V2D_Mul(vect, tFP32_RecipSqrt(lngSq));
 }
 tBln tFP32V2D_Norm_fast_safe(tFP32V2D *vect)
 {
 	tFP32 lngSq = tFP32V2D_LngSq(*vect);
-	if (tFP32_Nearby(lngSq, 0.0F)) return True;
+	if (tFP32_IsNearby(lngSq, 0.0F)) return True;
 	tFP32V2D_Mul(*vect, tFP32_RecipSqrt(lngSq));
 	return False;
 }
@@ -339,8 +339,8 @@ tFP32V3D tFP32V3D_Div(tFP32V3D vect, tFP32 mod);
 /*Note: Returns `False` on success.*/
 ForceInline tBln tFP32V3D_Div_safe(tFP32V3D *vect, tFP32 mod);
 tFP32 tFP32V3D_Dot(tFP32V3D vect1, tFP32V3D vect2);
-ForceInline tBln tFP32V3D_Eq(tFP32V3D vect1, tFP32V3D vect2);
-tBln tFP32V3D_Nearby(tFP32V3D vect1, tFP32V3D vect2, tFP32 eps);
+ForceInline tBln tFP32V3D_IsEq(tFP32V3D vect1, tFP32V3D vect2);
+tBln tFP32V3D_IsNearby(tFP32V3D vect1, tFP32V3D vect2, tFP32 eps);
 ForceInline tFP32 tFP32V3D_LngSq(tFP32V3D vect);
 ForceInline tFP32 tFP32V3D_Lng(tFP32V3D vect);
 /*Note: `yaw` and `pitch` are in radians.*/
@@ -401,7 +401,7 @@ ForceInline tFP32V3D tFP32V3D_Mul(tFP32V3D vect, tFP32 mod)
 tFP32V3D tFP32V3D_Div(tFP32V3D vect, tFP32 mod)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(mod, 0.0F))
+	if (tFP32_IsNearby(mod, 0.0F))
 	{
 		vect.x = tFP32_IsNeg(vect.x) ? tFP32_NegInf() : tFP32_Inf();
 		vect.y = tFP32_IsNeg(vect.y) ? tFP32_NegInf() : tFP32_Inf();
@@ -409,7 +409,7 @@ tFP32V3D tFP32V3D_Div(tFP32V3D vect, tFP32 mod)
 		return vect;
 	}
 #else
-	Assertion(!tFP32_Nearby(mod, 0.0F));
+	Assertion(!tFP32_IsNearby(mod, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	vect.x /= mod;
 	vect.y /= mod;
@@ -418,7 +418,7 @@ tFP32V3D tFP32V3D_Div(tFP32V3D vect, tFP32 mod)
 }
 ForceInline tBln tFP32V3D_Div_safe(tFP32V3D *vect, tFP32 mod)
 {
-	if (tFP32_Nearby(mod, 0.0F)) return True;
+	if (tFP32_IsNearby(mod, 0.0F)) return True;
 	vect->x /= mod;
 	vect->y /= mod;
 	vect->z /= mod;
@@ -428,11 +428,11 @@ tFP32 tFP32V3D_Dot(tFP32V3D vect1, tFP32V3D vect2)
 {
 	return vect1.x * vect2.x + vect1.y * vect2.y + vect1.z * vect2.z;
 }
-ForceInline tBln tFP32V3D_Eq(tFP32V3D vect1, tFP32V3D vect2)
+ForceInline tBln tFP32V3D_IsEq(tFP32V3D vect1, tFP32V3D vect2)
 {
-	return tFP32_Nearby(vect1.x, vect2.x) && tFP32_Nearby(vect1.y, vect2.y) && tFP32_Nearby(vect1.z, vect2.z);
+	return tFP32_IsNearby(vect1.x, vect2.x) && tFP32_IsNearby(vect1.y, vect2.y) && tFP32_IsNearby(vect1.z, vect2.z);
 }
-tBln tFP32V3D_Nearby(tFP32V3D vect1, tFP32V3D vect2, tFP32 eps)
+tBln tFP32V3D_IsNearby(tFP32V3D vect1, tFP32V3D vect2, tFP32 eps)
 {
 	return (tFP32_Abs(vect1.x - vect2.x) <= eps) && (tFP32_Abs(vect1.y - vect2.y) <= eps) && (tFP32_Abs(vect1.z - vect2.z) <= eps);
 }
@@ -460,9 +460,9 @@ tFP32V3D tFP32V3D_Norm(tFP32V3D vect)
 {
 	tFP32 lng = tFP32V3D_Lng(vect);
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(lng, 0.0F)) return tFP32V3D_Zero();
+	if (tFP32_IsNearby(lng, 0.0F)) return tFP32V3D_Zero();
 #else
-	Assertion(!tFP32_Nearby(lng, 0.0F));
+	Assertion(!tFP32_IsNearby(lng, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP32V3D_Div(vect, lng);
 }
@@ -474,16 +474,16 @@ tFP32V3D tFP32V3D_Norm_fast(tFP32V3D vect)
 {
 	tFP32 lngSq = tFP32V3D_LngSq(vect);
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(lngSq, 0.0F)) return tFP32V3D_Zero();
+	if (tFP32_IsNearby(lngSq, 0.0F)) return tFP32V3D_Zero();
 #else
-	Assertion(!tFP32_Nearby(lngSq, 0.0F));
+	Assertion(!tFP32_IsNearby(lngSq, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP32V3D_Mul(vect, tFP32_RecipSqrt(lngSq));
 }
 tBln tFP32V3D_Norm_fast_safe(tFP32V3D *vect)
 {
 	tFP32 lngSq = tFP32V3D_LngSq(*vect);
-	if (tFP32_Nearby(lngSq, 0.0F)) return True;
+	if (tFP32_IsNearby(lngSq, 0.0F)) return True;
 	tFP32V3D_Mul(*vect, tFP32_RecipSqrt(lngSq));
 	return False;
 }
@@ -524,8 +524,8 @@ tFP32V4D tFP32V4D_Div(tFP32V4D vect, tFP32 mod);
 /*Note: Returns `False` on success.*/
 ForceInline tBln tFP32V4D_Div_safe(tFP32V4D *vect, tFP32 mod);
 tFP32 tFP32V4D_Dot(tFP32V4D vect1, tFP32V4D vect2);
-ForceInline tBln tFP32V4D_Eq(tFP32V4D vect1, tFP32V4D vect2);
-tBln tFP32V4D_Nearby(tFP32V4D vect1, tFP32V4D vect2, tFP32 eps);
+ForceInline tBln tFP32V4D_IsEq(tFP32V4D vect1, tFP32V4D vect2);
+tBln tFP32V4D_IsNearby(tFP32V4D vect1, tFP32V4D vect2, tFP32 eps);
 ForceInline tFP32 tFP32V4D_LngSq(tFP32V4D vect);
 ForceInline tFP32 tFP32V4D_Lng(tFP32V4D vect);
 /*Warn: Silently returns `tFP32V4D_Zero` on failure when BQSELAYER_DEBUG is not defined.*/
@@ -588,7 +588,7 @@ ForceInline tFP32V4D tFP32V4D_Mul(tFP32V4D vect, tFP32 mod)
 tFP32V4D tFP32V4D_Div(tFP32V4D vect, tFP32 mod)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(mod, 0.0F))
+	if (tFP32_IsNearby(mod, 0.0F))
 	{
 		vect.x = tFP32_IsNeg(vect.x) ? tFP32_NegInf() : tFP32_Inf();
 		vect.y = tFP32_IsNeg(vect.y) ? tFP32_NegInf() : tFP32_Inf();
@@ -597,7 +597,7 @@ tFP32V4D tFP32V4D_Div(tFP32V4D vect, tFP32 mod)
 		return vect;
 	}
 #else
-	Assertion(!tFP32_Nearby(mod, 0.0F));
+	Assertion(!tFP32_IsNearby(mod, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	vect.x /= mod;
 	vect.y /= mod;
@@ -607,7 +607,7 @@ tFP32V4D tFP32V4D_Div(tFP32V4D vect, tFP32 mod)
 }
 ForceInline tBln tFP32V4D_Div_safe(tFP32V4D *vect, tFP32 mod)
 {
-	if (tFP32_Nearby(mod, 0.0F)) return True;
+	if (tFP32_IsNearby(mod, 0.0F)) return True;
 	vect->x /= mod;
 	vect->y /= mod;
 	vect->z /= mod;
@@ -618,11 +618,11 @@ tFP32 tFP32V4D_Dot(tFP32V4D vect1, tFP32V4D vect2)
 {
 	return vect1.x * vect2.x + vect1.y * vect2.y + vect1.z * vect2.z + vect1.w * vect2.w;
 }
-ForceInline tBln tFP32V4D_Eq(tFP32V4D vect1, tFP32V4D vect2)
+ForceInline tBln tFP32V4D_IsEq(tFP32V4D vect1, tFP32V4D vect2)
 {
-	return tFP32_Nearby(vect1.x, vect2.x) && tFP32_Nearby(vect1.y, vect2.y) && tFP32_Nearby(vect1.z, vect2.z) && tFP32_Nearby(vect1.w, vect2.w);
+	return tFP32_IsNearby(vect1.x, vect2.x) && tFP32_IsNearby(vect1.y, vect2.y) && tFP32_IsNearby(vect1.z, vect2.z) && tFP32_IsNearby(vect1.w, vect2.w);
 }
-tBln tFP32V4D_Nearby(tFP32V4D vect1, tFP32V4D vect2, tFP32 eps)
+tBln tFP32V4D_IsNearby(tFP32V4D vect1, tFP32V4D vect2, tFP32 eps)
 {
 	return (tFP32_Abs(vect1.x - vect2.x) <= eps) && (tFP32_Abs(vect1.y - vect2.y) <= eps) && (tFP32_Abs(vect1.z - vect2.z) <= eps) && (tFP32_Abs(vect1.w - vect2.w) <= eps);
 }
@@ -638,9 +638,9 @@ tFP32V4D tFP32V4D_Norm(tFP32V4D vect)
 {
 	tFP32 lng = tFP32V4D_Lng(vect);
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(lng, 0.0F)) return tFP32V4D_Zero();
+	if (tFP32_IsNearby(lng, 0.0F)) return tFP32V4D_Zero();
 #else
-	Assertion(!tFP32_Nearby(mod, 0.0F));
+	Assertion(!tFP32_IsNearby(mod, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP32V4D_Div(vect, lng);
 }
@@ -652,16 +652,16 @@ tFP32V4D tFP32V4D_Norm_fast(tFP32V4D vect)
 {
 	tFP32 lngSq = tFP32V4D_LngSq(vect);
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(lngSq, 0.0F)) return tFP32V4D_Zero();
+	if (tFP32_IsNearby(lngSq, 0.0F)) return tFP32V4D_Zero();
 #else
-	Assertion(!tFP32_Nearby(lngSq, 0.0F));
+	Assertion(!tFP32_IsNearby(lngSq, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP32V4D_Mul(vect, tFP32_RecipSqrt(lngSq));
 }
 tBln tFP32V4D_Norm_fast_safe(tFP32V4D *vect)
 {
 	tFP32 lngSq = tFP32V4D_LngSq(*vect);
-	if (tFP32_Nearby(lngSq, 0.0F)) return True;
+	if (tFP32_IsNearby(lngSq, 0.0F)) return True;
 	tFP32V4D_Mul(*vect, tFP32_RecipSqrt(lngSq));
 	return False;
 }
@@ -695,8 +695,8 @@ tFP64V2D tFP64V2D_Div(tFP64V2D vect, tFP64 mod);
 /*Note: Returns `False` on success.*/
 ForceInline tBln tFP64V2D_Div_safe(tFP64V2D *vect, tFP64 mod);
 tFP64 tFP64V2D_Dot(tFP64V2D vect1, tFP64V2D vect2);
-ForceInline tBln tFP64V2D_Eq(tFP64V2D vect1, tFP64V2D vect2);
-ForceInline tBln tFP64V2D_Nearby(tFP64V2D vect1, tFP64V2D vect2, tFP64 eps);
+ForceInline tBln tFP64V2D_IsEq(tFP64V2D vect1, tFP64V2D vect2);
+ForceInline tBln tFP64V2D_IsNearby(tFP64V2D vect1, tFP64V2D vect2, tFP64 eps);
 ForceInline tFP64 tFP64V2D_LngSq(tFP64V2D vect);
 ForceInline tFP64 tFP64V2D_Lng(tFP64V2D vect);
 /*Note: `rot` is in radians. A value of 0 will produce a unit vector along the positive X-axis.*/
@@ -751,14 +751,14 @@ ForceInline tFP64V2D tFP64V2D_Mul(tFP64V2D vect, tFP64 mod)
 tFP64V2D tFP64V2D_Div(tFP64V2D vect, tFP64 mod)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(mod, 0.0))
+	if (tFP64_IsNearby(mod, 0.0))
 	{
 		vect.x = tFP64_IsNeg(vect.x) ? tFP64_NegInf() : tFP64_Inf();
 		vect.y = tFP64_IsNeg(vect.y) ? tFP64_NegInf() : tFP64_Inf();
 		return vect;
 	}
 #else
-	Assertion(!tFP64_Nearby(mod, 0.0));
+	Assertion(!tFP64_IsNearby(mod, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	vect.x /= mod;
 	vect.y /= mod;
@@ -766,7 +766,7 @@ tFP64V2D tFP64V2D_Div(tFP64V2D vect, tFP64 mod)
 }
 ForceInline tBln tFP64V2D_Div_safe(tFP64V2D *vect, tFP64 mod)
 {
-	if (tFP64_Nearby(mod, 0.0)) return True;
+	if (tFP64_IsNearby(mod, 0.0)) return True;
 	vect->x /= mod;
 	vect->y /= mod;
 	return False;
@@ -775,11 +775,11 @@ tFP64 tFP64V2D_Dot(tFP64V2D vect1, tFP64V2D vect2)
 {
 	return vect1.x * vect2.x + vect1.y * vect2.y;
 }
-ForceInline tBln tFP64V2D_Eq(tFP64V2D vect1, tFP64V2D vect2)
+ForceInline tBln tFP64V2D_IsEq(tFP64V2D vect1, tFP64V2D vect2)
 {
-	return tFP64_Nearby(vect1.x, vect2.x) && tFP64_Nearby(vect1.y, vect2.y);
+	return tFP64_IsNearby(vect1.x, vect2.x) && tFP64_IsNearby(vect1.y, vect2.y);
 }
-ForceInline tBln tFP64V2D_Nearby(tFP64V2D vect1, tFP64V2D vect2, tFP64 eps)
+ForceInline tBln tFP64V2D_IsNearby(tFP64V2D vect1, tFP64V2D vect2, tFP64 eps)
 {
 	return (tFP64_Abs(vect1.x - vect2.x) <= eps) && (tFP64_Abs(vect1.y - vect2.y) <= eps);
 }
@@ -811,16 +811,16 @@ ForceInline tFP64V2D tFP64V2D_Norm_fast(tFP64V2D vect)
 {
 	tFP64 lngSq = tFP64V2D_LngSq(vect);
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(lngSq, 0.0)) return tFP64V2D_Zero();
+	if (tFP64_IsNearby(lngSq, 0.0)) return tFP64V2D_Zero();
 #else
-	Assertion(!tFP64_Nearby(lngSq, 0.0));
+	Assertion(!tFP64_IsNearby(lngSq, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP64V2D_Mul(vect, tFP64_RecipSqrt(lngSq));
 }
 tBln tFP64V2D_Norm_fast_safe(tFP64V2D *vect)
 {
 	tFP64 lngSq = tFP64V2D_LngSq(*vect);
-	if (tFP64_Nearby(lngSq, 0.0)) return True;
+	if (tFP64_IsNearby(lngSq, 0.0)) return True;
 	tFP64V2D_Mul(*vect, tFP64_RecipSqrt(lngSq));
 	return False;
 }
@@ -852,8 +852,8 @@ tFP64V3D tFP64V3D_Div(tFP64V3D vect, tFP64 mod);
 /*Note: Returns `False` on success.*/
 ForceInline tBln tFP64V3D_Div_safe(tFP64V3D *vect, tFP64 mod);
 tFP64 tFP64V3D_Dot(tFP64V3D vect1, tFP64V3D vect2);
-ForceInline tBln tFP64V3D_Eq(tFP64V3D vect1, tFP64V3D vect2);
-tBln tFP64V3D_Nearby(tFP64V3D vect1, tFP64V3D vect2, tFP64 eps);
+ForceInline tBln tFP64V3D_IsEq(tFP64V3D vect1, tFP64V3D vect2);
+tBln tFP64V3D_IsNearby(tFP64V3D vect1, tFP64V3D vect2, tFP64 eps);
 ForceInline tFP64 tFP64V3D_LngSq(tFP64V3D vect);
 ForceInline tFP64 tFP64V3D_Lng(tFP64V3D vect);
 /*Note: `yaw` and `pitch` are in radians.*/
@@ -914,7 +914,7 @@ ForceInline tFP64V3D tFP64V3D_Mul(tFP64V3D vect, tFP64 mod)
 tFP64V3D tFP64V3D_Div(tFP64V3D vect, tFP64 mod)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(mod, 0.0))
+	if (tFP64_IsNearby(mod, 0.0))
 	{
 		vect.x = tFP64_IsNeg(vect.x) ? tFP64_NegInf() : tFP64_Inf();
 		vect.y = tFP64_IsNeg(vect.y) ? tFP64_NegInf() : tFP64_Inf();
@@ -922,7 +922,7 @@ tFP64V3D tFP64V3D_Div(tFP64V3D vect, tFP64 mod)
 		return vect;
 	}
 #else
-	Assertion(!tFP64_Nearby(mod, 0.0));
+	Assertion(!tFP64_IsNearby(mod, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	vect.x /= mod;
 	vect.y /= mod;
@@ -931,7 +931,7 @@ tFP64V3D tFP64V3D_Div(tFP64V3D vect, tFP64 mod)
 }
 ForceInline tBln tFP64V3D_Div_safe(tFP64V3D *vect, tFP64 mod)
 {
-	if (tFP64_Nearby(mod, 0.0)) return True;
+	if (tFP64_IsNearby(mod, 0.0)) return True;
 	vect->x /= mod;
 	vect->y /= mod;
 	vect->z /= mod;
@@ -941,11 +941,11 @@ tFP64 tFP64V3D_Dot(tFP64V3D vect1, tFP64V3D vect2)
 {
 	return vect1.x * vect2.x + vect1.y * vect2.y + vect1.z * vect2.z;
 }
-ForceInline tBln tFP64V3D_Eq(tFP64V3D vect1, tFP64V3D vect2)
+ForceInline tBln tFP64V3D_IsEq(tFP64V3D vect1, tFP64V3D vect2)
 {
-	return tFP64_Nearby(vect1.x, vect2.x) && tFP64_Nearby(vect1.y, vect2.y) && tFP64_Nearby(vect1.z, vect2.z);
+	return tFP64_IsNearby(vect1.x, vect2.x) && tFP64_IsNearby(vect1.y, vect2.y) && tFP64_IsNearby(vect1.z, vect2.z);
 }
-tBln tFP64V3D_Nearby(tFP64V3D vect1, tFP64V3D vect2, tFP64 eps)
+tBln tFP64V3D_IsNearby(tFP64V3D vect1, tFP64V3D vect2, tFP64 eps)
 {
 	return (tFP64_Abs(vect1.x - vect2.x) <= eps) && (tFP64_Abs(vect1.y - vect2.y) <= eps) && (tFP64_Abs(vect1.z - vect2.z) <= eps);
 }
@@ -973,9 +973,9 @@ tFP64V3D tFP64V3D_Norm(tFP64V3D vect)
 {
 	tFP64 lng = tFP64V3D_Lng(vect);
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(lng, 0.0)) return tFP64V3D_Zero();
+	if (tFP64_IsNearby(lng, 0.0)) return tFP64V3D_Zero();
 #else
-	Assertion(!tFP64_Nearby(lng, 0.0));
+	Assertion(!tFP64_IsNearby(lng, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP64V3D_Div(vect, lng);
 }
@@ -987,16 +987,16 @@ tFP64V3D tFP64V3D_Norm_fast(tFP64V3D vect)
 {
 	tFP64 lngSq = tFP64V3D_LngSq(vect);
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(lngSq, 0.0)) return tFP64V3D_Zero();
+	if (tFP64_IsNearby(lngSq, 0.0)) return tFP64V3D_Zero();
 #else
-	Assertion(!tFP64_Nearby(lngSq, 0.0));
+	Assertion(!tFP64_IsNearby(lngSq, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP64V3D_Mul(vect, tFP64_RecipSqrt(lngSq));
 }
 tBln tFP64V3D_Norm_fast_safe(tFP64V3D *vect)
 {
 	tFP64 lngSq = tFP64V3D_LngSq(*vect);
-	if (tFP64_Nearby(lngSq, 0.0)) return True;
+	if (tFP64_IsNearby(lngSq, 0.0)) return True;
 	tFP64V3D_Mul(*vect, tFP64_RecipSqrt(lngSq));
 	return False;
 }
@@ -1037,8 +1037,8 @@ tFP64V4D tFP64V4D_Div(tFP64V4D vect, tFP64 mod);
 /*Note: Returns `False` on success.*/
 ForceInline tBln tFP64V4D_Div_safe(tFP64V4D *vect, tFP64 mod);
 tFP64 tFP64V4D_Dot(tFP64V4D vect1, tFP64V4D vect2);
-ForceInline tBln tFP64V4D_Eq(tFP64V4D vect1, tFP64V4D vect2);
-tBln tFP64V4D_Nearby(tFP64V4D vect1, tFP64V4D vect2, tFP64 eps);
+ForceInline tBln tFP64V4D_IsEq(tFP64V4D vect1, tFP64V4D vect2);
+tBln tFP64V4D_IsNearby(tFP64V4D vect1, tFP64V4D vect2, tFP64 eps);
 ForceInline tFP64 tFP64V4D_LngSq(tFP64V4D vect);
 ForceInline tFP64 tFP64V4D_Lng(tFP64V4D vect);
 /*Warn: Silently returns `tFP64V4D_Zero` on failure when BQSELAYER_DEBUG is not defined.*/
@@ -1101,7 +1101,7 @@ ForceInline tFP64V4D tFP64V4D_Mul(tFP64V4D vect, tFP64 mod)
 tFP64V4D tFP64V4D_Div(tFP64V4D vect, tFP64 mod)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(mod, 0.0))
+	if (tFP64_IsNearby(mod, 0.0))
 	{
 		vect.x = tFP64_IsNeg(vect.x) ? tFP64_NegInf() : tFP64_Inf();
 		vect.y = tFP64_IsNeg(vect.y) ? tFP64_NegInf() : tFP64_Inf();
@@ -1110,7 +1110,7 @@ tFP64V4D tFP64V4D_Div(tFP64V4D vect, tFP64 mod)
 		return vect;
 	}
 #else
-	Assertion(!tFP64_Nearby(mod, 0.0));
+	Assertion(!tFP64_IsNearby(mod, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	vect.x /= mod;
 	vect.y /= mod;
@@ -1120,7 +1120,7 @@ tFP64V4D tFP64V4D_Div(tFP64V4D vect, tFP64 mod)
 }
 ForceInline tBln tFP64V4D_Div_safe(tFP64V4D *vect, tFP64 mod)
 {
-	if (tFP64_Nearby(mod, 0.0)) return True;
+	if (tFP64_IsNearby(mod, 0.0)) return True;
 	vect->x /= mod;
 	vect->y /= mod;
 	vect->z /= mod;
@@ -1131,11 +1131,11 @@ tFP64 tFP64V4D_Dot(tFP64V4D vect1, tFP64V4D vect2)
 {
 	return vect1.x * vect2.x + vect1.y * vect2.y + vect1.z * vect2.z + vect1.w * vect2.w;
 }
-ForceInline tBln tFP64V4D_Eq(tFP64V4D vect1, tFP64V4D vect2)
+ForceInline tBln tFP64V4D_IsEq(tFP64V4D vect1, tFP64V4D vect2)
 {
-	return tFP64_Nearby(vect1.x, vect2.x) && tFP64_Nearby(vect1.y, vect2.y) && tFP64_Nearby(vect1.z, vect2.z) && tFP64_Nearby(vect1.w, vect2.w);
+	return tFP64_IsNearby(vect1.x, vect2.x) && tFP64_IsNearby(vect1.y, vect2.y) && tFP64_IsNearby(vect1.z, vect2.z) && tFP64_IsNearby(vect1.w, vect2.w);
 }
-tBln tFP64V4D_Nearby(tFP64V4D vect1, tFP64V4D vect2, tFP64 eps)
+tBln tFP64V4D_IsNearby(tFP64V4D vect1, tFP64V4D vect2, tFP64 eps)
 {
 	return (tFP64_Abs(vect1.x - vect2.x) <= eps) && (tFP64_Abs(vect1.y - vect2.y) <= eps) && (tFP64_Abs(vect1.z - vect2.z) <= eps) && (tFP64_Abs(vect1.w - vect2.w) <= eps);
 }
@@ -1151,9 +1151,9 @@ tFP64V4D tFP64V4D_Norm(tFP64V4D vect)
 {
 	tFP64 lng = tFP64V4D_Lng(vect);
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(lng, 0.0)) return tFP64V4D_Zero();
+	if (tFP64_IsNearby(lng, 0.0)) return tFP64V4D_Zero();
 #else
-	Assertion(!tFP64_Nearby(mod, 0.0));
+	Assertion(!tFP64_IsNearby(mod, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP64V4D_Div(vect, lng);
 }
@@ -1165,16 +1165,16 @@ tFP64V4D tFP64V4D_Norm_fast(tFP64V4D vect)
 {
 	tFP64 lngSq = tFP64V4D_LngSq(vect);
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(lngSq, 0.0)) return tFP64V4D_Zero();
+	if (tFP64_IsNearby(lngSq, 0.0)) return tFP64V4D_Zero();
 #else
-	Assertion(!tFP64_Nearby(lngSq, 0.0));
+	Assertion(!tFP64_IsNearby(lngSq, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	return tFP64V4D_Mul(vect, tFP64_RecipSqrt(lngSq));
 }
 tBln tFP64V4D_Norm_fast_safe(tFP64V4D *vect)
 {
 	tFP64 lngSq = tFP64V4D_LngSq(*vect);
-	if (tFP64_Nearby(lngSq, 0.0)) return True;
+	if (tFP64_IsNearby(lngSq, 0.0)) return True;
 	tFP64V4D_Mul(*vect, tFP64_RecipSqrt(lngSq));
 	return False;
 }

@@ -32,8 +32,8 @@ tFP32Cmplx tFP32Cmplx_Ln(tFP32Cmplx num);
 tFP32Cmplx tFP32Cmplx_PowI(tFP32Cmplx num, tISSz exp);
 tFP32Cmplx tFP32Cmplx_Pow_iter(tFP32Cmplx base, tFP32Cmplx exp, tIUSz itr);
 tFP32Cmplx tFP32Cmplx_Pow(tFP32Cmplx base, tFP32Cmplx exp);
-ForceInline tBln tFP32Cmplx_Eq(tFP32Cmplx num1, tFP32Cmplx num2);
-ForceInline tBln tFP32Cmplx_Nearby(tFP32Cmplx num1, tFP32Cmplx num2);
+ForceInline tBln tFP32Cmplx_IsEq(tFP32Cmplx num1, tFP32Cmplx num2);
+ForceInline tBln tFP32Cmplx_IsNearby(tFP32Cmplx num1, tFP32Cmplx num2);
 ForceInline tFP32Cmplx tFP32Cmplx_Neg(tFP32Cmplx num);
 ForceInline tFP32Cmplx tFP32Cmplx_One(void);
 ForceInline tFP32Cmplx tFP32Cmplx_I(void);
@@ -77,14 +77,14 @@ tFP32Cmplx tFP32Cmplx_Div(tFP32Cmplx lhs, tFP32Cmplx rhs)
 {
 	tFP32Cmplx num;
 #ifndef BQSELAYER_DBG
-	if (tFP32_Nearby(rhs.real, 0.0F) && tFP32_Nearby(rhs.imag, 0.0F))
+	if (tFP32_IsNearby(rhs.real, 0.0F) && tFP32_IsNearby(rhs.imag, 0.0F))
 	{
 		num.real = tFP32_SigNaN();
 		num.imag = tFP32_SigNaN();
 		return num;
 	}
 #else
-	Assertion(!tFP32_Nearby(rhs.real, 0.0F) || !tFP32_Nearby(rhs.imag, 0.0F));
+	Assertion(!tFP32_IsNearby(rhs.real, 0.0F) || !tFP32_IsNearby(rhs.imag, 0.0F));
 #endif/*BQSELAYER_DBG*/
 	tFP32 commonDenom = tFP32_Recip(tFP32_Sq(rhs.real) + tFP32_Sq(rhs.imag));
 	num.real = ((lhs.real * rhs.real) + (lhs.imag * rhs.imag)) * commonDenom;
@@ -127,14 +127,14 @@ ForceInline tFP32Cmplx tFP32Cmplx_MulFlt(tFP32Cmplx num, tFP32 flt)
 ForceInline tFP32Cmplx tFP32Cmplx_DivFlt(tFP32Cmplx num, tFP32 flt)
 {
 #ifndef BQSELAYER_DBG
-	if (tFP32_Nearby(flt, 0.0F))
+	if (tFP32_IsNearby(flt, 0.0F))
 	{
 		num.real = tFP32_SigNaN();
 		num.imag = tFP32_SigNaN();
 		return num;
 	}
 #else
-	Assertion(!tFP32_Nearby(flt, 0.0F));
+	Assertion(!tFP32_IsNearby(flt, 0.0F));
 #endif/*BQSELAYER_DBG*/
 	num.real /= flt;
 	num.imag /= flt;
@@ -175,7 +175,7 @@ tFP32Cmplx tFP32Cmplx_Sqrt_iter(tFP32Cmplx num, tIUSz itr)
 #define BQSELAYER_RECIPSQRT2 0.707106781187F
 	tBln neg = tFP32_IsNeg(num.imag);
 	num.imag = tFP32_Sqrt_iter(mag - num.real, itr) * BQSELAYER_RECIPSQRT2;
-	if (tFP32_Nearby(mag + num.real, 0.0F)) num.real = 0.0F;
+	if (tFP32_IsNearby(mag + num.real, 0.0F)) num.real = 0.0F;
 	else num.real = tFP32_Sqrt_iter(mag + num.real, itr) * BQSELAYER_RECIPSQRT2;
 #undef BQSELAYER_RECIPSQRT2
 	if (neg) num.imag = tFP32_Neg(num.imag);
@@ -187,7 +187,7 @@ tFP32Cmplx tFP32Cmplx_Sqrt(tFP32Cmplx num)
 #define BQSELAYER_RECIPSQRT2 0.707106781187F
 	tBln neg = tFP32_IsNeg(num.imag);
 	num.imag = tFP32_Sqrt(mag - num.real) * BQSELAYER_RECIPSQRT2;
-	if (tFP32_Nearby(mag + num.real, 0.0F)) num.real = 0.0F;
+	if (tFP32_IsNearby(mag + num.real, 0.0F)) num.real = 0.0F;
 	else num.real = tFP32_Sqrt(mag + num.real) * BQSELAYER_RECIPSQRT2;
 #undef BQSELAYER_RECIPSQRT2
 	if (neg) num.imag = tFP32_Neg(num.imag);
@@ -252,13 +252,13 @@ tFP32Cmplx tFP32Cmplx_Pow(tFP32Cmplx base, tFP32Cmplx exp)
 {
 	return tFP32Cmplx_Exp(tFP32Cmplx_Mul(exp, tFP32Cmplx_Ln(base)));
 }
-ForceInline tBln tFP32Cmplx_Eq(tFP32Cmplx num1, tFP32Cmplx num2)
+ForceInline tBln tFP32Cmplx_IsEq(tFP32Cmplx num1, tFP32Cmplx num2)
 {
 	return num1.real == num2.real && num1.imag == num2.imag;
 }
-ForceInline tBln tFP32Cmplx_Nearby(tFP32Cmplx num1, tFP32Cmplx num2)
+ForceInline tBln tFP32Cmplx_IsNearby(tFP32Cmplx num1, tFP32Cmplx num2)
 {
-	return tFP32_Nearby(num1.real, num2.real) && tFP32_Nearby(num1.imag, num2.imag);
+	return tFP32_IsNearby(num1.real, num2.real) && tFP32_IsNearby(num1.imag, num2.imag);
 }
 ForceInline tFP32Cmplx tFP32Cmplx_Neg(tFP32Cmplx num)
 {
@@ -317,8 +317,8 @@ tFP64Cmplx tFP64Cmplx_Ln(tFP64Cmplx num);
 tFP64Cmplx tFP64Cmplx_PowI(tFP64Cmplx num, tISSz exp);
 tFP64Cmplx tFP64Cmplx_Pow_iter(tFP64Cmplx base, tFP64Cmplx exp, tIUSz itr);
 tFP64Cmplx tFP64Cmplx_Pow(tFP64Cmplx base, tFP64Cmplx exp);
-ForceInline tBln tFP64Cmplx_Eq(tFP64Cmplx num1, tFP64Cmplx num2);
-ForceInline tBln tFP64Cmplx_Nearby(tFP64Cmplx num1, tFP64Cmplx num2);
+ForceInline tBln tFP64Cmplx_IsEq(tFP64Cmplx num1, tFP64Cmplx num2);
+ForceInline tBln tFP64Cmplx_IsNearby(tFP64Cmplx num1, tFP64Cmplx num2);
 ForceInline tFP64Cmplx tFP64Cmplx_Neg(tFP64Cmplx num);
 ForceInline tFP64Cmplx tFP64Cmplx_One(void);
 ForceInline tFP64Cmplx tFP64Cmplx_I(void);
@@ -362,14 +362,14 @@ tFP64Cmplx tFP64Cmplx_Div(tFP64Cmplx lhs, tFP64Cmplx rhs)
 {
 	tFP64Cmplx num;
 #ifndef BQSELAYER_DBG
-	if (tFP64_Nearby(rhs.real, 0.0) && tFP64_Nearby(rhs.imag, 0.0))
+	if (tFP64_IsNearby(rhs.real, 0.0) && tFP64_IsNearby(rhs.imag, 0.0))
 	{
 		num.real = tFP64_SigNaN();
 		num.imag = tFP64_SigNaN();
 		return num;
 	}
 #else
-	Assertion(!tFP64_Nearby(rhs.real, 0.0) || !tFP64_Nearby(rhs.imag, 0.0));
+	Assertion(!tFP64_IsNearby(rhs.real, 0.0) || !tFP64_IsNearby(rhs.imag, 0.0));
 #endif/*BQSELAYER_DBG*/
 	tFP64 commonDenom = tFP64_Recip(tFP64_Sq(rhs.real) + tFP64_Sq(rhs.imag));
 	num.real = ((lhs.real * rhs.real) + (lhs.imag * rhs.imag)) * commonDenom;
@@ -412,14 +412,14 @@ ForceInline tFP64Cmplx tFP64Cmplx_MulDbl(tFP64Cmplx num, tFP64 dbl)
 ForceInline tFP64Cmplx tFP64Cmplx_DivDbl(tFP64Cmplx num, tFP64 dbl)
 {
 #ifndef BQSELAYER_DBG
-	if (tFP64_Nearby(dbl, 0.0))
+	if (tFP64_IsNearby(dbl, 0.0))
 	{
 		num.real = tFP64_SigNaN();
 		num.imag = tFP64_SigNaN();
 		return num;
 	}
 #else
-	Assertion(!tFP64_Nearby(dbl, 0.0));
+	Assertion(!tFP64_IsNearby(dbl, 0.0));
 #endif/*BQSELAYER_DBG*/
 	num.real /= dbl;
 	num.imag /= dbl;
@@ -460,7 +460,7 @@ tFP64Cmplx tFP64Cmplx_Sqrt_iter(tFP64Cmplx num, tIUSz itr)
 #define BQSELAYER_RECIPSQRT2 0.707106781187
 	tBln neg = tFP64_IsNeg(num.imag);
 	num.imag = tFP64_Sqrt_iter(mag - num.real, itr) * BQSELAYER_RECIPSQRT2;
-	if (tFP64_Nearby(mag + num.real, 0.0)) num.real = 0.0;
+	if (tFP64_IsNearby(mag + num.real, 0.0)) num.real = 0.0;
 	else num.real = tFP64_Sqrt_iter(mag + num.real, itr) * BQSELAYER_RECIPSQRT2;
 #undef BQSELAYER_RECIPSQRT2
 	if (neg) num.imag = tFP64_Neg(num.imag);
@@ -472,7 +472,7 @@ tFP64Cmplx tFP64Cmplx_Sqrt(tFP64Cmplx num)
 #define BQSELAYER_RECIPSQRT2 0.707106781187
 	tBln neg = tFP64_IsNeg(num.imag);
 	num.imag = tFP64_Sqrt(mag - num.real) * BQSELAYER_RECIPSQRT2;
-	if (tFP64_Nearby(mag + num.real, 0.0)) num.real = 0.0;
+	if (tFP64_IsNearby(mag + num.real, 0.0)) num.real = 0.0;
 	else num.real = tFP64_Sqrt(mag + num.real) * BQSELAYER_RECIPSQRT2;
 #undef BQSELAYER_RECIPSQRT2
 	if (neg) num.imag = tFP64_Neg(num.imag);
@@ -537,13 +537,13 @@ tFP64Cmplx tFP64Cmplx_Pow(tFP64Cmplx base, tFP64Cmplx exp)
 {
 	return tFP64Cmplx_Exp(tFP64Cmplx_Mul(exp, tFP64Cmplx_Ln(base)));
 }
-ForceInline tBln tFP64Cmplx_Eq(tFP64Cmplx num1, tFP64Cmplx num2)
+ForceInline tBln tFP64Cmplx_IsEq(tFP64Cmplx num1, tFP64Cmplx num2)
 {
 	return num1.real == num2.real && num1.imag == num2.imag;
 }
-ForceInline tBln tFP64Cmplx_Nearby(tFP64Cmplx num1, tFP64Cmplx num2)
+ForceInline tBln tFP64Cmplx_IsNearby(tFP64Cmplx num1, tFP64Cmplx num2)
 {
-	return tFP64_Nearby(num1.real, num2.real) && tFP64_Nearby(num1.imag, num2.imag);
+	return tFP64_IsNearby(num1.real, num2.real) && tFP64_IsNearby(num1.imag, num2.imag);
 }
 ForceInline tFP64Cmplx tFP64Cmplx_Neg(tFP64Cmplx num)
 {

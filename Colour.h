@@ -30,28 +30,28 @@ ForceInline tFP32HSV tFP32HSV_Make(tFP32 h, tFP32 s, tFP32 v);
 ForceInline tFP64HSV tFP64HSV_Make(tFP64 h, tFP64 s, tFP64 v);
 ForceInline tFP32HSL tFP32HSL_Make(tFP32 h, tFP32 s, tFP32 l);
 ForceInline tFP64HSL tFP64HSL_Make(tFP64 h, tFP64 s, tFP64 l);
-ForceInline tBln tIU8RGB_Eq(tIU8RGB colour1, tIU8RGB colour2);
-ForceInline tBln tIU8RGBA_Eq(tIU8RGBA colour1, tIU8RGBA colour2);
-ForceInline tBln tFP32RGB_Eq(tFP32RGB colour1, tFP32RGB colour2);
-ForceInline tBln tFP32RGBA_Eq(tFP32RGBA colour1, tFP32RGBA colour2);
-ForceInline tBln tFP64RGB_Eq(tFP64RGB colour1, tFP64RGB colour2);
-ForceInline tBln tFP64RGBA_Eq(tFP64RGBA colour1, tFP64RGBA colour2);
-ForceInline tBln tIU32ARGB_Eq(tIU32ARGB colour1, tIU32ARGB colour2);
-ForceInline tBln tIU32RGBA_Eq(tIU32RGBA colour1, tIU32RGBA colour2);
-ForceInline tBln tIU32BGRA_Eq(tIU32BGRA colour1, tIU32BGRA colour2);
-ForceInline tBln tIU32ABGR_Eq(tIU32ABGR colour1, tIU32ABGR colour2);
-ForceInline tBln tFP32HSV_Eq(tFP32HSV colour1, tFP32HSV colour2);
-ForceInline tBln tFP64HSV_Eq(tFP64HSV colour1, tFP64HSV colour2);
-ForceInline tBln tFP32HSL_Eq(tFP32HSL colour1, tFP32HSL colour2);
-ForceInline tBln tFP64HSL_Eq(tFP64HSL colour1, tFP64HSL colour2);
-ForceInline tBln tFP32RGB_Nearby(tFP32RGB colour1, tFP32RGB colour2);
-ForceInline tBln tFP32RGBA_Nearby(tFP32RGBA colour1, tFP32RGBA colour2);
-ForceInline tBln tFP64RGB_Nearby(tFP64RGB colour1, tFP64RGB colour2);
-ForceInline tBln tFP64RGBA_Nearby(tFP64RGBA colour1, tFP64RGBA colour2);
-ForceInline tBln tFP32HSV_Nearby(tFP32HSV colour1, tFP32HSV colour2);
-ForceInline tBln tFP64HSV_Nearby(tFP64HSV colour1, tFP64HSV colour2);
-ForceInline tBln tFP32HSL_Nearby(tFP32HSL colour1, tFP32HSL colour2);
-ForceInline tBln tFP64HSL_Nearby(tFP64HSL colour1, tFP64HSL colour2);
+ForceInline tBln tIU8RGB_IsEq(tIU8RGB colour1, tIU8RGB colour2);
+ForceInline tBln tIU8RGBA_IsEq(tIU8RGBA colour1, tIU8RGBA colour2);
+ForceInline tBln tFP32RGB_IsEq(tFP32RGB colour1, tFP32RGB colour2);
+ForceInline tBln tFP32RGBA_IsEq(tFP32RGBA colour1, tFP32RGBA colour2);
+ForceInline tBln tFP64RGB_IsEq(tFP64RGB colour1, tFP64RGB colour2);
+ForceInline tBln tFP64RGBA_IsEq(tFP64RGBA colour1, tFP64RGBA colour2);
+ForceInline tBln tIU32ARGB_IsEq(tIU32ARGB colour1, tIU32ARGB colour2);
+ForceInline tBln tIU32RGBA_IsEq(tIU32RGBA colour1, tIU32RGBA colour2);
+ForceInline tBln tIU32BGRA_IsEq(tIU32BGRA colour1, tIU32BGRA colour2);
+ForceInline tBln tIU32ABGR_IsEq(tIU32ABGR colour1, tIU32ABGR colour2);
+ForceInline tBln tFP32HSV_IsEq(tFP32HSV colour1, tFP32HSV colour2);
+ForceInline tBln tFP64HSV_IsEq(tFP64HSV colour1, tFP64HSV colour2);
+ForceInline tBln tFP32HSL_IsEq(tFP32HSL colour1, tFP32HSL colour2);
+ForceInline tBln tFP64HSL_IsEq(tFP64HSL colour1, tFP64HSL colour2);
+ForceInline tBln tFP32RGB_IsNearby(tFP32RGB colour1, tFP32RGB colour2);
+ForceInline tBln tFP32RGBA_IsNearby(tFP32RGBA colour1, tFP32RGBA colour2);
+ForceInline tBln tFP64RGB_IsNearby(tFP64RGB colour1, tFP64RGB colour2);
+ForceInline tBln tFP64RGBA_IsNearby(tFP64RGBA colour1, tFP64RGBA colour2);
+ForceInline tBln tFP32HSV_IsNearby(tFP32HSV colour1, tFP32HSV colour2);
+ForceInline tBln tFP64HSV_IsNearby(tFP64HSV colour1, tFP64HSV colour2);
+ForceInline tBln tFP32HSL_IsNearby(tFP32HSL colour1, tFP32HSL colour2);
+ForceInline tBln tFP64HSL_IsNearby(tFP64HSL colour1, tFP64HSL colour2);
 ForceInline tIU32ARGB tIU32ARGB_From_tRGBA(tIU8RGBA colour);
 ForceInline tIU32RGBA tIU32RGBA_From_tRGBA(tIU8RGBA colour);
 ForceInline tIU32BGRA tIU32BGRA_From_tRGBA(tIU8RGBA colour);
@@ -265,93 +265,93 @@ ForceInline tFP64HSL tFP64HSL_Make(tFP64 h, tFP64 s, tFP64 l)
 	colour.l = tFP64_Clamp(0.0, l, 1.0);
 	return colour;
 }
-ForceInline tBln tIU8RGB_Eq(tIU8RGB colour1, tIU8RGB colour2)
+ForceInline tBln tIU8RGB_IsEq(tIU8RGB colour1, tIU8RGB colour2)
 {
 	return colour1.r == colour2.r && colour1.g == colour2.g && colour1.b == colour2.b;
 }
-ForceInline tBln tIU8RGBA_Eq(tIU8RGBA colour1, tIU8RGBA colour2)
+ForceInline tBln tIU8RGBA_IsEq(tIU8RGBA colour1, tIU8RGBA colour2)
 {
 	return colour1.r == colour2.r && colour1.g == colour2.g && colour1.b == colour2.b && colour1.a == colour2.a;
 }
-ForceInline tBln tFP32RGB_Eq(tFP32RGB colour1, tFP32RGB colour2)
+ForceInline tBln tFP32RGB_IsEq(tFP32RGB colour1, tFP32RGB colour2)
 {
 	return colour1.r == colour2.r && colour1.g == colour2.g && colour1.b == colour2.b;
 }
-ForceInline tBln tFP32RGBA_Eq(tFP32RGBA colour1, tFP32RGBA colour2)
+ForceInline tBln tFP32RGBA_IsEq(tFP32RGBA colour1, tFP32RGBA colour2)
 {
 	return colour1.r == colour2.r && colour1.g == colour2.g && colour1.b == colour2.b && colour1.a == colour2.a;
 }
-ForceInline tBln tFP64RGB_Eq(tFP64RGB colour1, tFP64RGB colour2)
+ForceInline tBln tFP64RGB_IsEq(tFP64RGB colour1, tFP64RGB colour2)
 {
 	return colour1.r == colour2.r && colour1.g == colour2.g && colour1.b == colour2.b;
 }
-ForceInline tBln tFP64RGBA_Eq(tFP64RGBA colour1, tFP64RGBA colour2)
+ForceInline tBln tFP64RGBA_IsEq(tFP64RGBA colour1, tFP64RGBA colour2)
 {
 	return colour1.r == colour2.r && colour1.g == colour2.g && colour1.b == colour2.b && colour1.a == colour2.a;
 }
-ForceInline tBln tIU32ARGB_Eq(tIU32ARGB colour1, tIU32ARGB colour2)
+ForceInline tBln tIU32ARGB_IsEq(tIU32ARGB colour1, tIU32ARGB colour2)
 {
 	return colour1 == colour2;
 }
-ForceInline tBln tIU32RGBA_Eq(tIU32RGBA colour1, tIU32RGBA colour2)
+ForceInline tBln tIU32RGBA_IsEq(tIU32RGBA colour1, tIU32RGBA colour2)
 {
 	return colour1 == colour2;
 }
-ForceInline tBln tIU32BGRA_Eq(tIU32BGRA colour1, tIU32BGRA colour2)
+ForceInline tBln tIU32BGRA_IsEq(tIU32BGRA colour1, tIU32BGRA colour2)
 {
 	return colour1 == colour2;
 }
-ForceInline tBln tIU32ABGR_Eq(tIU32ABGR colour1, tIU32ABGR colour2)
+ForceInline tBln tIU32ABGR_IsEq(tIU32ABGR colour1, tIU32ABGR colour2)
 {
 	return colour1 == colour2;
 }
-ForceInline tBln tFP32HSV_Eq(tFP32HSV colour1, tFP32HSV colour2)
+ForceInline tBln tFP32HSV_IsEq(tFP32HSV colour1, tFP32HSV colour2)
 {
 	return colour1.h == colour2.h && colour1.s == colour2.s && colour1.v == colour2.v;
 }
-ForceInline tBln tFP64HSV_Eq(tFP64HSV colour1, tFP64HSV colour2)
+ForceInline tBln tFP64HSV_IsEq(tFP64HSV colour1, tFP64HSV colour2)
 {
 	return colour1.h == colour2.h && colour1.s == colour2.s && colour1.v == colour2.v;
 }
-ForceInline tBln tFP32HSL_Eq(tFP32HSL colour1, tFP32HSL colour2)
+ForceInline tBln tFP32HSL_IsEq(tFP32HSL colour1, tFP32HSL colour2)
 {
 	return colour1.h == colour2.h && colour1.s == colour2.s && colour1.l == colour2.l;
 }
-ForceInline tBln tFP64HSL_Eq(tFP64HSL colour1, tFP64HSL colour2)
+ForceInline tBln tFP64HSL_IsEq(tFP64HSL colour1, tFP64HSL colour2)
 {
 	return colour1.h == colour2.h && colour1.s == colour2.s && colour1.l == colour2.l;
 }
-ForceInline tBln tFP32RGB_Nearby(tFP32RGB colour1, tFP32RGB colour2)
+ForceInline tBln tFP32RGB_IsNearby(tFP32RGB colour1, tFP32RGB colour2)
 {
-	return tFP32_Nearby(colour1.r, colour2.r) && tFP32_Nearby(colour1.g, colour2.g) && tFP32_Nearby(colour1.b, colour2.b);
+	return tFP32_IsNearby(colour1.r, colour2.r) && tFP32_IsNearby(colour1.g, colour2.g) && tFP32_IsNearby(colour1.b, colour2.b);
 }
-ForceInline tBln tFP32RGBA_Nearby(tFP32RGBA colour1, tFP32RGBA colour2)
+ForceInline tBln tFP32RGBA_IsNearby(tFP32RGBA colour1, tFP32RGBA colour2)
 {
-	return tFP32_Nearby(colour1.r, colour2.r) && tFP32_Nearby(colour1.g, colour2.g) && tFP32_Nearby(colour1.b, colour2.b) && tFP32_Nearby(colour1.a, colour2.a);
+	return tFP32_IsNearby(colour1.r, colour2.r) && tFP32_IsNearby(colour1.g, colour2.g) && tFP32_IsNearby(colour1.b, colour2.b) && tFP32_IsNearby(colour1.a, colour2.a);
 }
-ForceInline tBln tFP64RGB_Nearby(tFP64RGB colour1, tFP64RGB colour2)
+ForceInline tBln tFP64RGB_IsNearby(tFP64RGB colour1, tFP64RGB colour2)
 {
-	return tFP64_Nearby(colour1.r, colour2.r) && tFP64_Nearby(colour1.g, colour2.g) && tFP64_Nearby(colour1.b, colour2.b);
+	return tFP64_IsNearby(colour1.r, colour2.r) && tFP64_IsNearby(colour1.g, colour2.g) && tFP64_IsNearby(colour1.b, colour2.b);
 }
-ForceInline tBln tFP64RGBA_Nearby(tFP64RGBA colour1, tFP64RGBA colour2)
+ForceInline tBln tFP64RGBA_IsNearby(tFP64RGBA colour1, tFP64RGBA colour2)
 {
-	return tFP64_Nearby(colour1.r, colour2.r) && tFP64_Nearby(colour1.g, colour2.g) && tFP64_Nearby(colour1.b, colour2.b) && tFP64_Nearby(colour1.a, colour2.a);
+	return tFP64_IsNearby(colour1.r, colour2.r) && tFP64_IsNearby(colour1.g, colour2.g) && tFP64_IsNearby(colour1.b, colour2.b) && tFP64_IsNearby(colour1.a, colour2.a);
 }
-ForceInline tBln tFP32HSV_Nearby(tFP32HSV colour1, tFP32HSV colour2)
+ForceInline tBln tFP32HSV_IsNearby(tFP32HSV colour1, tFP32HSV colour2)
 {
-	return tFP32_Nearby(colour1.h, colour2.h) && tFP32_Nearby(colour1.s, colour2.s) && tFP32_Nearby(colour1.v, colour2.v);
+	return tFP32_IsNearby(colour1.h, colour2.h) && tFP32_IsNearby(colour1.s, colour2.s) && tFP32_IsNearby(colour1.v, colour2.v);
 }
-ForceInline tBln tFP64HSV_Nearby(tFP64HSV colour1, tFP64HSV colour2)
+ForceInline tBln tFP64HSV_IsNearby(tFP64HSV colour1, tFP64HSV colour2)
 {
-	return tFP64_Nearby(colour1.h, colour2.h) && tFP64_Nearby(colour1.s, colour2.s) && tFP64_Nearby(colour1.v, colour2.v);
+	return tFP64_IsNearby(colour1.h, colour2.h) && tFP64_IsNearby(colour1.s, colour2.s) && tFP64_IsNearby(colour1.v, colour2.v);
 }
-ForceInline tBln tFP32HSL_Nearby(tFP32HSL colour1, tFP32HSL colour2)
+ForceInline tBln tFP32HSL_IsNearby(tFP32HSL colour1, tFP32HSL colour2)
 {
-	return tFP32_Nearby(colour1.h, colour2.h) && tFP32_Nearby(colour1.s, colour2.s) && tFP32_Nearby(colour1.l, colour2.l);
+	return tFP32_IsNearby(colour1.h, colour2.h) && tFP32_IsNearby(colour1.s, colour2.s) && tFP32_IsNearby(colour1.l, colour2.l);
 }
-ForceInline tBln tFP64HSL_Nearby(tFP64HSL colour1, tFP64HSL colour2)
+ForceInline tBln tFP64HSL_IsNearby(tFP64HSL colour1, tFP64HSL colour2)
 {
-	return tFP64_Nearby(colour1.h, colour2.h) && tFP64_Nearby(colour1.s, colour2.s) && tFP64_Nearby(colour1.l, colour2.l);
+	return tFP64_IsNearby(colour1.h, colour2.h) && tFP64_IsNearby(colour1.s, colour2.s) && tFP64_IsNearby(colour1.l, colour2.l);
 }
 ForceInline tIU32ARGB tIU32ARGB_From_tRGBA(tIU8RGBA colour)
 {

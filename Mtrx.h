@@ -15,8 +15,8 @@ tFP32M2x2 tFP32M2x2_MulFlt(tFP32M2x2 mtrx, tFP32 mod);
 tFP32M2x2 tFP32M2x2_DivFlt(tFP32M2x2 mtrx, tFP32 mod);
 /*Note: Returns `False` on success.*/
 tBln tFP32M2x2_DivFlt_safe(tFP32M2x2 *mtrx, tFP32 mod);
-tBln tFP32M2x2_Eq(tFP32M2x2 mtrx1, tFP32M2x2 mtrx2);
-tBln tFP32M2x2_Nearby(tFP32M2x2 mtrx1, tFP32M2x2 mtrx2, tFP32 eps);
+tBln tFP32M2x2_IsEq(tFP32M2x2 mtrx1, tFP32M2x2 mtrx2);
+tBln tFP32M2x2_IsNearby(tFP32M2x2 mtrx1, tFP32M2x2 mtrx2, tFP32 eps);
 tFP32V2D tFP32M2x2_MulVect(tFP32M2x2 mtrx, tFP32V2D vect);
 tFP32M2x2 tFP32M2x2_Transp(tFP32M2x2 mtrx);
 tFP32 tFP32M2x2_Det(tFP32M2x2 mtrx);
@@ -104,7 +104,7 @@ tFP32M2x2 tFP32M2x2_MulFlt(tFP32M2x2 mtrx, tFP32 mod)
 tFP32M2x2 tFP32M2x2_DivFlt(tFP32M2x2 mtrx, tFP32 mod)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(mod, 0.0F))
+	if (tFP32_IsNearby(mod, 0.0F))
 	{
 		mtrx.m00 = tFP32_IsNeg(mtrx.m00) ? tFP32_NegInf() : tFP32_Inf();
 		mtrx.m01 = tFP32_IsNeg(mtrx.m01) ? tFP32_NegInf() : tFP32_Inf();
@@ -113,7 +113,7 @@ tFP32M2x2 tFP32M2x2_DivFlt(tFP32M2x2 mtrx, tFP32 mod)
 		return mtrx;
 	}
 #else
-	Assertion(!tFP32_Nearby(mod, 0.0F));
+	Assertion(!tFP32_IsNearby(mod, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
@@ -123,18 +123,18 @@ tFP32M2x2 tFP32M2x2_DivFlt(tFP32M2x2 mtrx, tFP32 mod)
 }
 tBln tFP32M2x2_DivFlt_safe(tFP32M2x2 *mtrx, tFP32 mod)
 {
-	if (tFP32_Nearby(mod, 0.0F)) return True;
+	if (tFP32_IsNearby(mod, 0.0F)) return True;
 	mtrx->m00 /= mod;
 	mtrx->m01 /= mod;
 	mtrx->m10 /= mod;
 	mtrx->m11 /= mod;
 	return False;
 }
-tBln tFP32M2x2_Eq(tFP32M2x2 mtrx1, tFP32M2x2 mtrx2)
+tBln tFP32M2x2_IsEq(tFP32M2x2 mtrx1, tFP32M2x2 mtrx2)
 {
-	return tFP32_Nearby(mtrx1.m00, mtrx2.m00) && tFP32_Nearby(mtrx1.m01, mtrx2.m01) && tFP32_Nearby(mtrx1.m10, mtrx2.m10) && tFP32_Nearby(mtrx1.m11, mtrx2.m11);
+	return tFP32_IsNearby(mtrx1.m00, mtrx2.m00) && tFP32_IsNearby(mtrx1.m01, mtrx2.m01) && tFP32_IsNearby(mtrx1.m10, mtrx2.m10) && tFP32_IsNearby(mtrx1.m11, mtrx2.m11);
 }
-tBln tFP32M2x2_Nearby(tFP32M2x2 mtrx1, tFP32M2x2 mtrx2, tFP32 eps)
+tBln tFP32M2x2_IsNearby(tFP32M2x2 mtrx1, tFP32M2x2 mtrx2, tFP32 eps)
 {
 	return (tFP32_Abs(mtrx1.m00 - mtrx2.m00) <= eps) && (tFP32_Abs(mtrx1.m01 - mtrx2.m01) <= eps) && (tFP32_Abs(mtrx1.m10 - mtrx2.m10) <= eps) && (tFP32_Abs(mtrx1.m11 - mtrx2.m11) <= eps);
 }
@@ -249,12 +249,12 @@ tNone tFP32M2x2_RowEch(tFP32M2x2 *mtrx)
 	{
 		if (pivotRow >= 2U) break;
 		tBln foundPivot = False;
-		if (!tFP32_Nearby(mtrx->m[pivotRow][col], 0.0F)) foundPivot = True;
+		if (!tFP32_IsNearby(mtrx->m[pivotRow][col], 0.0F)) foundPivot = True;
 		else
 		{
 			for (tIU8 idx = 1U; idx < 2U - pivotRow; ++idx)
 			{
-				if (!tFP32_Nearby(mtrx->m[pivotRow + idx][col], 0.0F))
+				if (!tFP32_IsNearby(mtrx->m[pivotRow + idx][col], 0.0F))
 				{
 					tFP32M2x2_RowSwap(mtrx);
 					foundPivot = True;
@@ -292,7 +292,7 @@ tFP32M2x2 tFP32M2x2_InvAff(tFP32M2x2 mtrx)
 }
 ForceInline tBln tFP32M2x2_IsAff(tFP32M2x2 mtrx)
 {
-	return tFP32_Nearby(mtrx.m10, 0.0F) && tFP32_Nearby(mtrx.m11, 0.0F);
+	return tFP32_IsNearby(mtrx.m10, 0.0F) && tFP32_IsNearby(mtrx.m11, 0.0F);
 }
 #endif/*BQSELAYER_MTRX_IMPL*/
 typedef union { struct { tFP32 m00, m01, m02; tFP32 m10, m11, m12; tFP32 m20, m21, m22; }; tFP32 m[3][3]; tFP32V3D row[3]; } tFP32M3x3;
@@ -308,8 +308,8 @@ tFP32M3x3 tFP32M3x3_MulFlt(tFP32M3x3 mtrx, tFP32 mod);
 tFP32M3x3 tFP32M3x3_DivFlt(tFP32M3x3 mtrx, tFP32 mod);
 /*Note: Returns `False` on success.*/
 tBln tFP32M3x3_DivFlt_safe(tFP32M3x3 *mtrx, tFP32 mod);
-tBln tFP32M3x3_Eq(tFP32M3x3 mtrx1, tFP32M3x3 mtrx2);
-tBln tFP32M3x3_Nearby(tFP32M3x3 mtrx1, tFP32M3x3 mtrx2, tFP32 eps);
+tBln tFP32M3x3_IsEq(tFP32M3x3 mtrx1, tFP32M3x3 mtrx2);
+tBln tFP32M3x3_IsNearby(tFP32M3x3 mtrx1, tFP32M3x3 mtrx2, tFP32 eps);
 tFP32V3D tFP32M3x3_MulVect(tFP32M3x3 mtrx, tFP32V3D vect);
 tFP32M3x3 tFP32M3x3_Transp(tFP32M3x3 mtrx);
 tFP32 tFP32M3x3_Det(tFP32M3x3 mtrx);
@@ -420,7 +420,7 @@ tFP32M3x3 tFP32M3x3_MulFlt(tFP32M3x3 mtrx, tFP32 mod)
 tFP32M3x3 tFP32M3x3_DivFlt(tFP32M3x3 mtrx, tFP32 mod)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(mod, 0.0F))
+	if (tFP32_IsNearby(mod, 0.0F))
 	{
 		mtrx.m00 = tFP32_IsNeg(mtrx.m00) ? tFP32_NegInf() : tFP32_Inf();
 		mtrx.m01 = tFP32_IsNeg(mtrx.m01) ? tFP32_NegInf() : tFP32_Inf();
@@ -434,7 +434,7 @@ tFP32M3x3 tFP32M3x3_DivFlt(tFP32M3x3 mtrx, tFP32 mod)
 		return mtrx;
 	}
 #else
-	Assertion(!tFP32_Nearby(mod, 0.0F));
+	Assertion(!tFP32_IsNearby(mod, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
@@ -449,7 +449,7 @@ tFP32M3x3 tFP32M3x3_DivFlt(tFP32M3x3 mtrx, tFP32 mod)
 }
 tBln tFP32M3x3_DivFlt_safe(tFP32M3x3 *mtrx, tFP32 mod)
 {
-	if (tFP32_Nearby(mod, 0.0F)) return True;
+	if (tFP32_IsNearby(mod, 0.0F)) return True;
 	mtrx->m00 /= mod;
 	mtrx->m01 /= mod;
 	mtrx->m02 /= mod;
@@ -461,11 +461,11 @@ tBln tFP32M3x3_DivFlt_safe(tFP32M3x3 *mtrx, tFP32 mod)
 	mtrx->m22 /= mod;
 	return False;
 }
-tBln tFP32M3x3_Eq(tFP32M3x3 mtrx1, tFP32M3x3 mtrx2)
+tBln tFP32M3x3_IsEq(tFP32M3x3 mtrx1, tFP32M3x3 mtrx2)
 {
-	return tFP32_Nearby(mtrx1.m00, mtrx2.m00) && tFP32_Nearby(mtrx1.m01, mtrx2.m01) && tFP32_Nearby(mtrx1.m02, mtrx2.m02) && tFP32_Nearby(mtrx1.m10, mtrx2.m10) && tFP32_Nearby(mtrx1.m11, mtrx2.m11) && tFP32_Nearby(mtrx1.m12, mtrx2.m12) && tFP32_Nearby(mtrx1.m20, mtrx2.m20) && tFP32_Nearby(mtrx1.m21, mtrx2.m21) && tFP32_Nearby(mtrx1.m22, mtrx2.m22);
+	return tFP32_IsNearby(mtrx1.m00, mtrx2.m00) && tFP32_IsNearby(mtrx1.m01, mtrx2.m01) && tFP32_IsNearby(mtrx1.m02, mtrx2.m02) && tFP32_IsNearby(mtrx1.m10, mtrx2.m10) && tFP32_IsNearby(mtrx1.m11, mtrx2.m11) && tFP32_IsNearby(mtrx1.m12, mtrx2.m12) && tFP32_IsNearby(mtrx1.m20, mtrx2.m20) && tFP32_IsNearby(mtrx1.m21, mtrx2.m21) && tFP32_IsNearby(mtrx1.m22, mtrx2.m22);
 }
-tBln tFP32M3x3_Nearby(tFP32M3x3 mtrx1, tFP32M3x3 mtrx2, tFP32 eps)
+tBln tFP32M3x3_IsNearby(tFP32M3x3 mtrx1, tFP32M3x3 mtrx2, tFP32 eps)
 {
 	return (tFP32_Abs(mtrx1.m00 - mtrx2.m00) <= eps) && (tFP32_Abs(mtrx1.m01 - mtrx2.m01) <= eps) && (tFP32_Abs(mtrx1.m02 - mtrx2.m02) <= eps) && (tFP32_Abs(mtrx1.m10 - mtrx2.m10) <= eps) && (tFP32_Abs(mtrx1.m11 - mtrx2.m11) <= eps) && (tFP32_Abs(mtrx1.m12 - mtrx2.m12) <= eps) && (tFP32_Abs(mtrx1.m20 - mtrx2.m20) <= eps) && (tFP32_Abs(mtrx1.m21 - mtrx2.m21) <= eps) && (tFP32_Abs(mtrx1.m22 - mtrx2.m22) <= eps);
 }
@@ -610,12 +610,12 @@ tNone tFP32M3x3_RowEch(tFP32M3x3 *mtrx)
 	{
 		if (pivotRow >= 3U) break;
 		tBln foundPivot = False;
-		if (!tFP32_Nearby(mtrx->m[pivotRow][col], 0.0F)) foundPivot = True;
+		if (!tFP32_IsNearby(mtrx->m[pivotRow][col], 0.0F)) foundPivot = True;
 		else
 		{
 			for (tIU8 idx = 1U; idx < 3U - pivotRow; ++idx)
 			{
-				if (!tFP32_Nearby(mtrx->m[pivotRow + idx][col], 0.0F))
+				if (!tFP32_IsNearby(mtrx->m[pivotRow + idx][col], 0.0F))
 				{
 					tFP32M3x3_RowSwap(mtrx, pivotRow, pivotRow + idx);
 					foundPivot = True;
@@ -638,7 +638,7 @@ tNone tFP32M3x3_RowRedEch(tFP32M3x3 *mtrx)
 		tIU8 pivotCol = 0;
 		for (tIU8 col = 0U; col < 3; ++col)
 		{
-			if (!tFP32_Nearby(mtrx->m[row][col], 0.0F))
+			if (!tFP32_IsNearby(mtrx->m[row][col], 0.0F))
 			{
 				foundPivot = True;
 				pivotCol = col;
@@ -668,7 +668,7 @@ tFP32M3x3 tFP32M3x3_InvAff(tFP32M3x3 mtrx)
 }
 ForceInline tBln tFP32M3x3_IsAff(tFP32M3x3 mtrx)
 {
-	return tFP32_Nearby(mtrx.m20, 0.0F) && tFP32_Nearby(mtrx.m21, 0.0F) && tFP32_Nearby(mtrx.m22, 0.0F);
+	return tFP32_IsNearby(mtrx.m20, 0.0F) && tFP32_IsNearby(mtrx.m21, 0.0F) && tFP32_IsNearby(mtrx.m22, 0.0F);
 }
 #endif/*BQSELAYER_MTRX_IMPL*/
 typedef union { struct { tFP32 m00, m01, m02, m03; tFP32 m10, m11, m12, m13; tFP32 m20, m21, m22, m23; tFP32 m30, m31, m32, m33; }; tFP32 m[4][4]; tFP32V4D row[4]; } tFP32M4x4;
@@ -684,8 +684,8 @@ tFP32M4x4 tFP32M4x4_MulFlt(tFP32M4x4 mtrx, tFP32 mod);
 tFP32M4x4 tFP32M4x4_DivFlt(tFP32M4x4 mtrx, tFP32 mod);
 /*Note: Returns `False` on success.*/
 tBln tFP32M4x4_DivFlt_safe(tFP32M4x4 *mtrx, tFP32 mod);
-tBln tFP32M4x4_Eq(tFP32M4x4 mtrx1, tFP32M4x4 mtrx2);
-tBln tFP32M4x4_Nearby(tFP32M4x4 mtrx1, tFP32M4x4 mtrx2, tFP32 eps);
+tBln tFP32M4x4_IsEq(tFP32M4x4 mtrx1, tFP32M4x4 mtrx2);
+tBln tFP32M4x4_IsNearby(tFP32M4x4 mtrx1, tFP32M4x4 mtrx2, tFP32 eps);
 tFP32V4D tFP32M4x4_MulVect(tFP32M4x4 mtrx, tFP32V4D vect);
 tFP32M4x4 tFP32M4x4_Transp(tFP32M4x4 mtrx);
 tFP32 tFP32M4x4_Det(tFP32M4x4 mtrx);
@@ -860,7 +860,7 @@ tFP32M4x4 tFP32M4x4_MulFlt(tFP32M4x4 mtrx, tFP32 mod)
 tFP32M4x4 tFP32M4x4_DivFlt(tFP32M4x4 mtrx, tFP32 mod)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP32_Nearby(mod, 0.0F))
+	if (tFP32_IsNearby(mod, 0.0F))
 	{
 		mtrx.m00 = tFP32_IsNeg(mtrx.m00) ? tFP32_NegInf() : tFP32_Inf();
 		mtrx.m01 = tFP32_IsNeg(mtrx.m01) ? tFP32_NegInf() : tFP32_Inf();
@@ -881,7 +881,7 @@ tFP32M4x4 tFP32M4x4_DivFlt(tFP32M4x4 mtrx, tFP32 mod)
 		return mtrx;
 	}
 #else
-	Assertion(!tFP32_Nearby(mod, 0.0F));
+	Assertion(!tFP32_IsNearby(mod, 0.0F));
 #endif/*BQSELAYER_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
@@ -903,7 +903,7 @@ tFP32M4x4 tFP32M4x4_DivFlt(tFP32M4x4 mtrx, tFP32 mod)
 }
 tBln tFP32M4x4_DivFlt_safe(tFP32M4x4 *mtrx, tFP32 mod)
 {
-	if (tFP32_Nearby(mod, 0.0F)) return True;
+	if (tFP32_IsNearby(mod, 0.0F)) return True;
 	mtrx->m00 /= mod;
 	mtrx->m01 /= mod;
 	mtrx->m02 /= mod;
@@ -922,11 +922,11 @@ tBln tFP32M4x4_DivFlt_safe(tFP32M4x4 *mtrx, tFP32 mod)
 	mtrx->m33 /= mod;
 	return False;
 }
-tBln tFP32M4x4_Eq(tFP32M4x4 mtrx1, tFP32M4x4 mtrx2)
+tBln tFP32M4x4_IsEq(tFP32M4x4 mtrx1, tFP32M4x4 mtrx2)
 {
-	return tFP32_Nearby(mtrx1.m00, mtrx2.m00) && tFP32_Nearby(mtrx1.m01, mtrx2.m01) && tFP32_Nearby(mtrx1.m02, mtrx2.m02) && tFP32_Nearby(mtrx1.m03, mtrx2.m03) && tFP32_Nearby(mtrx1.m10, mtrx2.m10) && tFP32_Nearby(mtrx1.m11, mtrx2.m11) && tFP32_Nearby(mtrx1.m12, mtrx2.m12) && tFP32_Nearby(mtrx1.m13, mtrx2.m13) && tFP32_Nearby(mtrx1.m20, mtrx2.m20) && tFP32_Nearby(mtrx1.m21, mtrx2.m21) && tFP32_Nearby(mtrx1.m22, mtrx2.m22) && tFP32_Nearby(mtrx1.m23, mtrx2.m23) && tFP32_Nearby(mtrx1.m30, mtrx2.m30) && tFP32_Nearby(mtrx1.m31, mtrx2.m31) && tFP32_Nearby(mtrx1.m32, mtrx2.m32) && tFP32_Nearby(mtrx1.m33, mtrx2.m33);
+	return tFP32_IsNearby(mtrx1.m00, mtrx2.m00) && tFP32_IsNearby(mtrx1.m01, mtrx2.m01) && tFP32_IsNearby(mtrx1.m02, mtrx2.m02) && tFP32_IsNearby(mtrx1.m03, mtrx2.m03) && tFP32_IsNearby(mtrx1.m10, mtrx2.m10) && tFP32_IsNearby(mtrx1.m11, mtrx2.m11) && tFP32_IsNearby(mtrx1.m12, mtrx2.m12) && tFP32_IsNearby(mtrx1.m13, mtrx2.m13) && tFP32_IsNearby(mtrx1.m20, mtrx2.m20) && tFP32_IsNearby(mtrx1.m21, mtrx2.m21) && tFP32_IsNearby(mtrx1.m22, mtrx2.m22) && tFP32_IsNearby(mtrx1.m23, mtrx2.m23) && tFP32_IsNearby(mtrx1.m30, mtrx2.m30) && tFP32_IsNearby(mtrx1.m31, mtrx2.m31) && tFP32_IsNearby(mtrx1.m32, mtrx2.m32) && tFP32_IsNearby(mtrx1.m33, mtrx2.m33);
 }
-tBln tFP32M4x4_Nearby(tFP32M4x4 mtrx1, tFP32M4x4 mtrx2, tFP32 eps)
+tBln tFP32M4x4_IsNearby(tFP32M4x4 mtrx1, tFP32M4x4 mtrx2, tFP32 eps)
 {
 	return (tFP32_Abs(mtrx1.m00 - mtrx2.m00) <= eps) && (tFP32_Abs(mtrx1.m01 - mtrx2.m01) <= eps) && (tFP32_Abs(mtrx1.m02 - mtrx2.m02) <= eps) && (tFP32_Abs(mtrx1.m03 - mtrx2.m03) <= eps) && (tFP32_Abs(mtrx1.m10 - mtrx2.m10) <= eps) && (tFP32_Abs(mtrx1.m11 - mtrx2.m11) <= eps) && (tFP32_Abs(mtrx1.m12 - mtrx2.m12) <= eps) && (tFP32_Abs(mtrx1.m13 - mtrx2.m13) <= eps) && (tFP32_Abs(mtrx1.m20 - mtrx2.m20) <= eps) && (tFP32_Abs(mtrx1.m21 - mtrx2.m21) <= eps) && (tFP32_Abs(mtrx1.m22 - mtrx2.m22) <= eps) && (tFP32_Abs(mtrx1.m23 - mtrx2.m23) <= eps) && (tFP32_Abs(mtrx1.m30 - mtrx2.m30) <= eps) && (tFP32_Abs(mtrx1.m31 - mtrx2.m31) <= eps) && (tFP32_Abs(mtrx1.m32 - mtrx2.m32) <= eps) && (tFP32_Abs(mtrx1.m33 - mtrx2.m33) <= eps);
 }
@@ -1122,12 +1122,12 @@ tNone tFP32M4x4_RowEch(tFP32M4x4 *mtrx)
 	{
 		if (pivotRow >= 4U) break;
 		tBln foundPivot = False;
-		if (!tFP32_Nearby(mtrx->m[pivotRow][col], 0.0F)) foundPivot = True;
+		if (!tFP32_IsNearby(mtrx->m[pivotRow][col], 0.0F)) foundPivot = True;
 		else
 		{
 			for (tIU8 idx = 1U; idx < 4U - pivotRow; ++idx)
 			{
-				if (!tFP32_Nearby(mtrx->m[pivotRow + idx][col], 0.0F))
+				if (!tFP32_IsNearby(mtrx->m[pivotRow + idx][col], 0.0F))
 				{
 					tFP32M4x4_RowSwap(mtrx, pivotRow, pivotRow + idx);
 					foundPivot = True;
@@ -1150,7 +1150,7 @@ tNone tFP32M4x4_RowRedEch(tFP32M4x4 *mtrx)
 		tIU8 pivotCol = 0;
 		for (tIU8 col = 0U; col < 4; ++col)
 		{
-			if (!tFP32_Nearby(mtrx->m[row][col], 0.0F))
+			if (!tFP32_IsNearby(mtrx->m[row][col], 0.0F))
 			{
 				foundPivot = True;
 				pivotCol = col;
@@ -1372,7 +1372,7 @@ tFP32M4x4 tFP32M4x4_Persp(tFP32 fov, tFP32 aspRatio, tFP32 near, tFP32 far, tIS8
 }
 tBln tFP32M4x4_IsAff(tFP32M4x4 mtrx)
 {
-	return tFP32_Nearby(mtrx.m30, 0.0F) && tFP32_Nearby(mtrx.m31, 0.0F) && tFP32_Nearby(mtrx.m32, 0.0F) && tFP32_Nearby(mtrx.m33, 1.0F);
+	return tFP32_IsNearby(mtrx.m30, 0.0F) && tFP32_IsNearby(mtrx.m31, 0.0F) && tFP32_IsNearby(mtrx.m32, 0.0F) && tFP32_IsNearby(mtrx.m33, 1.0F);
 }
 tFP32M4x4 tFP32M4x4_LookAt(tFP32V3D eye, tFP32V3D target, tFP32V3D up)
 {
@@ -1427,8 +1427,8 @@ tFP64M2x2 tFP64M2x2_MulDbl(tFP64M2x2 mtrx, tFP64 mod);
 tFP64M2x2 tFP64M2x2_DivDbl(tFP64M2x2 mtrx, tFP64 mod);
 /*Note: Returns `False` on success.*/
 tBln tFP64M2x2_DivDbl_safe(tFP64M2x2 *mtrx, tFP64 mod);
-tBln tFP64M2x2_Eq(tFP64M2x2 mtrx1, tFP64M2x2 mtrx2);
-tBln tFP64M2x2_Nearby(tFP64M2x2 mtrx1, tFP64M2x2 mtrx2, tFP64 eps);
+tBln tFP64M2x2_IsEq(tFP64M2x2 mtrx1, tFP64M2x2 mtrx2);
+tBln tFP64M2x2_IsNearby(tFP64M2x2 mtrx1, tFP64M2x2 mtrx2, tFP64 eps);
 tFP64V2D tFP64M2x2_MulVect(tFP64M2x2 mtrx, tFP64V2D vect);
 tFP64M2x2 tFP64M2x2_Transp(tFP64M2x2 mtrx);
 tFP64 tFP64M2x2_Det(tFP64M2x2 mtrx);
@@ -1516,7 +1516,7 @@ tFP64M2x2 tFP64M2x2_MulDbl(tFP64M2x2 mtrx, tFP64 mod)
 tFP64M2x2 tFP64M2x2_DivDbl(tFP64M2x2 mtrx, tFP64 mod)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(mod, 0.0))
+	if (tFP64_IsNearby(mod, 0.0))
 	{
 		mtrx.m00 = tFP64_IsNeg(mtrx.m00) ? tFP64_NegInf() : tFP64_Inf();
 		mtrx.m01 = tFP64_IsNeg(mtrx.m01) ? tFP64_NegInf() : tFP64_Inf();
@@ -1525,7 +1525,7 @@ tFP64M2x2 tFP64M2x2_DivDbl(tFP64M2x2 mtrx, tFP64 mod)
 		return mtrx;
 	}
 #else
-	Assertion(!tFP64_Nearby(mod, 0.0));
+	Assertion(!tFP64_IsNearby(mod, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
@@ -1535,18 +1535,18 @@ tFP64M2x2 tFP64M2x2_DivDbl(tFP64M2x2 mtrx, tFP64 mod)
 }
 tBln tFP64M2x2_DivDbl_safe(tFP64M2x2 *mtrx, tFP64 mod)
 {
-	if (tFP64_Nearby(mod, 0.0)) return True;
+	if (tFP64_IsNearby(mod, 0.0)) return True;
 	mtrx->m00 /= mod;
 	mtrx->m01 /= mod;
 	mtrx->m10 /= mod;
 	mtrx->m11 /= mod;
 	return False;
 }
-tBln tFP64M2x2_Eq(tFP64M2x2 mtrx1, tFP64M2x2 mtrx2)
+tBln tFP64M2x2_IsEq(tFP64M2x2 mtrx1, tFP64M2x2 mtrx2)
 {
-	return tFP64_Nearby(mtrx1.m00, mtrx2.m00) && tFP64_Nearby(mtrx1.m01, mtrx2.m01) && tFP64_Nearby(mtrx1.m10, mtrx2.m10) && tFP64_Nearby(mtrx1.m11, mtrx2.m11);
+	return tFP64_IsNearby(mtrx1.m00, mtrx2.m00) && tFP64_IsNearby(mtrx1.m01, mtrx2.m01) && tFP64_IsNearby(mtrx1.m10, mtrx2.m10) && tFP64_IsNearby(mtrx1.m11, mtrx2.m11);
 }
-tBln tFP64M2x2_Nearby(tFP64M2x2 mtrx1, tFP64M2x2 mtrx2, tFP64 eps)
+tBln tFP64M2x2_IsNearby(tFP64M2x2 mtrx1, tFP64M2x2 mtrx2, tFP64 eps)
 {
 	return (tFP64_Abs(mtrx1.m00 - mtrx2.m00) <= eps) && (tFP64_Abs(mtrx1.m01 - mtrx2.m01) <= eps) && (tFP64_Abs(mtrx1.m10 - mtrx2.m10) <= eps) && (tFP64_Abs(mtrx1.m11 - mtrx2.m11) <= eps);
 }
@@ -1661,12 +1661,12 @@ tNone tFP64M2x2_RowEch(tFP64M2x2 *mtrx)
 	{
 		if (pivotRow >= 2U) break;
 		tBln foundPivot = False;
-		if (!tFP64_Nearby(mtrx->m[pivotRow][col], 0.0)) foundPivot = True;
+		if (!tFP64_IsNearby(mtrx->m[pivotRow][col], 0.0)) foundPivot = True;
 		else
 		{
 			for (tIU8 idx = 1U; idx < 2U - pivotRow; ++idx)
 			{
-				if (!tFP64_Nearby(mtrx->m[pivotRow + idx][col], 0.0))
+				if (!tFP64_IsNearby(mtrx->m[pivotRow + idx][col], 0.0))
 				{
 					tFP64M2x2_RowSwap(mtrx);
 					foundPivot = True;
@@ -1704,7 +1704,7 @@ tFP64M2x2 tFP64M2x2_InvAff(tFP64M2x2 mtrx)
 }
 ForceInline tBln tFP64M2x2_IsAff(tFP64M2x2 mtrx)
 {
-	return tFP64_Nearby(mtrx.m10, 0.0) && tFP64_Nearby(mtrx.m11, 0.0);
+	return tFP64_IsNearby(mtrx.m10, 0.0) && tFP64_IsNearby(mtrx.m11, 0.0);
 }
 #endif/*BQSELAYER_MTRX_IMPL*/
 typedef union { struct { tFP64 m00, m01, m02; tFP64 m10, m11, m12; tFP64 m20, m21, m22; }; tFP64 m[3][3]; tFP64V3D row[3]; } tFP64M3x3;
@@ -1720,8 +1720,8 @@ tFP64M3x3 tFP64M3x3_MulDbl(tFP64M3x3 mtrx, tFP64 mod);
 tFP64M3x3 tFP64M3x3_DivDbl(tFP64M3x3 mtrx, tFP64 mod);
 /*Note: Returns `False` on success.*/
 tBln tFP64M3x3_DivDbl_safe(tFP64M3x3 *mtrx, tFP64 mod);
-tBln tFP64M3x3_Eq(tFP64M3x3 mtrx1, tFP64M3x3 mtrx2);
-tBln tFP64M3x3_Nearby(tFP64M3x3 mtrx1, tFP64M3x3 mtrx2, tFP64 eps);
+tBln tFP64M3x3_IsEq(tFP64M3x3 mtrx1, tFP64M3x3 mtrx2);
+tBln tFP64M3x3_IsNearby(tFP64M3x3 mtrx1, tFP64M3x3 mtrx2, tFP64 eps);
 tFP64V3D tFP64M3x3_MulVect(tFP64M3x3 mtrx, tFP64V3D vect);
 tFP64M3x3 tFP64M3x3_Transp(tFP64M3x3 mtrx);
 tFP64 tFP64M3x3_Det(tFP64M3x3 mtrx);
@@ -1832,7 +1832,7 @@ tFP64M3x3 tFP64M3x3_MulDbl(tFP64M3x3 mtrx, tFP64 mod)
 tFP64M3x3 tFP64M3x3_DivDbl(tFP64M3x3 mtrx, tFP64 mod)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(mod, 0.0))
+	if (tFP64_IsNearby(mod, 0.0))
 	{
 		mtrx.m00 = tFP64_IsNeg(mtrx.m00) ? tFP64_NegInf() : tFP64_Inf();
 		mtrx.m01 = tFP64_IsNeg(mtrx.m01) ? tFP64_NegInf() : tFP64_Inf();
@@ -1846,7 +1846,7 @@ tFP64M3x3 tFP64M3x3_DivDbl(tFP64M3x3 mtrx, tFP64 mod)
 		return mtrx;
 	}
 #else
-	Assertion(!tFP64_Nearby(mod, 0.0));
+	Assertion(!tFP64_IsNearby(mod, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
@@ -1861,7 +1861,7 @@ tFP64M3x3 tFP64M3x3_DivDbl(tFP64M3x3 mtrx, tFP64 mod)
 }
 tBln tFP64M3x3_DivDbl_safe(tFP64M3x3 *mtrx, tFP64 mod)
 {
-	if (tFP64_Nearby(mod, 0.0)) return True;
+	if (tFP64_IsNearby(mod, 0.0)) return True;
 	mtrx->m00 /= mod;
 	mtrx->m01 /= mod;
 	mtrx->m02 /= mod;
@@ -1873,11 +1873,11 @@ tBln tFP64M3x3_DivDbl_safe(tFP64M3x3 *mtrx, tFP64 mod)
 	mtrx->m22 /= mod;
 	return False;
 }
-tBln tFP64M3x3_Eq(tFP64M3x3 mtrx1, tFP64M3x3 mtrx2)
+tBln tFP64M3x3_IsEq(tFP64M3x3 mtrx1, tFP64M3x3 mtrx2)
 {
-	return tFP64_Nearby(mtrx1.m00, mtrx2.m00) && tFP64_Nearby(mtrx1.m01, mtrx2.m01) && tFP64_Nearby(mtrx1.m02, mtrx2.m02) && tFP64_Nearby(mtrx1.m10, mtrx2.m10) && tFP64_Nearby(mtrx1.m11, mtrx2.m11) && tFP64_Nearby(mtrx1.m12, mtrx2.m12) && tFP64_Nearby(mtrx1.m20, mtrx2.m20) && tFP64_Nearby(mtrx1.m21, mtrx2.m21) && tFP64_Nearby(mtrx1.m22, mtrx2.m22);
+	return tFP64_IsNearby(mtrx1.m00, mtrx2.m00) && tFP64_IsNearby(mtrx1.m01, mtrx2.m01) && tFP64_IsNearby(mtrx1.m02, mtrx2.m02) && tFP64_IsNearby(mtrx1.m10, mtrx2.m10) && tFP64_IsNearby(mtrx1.m11, mtrx2.m11) && tFP64_IsNearby(mtrx1.m12, mtrx2.m12) && tFP64_IsNearby(mtrx1.m20, mtrx2.m20) && tFP64_IsNearby(mtrx1.m21, mtrx2.m21) && tFP64_IsNearby(mtrx1.m22, mtrx2.m22);
 }
-tBln tFP64M3x3_Nearby(tFP64M3x3 mtrx1, tFP64M3x3 mtrx2, tFP64 eps)
+tBln tFP64M3x3_IsNearby(tFP64M3x3 mtrx1, tFP64M3x3 mtrx2, tFP64 eps)
 {
 	return (tFP64_Abs(mtrx1.m00 - mtrx2.m00) <= eps) && (tFP64_Abs(mtrx1.m01 - mtrx2.m01) <= eps) && (tFP64_Abs(mtrx1.m02 - mtrx2.m02) <= eps) && (tFP64_Abs(mtrx1.m10 - mtrx2.m10) <= eps) && (tFP64_Abs(mtrx1.m11 - mtrx2.m11) <= eps) && (tFP64_Abs(mtrx1.m12 - mtrx2.m12) <= eps) && (tFP64_Abs(mtrx1.m20 - mtrx2.m20) <= eps) && (tFP64_Abs(mtrx1.m21 - mtrx2.m21) <= eps) && (tFP64_Abs(mtrx1.m22 - mtrx2.m22) <= eps);
 }
@@ -2022,12 +2022,12 @@ tNone tFP64M3x3_RowEch(tFP64M3x3 *mtrx)
 	{
 		if (pivotRow >= 3U) break;
 		tBln foundPivot = False;
-		if (!tFP64_Nearby(mtrx->m[pivotRow][col], 0.0)) foundPivot = True;
+		if (!tFP64_IsNearby(mtrx->m[pivotRow][col], 0.0)) foundPivot = True;
 		else
 		{
 			for (tIU8 idx = 1U; idx < 3U - pivotRow; ++idx)
 			{
-				if (!tFP64_Nearby(mtrx->m[pivotRow + idx][col], 0.0))
+				if (!tFP64_IsNearby(mtrx->m[pivotRow + idx][col], 0.0))
 				{
 					tFP64M3x3_RowSwap(mtrx, pivotRow, pivotRow + idx);
 					foundPivot = True;
@@ -2050,7 +2050,7 @@ tNone tFP64M3x3_RowRedEch(tFP64M3x3 *mtrx)
 		tIU8 pivotCol = 0;
 		for (tIU8 col = 0U; col < 3; ++col)
 		{
-			if (!tFP64_Nearby(mtrx->m[row][col], 0.0))
+			if (!tFP64_IsNearby(mtrx->m[row][col], 0.0))
 			{
 				foundPivot = True;
 				pivotCol = col;
@@ -2080,7 +2080,7 @@ tFP64M3x3 tFP64M3x3_InvAff(tFP64M3x3 mtrx)
 }
 ForceInline tBln tFP64M3x3_IsAff(tFP64M3x3 mtrx)
 {
-	return tFP64_Nearby(mtrx.m20, 0.0F) && tFP64_Nearby(mtrx.m21, 0.0F) && tFP64_Nearby(mtrx.m22, 0.0F);
+	return tFP64_IsNearby(mtrx.m20, 0.0F) && tFP64_IsNearby(mtrx.m21, 0.0F) && tFP64_IsNearby(mtrx.m22, 0.0F);
 }
 #endif/*BQSELAYER_MTRX_IMPL*/
 typedef union { struct { tFP64 m00, m01, m02, m03; tFP64 m10, m11, m12, m13; tFP64 m20, m21, m22, m23; tFP64 m30, m31, m64, m33; }; tFP64 m[4][4]; tFP64V4D row[4]; } tFP64M4x4;
@@ -2096,8 +2096,8 @@ tFP64M4x4 tFP64M4x4_MulDbl(tFP64M4x4 mtrx, tFP64 mod);
 tFP64M4x4 tFP64M4x4_DivDbl(tFP64M4x4 mtrx, tFP64 mod);
 /*Note: Returns `False` on success.*/
 tBln tFP64M4x4_DivDbl_safe(tFP64M4x4 *mtrx, tFP64 mod);
-tBln tFP64M4x4_Eq(tFP64M4x4 mtrx1, tFP64M4x4 mtrx2);
-tBln tFP64M4x4_Nearby(tFP64M4x4 mtrx1, tFP64M4x4 mtrx2, tFP64 eps);
+tBln tFP64M4x4_IsEq(tFP64M4x4 mtrx1, tFP64M4x4 mtrx2);
+tBln tFP64M4x4_IsNearby(tFP64M4x4 mtrx1, tFP64M4x4 mtrx2, tFP64 eps);
 tFP64V4D tFP64M4x4_MulVect(tFP64M4x4 mtrx, tFP64V4D vect);
 tFP64M4x4 tFP64M4x4_Transp(tFP64M4x4 mtrx);
 tFP64 tFP64M4x4_Det(tFP64M4x4 mtrx);
@@ -2272,7 +2272,7 @@ tFP64M4x4 tFP64M4x4_MulDbl(tFP64M4x4 mtrx, tFP64 mod)
 tFP64M4x4 tFP64M4x4_DivDbl(tFP64M4x4 mtrx, tFP64 mod)
 {
 #ifndef BQSELAYER_DEBUG
-	if (tFP64_Nearby(mod, 0.0))
+	if (tFP64_IsNearby(mod, 0.0))
 	{
 		mtrx.m00 = tFP64_IsNeg(mtrx.m00) ? tFP64_NegInf() : tFP64_Inf();
 		mtrx.m01 = tFP64_IsNeg(mtrx.m01) ? tFP64_NegInf() : tFP64_Inf();
@@ -2293,7 +2293,7 @@ tFP64M4x4 tFP64M4x4_DivDbl(tFP64M4x4 mtrx, tFP64 mod)
 		return mtrx;
 	}
 #else
-	Assertion(!tFP64_Nearby(mod, 0.0));
+	Assertion(!tFP64_IsNearby(mod, 0.0));
 #endif/*BQSELAYER_DEBUG*/
 	mtrx.m00 /= mod;
 	mtrx.m01 /= mod;
@@ -2315,7 +2315,7 @@ tFP64M4x4 tFP64M4x4_DivDbl(tFP64M4x4 mtrx, tFP64 mod)
 }
 tBln tFP64M4x4_DivDbl_safe(tFP64M4x4 *mtrx, tFP64 mod)
 {
-	if (tFP64_Nearby(mod, 0.0)) return True;
+	if (tFP64_IsNearby(mod, 0.0)) return True;
 	mtrx->m00 /= mod;
 	mtrx->m01 /= mod;
 	mtrx->m02 /= mod;
@@ -2334,11 +2334,11 @@ tBln tFP64M4x4_DivDbl_safe(tFP64M4x4 *mtrx, tFP64 mod)
 	mtrx->m33 /= mod;
 	return False;
 }
-tBln tFP64M4x4_Eq(tFP64M4x4 mtrx1, tFP64M4x4 mtrx2)
+tBln tFP64M4x4_IsEq(tFP64M4x4 mtrx1, tFP64M4x4 mtrx2)
 {
-	return tFP64_Nearby(mtrx1.m00, mtrx2.m00) && tFP64_Nearby(mtrx1.m01, mtrx2.m01) && tFP64_Nearby(mtrx1.m02, mtrx2.m02) && tFP64_Nearby(mtrx1.m03, mtrx2.m03) && tFP64_Nearby(mtrx1.m10, mtrx2.m10) && tFP64_Nearby(mtrx1.m11, mtrx2.m11) && tFP64_Nearby(mtrx1.m12, mtrx2.m12) && tFP64_Nearby(mtrx1.m13, mtrx2.m13) && tFP64_Nearby(mtrx1.m20, mtrx2.m20) && tFP64_Nearby(mtrx1.m21, mtrx2.m21) && tFP64_Nearby(mtrx1.m22, mtrx2.m22) && tFP64_Nearby(mtrx1.m23, mtrx2.m23) && tFP64_Nearby(mtrx1.m30, mtrx2.m30) && tFP64_Nearby(mtrx1.m31, mtrx2.m31) && tFP64_Nearby(mtrx1.m64, mtrx2.m64) && tFP64_Nearby(mtrx1.m33, mtrx2.m33);
+	return tFP64_IsNearby(mtrx1.m00, mtrx2.m00) && tFP64_IsNearby(mtrx1.m01, mtrx2.m01) && tFP64_IsNearby(mtrx1.m02, mtrx2.m02) && tFP64_IsNearby(mtrx1.m03, mtrx2.m03) && tFP64_IsNearby(mtrx1.m10, mtrx2.m10) && tFP64_IsNearby(mtrx1.m11, mtrx2.m11) && tFP64_IsNearby(mtrx1.m12, mtrx2.m12) && tFP64_IsNearby(mtrx1.m13, mtrx2.m13) && tFP64_IsNearby(mtrx1.m20, mtrx2.m20) && tFP64_IsNearby(mtrx1.m21, mtrx2.m21) && tFP64_IsNearby(mtrx1.m22, mtrx2.m22) && tFP64_IsNearby(mtrx1.m23, mtrx2.m23) && tFP64_IsNearby(mtrx1.m30, mtrx2.m30) && tFP64_IsNearby(mtrx1.m31, mtrx2.m31) && tFP64_IsNearby(mtrx1.m64, mtrx2.m64) && tFP64_IsNearby(mtrx1.m33, mtrx2.m33);
 }
-tBln tFP64M4x4_Nearby(tFP64M4x4 mtrx1, tFP64M4x4 mtrx2, tFP64 eps)
+tBln tFP64M4x4_IsNearby(tFP64M4x4 mtrx1, tFP64M4x4 mtrx2, tFP64 eps)
 {
 	return (tFP64_Abs(mtrx1.m00 - mtrx2.m00) <= eps) && (tFP64_Abs(mtrx1.m01 - mtrx2.m01) <= eps) && (tFP64_Abs(mtrx1.m02 - mtrx2.m02) <= eps) && (tFP64_Abs(mtrx1.m03 - mtrx2.m03) <= eps) && (tFP64_Abs(mtrx1.m10 - mtrx2.m10) <= eps) && (tFP64_Abs(mtrx1.m11 - mtrx2.m11) <= eps) && (tFP64_Abs(mtrx1.m12 - mtrx2.m12) <= eps) && (tFP64_Abs(mtrx1.m13 - mtrx2.m13) <= eps) && (tFP64_Abs(mtrx1.m20 - mtrx2.m20) <= eps) && (tFP64_Abs(mtrx1.m21 - mtrx2.m21) <= eps) && (tFP64_Abs(mtrx1.m22 - mtrx2.m22) <= eps) && (tFP64_Abs(mtrx1.m23 - mtrx2.m23) <= eps) && (tFP64_Abs(mtrx1.m30 - mtrx2.m30) <= eps) && (tFP64_Abs(mtrx1.m31 - mtrx2.m31) <= eps) && (tFP64_Abs(mtrx1.m64 - mtrx2.m64) <= eps) && (tFP64_Abs(mtrx1.m33 - mtrx2.m33) <= eps);
 }
@@ -2534,12 +2534,12 @@ tNone tFP64M4x4_RowEch(tFP64M4x4 *mtrx)
 	{
 		if (pivotRow >= 4U) break;
 		tBln foundPivot = False;
-		if (!tFP64_Nearby(mtrx->m[pivotRow][col], 0.0)) foundPivot = True;
+		if (!tFP64_IsNearby(mtrx->m[pivotRow][col], 0.0)) foundPivot = True;
 		else
 		{
 			for (tIU8 idx = 1U; idx < 4U - pivotRow; ++idx)
 			{
-				if (!tFP64_Nearby(mtrx->m[pivotRow + idx][col], 0.0))
+				if (!tFP64_IsNearby(mtrx->m[pivotRow + idx][col], 0.0))
 				{
 					tFP64M4x4_RowSwap(mtrx, pivotRow, pivotRow + idx);
 					foundPivot = True;
@@ -2562,7 +2562,7 @@ tNone tFP64M4x4_RowRedEch(tFP64M4x4 *mtrx)
 		tIU8 pivotCol = 0;
 		for (tIU8 col = 0U; col < 4; ++col)
 		{
-			if (!tFP64_Nearby(mtrx->m[row][col], 0.0))
+			if (!tFP64_IsNearby(mtrx->m[row][col], 0.0))
 			{
 				foundPivot = True;
 				pivotCol = col;
@@ -2784,7 +2784,7 @@ tFP64M4x4 tFP64M4x4_Persp(tFP64 fov, tFP64 aspRatio, tFP64 near, tFP64 far, tIS8
 }
 tBln tFP64M4x4_IsAff(tFP64M4x4 mtrx)
 {
-	return tFP64_Nearby(mtrx.m30, 0.0) && tFP64_Nearby(mtrx.m31, 0.0) && tFP64_Nearby(mtrx.m64, 0.0) && tFP64_Nearby(mtrx.m33, 1.0);
+	return tFP64_IsNearby(mtrx.m30, 0.0) && tFP64_IsNearby(mtrx.m31, 0.0) && tFP64_IsNearby(mtrx.m64, 0.0) && tFP64_IsNearby(mtrx.m33, 1.0);
 }
 tFP64M4x4 tFP64M4x4_LookAt(tFP64V3D eye, tFP64V3D target, tFP64V3D up)
 {
