@@ -1422,11 +1422,11 @@ tF64M2x2 tF64M2x2_Id(tNone);
 tF64M2x2 tF64M2x2_Add(tF64M2x2 mtrx1, tF64M2x2 mtrx2);
 tF64M2x2 tF64M2x2_Sub(tF64M2x2 mtrx1, tF64M2x2 mtrx2);
 tF64M2x2 tF64M2x2_Mul(tF64M2x2 mtrx1, tF64M2x2 mtrx2);
-tF64M2x2 tF64M2x2_MulFlt(tF64M2x2 mtrx, tF64 mod);
+tF64M2x2 tF64M2x2_MulDbl(tF64M2x2 mtrx, tF64 mod);
 /*Warn: Silently returns a matrix with all components either -Inf or +Inf when `mod` is 0.*/
-tF64M2x2 tF64M2x2_DivFlt(tF64M2x2 mtrx, tF64 mod);
+tF64M2x2 tF64M2x2_DivDbl(tF64M2x2 mtrx, tF64 mod);
 /*Note: Returns `False` on success.*/
-tBln tF64M2x2_DivFlt_safe(tF64M2x2 *mtrx, tF64 mod);
+tBln tF64M2x2_DivDbl_safe(tF64M2x2 *mtrx, tF64 mod);
 tBln tF64M2x2_Eq(tF64M2x2 mtrx1, tF64M2x2 mtrx2);
 tBln tF64M2x2_Nearby(tF64M2x2 mtrx1, tF64M2x2 mtrx2, tF64 eps);
 tF64V2D tF64M2x2_MulVect(tF64M2x2 mtrx, tF64V2D vect);
@@ -1505,7 +1505,7 @@ tF64M2x2 tF64M2x2_Mul(tF64M2x2 mtrx1, tF64M2x2 mtrx2)
 	mtrx.m11 = mtrx1.m10 * mtrx2.m01 + mtrx1.m11 * mtrx2.m11;
 	return mtrx;
 }
-tF64M2x2 tF64M2x2_MulFlt(tF64M2x2 mtrx, tF64 mod)
+tF64M2x2 tF64M2x2_MulDbl(tF64M2x2 mtrx, tF64 mod)
 {
 	mtrx.m00 *= mod;
 	mtrx.m01 *= mod;
@@ -1513,7 +1513,7 @@ tF64M2x2 tF64M2x2_MulFlt(tF64M2x2 mtrx, tF64 mod)
 	mtrx.m11 *= mod;
 	return mtrx;
 }
-tF64M2x2 tF64M2x2_DivFlt(tF64M2x2 mtrx, tF64 mod)
+tF64M2x2 tF64M2x2_DivDbl(tF64M2x2 mtrx, tF64 mod)
 {
 #ifndef BQSELAYER_DEBUG
 	if (tF64_Nearby(mod, 0.0))
@@ -1533,7 +1533,7 @@ tF64M2x2 tF64M2x2_DivFlt(tF64M2x2 mtrx, tF64 mod)
 	mtrx.m11 /= mod;
 	return mtrx;
 }
-tBln tF64M2x2_DivFlt_safe(tF64M2x2 *mtrx, tF64 mod)
+tBln tF64M2x2_DivDbl_safe(tF64M2x2 *mtrx, tF64 mod)
 {
 	if (tF64_Nearby(mod, 0.0)) return True;
 	mtrx->m00 /= mod;
@@ -1594,13 +1594,13 @@ tF64M2x2 tF64M2x2_Inv(tF64M2x2 mtrx)
 #else
 	Assertion(tF64_Abs(det) > tF64_Eps);
 #endif/*BQSELAYER_DEBUG*/
-	return tF64M2x2_DivFlt(tF64M2x2_Adj(mtrx), det);
+	return tF64M2x2_DivDbl(tF64M2x2_Adj(mtrx), det);
 }
 tBln tF64M2x2_Inv_safe(tF64M2x2 *mtrx)
 {
 	tF64 det = tF64M2x2_Det(*mtrx);
 	if (tF64_Abs(det) <= tF64_Eps) return True;
-	*mtrx = tF64M2x2_DivFlt(tF64M2x2_Adj(*mtrx), det);
+	*mtrx = tF64M2x2_DivDbl(tF64M2x2_Adj(*mtrx), det);
 	return False;
 }
 tF64M2x2 tF64M2x2_Rot_fast(tF64 ang)
@@ -1715,11 +1715,11 @@ tF64M3x3 tF64M3x3_Id(tNone);
 tF64M3x3 tF64M3x3_Add(tF64M3x3 mtrx1, tF64M3x3 mtrx2);
 tF64M3x3 tF64M3x3_Sub(tF64M3x3 mtrx1, tF64M3x3 mtrx2);
 tF64M3x3 tF64M3x3_Mul(tF64M3x3 mtrx1, tF64M3x3 mtrx2);
-tF64M3x3 tF64M3x3_MulFlt(tF64M3x3 mtrx, tF64 mod);
+tF64M3x3 tF64M3x3_MulDbl(tF64M3x3 mtrx, tF64 mod);
 /*Warn: Silently returns a matrix with all components either -Inf or +Inf when `mod` is 0.*/
-tF64M3x3 tF64M3x3_DivFlt(tF64M3x3 mtrx, tF64 mod);
+tF64M3x3 tF64M3x3_DivDbl(tF64M3x3 mtrx, tF64 mod);
 /*Note: Returns `False` on success.*/
-tBln tF64M3x3_DivFlt_safe(tF64M3x3 *mtrx, tF64 mod);
+tBln tF64M3x3_DivDbl_safe(tF64M3x3 *mtrx, tF64 mod);
 tBln tF64M3x3_Eq(tF64M3x3 mtrx1, tF64M3x3 mtrx2);
 tBln tF64M3x3_Nearby(tF64M3x3 mtrx1, tF64M3x3 mtrx2, tF64 eps);
 tF64V3D tF64M3x3_MulVect(tF64M3x3 mtrx, tF64V3D vect);
@@ -1816,7 +1816,7 @@ tF64M3x3 tF64M3x3_Mul(tF64M3x3 mtrx1, tF64M3x3 mtrx2)
 	res.m22 = (mtrx1.m20 * mtrx2.m02) + (mtrx1.m21 * mtrx2.m12) + (mtrx1.m22 * mtrx2.m22);
 	return res;
 }
-tF64M3x3 tF64M3x3_MulFlt(tF64M3x3 mtrx, tF64 mod)
+tF64M3x3 tF64M3x3_MulDbl(tF64M3x3 mtrx, tF64 mod)
 {
 	mtrx.m00 *= mod;
 	mtrx.m01 *= mod;
@@ -1829,7 +1829,7 @@ tF64M3x3 tF64M3x3_MulFlt(tF64M3x3 mtrx, tF64 mod)
 	mtrx.m22 *= mod;
 	return mtrx;
 }
-tF64M3x3 tF64M3x3_DivFlt(tF64M3x3 mtrx, tF64 mod)
+tF64M3x3 tF64M3x3_DivDbl(tF64M3x3 mtrx, tF64 mod)
 {
 #ifndef BQSELAYER_DEBUG
 	if (tF64_Nearby(mod, 0.0))
@@ -1859,7 +1859,7 @@ tF64M3x3 tF64M3x3_DivFlt(tF64M3x3 mtrx, tF64 mod)
 	mtrx.m22 /= mod;
 	return mtrx;
 }
-tBln tF64M3x3_DivFlt_safe(tF64M3x3 *mtrx, tF64 mod)
+tBln tF64M3x3_DivDbl_safe(tF64M3x3 *mtrx, tF64 mod)
 {
 	if (tF64_Nearby(mod, 0.0)) return True;
 	mtrx->m00 /= mod;
@@ -1932,13 +1932,13 @@ tF64M3x3 tF64M3x3_Inv(tF64M3x3 mtrx)
 #else
 	Assertion(tF64_Abs(det) > tF64_Eps);
 #endif/*BQSELAYER_DEBUG*/
-	return tF64M3x3_DivFlt(tF64M3x3_Adj(mtrx), det);
+	return tF64M3x3_DivDbl(tF64M3x3_Adj(mtrx), det);
 }
 tBln tF64M3x3_Inv_safe(tF64M3x3 *mtrx)
 {
 	tF64 det = tF64M3x3_Det(*mtrx);
 	if (tF64_Abs(det) <= tF64_Eps) return True;
-	*mtrx = tF64M3x3_DivFlt(tF64M3x3_Adj(*mtrx), det);
+	*mtrx = tF64M3x3_DivDbl(tF64M3x3_Adj(*mtrx), det);
 	return False;
 }
 tF64M3x3 tF64M3x3_Transl(tF64 x, tF64 y)
@@ -2091,11 +2091,11 @@ tF64M4x4 tF64M4x4_Id(tNone);
 tF64M4x4 tF64M4x4_Add(tF64M4x4 mtrx1, tF64M4x4 mtrx2);
 tF64M4x4 tF64M4x4_Sub(tF64M4x4 mtrx1, tF64M4x4 mtrx2);
 tF64M4x4 tF64M4x4_Mul(tF64M4x4 mtrx1, tF64M4x4 mtrx2);
-tF64M4x4 tF64M4x4_MulFlt(tF64M4x4 mtrx, tF64 mod);
+tF64M4x4 tF64M4x4_MulDbl(tF64M4x4 mtrx, tF64 mod);
 /*Warn: Silently returns a matrix with all components either -Inf or +Inf when `mod` is 0.*/
-tF64M4x4 tF64M4x4_DivFlt(tF64M4x4 mtrx, tF64 mod);
+tF64M4x4 tF64M4x4_DivDbl(tF64M4x4 mtrx, tF64 mod);
 /*Note: Returns `False` on success.*/
-tBln tF64M4x4_DivFlt_safe(tF64M4x4 *mtrx, tF64 mod);
+tBln tF64M4x4_DivDbl_safe(tF64M4x4 *mtrx, tF64 mod);
 tBln tF64M4x4_Eq(tF64M4x4 mtrx1, tF64M4x4 mtrx2);
 tBln tF64M4x4_Nearby(tF64M4x4 mtrx1, tF64M4x4 mtrx2, tF64 eps);
 tF64V4D tF64M4x4_MulVect(tF64M4x4 mtrx, tF64V4D vect);
@@ -2249,7 +2249,7 @@ tF64M4x4 tF64M4x4_Mul(tF64M4x4 mtrx1, tF64M4x4 mtrx2)
 	res.m33 = (mtrx1.m30 * mtrx2.m03) + (mtrx1.m31 * mtrx2.m13) + (mtrx1.m64 * mtrx2.m23) + (mtrx1.m33 * mtrx2.m33);
 	return res;
 }
-tF64M4x4 tF64M4x4_MulFlt(tF64M4x4 mtrx, tF64 mod)
+tF64M4x4 tF64M4x4_MulDbl(tF64M4x4 mtrx, tF64 mod)
 {
 	mtrx.m00 *= mod;
 	mtrx.m01 *= mod;
@@ -2269,7 +2269,7 @@ tF64M4x4 tF64M4x4_MulFlt(tF64M4x4 mtrx, tF64 mod)
 	mtrx.m33 *= mod;
 	return mtrx;
 }
-tF64M4x4 tF64M4x4_DivFlt(tF64M4x4 mtrx, tF64 mod)
+tF64M4x4 tF64M4x4_DivDbl(tF64M4x4 mtrx, tF64 mod)
 {
 #ifndef BQSELAYER_DEBUG
 	if (tF64_Nearby(mod, 0.0))
@@ -2313,7 +2313,7 @@ tF64M4x4 tF64M4x4_DivFlt(tF64M4x4 mtrx, tF64 mod)
 	mtrx.m33 /= mod;
 	return mtrx;
 }
-tBln tF64M4x4_DivFlt_safe(tF64M4x4 *mtrx, tF64 mod)
+tBln tF64M4x4_DivDbl_safe(tF64M4x4 *mtrx, tF64 mod)
 {
 	if (tF64_Nearby(mod, 0.0)) return True;
 	mtrx->m00 /= mod;
@@ -2424,13 +2424,13 @@ tF64M4x4 tF64M4x4_Inv(tF64M4x4 mtrx)
 #else
 	Assertion(tF64_Abs(det) > tF64_Eps);
 #endif/*BQSELAYER_DEBUG*/
-	return tF64M4x4_DivFlt(tF64M4x4_Adj(mtrx), det);
+	return tF64M4x4_DivDbl(tF64M4x4_Adj(mtrx), det);
 }
 tBln tF64M4x4_Inv_safe(tF64M4x4 *mtrx)
 {
 	tF64 det = tF64M4x4_Det(*mtrx);
 	if (tF64_Abs(det) <= tF64_Eps) return True;
-	*mtrx = tF64M4x4_DivFlt(tF64M4x4_Adj(*mtrx), det);
+	*mtrx = tF64M4x4_DivDbl(tF64M4x4_Adj(*mtrx), det);
 	return False;
 }
 tF64M4x4 tF64M4x4_Transl(tF64 x, tF64 y, tF64 z)
