@@ -23,7 +23,7 @@
 #elif defined(__STDC__)
 #define LANG_Ver 1990
 #else
-#error "Unknown C standard"
+#error "Unknown C standard."
 #endif
 #elif defined(LANG_Cpp)
 #if __cplusplus >= 202302L
@@ -39,7 +39,7 @@
 #elif __cplusplus >= 199711L
 #define LANG_Ver 1998
 #else
-#error "Unknown CPP standard"
+#error "Unknown CPP standard."
 #endif
 #endif
 /*Compiler*/
@@ -61,7 +61,7 @@ enum eCompiler
 #define COMP_GNUC 1
 #define COMP_Curr eCompiler_GNUC
 #else
-#error "Unknown compiler"
+#error "Unknown compiler."
 #endif
 /*Operating system*/
 enum eOperatingSystem
@@ -94,7 +94,7 @@ enum eOperatingSystem
 #define OS_Unix 1
 #define OS_Curr eOperatingSystem_Unix
 #else
-#error "Unknown operating system"
+#error "Unknown operating system."
 #endif
 /*Architecture*/
 enum eArchitecture
@@ -119,7 +119,7 @@ enum eArchitecture
 #define ARCH_Arm 1
 #define ARCH_Curr eArchitecture_Arm
 #else
-#error "Unknown architecture"
+#error "Unknown architecture."
 #endif
 /*Bitness*/
 #if defined(ARCH_AMD64) || defined(ARCH_Arm64)
