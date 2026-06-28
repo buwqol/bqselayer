@@ -5,7 +5,7 @@
 LINK_C_Begin
 tNone BQSELAYER_StaticChecks(tNone);
 LINK_C_End
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_DBG_IMPL
 tNone BQSELAYER_StaticChecks(tNone)
 {
 	typedef char BQSELAYER_StaticAssert_tSSz_size[(sizeof(tSSz) == sizeof(tPtr)) ? 1U : -1];
@@ -21,5 +21,5 @@ tNone BQSELAYER_StaticChecks(tNone)
 	typedef char BQSELAYER_StaticAssert_tF32_IEEE754_size[(sizeof(tF32) == 4U) ? 1U : -1];
 	typedef char BQSELAYER_StaticAssert_tF64_IEEE754_size[(sizeof(tF64) == 8U) ? 1U : -1];
 }
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_DBG_IMPL*/
 #endif/*BQSELAYER_DBG_H*/

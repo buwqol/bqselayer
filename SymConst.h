@@ -5,7 +5,7 @@
 LINK_C_Begin
 const tChr *BQSELAYER_GetCompiler(enum eCompiler comp);
 LINK_C_End
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_SYMCONST_IMPL
 const tChr *BQSELAYER_GetCompiler(enum eCompiler comp)
 {
 	switch (comp)
@@ -16,11 +16,11 @@ const tChr *BQSELAYER_GetCompiler(enum eCompiler comp)
 	default: return "Unknown";
 	}
 }
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_SYMCONST_IMPL*/
 LINK_C_Begin
 const tChr *BQSELAYER_GetOperatingSystem(enum eOperatingSystem os);
 LINK_C_End
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_SYMCONST_IMPL
 const tChr *BQSELAYER_GetOperatingSystem(enum eOperatingSystem os)
 {
 	switch (os)
@@ -34,11 +34,11 @@ const tChr *BQSELAYER_GetOperatingSystem(enum eOperatingSystem os)
 	default: return "Unknown";
 	}
 }
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_SYMCONST_IMPL*/
 LINK_C_Begin
 const tChr *BQSELAYER_GetArchitecture(enum eArchitecture arch);
 LINK_C_End
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_SYMCONST_IMPL
 const tChr *BQSELAYER_GetArchitecture(enum eArchitecture arch)
 {
 	switch (arch)
@@ -50,7 +50,7 @@ const tChr *BQSELAYER_GetArchitecture(enum eArchitecture arch)
 	default: return "Unknown";
 	}
 }
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_SYMCONST_IMPL*/
 enum eMonth
 {
 	eMonth_Jan,
@@ -70,7 +70,7 @@ LINK_C_Begin
 const tChr *BQSELAYER_GetMonth(enum eMonth mon);
 const tChr *BQSELAYER_GetMonthFull(enum eMonth mon);
 LINK_C_End
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_SYMCONST_IMPL
 const tChr *BQSELAYER_GetMonth(enum eMonth mon)
 {
 	switch (mon)
@@ -109,7 +109,7 @@ const tChr *BQSELAYER_GetMonthFull(enum eMonth mon)
 	default: return "Unknown";
 	}
 }
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_SYMCONST_IMPL*/
 enum eDay
 {
 	eDay_Sun,
@@ -124,7 +124,7 @@ LINK_C_Begin
 const tChr *BQSELAYER_GetDay(enum eDay day);
 const tChr *BQSELAYER_GetDayFull(enum eDay day);
 LINK_C_End
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_SYMCONST_IMPL
 const tChr *BQSELAYER_GetDay(enum eDay day)
 {
 	switch (day)
@@ -153,5 +153,5 @@ const tChr *BQSELAYER_GetDayFull(enum eDay day)
 	default: return "Unknown";
 	}
 }
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_SYMCONST_IMPL*/
 #endif/*BQSELAYER_SYMCONST_H*/

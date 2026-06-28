@@ -38,9 +38,9 @@ tNone tF32M2x2_RowMult(tF32M2x2 *mtrx, tU8 idx, tF32 mult);
 tNone tF32M2x2_RowEch(tF32M2x2 *mtrx);
 tNone tF32M2x2_RowRedEch(tF32M2x2 *mtrx);
 tF32M2x2 tF32M2x2_InvAff(tF32M2x2 mtrx);
-tBln tF32M2x2_IsAff(tF32M2x2 mtrx);
+FORCEINLINE tBln tF32M2x2_IsAff(tF32M2x2 mtrx);
 LINK_C_End
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_MTRX_IMPL
 tF32M2x2 tF32M2x2_Make(tF32 m00, tF32 m01, tF32 m10, tF32 m11)
 {
 	tF32M2x2 mtrx;
@@ -294,7 +294,7 @@ FORCEINLINE tBln tF32M2x2_IsAff(tF32M2x2 mtrx)
 {
 	return tF32_Nearby(mtrx.m10, 0.0F) && tF32_Nearby(mtrx.m11, 0.0F);
 }
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_MTRX_IMPL*/
 typedef union { struct { tF32 m00, m01, m02; tF32 m10, m11, m12; tF32 m20, m21, m22; }; tF32 m[3][3]; tF32V3D row[3]; } tF32M3x3;
 LINK_C_Begin
 tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22);
@@ -334,9 +334,9 @@ tNone tF32M3x3_RowMult(tF32M3x3 *mtrx, tU8 idx, tF32 mult);
 tNone tF32M3x3_RowEch(tF32M3x3 *mtrx);
 tNone tF32M3x3_RowRedEch(tF32M3x3 *mtrx);
 tF32M3x3 tF32M3x3_InvAff(tF32M3x3 mtrx);
-tBln tF32M3x3_IsAff(tF32M3x3 mtrx);
+FORCEINLINE tBln tF32M3x3_IsAff(tF32M3x3 mtrx);
 LINK_C_End
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_MTRX_IMPL
 tF32M3x3 tF32M3x3_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m10, tF32 m11, tF32 m12, tF32 m20, tF32 m21, tF32 m22)
 {
 	tF32M3x3 mtrx;
@@ -670,7 +670,7 @@ FORCEINLINE tBln tF32M3x3_IsAff(tF32M3x3 mtrx)
 {
 	return tF32_Nearby(mtrx.m20, 0.0F) && tF32_Nearby(mtrx.m21, 0.0F) && tF32_Nearby(mtrx.m22, 0.0F);
 }
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_MTRX_IMPL*/
 typedef union { struct { tF32 m00, m01, m02, m03; tF32 m10, m11, m12, m13; tF32 m20, m21, m22, m23; tF32 m30, m31, m32, m33; }; tF32 m[4][4]; tF32V4D row[4]; } tF32M4x4;
 LINK_C_Begin
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33);
@@ -741,7 +741,7 @@ tBln tF32M4x4_IsAff(tF32M4x4 mtrx);
 tF32M4x4 tF32M4x4_LookAt(tF32V3D eye, tF32V3D target, tF32V3D up);
 tF32M3x3 tF32M4x4_NormalMtrx(tF32M4x4 mtrx);
 LINK_C_End
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_MTRX_IMPL
 tF32M4x4 tF32M4x4_Make(tF32 m00, tF32 m01, tF32 m02, tF32 m03, tF32 m10, tF32 m11, tF32 m12, tF32 m13, tF32 m20, tF32 m21, tF32 m22, tF32 m23, tF32 m30, tF32 m31, tF32 m32, tF32 m33)
 {
 	tF32M4x4 mtrx;
@@ -1413,7 +1413,7 @@ tF32M3x3 tF32M4x4_NormalMtrx(tF32M4x4 mtrx)
 	res.m22 = invTrans.m22;
 	return res;
 }
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_MTRX_IMPL*/
 typedef union { struct { tF64 m00, m01; tF64 m10, m11; }; tF64 m[2][2]; tF64V2D row[2]; } tF64M2x2;
 LINK_C_Begin
 tF64M2x2 tF64M2x2_Make(tF64 m00, tF64 m01, tF64 m10, tF64 m11);
@@ -1450,9 +1450,9 @@ tNone tF64M2x2_RowMult(tF64M2x2 *mtrx, tU8 idx, tF64 mult);
 tNone tF64M2x2_RowEch(tF64M2x2 *mtrx);
 tNone tF64M2x2_RowRedEch(tF64M2x2 *mtrx);
 tF64M2x2 tF64M2x2_InvAff(tF64M2x2 mtrx);
-tBln tF64M2x2_IsAff(tF64M2x2 mtrx);
+FORCEINLINE tBln tF64M2x2_IsAff(tF64M2x2 mtrx);
 LINK_C_End
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_MTRX_IMPL
 tF64M2x2 tF64M2x2_Make(tF64 m00, tF64 m01, tF64 m10, tF64 m11)
 {
 	tF64M2x2 mtrx;
@@ -1706,7 +1706,7 @@ FORCEINLINE tBln tF64M2x2_IsAff(tF64M2x2 mtrx)
 {
 	return tF64_Nearby(mtrx.m10, 0.0) && tF64_Nearby(mtrx.m11, 0.0);
 }
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_MTRX_IMPL*/
 typedef union { struct { tF64 m00, m01, m02; tF64 m10, m11, m12; tF64 m20, m21, m22; }; tF64 m[3][3]; tF64V3D row[3]; } tF64M3x3;
 LINK_C_Begin
 tF64M3x3 tF64M3x3_Make(tF64 m00, tF64 m01, tF64 m02, tF64 m10, tF64 m11, tF64 m12, tF64 m20, tF64 m21, tF64 m22);
@@ -1746,9 +1746,9 @@ tNone tF64M3x3_RowMult(tF64M3x3 *mtrx, tU8 idx, tF64 mult);
 tNone tF64M3x3_RowEch(tF64M3x3 *mtrx);
 tNone tF64M3x3_RowRedEch(tF64M3x3 *mtrx);
 tF64M3x3 tF64M3x3_InvAff(tF64M3x3 mtrx);
-tBln tF64M3x3_IsAff(tF64M3x3 mtrx);
+FORCEINLINE tBln tF64M3x3_IsAff(tF64M3x3 mtrx);
 LINK_C_End
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_MTRX_IMPL
 tF64M3x3 tF64M3x3_Make(tF64 m00, tF64 m01, tF64 m02, tF64 m10, tF64 m11, tF64 m12, tF64 m20, tF64 m21, tF64 m22)
 {
 	tF64M3x3 mtrx;
@@ -2082,7 +2082,7 @@ FORCEINLINE tBln tF64M3x3_IsAff(tF64M3x3 mtrx)
 {
 	return tF64_Nearby(mtrx.m20, 0.0F) && tF64_Nearby(mtrx.m21, 0.0F) && tF64_Nearby(mtrx.m22, 0.0F);
 }
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_MTRX_IMPL*/
 typedef union { struct { tF64 m00, m01, m02, m03; tF64 m10, m11, m12, m13; tF64 m20, m21, m22, m23; tF64 m30, m31, m64, m33; }; tF64 m[4][4]; tF64V4D row[4]; } tF64M4x4;
 LINK_C_Begin
 tF64M4x4 tF64M4x4_Make(tF64 m00, tF64 m01, tF64 m02, tF64 m03, tF64 m10, tF64 m11, tF64 m12, tF64 m13, tF64 m20, tF64 m21, tF64 m22, tF64 m23, tF64 m30, tF64 m31, tF64 m64, tF64 m33);
@@ -2153,7 +2153,7 @@ tBln tF64M4x4_IsAff(tF64M4x4 mtrx);
 tF64M4x4 tF64M4x4_LookAt(tF64V3D eye, tF64V3D target, tF64V3D up);
 tF64M3x3 tF64M4x4_NormalMtrx(tF64M4x4 mtrx);
 LINK_C_End
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_MTRX_IMPL
 tF64M4x4 tF64M4x4_Make(tF64 m00, tF64 m01, tF64 m02, tF64 m03, tF64 m10, tF64 m11, tF64 m12, tF64 m13, tF64 m20, tF64 m21, tF64 m22, tF64 m23, tF64 m30, tF64 m31, tF64 m64, tF64 m33)
 {
 	tF64M4x4 mtrx;
@@ -2825,5 +2825,5 @@ tF64M3x3 tF64M4x4_NormalMtrx(tF64M4x4 mtrx)
 	res.m22 = invTrans.m22;
 	return res;
 }
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_MTRX_IMPL*/
 #endif/*BQSELAYER_MTRX_H*/

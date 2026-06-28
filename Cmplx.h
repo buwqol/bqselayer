@@ -4,22 +4,22 @@
 typedef tF32 tF32Real;
 typedef tF32 tF32Imag;
 typedef struct { tF32Real real; tF32Imag imag; } tF32Cmplx;
-tF32Cmplx tF32Cmplx_Make(tF32 real, tF32 imag);
-tF32Cmplx tF32Cmplx_Zero(void);
-tF32Cmplx tF32Cmplx_Add(tF32Cmplx num1, tF32Cmplx num2);
-tF32Cmplx tF32Cmplx_Sub(tF32Cmplx lhs, tF32Cmplx rhs);
-tF32Cmplx tF32Cmplx_Mul(tF32Cmplx num1, tF32Cmplx num2);
+FORCEINLINE tF32Cmplx tF32Cmplx_Make(tF32 real, tF32 imag);
+FORCEINLINE tF32Cmplx tF32Cmplx_Zero(void);
+FORCEINLINE tF32Cmplx tF32Cmplx_Add(tF32Cmplx num1, tF32Cmplx num2);
+FORCEINLINE tF32Cmplx tF32Cmplx_Sub(tF32Cmplx lhs, tF32Cmplx rhs);
+FORCEINLINE tF32Cmplx tF32Cmplx_Mul(tF32Cmplx num1, tF32Cmplx num2);
 tF32Cmplx tF32Cmplx_Div(tF32Cmplx lhs, tF32Cmplx rhs);
-tF32Cmplx tF32Cmplx_Conj(tF32Cmplx num);
-tF32 tF32Cmplx_MagSq(tF32Cmplx num);
-tF32 tF32Cmplx_Mag_iter(tF32Cmplx num, tUSz itr);
-tF32 tF32Cmplx_Mag(tF32Cmplx num);
-tF32Cmplx tF32Cmplx_AddF(tF32Cmplx num, tF32 flt);
-tF32Cmplx tF32Cmplx_SubF(tF32Cmplx num, tF32 flt);
-tF32Cmplx tF32Cmplx_MulF(tF32Cmplx num, tF32 flt);
-tF32Cmplx tF32Cmplx_DivF(tF32Cmplx num, tF32 flt);
-tF32 tF32Cmplx_Arg_iter(tF32Cmplx num, tUSz itr);
-tF32 tF32Cmplx_Arg(tF32Cmplx num);
+FORCEINLINE tF32Cmplx tF32Cmplx_Conj(tF32Cmplx num);
+FORCEINLINE tF32 tF32Cmplx_MagSq(tF32Cmplx num);
+FORCEINLINE tF32 tF32Cmplx_Mag_iter(tF32Cmplx num, tUSz itr);
+FORCEINLINE tF32 tF32Cmplx_Mag(tF32Cmplx num);
+FORCEINLINE tF32Cmplx tF32Cmplx_AddF(tF32Cmplx num, tF32 flt);
+FORCEINLINE tF32Cmplx tF32Cmplx_SubF(tF32Cmplx num, tF32 flt);
+FORCEINLINE tF32Cmplx tF32Cmplx_MulF(tF32Cmplx num, tF32 flt);
+FORCEINLINE tF32Cmplx tF32Cmplx_DivF(tF32Cmplx num, tF32 flt);
+FORCEINLINE tF32 tF32Cmplx_Arg_iter(tF32Cmplx num, tUSz itr);
+FORCEINLINE tF32 tF32Cmplx_Arg(tF32Cmplx num);
 tF32Cmplx tF32Cmplx_FromPolar_fast(tF32 mag, tF32 ang);
 tF32Cmplx tF32Cmplx_FromPolar_iter(tF32 mag, tF32 ang, tUSz itr);
 tF32Cmplx tF32Cmplx_FromPolar(tF32 mag, tF32 ang);
@@ -32,13 +32,13 @@ tF32Cmplx tF32Cmplx_Ln(tF32Cmplx num);
 tF32Cmplx tF32Cmplx_PowI(tF32Cmplx num, tSSz exp);
 tF32Cmplx tF32Cmplx_Pow_iter(tF32Cmplx base, tF32Cmplx exp, tUSz itr);
 tF32Cmplx tF32Cmplx_Pow(tF32Cmplx base, tF32Cmplx exp);
-tBln tF32Cmplx_Eq(tF32Cmplx num1, tF32Cmplx num2);
-tBln tF32Cmplx_Nearby(tF32Cmplx num1, tF32Cmplx num2);
-tF32Cmplx tF32Cmplx_Neg(tF32Cmplx num);
-tF32Cmplx tF32Cmplx_One(void);
-tF32Cmplx tF32Cmplx_I(void);
+FORCEINLINE tBln tF32Cmplx_Eq(tF32Cmplx num1, tF32Cmplx num2);
+FORCEINLINE tBln tF32Cmplx_Nearby(tF32Cmplx num1, tF32Cmplx num2);
+FORCEINLINE tF32Cmplx tF32Cmplx_Neg(tF32Cmplx num);
+FORCEINLINE tF32Cmplx tF32Cmplx_One(void);
+FORCEINLINE tF32Cmplx tF32Cmplx_I(void);
 tF32Cmplx tF32Cmplx_Recip(tF32Cmplx num);
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_CMPLX_IMPL
 LINK_C_Begin
 FORCEINLINE tF32Cmplx tF32Cmplx_Make(tF32 real, tF32 imag)
 {
@@ -283,26 +283,26 @@ tF32Cmplx tF32Cmplx_Recip(tF32Cmplx num)
 	return tF32Cmplx_DivF(tF32Cmplx_Conj(num), tF32Cmplx_MagSq(num));
 }
 LINK_C_End
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_CMPLX_IMPL*/
 typedef tF64 tF64Real;
 typedef tF64 tF64Imag;
 typedef struct { tF64Real real; tF64Imag imag; } tF64Cmplx;
-tF64Cmplx tF64Cmplx_Make(tF64 real, tF64 imag);
-tF64Cmplx tF64Cmplx_Zero(void);
-tF64Cmplx tF64Cmplx_Add(tF64Cmplx num1, tF64Cmplx num2);
-tF64Cmplx tF64Cmplx_Sub(tF64Cmplx lhs, tF64Cmplx rhs);
-tF64Cmplx tF64Cmplx_Mul(tF64Cmplx num1, tF64Cmplx num2);
+FORCEINLINE tF64Cmplx tF64Cmplx_Make(tF64 real, tF64 imag);
+FORCEINLINE tF64Cmplx tF64Cmplx_Zero(void);
+FORCEINLINE tF64Cmplx tF64Cmplx_Add(tF64Cmplx num1, tF64Cmplx num2);
+FORCEINLINE tF64Cmplx tF64Cmplx_Sub(tF64Cmplx lhs, tF64Cmplx rhs);
+FORCEINLINE tF64Cmplx tF64Cmplx_Mul(tF64Cmplx num1, tF64Cmplx num2);
 tF64Cmplx tF64Cmplx_Div(tF64Cmplx lhs, tF64Cmplx rhs);
-tF64Cmplx tF64Cmplx_Conj(tF64Cmplx num);
-tF64 tF64Cmplx_MagSq(tF64Cmplx num);
-tF64 tF64Cmplx_Mag_iter(tF64Cmplx num, tUSz itr);
-tF64 tF64Cmplx_Mag(tF64Cmplx num);
-tF64Cmplx tF64Cmplx_AddF(tF64Cmplx num, tF64 flt);
-tF64Cmplx tF64Cmplx_SubF(tF64Cmplx num, tF64 flt);
-tF64Cmplx tF64Cmplx_MulF(tF64Cmplx num, tF64 flt);
-tF64Cmplx tF64Cmplx_DivF(tF64Cmplx num, tF64 flt);
-tF64 tF64Cmplx_Arg_iter(tF64Cmplx num, tUSz itr);
-tF64 tF64Cmplx_Arg(tF64Cmplx num);
+FORCEINLINE tF64Cmplx tF64Cmplx_Conj(tF64Cmplx num);
+FORCEINLINE tF64 tF64Cmplx_MagSq(tF64Cmplx num);
+FORCEINLINE tF64 tF64Cmplx_Mag_iter(tF64Cmplx num, tUSz itr);
+FORCEINLINE tF64 tF64Cmplx_Mag(tF64Cmplx num);
+FORCEINLINE tF64Cmplx tF64Cmplx_AddF(tF64Cmplx num, tF64 dbl);
+FORCEINLINE tF64Cmplx tF64Cmplx_SubF(tF64Cmplx num, tF64 dbl);
+FORCEINLINE tF64Cmplx tF64Cmplx_MulF(tF64Cmplx num, tF64 dbl);
+FORCEINLINE tF64Cmplx tF64Cmplx_DivF(tF64Cmplx num, tF64 dbl);
+FORCEINLINE tF64 tF64Cmplx_Arg_iter(tF64Cmplx num, tUSz itr);
+FORCEINLINE tF64 tF64Cmplx_Arg(tF64Cmplx num);
 tF64Cmplx tF64Cmplx_FromPolar_fast(tF64 mag, tF64 ang);
 tF64Cmplx tF64Cmplx_FromPolar_iter(tF64 mag, tF64 ang, tUSz itr);
 tF64Cmplx tF64Cmplx_FromPolar(tF64 mag, tF64 ang);
@@ -315,13 +315,13 @@ tF64Cmplx tF64Cmplx_Ln(tF64Cmplx num);
 tF64Cmplx tF64Cmplx_PowI(tF64Cmplx num, tSSz exp);
 tF64Cmplx tF64Cmplx_Pow_iter(tF64Cmplx base, tF64Cmplx exp, tUSz itr);
 tF64Cmplx tF64Cmplx_Pow(tF64Cmplx base, tF64Cmplx exp);
-tBln tF64Cmplx_Eq(tF64Cmplx num1, tF64Cmplx num2);
-tBln tF64Cmplx_Nearby(tF64Cmplx num1, tF64Cmplx num2);
-tF64Cmplx tF64Cmplx_Neg(tF64Cmplx num);
-tF64Cmplx tF64Cmplx_One(void);
-tF64Cmplx tF64Cmplx_I(void);
+FORCEINLINE tBln tF64Cmplx_Eq(tF64Cmplx num1, tF64Cmplx num2);
+FORCEINLINE tBln tF64Cmplx_Nearby(tF64Cmplx num1, tF64Cmplx num2);
+FORCEINLINE tF64Cmplx tF64Cmplx_Neg(tF64Cmplx num);
+FORCEINLINE tF64Cmplx tF64Cmplx_One(void);
+FORCEINLINE tF64Cmplx tF64Cmplx_I(void);
 tF64Cmplx tF64Cmplx_Recip(tF64Cmplx num);
-#ifdef BQSELAYER_IMPL
+#ifdef BQSELAYER_CMPLX_IMPL
 LINK_C_Begin
 FORCEINLINE tF64Cmplx tF64Cmplx_Make(tF64 real, tF64 imag)
 {
@@ -391,36 +391,36 @@ FORCEINLINE tF64 tF64Cmplx_Mag(tF64Cmplx num)
 {
 	return tF64_Sqrt(tF64Cmplx_MagSq(num));
 }
-FORCEINLINE tF64Cmplx tF64Cmplx_AddF(tF64Cmplx num, tF64 flt)
+FORCEINLINE tF64Cmplx tF64Cmplx_AddF(tF64Cmplx num, tF64 dbl)
 {
-	num.real += flt;
+	num.real += dbl;
 	return num;
 }
-FORCEINLINE tF64Cmplx tF64Cmplx_SubF(tF64Cmplx num, tF64 flt)
+FORCEINLINE tF64Cmplx tF64Cmplx_SubF(tF64Cmplx num, tF64 dbl)
 {
-	num.real -= flt;
+	num.real -= dbl;
 	return num;
 }
-FORCEINLINE tF64Cmplx tF64Cmplx_MulF(tF64Cmplx num, tF64 flt)
+FORCEINLINE tF64Cmplx tF64Cmplx_MulF(tF64Cmplx num, tF64 dbl)
 {
-	num.real *= flt;
-	num.imag *= flt;
+	num.real *= dbl;
+	num.imag *= dbl;
 	return num;
 }
-FORCEINLINE tF64Cmplx tF64Cmplx_DivF(tF64Cmplx num, tF64 flt)
+FORCEINLINE tF64Cmplx tF64Cmplx_DivF(tF64Cmplx num, tF64 dbl)
 {
 #ifndef BQSELAYER_DBG
-	if (tF64_Nearby(flt, 0.0))
+	if (tF64_Nearby(dbl, 0.0))
 	{
 		num.real = tF64_SigNaN();
 		num.imag = tF64_SigNaN();
 		return num;
 	}
 #else
-	Assertion(!tF64_Nearby(flt, 0.0));
+	Assertion(!tF64_Nearby(dbl, 0.0));
 #endif/*BQSELAYER_DBG*/
-	num.real /= flt;
-	num.imag /= flt;
+	num.real /= dbl;
+	num.imag /= dbl;
 	return num;
 }
 FORCEINLINE tF64 tF64Cmplx_Arg_iter(tF64Cmplx num, tUSz itr)
@@ -566,5 +566,5 @@ tF64Cmplx tF64Cmplx_Recip(tF64Cmplx num)
 	return tF64Cmplx_DivF(tF64Cmplx_Conj(num), tF64Cmplx_MagSq(num));
 }
 LINK_C_End
-#endif/*BQSELAYER_IMPL*/
+#endif/*BQSELAYER_CMPLX_IMPL*/
 #endif/*BQSELAYER_CMPLX_H*/
