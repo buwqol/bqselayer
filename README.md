@@ -15,3 +15,4 @@ Base layer for my (larger) C projects.
 - Vectors (2D, 3D, and 4D)
 - Matrices (2x2, 3x3, and 4x4)
 - Complex numbers
+- Colours
