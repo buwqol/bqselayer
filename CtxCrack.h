@@ -140,28 +140,28 @@ enum eArchitecture
 /*Function prefixes*/
 #if defined(COMP_MSC)
 #define FORCEINLINE __forceinline
-#define BQSELAYER_NOINLINE __declspec(noinline)
-#define BQSELAYER_DLLEXPORT __declspec(dllexport)
-#define BQSELAYER_DLLIMPORT __declspec(dllimport)
-#define BQSELAYER_RESTRICT __restrict
+#define NOINLINE __declspec(noinline)
+#define DLLEXPORT __declspec(dllexport)
+#define DLLIMPORT __declspec(dllimport)
+#define RESTRICT __restrict
 #elif defined(COMP_GNUC) || defined(COMP_LLVM)
 #define FORCEINLINE inline __attribute__((always_inline))
-#define BQSELAYER_NOINLINE __attribute__((noinline))
-#define BQSELAYER_DLLEXPORT __attribute__((visibility("default")))
-#define BQSELAYER_DLLIMPORT
-#define BQSELAYER_RESTRICT __restrict__
+#define NOINLINE __attribute__((noinline))
+#define DLLEXPORT __attribute__((visibility("default")))
+#define DLLIMPORT
+#define RESTRICT __restrict__
 #else
 #define FORCEINLINE inline
-#define BQSELAYER_NOINLINE
-#define BQSELAYER_DLLEXPORT
-#define BQSELAYER_DLLIMPORT
-#define BQSELAYER_RESTRICT
+#define NOINLINE
+#define DLLEXPORT
+#define DLLIMPORT
+#define RESTRICT
 #endif
 #if defined(COMP_GNUC) || defined(COMP_LLVM)
-#define BQSELAYER_LIKELY(Cnd)   __builtin_expect(!!(Cnd), 1)
-#define BQSELAYER_UNLIKELY(Cnd) __builtin_expect(!!(Cnd), 0)
+#define LIKELY(Cnd)   __builtin_expect(!!(Cnd), 1)
+#define UNLIKELY(Cnd) __builtin_expect(!!(Cnd), 0)
 #else
-#define BQSELAYER_LIKELY(Cnd)   (Cnd)
-#define BQSELAYER_UNLIKELY(Cnd) (Cnd)
+#define LIKELY(Cnd)   (Cnd)
+#define UNLIKELY(Cnd) (Cnd)
 #endif
 #endif/*BQSELAYER_CTXCRACK_H*/
