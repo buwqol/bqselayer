@@ -1,6 +1,11 @@
 # bqselayer
 Base layer for my (larger) C projects.
 
+##
+
+DISCLAIMER:
+This repo is no longer maintained. I'm going to restart from the ground up and reimplement everything from scratch, trying to really understand what the hell I'm doing.
+
 ## Features
 
 - Context cracking
